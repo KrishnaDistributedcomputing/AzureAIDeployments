@@ -1,0 +1,26 @@
+# Bicep build output
+*.json
+!**/bicepconfig.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node (SWA CLI)
+node_modules/
+package-lock.json
+
+# Terraform (if mixed)
+.terraform/
+*.tfstate*
+
+# Secrets
+*.env
+.env.*

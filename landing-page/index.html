@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Azure AI Deployment Patterns</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+  <style>
+    :root {
+      --azure-blue: #0078d4;
+      --azure-dark: #004578;
+      --azure-light: #deecf9;
+      --surface: #f4f6f8;
+      --surface-card: #ffffff;
+      --text-primary: #1b1b1b;
+      --text-secondary: #505050;
+      --border: #e1e4e8;
+      --gradient-start: #0078d4;
+      --gradient-end: #50e6ff;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 8px 24px rgba(0, 120, 212, 0.15);
+      --radius: 12px;
+      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--surface);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* ─── Navigation ─── */
+    nav {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 2rem;
+    }
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--azure-dark);
+      text-decoration: none;
+    }
+    .nav-brand svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--azure-blue); }
+
+    /* ─── Hero ─── */
+    .hero {
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      color: #fff;
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.08) 0%, transparent 50%);
+      animation: shimmer 8s ease-in-out infinite alternate;
+    }
+    @keyframes shimmer {
+      from { transform: translateX(-10%) rotate(0deg); }
+      to   { transform: translateX(10%) rotate(3deg); }
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      opacity: 0.92;
+      max-width: 640px;
+      margin: 0 auto 2rem;
+    }
+    .hero-badges { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+    .badge {
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ─── Section ─── */
+    section { padding: 4rem 2rem; }
+    .container { max-width: 1280px; margin: 0 auto; }
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--azure-dark);
+      margin-bottom: 0.5rem;
+    }
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ─── Pattern Cards Grid ─── */
+    .patterns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+      gap: 1.5rem;
+    }
+    .pattern-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow var(--transition), transform var(--transition);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .pattern-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-3px);
+    }
+    .pattern-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .pattern-card[data-color="blue"]::before    { background: #0078d4; }
+    .pattern-card[data-color="green"]::before   { background: #107c10; }
+    .pattern-card[data-color="purple"]::before  { background: #8764b8; }
+    .pattern-card[data-color="orange"]::before  { background: #d83b01; }
+    .pattern-card[data-color="teal"]::before    { background: #008272; }
+    .pattern-card[data-color="red"]::before     { background: #e81123; }
+    .pattern-card[data-color="navy"]::before    { background: #002050; }
+
+    .card-number {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--azure-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    .card-subtitle {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    .card-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .meta-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      background: var(--azure-light);
+      color: var(--azure-dark);
+    }
+    .meta-tag.warn { background: #fff4ce; color: #835c00; }
+    .meta-tag.good { background: #dff6dd; color: #0e700e; }
+    .meta-tag.high { background: #fde7e9; color: #a80000; }
+
+    .card-services {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .card-services li {
+      font-size: 0.78rem;
+      background: var(--surface);
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+    }
+    .card-usecases {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .card-usecases strong {
+      display: block;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-primary);
+      margin-bottom: 0.3rem;
+    }
+
+    /* ─── Decision Matrix ─── */
+    .matrix-section { background: #fff; }
+    .matrix-table-wrap { overflow-x: auto; }
+    .matrix-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      font-size: 0.9rem;
+    }
+    .matrix-table thead th {
+      background: var(--azure-dark);
+      color: #fff;
+      padding: 0.85rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .matrix-table tbody td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .matrix-table tbody tr:last-child td { border-bottom: none; }
+    .matrix-table tbody tr:hover { background: var(--azure-light); }
+    .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 2px; }
+    .dot.filled { background: var(--azure-blue); }
+    .dot.empty  { background: var(--border); }
+
+    /* ─── Architecture Diagram Section ─── */
+    .arch-section { background: var(--surface); }
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+    .arch-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .arch-card-header {
+      background: var(--azure-dark);
+      color: #fff;
+      padding: 1rem 1.25rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .arch-card-body {
+      padding: 1.25rem;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.72rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
+      white-space: pre;
+      overflow-x: auto;
+      background: #fafbfc;
+    }
+
+    /* ─── Modules Section ─── */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .module-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .module-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+    .module-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .module-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    .module-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    /* ─── Deploy CTA ─── */
+    .deploy-section {
+      background: linear-gradient(135deg, var(--azure-dark) 0%, #005a9e 100%);
+      color: #fff;
+      text-align: center;
+    }
+    .deploy-section h2 { color: #fff; margin-bottom: 1rem; }
+    .deploy-section p { opacity: 0.85; max-width: 600px; margin: 0 auto 2rem; }
+    .code-block {
+      background: rgba(0,0,0,0.35);
+      border-radius: 10px;
+      padding: 1.5rem 2rem;
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block .comment { color: #6a9955; }
+    .code-block .cmd { color: #50e6ff; }
+    .code-block .flag { color: #ce9178; }
+
+    /* ─── Footer ─── */
+    footer {
+      background: #1b1b1b;
+      color: rgba(255,255,255,0.6);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--gradient-end); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.9rem; }
+      .patterns-grid, .arch-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .modules-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      Azure AI Deployment Patterns
+    </a>
+    <ul class="nav-links">
+      <li><a href="#patterns">Patterns</a></li>
+      <li><a href="#comparison">Comparison</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#modules">Modules</a></li>
+      <li><a href="#deploy">Deploy</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Azure AI Deployment Patterns</h1>
+    <p>7 production-ready, single-region deployment architectures for Azure AI workloads. Built with Bicep, aligned to Azure Landing Zones.</p>
+    <div class="hero-badges">
+      <span class="badge">Single-Region</span>
+      <span class="badge">Bicep IaC</span>
+      <span class="badge">Landing Zone Aligned</span>
+      <span class="badge">Canada Central</span>
+      <span class="badge">17 Shared Modules</span>
+    </div>
+  </div>
+</section>
+
+<!-- Patterns Grid -->
+<section id="patterns">
+  <div class="container">
+    <div class="section-header">
+      <h2>Deployment Patterns</h2>
+      <p>Choose the right architecture based on your governance, isolation, cost, and compliance needs.</p>
+    </div>
+    <div class="patterns-grid">
+
+      <!-- Pattern 1 -->
+      <div class="pattern-card" data-color="blue">
+        <div class="card-number">Pattern 1</div>
+        <div class="card-title">Centralized AI Platform</div>
+        <div class="card-subtitle">Shared AI platform in the Hub, consumed by multiple spokes via VNet peering.</div>
+        <div class="card-meta">
+          <span class="meta-tag good">Low Cost</span>
+          <span class="meta-tag">Medium Complexity</span>
+          <span class="meta-tag">Platform LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>Azure OpenAI</li><li>AML</li><li>AI Search</li><li>ADLS Gen2</li><li>Key Vault</li><li>VNet Peering</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          Enterprise copilots · Shared AI services · Controlled cost & governance
+        </div>
+      </div>
+
+      <!-- Pattern 2 -->
+      <div class="pattern-card" data-color="green">
+        <div class="card-number">Pattern 2</div>
+        <div class="card-title">Decentralized AI per Workload</div>
+        <div class="card-subtitle">Each application owns its complete AI stack. Full isolation, no hub dependency.</div>
+        <div class="card-meta">
+          <span class="meta-tag high">High Cost</span>
+          <span class="meta-tag">Medium Complexity</span>
+          <span class="meta-tag">App LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>Azure OpenAI</li><li>AI Search</li><li>ADLS Gen2</li><li>AKS</li><li>Key Vault</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          Data isolation (PII/PCI/PHI) · Independent teams · High throughput
+        </div>
+      </div>
+
+      <!-- Pattern 3 -->
+      <div class="pattern-card" data-color="purple">
+        <div class="card-number">Pattern 3</div>
+        <div class="card-title">Hybrid Central + Spoke</div>
+        <div class="card-subtitle">Base models in Hub, inference & RAG in spokes. Best of both worlds.</div>
+        <div class="card-meta">
+          <span class="meta-tag warn">Medium Cost</span>
+          <span class="meta-tag">Medium-High Complexity</span>
+          <span class="meta-tag">Platform + App LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>Azure OpenAI (Hub)</li><li>AML (Hub)</li><li>AI Search (Spoke)</li><li>App Service / AKS</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          CSI vertical apps · RAG applications · Controlled model reuse
+        </div>
+      </div>
+
+      <!-- Pattern 4 -->
+      <div class="pattern-card" data-color="orange">
+        <div class="card-number">Pattern 4</div>
+        <div class="card-title">AI Factory (MLOps)</div>
+        <div class="card-subtitle">Dedicated AI Factory LZ for the full ML lifecycle — training to serving.</div>
+        <div class="card-meta">
+          <span class="meta-tag high">High Cost</span>
+          <span class="meta-tag high">High Complexity</span>
+          <span class="meta-tag">AI Factory LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>AML Pipelines</li><li>Databricks</li><li>ADLS Gen2</li><li>ACR</li><li>Azure OpenAI</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          Large-scale ML pipelines · Continuous retraining · Enterprise MLOps
+        </div>
+      </div>
+
+      <!-- Pattern 5 -->
+      <div class="pattern-card" data-color="teal">
+        <div class="card-number">Pattern 5</div>
+        <div class="card-title">Serverless AI</div>
+        <div class="card-subtitle">Minimal infrastructure, fully managed. Deploy an AI stack in minutes.</div>
+        <div class="card-meta">
+          <span class="meta-tag good">Low Cost</span>
+          <span class="meta-tag good">Low Complexity</span>
+          <span class="meta-tag">Sandbox LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>Azure OpenAI</li><li>Functions</li><li>AI Search</li><li>Blob Storage</li><li>APIM (opt)</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          Internal copilots · MVPs / PoC · Rapid prototyping · Hackathons
+        </div>
+      </div>
+
+      <!-- Pattern 6 -->
+      <div class="pattern-card" data-color="red">
+        <div class="card-number">Pattern 6</div>
+        <div class="card-title">Secure Private AI (Zero Trust)</div>
+        <div class="card-subtitle">Fully private network boundary. No public access. Firewall-controlled egress.</div>
+        <div class="card-meta">
+          <span class="meta-tag high">Very High Cost</span>
+          <span class="meta-tag high">Very High Complexity</span>
+          <span class="meta-tag">Platform LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>Azure Firewall</li><li>Private AKS</li><li>OpenAI (Private)</li><li>AI Search (Private)</li><li>All PEs</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          Data residency (Canada) · Financial / Healthcare · Regulated customers
+        </div>
+      </div>
+
+      <!-- Pattern 7 -->
+      <div class="pattern-card" data-color="navy">
+        <div class="card-number">Pattern 7</div>
+        <div class="card-title">Data-Centric Lakehouse AI</div>
+        <div class="card-subtitle">AI tightly integrated with a Lakehouse. Medallion architecture + vector search.</div>
+        <div class="card-meta">
+          <span class="meta-tag high">High Cost</span>
+          <span class="meta-tag high">High Complexity</span>
+          <span class="meta-tag">Data + App LZ</span>
+        </div>
+        <ul class="card-services">
+          <li>Databricks</li><li>ADLS Gen2 ×3</li><li>AI Search</li><li>Azure OpenAI</li><li>App Service</li>
+        </ul>
+        <div class="card-usecases">
+          <strong>Use Cases</strong>
+          RAG on enterprise data · Knowledge copilots · Analytics + AI workloads
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Comparison Matrix -->
+<section id="comparison" class="matrix-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Pattern Comparison</h2>
+      <p>Side-by-side feature and attribute comparison across all patterns.</p>
+    </div>
+    <div class="matrix-table-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th>Attribute</th>
+            <th>1. Hub AI</th>
+            <th>2. Spoke AI</th>
+            <th>3. Hybrid</th>
+            <th>4. AI Factory</th>
+            <th>5. Serverless</th>
+            <th>6. Secure AI</th>
+            <th>7. Lakehouse</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Landing Zone</strong></td>
+            <td>Platform (Hub)</td>
+            <td>App (each)</td>
+            <td>Platform + App</td>
+            <td>AI Factory</td>
+            <td>Sandbox / App</td>
+            <td>Platform</td>
+            <td>Data + App</td>
+          </tr>
+          <tr>
+            <td><strong>Cost</strong></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></td>
+          </tr>
+          <tr>
+            <td><strong>Complexity</strong></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot empty"></span><span class="dot empty"></span><span class="dot empty"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></td>
+            <td><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot empty"></span></td>
+          </tr>
+          <tr>
+            <td><strong>Security</strong></td>
+            <td>Private Endpoints</td>
+            <td>Private Endpoints</td>
+            <td>VNet Peering + PE</td>
+            <td>VNet Inject + PE</td>
+            <td>PaaS Auth</td>
+            <td>Zero Trust</td>
+            <td>Private Endpoints</td>
+          </tr>
+          <tr>
+            <td><strong>Data Isolation</strong></td>
+            <td>Shared</td>
+            <td>Full</td>
+            <td>Per-spoke data</td>
+            <td>Dedicated</td>
+            <td>Shared</td>
+            <td>Full + Encrypted</td>
+            <td>Medallion zones</td>
+          </tr>
+          <tr>
+            <td><strong>OpenAI Ownership</strong></td>
+            <td>Hub (shared)</td>
+            <td>Per workload</td>
+            <td>Hub (shared)</td>
+            <td>Factory-owned</td>
+            <td>Dedicated</td>
+            <td>Private per LZ</td>
+            <td>Dedicated</td>
+          </tr>
+          <tr>
+            <td><strong>Compute</strong></td>
+            <td>AKS / App Svc</td>
+            <td>AKS (+ GPU)</td>
+            <td>App Svc or AKS</td>
+            <td>Databricks + AML</td>
+            <td>Functions</td>
+            <td>Private AKS</td>
+            <td>Databricks + App</td>
+          </tr>
+          <tr>
+            <td><strong>Best For</strong></td>
+            <td>Enterprise copilots</td>
+            <td>Regulated workloads</td>
+            <td>RAG apps</td>
+            <td>ML pipelines</td>
+            <td>PoC / MVPs</td>
+            <td>Compliance</td>
+            <td>Data + AI</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Selection Guide -->
+<section id="guide">
+  <div class="container">
+    <div class="section-header">
+      <h2>Quick Selection Guide</h2>
+      <p>Answer one question to find your pattern.</p>
+    </div>
+    <div class="matrix-table-wrap">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th style="width:60%">Scenario</th>
+            <th>Recommended Pattern</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Quick PoC or internal chatbot</td><td><strong>5 — Serverless AI</strong></td></tr>
+          <tr><td>Enterprise copilot shared across business units</td><td><strong>1 — Centralized Hub AI</strong></td></tr>
+          <tr><td>Workload with strict data isolation (PII/PCI/PHI)</td><td><strong>2 — Decentralized Spoke AI</strong></td></tr>
+          <tr><td>Shared base models + per-app RAG customization</td><td><strong>3 — Hybrid Central + Spoke</strong></td></tr>
+          <tr><td>Full ML lifecycle (training → registry → serving)</td><td><strong>4 — AI Factory (MLOps)</strong></td></tr>
+          <tr><td>Regulated / Zero Trust / Canadian data residency</td><td><strong>6 — Secure Private AI</strong></td></tr>
+          <tr><td>RAG on an enterprise data lakehouse</td><td><strong>7 — Data-Centric Lakehouse AI</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture Previews -->
+<section id="architecture" class="arch-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Architecture Previews</h2>
+      <p>High-level topology for each pattern.</p>
+    </div>
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-card-header">1. Centralized Hub AI</div>
+        <div class="arch-card-body">
+  Hub VNet (10.0.0.0/16)
+  ├── Azure OpenAI  (PE)
+  ├── AI Search     (PE)
+  ├── AML + ADLS    (PE)
+  └── Key Vault     (PE)
+        │ VNet Peering
+  ┌─────┴──────┐
+  │ Spoke 1    │  Spoke 2  ...
+  │ AKS/App    │  AKS/App
+  └────────────┘</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-header">2. Decentralized Spoke AI</div>
+        <div class="arch-card-body">
+  Workload VNet (per app)
+  ├── Azure OpenAI  (PE)
+  ├── AI Search     (PE)
+  ├── ADLS Gen2     (PE)
+  ├── Key Vault     (PE)
+  └── AKS Cluster
+      ├── system pool
+      └── gpu pool (opt)</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-header">3. Hybrid Central + Spoke</div>
+        <div class="arch-card-body">
+  Hub VNet
+  ├── OpenAI (base)  (PE)
+  └── AML Registry   (PE)
+        │ VNet Peering
+  Spoke VNet
+  ├── AI Search (RAG) (PE)
+  ├── ADLS (docs)
+  └── App Service / AKS</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-header">4. AI Factory (MLOps)</div>
+        <div class="arch-card-body">
+  Factory VNet
+  ├── Databricks (VNet-injected)
+  │   ├── public /22
+  │   └── private /22
+  ├── AML Workspace   (PE)
+  ├── ADLS Features    (PE)
+  ├── ADLS Models      (PE)
+  ├── ACR              (PE)
+  └── Azure OpenAI     (PE)</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-header">5. Serverless AI</div>
+        <div class="arch-card-body">
+  Fully Managed (No VNet)
+  ├── Azure OpenAI
+  ├── Azure Functions (Y1)
+  ├── AI Search (Basic)
+  ├── Blob Storage
+  ├── App Insights
+  └── APIM (optional)</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-header">6. Secure Private AI</div>
+        <div class="arch-card-body">
+  Secure VNet (10.30.0.0/16)
+  ├── Azure Firewall (Premium)
+  │   └── UDR 0.0.0.0/0 → FW
+  ├── Private AKS     (NSG)
+  ├── OpenAI           (PE, no pub)
+  ├── AI Search        (PE, no pub)
+  ├── ADLS + KV        (PE, no pub)
+  └── AML              (PE, no pub)
+  publicNetworkAccess = Disabled</div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-header">7. Data-Centric Lakehouse</div>
+        <div class="arch-card-body">
+  Lakehouse VNet
+  ├── Databricks (VNet-injected)
+  ├── ADLS Raw      → landing/raw
+  ├── ADLS Curated  → silver/gold
+  ├── ADLS Serving  → embeddings
+  ├── AI Search (vector layer)
+  ├── Azure OpenAI (inference)
+  └── App Service (RAG app)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Shared Modules -->
+<section id="modules">
+  <div class="container">
+    <div class="section-header">
+      <h2>Shared Bicep Modules</h2>
+      <p>17 reusable modules powering all patterns.</p>
+    </div>
+    <div class="modules-grid">
+      <div class="module-card"><div class="module-icon">🧠</div><div class="module-name">Azure OpenAI</div><div class="module-desc">Cognitive Services + model deployments</div></div>
+      <div class="module-card"><div class="module-icon">🔍</div><div class="module-name">AI Search</div><div class="module-desc">Semantic & vector search</div></div>
+      <div class="module-card"><div class="module-icon">🧪</div><div class="module-name">Machine Learning</div><div class="module-desc">AML workspace</div></div>
+      <div class="module-card"><div class="module-icon">📦</div><div class="module-name">ADLS Gen2</div><div class="module-desc">Data Lake with containers</div></div>
+      <div class="module-card"><div class="module-icon">☸️</div><div class="module-name">AKS</div><div class="module-desc">Kubernetes + GPU pools</div></div>
+      <div class="module-card"><div class="module-icon">🌐</div><div class="module-name">App Service</div><div class="module-desc">Web App + VNet integration</div></div>
+      <div class="module-card"><div class="module-icon">⚡</div><div class="module-name">Azure Functions</div><div class="module-desc">Serverless compute</div></div>
+      <div class="module-card"><div class="module-icon">🔑</div><div class="module-name">Key Vault</div><div class="module-desc">RBAC-enabled secrets</div></div>
+      <div class="module-card"><div class="module-icon">🔥</div><div class="module-name">Firewall</div><div class="module-desc">Azure Firewall + policy</div></div>
+      <div class="module-card"><div class="module-icon">🔗</div><div class="module-name">VNet</div><div class="module-desc">Virtual network + subnets</div></div>
+      <div class="module-card"><div class="module-icon">🔒</div><div class="module-name">Private Endpoint</div><div class="module-desc">PE + DNS integration</div></div>
+      <div class="module-card"><div class="module-icon">📡</div><div class="module-name">Private DNS</div><div class="module-desc">DNS zones + VNet links</div></div>
+      <div class="module-card"><div class="module-icon">🛡️</div><div class="module-name">NSG</div><div class="module-desc">Network Security Groups</div></div>
+      <div class="module-card"><div class="module-icon">📊</div><div class="module-name">Databricks</div><div class="module-desc">VNet-injectable workspace</div></div>
+      <div class="module-card"><div class="module-icon">🚪</div><div class="module-name">API Management</div><div class="module-desc">APIM gateway</div></div>
+      <div class="module-card"><div class="module-icon">📈</div><div class="module-name">Log Analytics</div><div class="module-desc">Centralized logging</div></div>
+      <div class="module-card"><div class="module-icon">🔬</div><div class="module-name">App Insights</div><div class="module-desc">Application telemetry</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Deploy CTA -->
+<section id="deploy" class="deploy-section">
+  <div class="container">
+    <h2>Deploy Any Pattern</h2>
+    <p>Each pattern is independently deployable with a single Azure CLI command.</p>
+    <div class="code-block">
+<span class="comment"># Choose your pattern (1-7)</span>
+<span class="cmd">az deployment group create</span> \
+  <span class="flag">--resource-group</span> rg-ai-pattern-dev \
+  <span class="flag">--template-file</span> patterns/&lt;N&gt;-&lt;pattern&gt;/main.bicep \
+  <span class="flag">--parameters</span> patterns/&lt;N&gt;-&lt;pattern&gt;/main.bicepparam
+
+<span class="comment"># Example: Deploy Serverless AI (Pattern 5)</span>
+<span class="cmd">az deployment group create</span> \
+  <span class="flag">--resource-group</span> rg-serverless-ai-dev \
+  <span class="flag">--template-file</span> patterns/5-serverless-ai/main.bicep \
+  <span class="flag">--parameters</span> patterns/5-serverless-ai/main.bicepparam
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>Azure AI Deployment Patterns &middot; Built with <a href="https://learn.microsoft.com/azure/azure-resource-manager/bicep/">Bicep</a> &middot; Aligned to <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/">Azure Landing Zones</a></p>
+  <p style="margin-top: 0.5rem; font-size: 0.78rem;">Region: Canada Central &middot; Single-Region Only &middot; 7 Patterns &middot; 17 Modules</p>
+</footer>
+
+</body>
+</html>
