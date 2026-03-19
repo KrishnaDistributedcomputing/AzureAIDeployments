@@ -795,7 +795,8 @@
     <div class="container">
       <div class="row g-5">
         <div class="col-lg-6">
-          <h2 class="fw-bold mb-4"><i class="bi bi-speedometer2 text-primary me-2"></i>Composite SLAs</h2>
+          <h2 class="fw-bold mb-3"><i class="bi bi-speedometer2 text-primary me-2"></i>Composite SLAs</h2>
+          <p class="small text-body-secondary mb-3">The Composite SLA is the <strong>product</strong> of individual SLAs of every service in the critical request path. Fewer services or higher-tier SKUs raise the composite. <a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank">Learn how it's calculated <i class="bi bi-box-arrow-up-right"></i></a></p>
           <table class="table table-bordered table-striped">
             <thead class="table-dark"><tr><th>Pattern</th><th>SLA</th></tr></thead>
             <tbody>
@@ -1067,7 +1068,7 @@
         <tr><td>Key Vault + Monitor + Content Safety</td><td class="text-end">~$40</td></tr>
         <tr class="table-primary"><td><strong>Total</strong></td><td class="text-end"><strong>~$3,400/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.72%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-primary" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.72%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">The <strong>Composite SLA</strong> is the product of the individual SLAs of every service in the critical request path. If any service is unavailable, the entire request fails.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.999 (APIM) × 0.9999 (Key Vault) × 0.999 (AI Search) × 0.9999 (Storage)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI</td><td>99.9%</td></tr><tr><td>API Management v2</td><td>99.9%</td></tr><tr><td>Key Vault</td><td>99.99%</td></tr><tr><td>AI Search (S1, 3 replicas)</td><td>99.9%</td></tr><tr><td>Storage (LRS)</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.999 × 0.9999 × 0.999 × 0.9999 = <strong>0.9972 → 99.72%</strong></p><p class="mb-0 text-muted">Each additional service in the chain <em>lowers</em> the composite. Add Availability Zones or remove services from the critical path to improve it.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <h6>Service Limits (2026)</h6><ul><li>AOAI: 30 deployments/resource, 450K TPM (GPT-4o), 2M TPM (GPT-4o-mini)</li><li>APIM: 5,000 req/sec (Standard v2), GenAI policies support streaming</li><li>AI Search: 50 indexes, 12 replicas (S1)</li></ul>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/" target="_blank">AOAI</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/api-management/" target="_blank">APIM</a> &middot; <a href="https://ai.azure.com" target="_blank">AI Foundry</a></p>
       <div class="text-center mt-3">
@@ -1093,7 +1094,7 @@
         <tr><td>3&times; Key Vault + Monitor + VNet</td><td class="text-end">~$55</td></tr>
         <tr class="table-info"><td><strong>Total</strong></td><td class="text-end"><strong>~$7,400/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.67%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-info" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.67%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">The <strong>Composite SLA</strong> is the product of every service in the critical path. A request flows through AOAI → Firewall → AI Search → Key Vault → Storage — all must be available.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.9999 (Firewall) × 0.999 (AI Search) × 0.9999 (Key Vault) × 0.9999 (Storage)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI (per spoke)</td><td>99.9%</td></tr><tr><td>Azure Firewall</td><td>99.99%</td></tr><tr><td>AI Search (Basic)</td><td>99.9%</td></tr><tr><td>Key Vault (per spoke)</td><td>99.99%</td></tr><tr><td>Storage (per spoke)</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.9999 × 0.999 × 0.9999 × 0.9999 = <strong>0.9967 → 99.67%</strong></p><p class="mb-0 text-muted">Blast-radius isolation means each spoke fails independently, but the per-spoke composite remains 99.67%.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/azure-firewall/" target="_blank">Firewall</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/virtual-network-manager/" target="_blank">VNet Manager</a></p>
       <div class="text-center mt-3">
         <a href="pattern2.html" class="btn btn-info text-white me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -1118,7 +1119,7 @@
         <tr><td>Key Vault + Monitor + VNet</td><td class="text-end">~$65</td></tr>
         <tr class="table-success"><td><strong>Total</strong></td><td class="text-end"><strong>~$5,600/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.54%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-success" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.54%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">This pattern has the <strong>most services in the critical path</strong> (AOAI → APIM → ML endpoints → Firewall → AI Search), which produces the lowest composite SLA.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.999 (APIM) × 0.999 (ML endpoints) × 0.9999 (Firewall) × 0.999 (AI Search)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI</td><td>99.9%</td></tr><tr><td>API Management v2</td><td>99.9%</td></tr><tr><td>AI Foundry Endpoints</td><td>99.9%</td></tr><tr><td>Azure Firewall</td><td>99.99%</td></tr><tr><td>AI Search (S1)</td><td>99.9%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.999 × 0.999 × 0.9999 × 0.999 = <strong>0.9954 → 99.54%</strong></p><p class="mb-0 text-muted">Each 99.9% service multiplied into the chain drops the composite by ~0.1%. Remove optional services from the critical path to improve.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Source: <a href="https://ai.azure.com" target="_blank">AI Foundry</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/api-management/" target="_blank">APIM</a></p>
       <div class="text-center mt-3">
         <a href="pattern3.html" class="btn btn-success me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -1143,7 +1144,7 @@
         <tr><td>Cosmos DB + Key Vault + Monitor</td><td class="text-end">~$100</td></tr>
         <tr class="table-warning"><td><strong>Total</strong></td><td class="text-end"><strong>~$4,770/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.72%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold" style="cursor:pointer;color:#6f42c1"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.72%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">The composite is the product of services in the inference/serving path: AOAI → AI Foundry endpoints → Key Vault → AI Search → Cosmos DB.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.999 (AI Foundry endpoints) × 0.9999 (Key Vault) × 0.999 (AI Search) × 0.9999 (Cosmos DB)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI</td><td>99.9%</td></tr><tr><td>AI Foundry Endpoints</td><td>99.9%</td></tr><tr><td>Key Vault</td><td>99.99%</td></tr><tr><td>AI Search (S1)</td><td>99.9%</td></tr><tr><td>Cosmos DB</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.999 × 0.9999 × 0.999 × 0.9999 = <strong>0.9972 → 99.72%</strong></p><p class="mb-0 text-muted">GPU training compute is not included — SLA applies to the serving/inference path only.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Source: <a href="https://ai.azure.com" target="_blank">AI Foundry</a> &middot; GPU: NC A100 v4 at $2.47/hr &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/machine-learning/" target="_blank">Compute</a></p>
       <div class="text-center mt-3">
         <a href="pattern4.html" class="btn btn-warning me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -1169,7 +1170,7 @@
         <tr><td>Key Vault + Monitor + Event Grid</td><td class="text-end">~$30</td></tr>
         <tr class="table-danger"><td><strong>Total</strong></td><td class="text-end"><strong>~$645/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.73%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-danger" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.73%</strong> — how is this calculated? <span class="badge bg-success ms-1">Highest AI SLA</span></summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">Serverless achieves the <strong>highest composite SLA</strong> among AI patterns because Functions Flex and Event Grid are both 99.99% — fewer low-SLA services in the path.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.9999 (Functions Flex) × 0.9999 (Event Grid) × 0.9995 (Cosmos DB) × 0.999 (AI Search)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI</td><td>99.9%</td></tr><tr><td>Azure Functions Flex</td><td>99.99%</td></tr><tr><td>Event Grid</td><td>99.99%</td></tr><tr><td>Cosmos DB (serverless)</td><td>99.95%</td></tr><tr><td>AI Search (Basic)</td><td>99.9%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.9999 × 0.9999 × 0.9995 × 0.999 = <strong>0.9973 → 99.73%</strong></p><p class="mb-0 text-muted">Fewer services + higher-SLA managed services = the best composite. Container Apps (99.95%) is not in the critical path (alternative compute).</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/functions/" target="_blank">Functions Flex</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/container-apps/" target="_blank">Container Apps</a> — gpt-4o-mini: $0.15/$0.60 per 1M tokens</p>
       <div class="text-center mt-3">
         <a href="pattern5.html" class="btn btn-danger me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -1195,7 +1196,7 @@
         <tr><td>Private Endpoints + Monitor + Bastion</td><td class="text-end">~$680</td></tr>
         <tr class="table-dark"><td><strong>Total</strong></td><td class="text-end"><strong>~$11,038/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.68%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-white" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.68%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light text-dark rounded p-3"><p class="mb-2">Despite premium-tier services, the composite is pulled down by AOAI and AI Search (both 99.9%). The zero-trust security stack (Firewall Premium, HSM, Storage) all provide 99.99%.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.9999 (Firewall Premium) × 0.999 (AI Search S2) × 0.9999 (HSM) × 0.9999 (Storage)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI (private)</td><td>99.9%</td></tr><tr><td>Firewall Premium</td><td>99.99%</td></tr><tr><td>AI Search (S2)</td><td>99.9%</td></tr><tr><td>Managed HSM</td><td>99.99%</td></tr><tr><td>Storage (CMK)</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.9999 × 0.999 × 0.9999 × 0.9999 = <strong>0.9968 → 99.68%</strong></p><p class="mb-0 text-muted">To raise the composite: deploy AI Search with 3+ replicas for higher SLA, or add active-active multi-region.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/azure-firewall/" target="_blank">Firewall Premium</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/key-vault/" target="_blank">Managed HSM</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/confidential-ledger/" target="_blank">Confidential Ledger</a></p>
       <div class="text-center mt-3">
         <a href="pattern6.html" class="btn btn-dark me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -1220,7 +1221,7 @@
         <tr><td>ADLS Gen2 (1TB, medallion) + Monitor</td><td class="text-end">~$235</td></tr>
         <tr class="table-secondary"><td><strong>Total</strong></td><td class="text-end"><strong>~$7,300/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.67%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-secondary" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.67%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">The critical data path: AOAI → Fabric → Databricks → AI Search → Storage. Databricks Premium at 99.95% and Fabric at 99.9% are the main limiters.</p><p class="mb-2 font-monospace">0.999 (AOAI) × 0.999 (Fabric) × 0.9995 (Databricks) × 0.999 (AI Search) × 0.9999 (Storage)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure OpenAI</td><td>99.9%</td></tr><tr><td>Microsoft Fabric</td><td>99.9%</td></tr><tr><td>Databricks Premium</td><td>99.95%</td></tr><tr><td>AI Search (S1)</td><td>99.9%</td></tr><tr><td>ADLS Gen2 (LRS)</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.999 × 0.999 × 0.9995 × 0.999 × 0.9999 = <strong>0.9967 → 99.67%</strong></p><p class="mb-0 text-muted">If Databricks is only in the batch pipeline (not real-time serving), it can be excluded from the critical-path calculation, raising the composite to ~99.72%.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/microsoft-fabric/" target="_blank">Fabric</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/databricks/" target="_blank">Databricks</a></p>
       <div class="text-center mt-3">
         <a href="pattern7.html" class="btn btn-secondary me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -1252,7 +1253,7 @@
         <tr><td>Azure Arc + Load Balancer + Storage + Monitor</td><td class="text-end">~$130</td></tr>
         <tr class="table-secondary"><td><strong>Total (Medium)</strong></td><td class="text-end"><strong>~$4,500/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.95%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold" style="cursor:pointer;color:#e67e22"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.95%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">IaaS VMs with Availability Zones provide 99.95%. Combined with high-SLA managed services, the composite stays very high.</p><p class="mb-2 font-monospace">0.9995 (VM AZ) × 0.9999 (Storage) × 0.9995 (Bastion) × 0.9999 (LB)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure VM (Availability Zone)</td><td>99.95%</td></tr><tr><td>Azure Storage (LRS)</td><td>99.99%</td></tr><tr><td>Azure Bastion</td><td>99.95%</td></tr><tr><td>Load Balancer</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.9995 × 0.9999 × 0.9995 × 0.9999 = <strong>0.9988 ≈ 99.95%</strong></p><p class="mb-0 text-muted">Bastion is for management access only — if excluded from the serving path, the composite rises to ~99.98%.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <div class="text-center mt-3">
         <a href="pattern8.html" class="btn me-2" style="background:#e67e22;color:#fff"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
         <button class="btn btn-success" onclick="openDeploySpec(8)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
@@ -1282,7 +1283,7 @@
         <tr><td>Microsoft Purview + Key Vault + Monitor + Backup</td><td class="text-end">~$200</td></tr>
         <tr class="table-secondary"><td><strong>Total (Medium)</strong></td><td class="text-end"><strong>~$4,100/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.97%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold" style="cursor:pointer;color:#0db7ed"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.97%</strong> — how is this calculated? <span class="badge bg-success ms-1">Highest Overall</span></summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">Azure SQL services are among the highest-SLA offerings. SQL MI and SQL DB both offer 99.99%, pushing the composite close to five-nines.</p><p class="mb-2 font-monospace">0.9999 (SQL MI) × 0.9999 (SQL DB) × 0.9995 (SQL VM) × 0.9999 (Key Vault)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure SQL MI (Next-gen GP)</td><td>99.99%</td></tr><tr><td>Azure SQL Database</td><td>99.99%</td></tr><tr><td>SQL on Azure VM</td><td>99.95%</td></tr><tr><td>Key Vault</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.9999 × 0.9999 × 0.9995 × 0.9999 = <strong>0.9992 ≈ 99.97%</strong></p><p class="mb-0 text-muted">SQL MI+DB are 99.99%. If SQL VM (99.95%) is replaced with another MI, composite rises to ~99.97+%.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <div class="text-center mt-3">
         <a href="pattern9.html" class="btn me-2" style="background:#0db7ed;color:#fff"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
         <button class="btn btn-success" onclick="openDeploySpec(9)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
@@ -1313,7 +1314,7 @@
         <tr><td>Defender CSPM + Grafana + Monitor + Storage</td><td class="text-end">~$330</td></tr>
         <tr class="table-secondary"><td><strong>Total (Medium)</strong></td><td class="text-end"><strong>~$5,800/mo</strong></td></tr>
       </tbody></table>
-      <p>Composite SLA <strong>99.95%</strong></p>
+      <details class="mb-3"><summary class="fw-semibold text-success" style="cursor:pointer"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.95%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">A balanced greenfield deployment. The hub Firewall and SQL MI at 99.99% anchor the composite, while AOAI and AI Search at 99.9% are the main limiters.</p><p class="mb-2 font-monospace">0.9999 (Firewall) × 0.999 (AOAI) × 0.9999 (SQL MI) × 0.999 (AI Search) × 0.9995 (App Svc)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure Firewall</td><td>99.99%</td></tr><tr><td>Azure OpenAI</td><td>99.9%</td></tr><tr><td>Azure SQL MI</td><td>99.99%</td></tr><tr><td>AI Search (S1)</td><td>99.9%</td></tr><tr><td>App Service (P1v3)</td><td>99.95%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.9999 × 0.999 × 0.9999 × 0.999 × 0.9995 = <strong>0.9973 ≈ 99.95%</strong></p><p class="mb-0 text-muted">This pattern follows all 6 CAF phases. IaC via Azure Verified Modules ensures consistent deployments across regions.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <p class="small text-muted">Follows all 6 CAF phases: Strategy &rarr; Plan &rarr; Ready &rarr; Adopt &rarr; Govern &rarr; Manage. IaC via <a href="https://aka.ms/avm" target="_blank">Azure Verified Modules</a>.</p>
       <div class="text-center mt-3">
         <a href="pattern10.html" class="btn btn-success me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
@@ -2371,23 +2372,44 @@ ${extraRbac}
 ────────────────────────────────────────────────────────────────────────────────
   10. HIGH AVAILABILITY (CAF Manage — Business Alignment)
 ────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/manage/
 
   HA STRATEGY:
   ${p.ha}
 
   COMPOSITE SLA CALCULATION:
+  Ref: https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas
+  Azure SLA Summary: https://azure.microsoft.com/en-us/support/legal/sla/summary/
 
+  METHOD:
+  The Composite SLA is calculated by multiplying the individual SLA of every
+  Azure service that sits in the critical request path (i.e. if that service
+  is unavailable, the end-user request fails). Services used only for background
+  processing, training, or management are EXCLUDED from the critical path.
+
+  Formula: Composite SLA = SLA₁ × SLA₂ × SLA₃ × … × SLAₙ
+
+  Individual Service SLAs (critical path):
 ${slaLines}
+
+  Multiplication:
   ─────────────────────────────────────────────
   Composite SLA = Product of all individual SLAs
                = ${p.slaCalc}
                = ${p.sla}
 
+  WHY THE COMPOSITE IS ALWAYS LOWER THAN ANY INDIVIDUAL SLA:
+  • Multiplying any number < 1.0 by another < 1.0 always yields a smaller result
+  • Each additional service in the chain reduces the composite by roughly:
+    (1 - service SLA) — e.g. a 99.9% service costs ~0.1% off the composite
+  • Example: 5 services at 99.9% each → 0.999⁵ = 0.9950 → 99.50%
+
   SLA improvement options:
   • Add Availability Zones (zone-redundant deployments)
-  • Increase AI Search replicas (3+ for 99.9% SLA)
-  • Use Premium/Standard v2 tiers for higher SLAs
-  • Deploy active-active across 2 regions (raises to ~99.99%)
+  • Increase AI Search replicas (3+ for higher read SLA)
+  • Use Premium/Standard v2 tiers for higher individual SLAs
+  • Remove optional services from the critical path (e.g. APIM bypass)
+  • Deploy active-active across 2 regions (raises composite to ~99.99%)
 
 ────────────────────────────────────────────────────────────────────────────────
   11. DISASTER RECOVERY (CAF Manage — Business Continuity)
