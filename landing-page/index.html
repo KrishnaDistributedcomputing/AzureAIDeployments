@@ -1250,7 +1250,7 @@
       const azSub = document.getElementById('specAzSub').value.trim() || '00000000-0000-0000-0000-000000000000';
       const azSubName = document.getElementById('specAzSubName').value.trim() || 'AI Subscription';
       const azRegion = document.getElementById('specAzRegion').value;
-      const azRG = document.getElementById('specAzRG').value.trim() || 'rg-ai-pattern' + currentPatternId + '-' + document.getElementById('specAzEnv').value;
+      const azRG = document.getElementById('specAzRG').value.trim() || 'rg-ai-' + document.getElementById('specAzEnv').value + '-' + azRegion + '-' + String(currentPatternId).padStart(3, '0');
       const azEnv = document.getElementById('specAzEnv').value;
       const p = PATTERNS[currentPatternId];
       const svcTable = p.services.map(s => '| ' + s.name + ' | `' + s.sku + '` | `' + s.bicep + '` |').join('\n');
@@ -1258,10 +1258,49 @@
       const extraRbac = p.rbacExtra.map(r => '- ' + r).join('\n');
       const timestamp = new Date().toISOString().split('T')[0];
 
+      // CAF abbreviation map: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
+      const cafAbbr = {
+        'Microsoft.CognitiveServices/accounts': 'oai',
+        'Microsoft.ApiManagement/service': 'apim',
+        'Microsoft.Search/searchServices': 'srch',
+        'Microsoft.KeyVault/vaults': 'kv',
+        'Microsoft.OperationalInsights/workspaces': 'log',
+        'Microsoft.Insights/components': 'appi',
+        'Microsoft.Storage/storageAccounts': 'st',
+        'Microsoft.Network/azureFirewalls': 'afw',
+        'Microsoft.Network/virtualNetworks': 'vnet',
+        'Microsoft.Network/networkSecurityGroups': 'nsg',
+        'Microsoft.MachineLearningServices/workspaces': 'mlw',
+        'Microsoft.App/containerApps': 'ca',
+        'Microsoft.DocumentDB/databaseAccounts': 'cosmos',
+        'Microsoft.Web/sites': 'func',
+        'Microsoft.ContainerRegistry/registries': 'cr',
+        'Microsoft.EventGrid/topics': 'evgt',
+        'Microsoft.Network/privateEndpoints': 'pep',
+        'Microsoft.Network/privateDnsZones': 'pdnsz',
+        'Microsoft.ManagedIdentity/userAssignedIdentities': 'id',
+        'Microsoft.Authorization/roleAssignments': 'ra',
+        'Microsoft.Synapse/workspaces': 'syn',
+        'Microsoft.Databricks/workspaces': 'dbw',
+        'Microsoft.Compute/virtualMachines': 'vm'
+      };
+      const workload = 'ai';
+      const envShort = azEnv === 'production' ? 'prod' : azEnv === 'staging' ? 'stg' : 'dev';
+      const regionShort = { canadacentral: 'cc', eastus: 'eus', eastus2: 'eus2', westus2: 'wus2', westeurope: 'weu', northeurope: 'neu', uksouth: 'uks', southeastasia: 'sea', australiaeast: 'aue', centralus: 'cus', westus: 'wus', japaneast: 'jpe' }[azRegion] || azRegion.substring(0,4);
+      const instance = '001';
+      const cafNamingRows = p.services.map(s => {
+        const abbr = cafAbbr[s.bicep] || s.bicep.split('/').pop().substring(0,4).toLowerCase();
+        const cafName = (s.bicep === 'Microsoft.Storage/storageAccounts' || s.bicep === 'Microsoft.ContainerRegistry/registries')
+          ? abbr + workload + envShort + regionShort + instance   // no hyphens for storage/ACR
+          : abbr + '-' + workload + '-' + envShort + '-' + regionShort + '-' + instance;
+        return '| ' + s.name + ' | `' + abbr + '` | `' + cafName + '` |';
+      }).join('\n');
+
       const spec = `# Deployment Spec Sheet
 ## Pattern ${currentPatternId} — ${p.name}
 
 > Generated: ${timestamp} | Est. Cost: **${p.cost}** | Composite SLA: **${p.sla}**
+> Naming Standard: **Microsoft CAF** ([Resource abbreviations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations))
 
 ---
 
@@ -1275,11 +1314,97 @@
 | **Azure Subscription** | \`${azSub}\` (${azSubName}) |
 | **Region** | \`${azRegion}\` |
 | **Resource Group** | \`${azRG}\` |
-| **Environment** | \`${azEnv}\` |
+| **Environment** | \`${azEnv}\` (\`${envShort}\`) |
 
 ---
 
-## 2. Azure Services — Bill of Materials
+## 2. CAF Resource Naming Convention
+
+> **Pattern:** \`<resource-abbreviation>-<workload>-<environment>-<region>-<instance>\`
+> **Reference:** [CAF — Define your naming convention](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming)
+
+| Service | CAF Abbr | Recommended Name |
+|---------|----------|-----------------|
+| Resource Group | \`rg\` | \`${azRG}\` |
+${cafNamingRows}
+
+> **Notes:**
+> - Storage Accounts and Container Registries must be alphanumeric only (no hyphens), 3-24 chars
+> - Key Vault names must be globally unique, 3-24 chars
+> - Use consistent \`<workload>\` across all resources (default: \`${workload}\`)
+> - Append \`-<instance>\` (001, 002…) for multiple instances of the same type
+
+---
+
+## 3. CAF Tagging Strategy
+
+> **Reference:** [CAF — Define your tagging strategy](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging)
+
+### Required Tags (apply to Resource Group and all resources)
+
+| Tag Name | Value | Purpose |
+|----------|-------|---------|
+| \`Environment\` | \`${azEnv}\` | Identifies deployment environment |
+| \`Workload\` | \`AI Pattern ${currentPatternId} - ${p.name}\` | Identifies the application workload |
+| \`Owner\` | \`<team-or-user-email>\` | Responsible team/individual |
+| \`CostCenter\` | \`<cost-center-code>\` | Financial tracking & chargeback |
+| \`DataClassification\` | \`Confidential\` | Data sensitivity level |
+| \`Criticality\` | \`High\` | Business criticality for SLA decisions |
+
+### Recommended Tags
+
+| Tag Name | Value | Purpose |
+|----------|-------|---------|
+| \`CreatedBy\` | \`IaC-GitHubActions\` | Deployment method traceability |
+| \`DeploymentDate\` | \`${timestamp}\` | When last deployed |
+| \`Pattern\` | \`Pattern${currentPatternId}\` | Links to AI pattern reference |
+| \`ComplianceScope\` | \`SOC2\` / \`HIPAA\` / \`FERPA\` | Regulatory compliance scope |
+| \`MaintenanceWindow\` | \`Sun 02:00-06:00 UTC\` | Planned maintenance schedule |
+| \`ExpirationDate\` | \`<yyyy-mm-dd>\` | For non-production, auto-cleanup date |
+
+### Bicep Implementation
+
+\`\`\`bicep
+// tags.bicep — shared tags module
+@description('Required tags per CAF tagging strategy')
+param environment string
+param workload string = 'AI Pattern ${currentPatternId}'
+param owner string
+param costCenter string
+
+var requiredTags = {
+  Environment: environment
+  Workload: workload
+  Owner: owner
+  CostCenter: costCenter
+  DataClassification: 'Confidential'
+  Criticality: 'High'
+  CreatedBy: 'IaC-GitHubActions'
+  DeploymentDate: utcNow('yyyy-MM-dd')
+  Pattern: 'Pattern${currentPatternId}'
+}
+
+output tags object = requiredTags
+\`\`\`
+
+### Azure Policy — Enforce Tagging
+
+\`\`\`json
+{
+  "if": {
+    "allOf": [
+      { "field": "tags['Environment']", "exists": "false" },
+      { "field": "tags['Owner']", "exists": "false" },
+      { "field": "tags['CostCenter']", "exists": "false" }
+    ]
+  },
+  "then": { "effect": "deny" }
+}
+\`\`\`
+
+---
+
+## 4. Azure Services — Bill of Materials
 
 | Service | SKU / Tier | Bicep Resource Type |
 |---------|-----------|-------------------|
@@ -1293,7 +1418,7 @@ ${p.networking}
 
 ---
 
-## 3. Required Access & Privileges
+## 5. Required Access & Privileges
 
 ### Azure RBAC (on subscription \`${azSub}\`)
 - **Owner** or **Contributor** + **User Access Administrator** — to create resources and assign roles
@@ -1331,7 +1456,7 @@ ${extraRbac}
 
 ---
 
-## 4. Pre-Deployment Checklist
+## 6. Pre-Deployment Checklist
 
 - [ ] Azure subscription \`${azSub}\` is active with sufficient spending limit
 - [ ] Azure OpenAI access approved for the subscription
@@ -1343,12 +1468,13 @@ ${extraRbac}
 - [ ] \`AZURE_CREDENTIALS\` secret configured in GitHub repo settings
 - [ ] VS Code + Bicep extension installed and authenticated
 - [ ] Private DNS Zones planned (if private networking pattern)
-- [ ] Resource naming convention agreed (e.g., \`<prefix>-<service>-<env>\`)
-- [ ] Tagging strategy: CostCenter, Owner, Environment, DataClassification
+- [ ] CAF resource naming convention applied (see Section 2 above)
+- [ ] CAF tags applied to all resources (see Section 3 above)
+- [ ] Azure Policy for tag enforcement assigned to subscription
 
 ---
 
-## 5. GitHub Actions Workflow
+## 7. GitHub Actions Workflow
 
 Save as \`.github/workflows/deploy-pattern${currentPatternId}.yml\`:
 
@@ -1402,7 +1528,7 @@ jobs:
           az group create \\
             --name \${{ env.RESOURCE_GROUP }} \\
             --location \${{ env.LOCATION }} \\
-            --tags Environment=\${{ env.ENVIRONMENT }} Pattern=pattern${currentPatternId}
+            --tags Environment=\${{ env.ENVIRONMENT }} Workload="AI-Pattern${currentPatternId}" Owner="deploy-pipeline" CostCenter="TBD" DataClassification="Confidential" Criticality="High" CreatedBy="IaC-GitHubActions" Pattern="Pattern${currentPatternId}"
       - name: Deploy Bicep
         run: |
           az deployment group create \\
@@ -1420,7 +1546,7 @@ jobs:
 
 ---
 
-## 6. File Structure
+## 8. File Structure
 
 \`\`\`
 ${ghPath}/
@@ -1428,6 +1554,7 @@ ${ghPath}/
 ├── parameters.dev.bicepparam           # Dev environment parameters
 ├── parameters.prod.bicepparam          # Prod environment parameters
 ├── modules/
+│   ├── tags.bicep                      # CAF shared tags module
 │   ├── openai.bicep                    # Azure OpenAI + model deployments
 │   ├── search.bicep                    # Azure AI Search
 │   ├── keyvault.bicep                  # Key Vault with RBAC
