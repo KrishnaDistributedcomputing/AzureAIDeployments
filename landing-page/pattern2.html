@@ -163,82 +163,90 @@
   <!-- Architecture Diagram -->
   <section class="py-5 bg-body-secondary" id="architecture">
     <div class="container">
-      <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
         <h2 class="fw-bold mb-0"><i class="bi bi-diagram-2 me-2"></i>Architecture Diagram</h2>
-        <div class="btn-group">
+        <div class="btn-group" role="group">
           <button class="btn btn-sm btn-outline-primary" onclick="downloadDiagram('png')" title="Download as PNG"><i class="bi bi-image me-1"></i>PNG</button>
           <button class="btn btn-sm btn-outline-primary" onclick="downloadDiagram('svg')" title="Download as SVG"><i class="bi bi-file-earmark-svg me-1"></i>SVG</button>
         </div>
       </div>
+      <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
+        <strong>📌 Architecture Overview:</strong> Three independent workload teams (Green/Orange/Purple) each run isolated Azure AI services. All outbound traffic routes through a central Azure Firewall. Monitoring is centralized in Log Analytics.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
       <div class="card shadow">
         <div class="card-body text-center p-4 bg-white">
-          <div class="diagram-wrapper" style="min-height:600px;display:flex;align-items:center;justify-content:center">
+          <div class="diagram-wrapper" style="min-height:550px;display:flex;align-items:center;justify-content:center;overflow:auto">
             <pre class="mermaid">
 graph LR
-    subgraph Shared["🔧 Shared Services"]
-        FW["🔥 Azure<br/>Firewall"]
-        MON["📊 Log<br/>Analytics"]
+    subgraph Mgmt["🔧 Shared Management<br/>(Centralized)"]
+        FW["🔥 Azure<br/>Firewall<br/><br/>Control all<br/>outbound traffic"]
+        MON["📊 Log Analytics<br/><br/>Monitor metrics<br/>from all spokes"]
     end
     
-    subgraph Spoke1["🟢 Spoke 1<br/>10.10.0.0/16"]
-        subgraph S1["Spoke 1 Resources"]
-            AKS1["☸️ AKS<br/>D4s_v5 x3"]
-            AOAI1["🤖 OpenAI<br/>S0"]
-            AIS1["🔍 Search<br/>Basic"]
-            ADLS1["💾 ADLS Gen2"]
-            KV1["🔐 Key Vault"]
-        end
+    subgraph SP1["🟢 SPOKE 1<br/>(Team A)<br/>VNet 10.10.0.0/16"]
+        AKS1["<b>AKS Cluster</b><br/>D4s_v5 x 3 nodes<br/><br/>Runs AI apps"]
+        AOAI1["<b>Azure OpenAI</b><br/>S0 Tier<br/><br/>LLM models"]
+        AIS1["<b>AI Search</b><br/>Basic Tier<br/><br/>Vector DB"]
+        ADLS1["<b>Data Lake</b><br/>Gen2 Storage<br/><br/>Datasets"]
     end
     
-    subgraph Spoke2["🟠 Spoke 2<br/>10.20.0.0/16"]
-        subgraph S2["Spoke 2 Resources"]
-            AKS2["☸️ AKS<br/>D4s_v5 x3"]
-            AOAI2["🤖 OpenAI<br/>S0"]
-            AIS2["🔍 Search<br/>Basic"]
-            ADLS2["💾 ADLS Gen2"]
-            KV2["🔐 Key Vault"]
-        end
+    subgraph SP2["🟠 SPOKE 2<br/>(Team B)<br/>VNet 10.20.0.0/16"]
+        AKS2["<b>AKS Cluster</b><br/>D4s_v5 x 3 nodes<br/><br/>Runs AI apps"]
+        AOAI2["<b>Azure OpenAI</b><br/>S0 Tier<br/><br/>LLM models"]
+        AIS2["<b>AI Search</b><br/>Basic Tier<br/><br/>Vector DB"]
+        ADLS2["<b>Data Lake</b><br/>Gen2 Storage<br/><br/>Datasets"]
     end
     
-    subgraph Spoke3["🟣 Spoke 3<br/>10.30.0.0/16"]
-        subgraph S3["Spoke 3 Resources"]
-            AKS3["☸️ AKS<br/>D4s_v5 x3"]
-            AOAI3["🤖 OpenAI<br/>S0"]
-            AIS3["🔍 Search<br/>Basic"]
-            ADLS3["💾 ADLS Gen2"]
-            KV3["🔐 Key Vault"]
-        end
+    subgraph SP3["🟣 SPOKE 3<br/>(Team C)<br/>VNet 10.30.0.0/16"]
+        AKS3["<b>AKS Cluster</b><br/>D4s_v5 x 3 nodes<br/><br/>Runs AI apps"]
+        AOAI3["<b>Azure OpenAI</b><br/>S0 Tier<br/><br/>LLM models"]
+        AIS3["<b>AI Search</b><br/>Basic Tier<br/><br/>Vector DB"]
+        ADLS3["<b>Data Lake</b><br/>Gen2 Storage<br/><br/>Datasets"]
     end
     
-    FW -->|Egress| AKS1
-    FW -->|Egress| AKS2
-    FW -->|Egress| AKS3
+    FW -->|Allow| AKS1
+    FW -->|Allow| AKS2
+    FW -->|Allow| AKS3
     
-    AKS1 -->|LLM Call| AOAI1
-    AKS1 -->|Vector Search| AIS1
-    AKS1 -->|Data Access| ADLS1
-    AIS1 -->|Index| ADLS1
-    AKS1 -->|Secrets| KV1
+    AKS1 -->|Call API| AOAI1
+    AKS1 -->|Search| AIS1
+    AIS1 -->|Read/Write| ADLS1
+    AOAI1 -->|Fetch| ADLS1
     
-    AKS2 -->|LLM Call| AOAI2
-    AKS2 -->|Vector Search| AIS2
-    AKS2 -->|Data Access| ADLS2
-    AIS2 -->|Index| ADLS2
-    AKS2 -->|Secrets| KV2
+    AKS2 -->|Call API| AOAI2
+    AKS2 -->|Search| AIS2
+    AIS2 -->|Read/Write| ADLS2
+    AOAI2 -->|Fetch| ADLS2
     
-    AKS3 -->|LLM Call| AOAI3
-    AKS3 -->|Vector Search| AIS3
-    AKS3 -->|Data Access| ADLS3
-    AIS3 -->|Index| ADLS3
-    AKS3 -->|Secrets| KV3
+    AKS3 -->|Call API| AOAI3
+    AKS3 -->|Search| AIS3
+    AIS3 -->|Read/Write| ADLS3
+    AOAI3 -->|Fetch| ADLS3
     
-    AKS1 -.->|Metrics| MON
-    AOAI1 -.->|Perf| MON
-    AKS2 -.->|Metrics| MON
-    AOAI2 -.->|Perf| MON
-    AKS3 -.->|Metrics| MON
-    AOAI3 -.->|Perf| MON
+    AKS1 -.->|Logs & Metrics| MON
+    AOAI1 -.->|Performance| MON
+    AKS2 -.->|Logs & Metrics| MON
+    AOAI2 -.->|Performance| MON
+    AKS3 -.->|Logs & Metrics| MON
+    AOAI3 -.->|Performance| MON
             </pre>
+          </div>
+        </div>
+      </div>
+      <div class="card mt-3 border-start border-info" style="border-left-width:4px !important">
+        <div class="card-body">
+          <h6 class="card-title fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Key Benefits</h6>
+          <div class="row g-2">
+            <div class="col-md-4">
+              <div class="small"><strong>🔐 Isolated Workloads:</strong> Each team has dedicated resources—no cross-team access</div>
+            </div>
+            <div class="col-md-4">
+              <div class="small"><strong>🛡️ Centralized Security:</strong> All egress through firewall for compliance</div>
+            </div>
+            <div class="col-md-4">
+              <div class="small"><strong>📊 Unified Monitoring:</strong> Single Log Analytics workspace for all spokes</div>
+            </div>
           </div>
         </div>
       </div>
