@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Help &amp; Getting Started — Azure AI Patterns</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root{--accent:#0078d4}
+    [data-bs-theme="dark"]{--accent:#50e6ff}
+    .hero-help{min-height:260px;background:linear-gradient(135deg,#ffc107 0%,#fd7e14 50%,#dc3545 100%)}
+    [data-bs-theme="dark"] .hero-help{background:linear-gradient(135deg,#664d03 0%,#842029 100%)}
+    .step-number{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;flex-shrink:0}
+    .step-card{border-left:4px solid var(--accent);transition:transform .2s}
+    .step-card:hover{transform:translateY(-3px);box-shadow:0 8px 16px rgba(0,0,0,.1)}
+    .faq-btn{text-align:left;font-weight:600;text-decoration:none;color:inherit}
+    .faq-btn:hover{color:var(--accent)}
+    .toc a{text-decoration:none;border-left:3px solid transparent;padding:.35rem .75rem;display:block;transition:all .15s;font-size:.9rem}
+    .toc a:hover,.toc a.active{border-left-color:var(--accent);background:rgba(0,120,212,.06)}
+    #backToTop{position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none}
+    .prereq-card{border-radius:1rem}
+    .tool-icon{width:56px;height:56px;border-radius:.75rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0}
+    .workflow-arrow{font-size:2rem;color:var(--accent)}
+    .pattern-rec-card{border-radius:1rem;overflow:hidden;transition:transform .2s}
+    .pattern-rec-card:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.12)}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="csi-education.html" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning active" href="help.html"><i class="bi bi-question-circle-fill me-1"></i>Help</a>
+          </li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-help text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-question-circle-fill me-3"></i>Help &amp; Getting Started</h1>
+          <p class="lead mb-0">A step-by-step guide to understanding, selecting, and deploying Azure AI patterns. From prerequisites to production — everything you need to get started.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <span class="badge bg-dark fs-6 px-4 py-2"><i class="bi bi-book me-2"></i>User Guide</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <div class="row g-5">
+      <!-- TOC Sidebar -->
+      <div class="col-lg-3 d-none d-lg-block">
+        <div class="position-sticky" style="top:5rem">
+          <h6 class="fw-bold text-muted text-uppercase small mb-3">Contents</h6>
+          <nav class="toc">
+            <a href="#overview">Overview</a>
+            <a href="#prerequisites">Prerequisites</a>
+            <a href="#choose-pattern">Choose a Pattern</a>
+            <a href="#step-by-step">Step-by-Step Guide</a>
+            <a href="#landing-zone-guide">Landing Zone Setup</a>
+            <a href="#education-guide">Education Platform</a>
+            <a href="#deploy-spec">Deploy Spec Generator</a>
+            <a href="#tools">Tools &amp; Extensions</a>
+            <a href="#troubleshooting">Troubleshooting</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="col-lg-9">
+
+        <!-- Overview -->
+        <section id="overview" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2 text-primary"></i>What Is This Portal?</h2>
+          <div class="card border-primary shadow-sm mb-4">
+            <div class="card-body">
+              <p class="mb-3">This portal provides <strong>seven enterprise-grade architectural blueprints</strong> for deploying AI workloads on Microsoft Azure. Each pattern includes:</p>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div><strong>Architecture diagrams</strong> — Mermaid-based visual reference</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div><strong>Bill of Materials</strong> — Every Azure service, SKU, and Bicep type</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div><strong>Cost estimates</strong> — Live pricing from Azure Retail API</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div><strong>SLA &amp; WAF scores</strong> — Composite SLA and Well-Architected alignment</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div><strong>Deployment specs</strong> — GitHub Actions workflow + Bicep structure</div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
+                    <div><strong>RBAC requirements</strong> — Exact roles needed on Azure &amp; GitHub</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="fw-bold mb-3">Three Core Sections</h5>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="card h-100 border-0 shadow-sm pattern-rec-card">
+                <div class="card-body text-center p-4">
+                  <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-primary text-white mb-3" style="width:64px;height:64px"><i class="bi bi-grid-3x3-gap-fill fs-4"></i></div>
+                  <h6 class="fw-bold">AI Patterns</h6>
+                  <p class="small text-muted">7 architectural blueprints with full BOM, costs, SLA, comparison tables, and one-click deployment spec generation.</p>
+                  <a href="index.html#patterns" class="btn btn-sm btn-outline-primary">View Patterns</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 border-0 shadow-sm pattern-rec-card">
+                <div class="card-body text-center p-4">
+                  <div class="rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width:64px;height:64px;background:linear-gradient(135deg,#0b5ed7,#198754)"><i class="bi bi-building-fill-gear fs-4"></i></div>
+                  <h6 class="fw-bold">Landing Zone</h6>
+                  <p class="small text-muted">CAF-aligned landing zone design with hub-spoke networking, subnet planning, governance, and a decision tree.</p>
+                  <a href="landing-zone.html" class="btn btn-sm btn-outline-success">View Landing Zone</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 border-0 shadow-sm pattern-rec-card">
+                <div class="card-body text-center p-4">
+                  <div class="rounded-circle d-inline-flex align-items-center justify-content-center text-white mb-3" style="width:64px;height:64px;background:linear-gradient(135deg,#6f42c1,#0d6efd)"><i class="bi bi-mortarboard-fill fs-4"></i></div>
+                  <h6 class="fw-bold">Education AI</h6>
+                  <p class="small text-muted">CSI Education vertical with 3 IQ engines, AI Academic Advisor, Dropout Predictor, and Learning Planner.</p>
+                  <a href="csi-education.html" class="btn btn-sm btn-outline-primary" style="border-color:#6f42c1;color:#6f42c1">View Education</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Prerequisites -->
+        <section id="prerequisites" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-wrench-adjustable me-2 text-warning"></i>Prerequisites</h2>
+          <p>Before deploying any pattern, ensure you have the following set up:</p>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card prereq-card h-100 border-danger">
+                <div class="card-header bg-danger text-white fw-bold"><i class="bi bi-cloud-fill me-2"></i>Azure Account</div>
+                <div class="card-body">
+                  <ul class="mb-0">
+                    <li><strong>Active Azure subscription</strong> with sufficient spending limit</li>
+                    <li><strong>Azure OpenAI access</strong> — must be <a href="https://aka.ms/oai/access" target="_blank">requested and approved</a></li>
+                    <li><strong>RBAC Role</strong>: <code>Owner</code> or <code>Contributor</code> + <code>User Access Administrator</code> on the subscription</li>
+                    <li><strong>Resource providers</strong> registered: <code>Microsoft.CognitiveServices</code>, <code>Microsoft.Search</code>, <code>Microsoft.KeyVault</code></li>
+                    <li><strong>Quota</strong>: Check <a href="https://portal.azure.com/#view/Microsoft_Azure_Capacity/QuotaMenuBlade" target="_blank">Azure Quota page</a> for OpenAI TPM and GPU limits</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card prereq-card h-100 border-dark">
+                <div class="card-header bg-dark text-white fw-bold"><i class="bi bi-github me-2"></i>GitHub Account</div>
+                <div class="card-body">
+                  <ul class="mb-0">
+                    <li><strong>GitHub account</strong> with repository write access</li>
+                    <li><strong>GitHub Actions</strong> enabled on the target repository</li>
+                    <li><strong>Repository secret</strong>: <code>AZURE_CREDENTIALS</code> — Service Principal JSON
+                      <pre class="bg-body-tertiary p-2 rounded mt-1 small mb-0"><code>{
+  "clientId": "&lt;sp-app-id&gt;",
+  "clientSecret": "&lt;sp-secret&gt;",
+  "subscriptionId": "&lt;sub-id&gt;",
+  "tenantId": "&lt;tenant-id&gt;"
+}</code></pre>
+                    </li>
+                    <li>Create a Service Principal via:<br>
+                      <code class="small">az ad sp create-for-rbac --name "sp-ai-deploy" --role Contributor --scopes /subscriptions/&lt;sub-id&gt;</code>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card prereq-card h-100 border-primary">
+                <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-pc-display me-2"></i>Local Development</div>
+                <div class="card-body">
+                  <ul class="mb-0">
+                    <li><strong>VS Code 1.85+</strong> — <a href="https://code.visualstudio.com" target="_blank">Download</a></li>
+                    <li><strong>Azure CLI 2.60+</strong> — <code>az --version</code> to check, then <code>az login</code></li>
+                    <li><strong>Bicep CLI</strong> — <code>az bicep install</code> (or via VS Code extension)</li>
+                    <li><strong>Git</strong> — configured with push access to GitHub</li>
+                    <li><strong>Node.js 18+</strong> (optional) — for Azure Functions patterns</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card prereq-card h-100 border-info">
+                <div class="card-header bg-info text-white fw-bold"><i class="bi bi-puzzle me-2"></i>VS Code Extensions</div>
+                <div class="card-body">
+                  <table class="table table-sm table-hover mb-0">
+                    <tbody>
+                      <tr><td><span class="badge bg-danger">Required</span></td><td><code>ms-azuretools.vscode-bicep</code></td><td>Bicep language</td></tr>
+                      <tr><td><span class="badge bg-danger">Required</span></td><td><code>ms-vscode.azure-account</code></td><td>Azure sign-in</td></tr>
+                      <tr><td><span class="badge bg-warning text-dark">Recommended</span></td><td><code>ms-azuretools.vscode-azureresourcegroups</code></td><td>Resource explorer</td></tr>
+                      <tr><td><span class="badge bg-warning text-dark">Recommended</span></td><td><code>GitHub.copilot</code></td><td>AI-assisted coding</td></tr>
+                      <tr><td><span class="badge bg-info">Optional</span></td><td><code>hashicorp.terraform</code></td><td>Terraform support</td></tr>
+                      <tr><td><span class="badge bg-info">Optional</span></td><td><code>ms-python.python</code></td><td>Python for ML patterns</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Choose a Pattern -->
+        <section id="choose-pattern" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-signpost-split me-2 text-success"></i>How to Choose a Pattern</h2>
+          <p>Use this decision guide to pick the right architectural pattern for your scenario:</p>
+
+          <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+              <thead class="table-primary">
+                <tr><th>If You Need...</th><th>Choose</th><th>Why</th><th>Est. Cost</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Shared AI for the whole org, lowest cost</td><td><a href="index.html" class="fw-bold text-primary">Pattern 1 — Centralized Hub</a></td><td>Single OpenAI behind APIM; central governance</td><td>~$3,723/mo</td></tr>
+                <tr><td>Team-level data isolation, autonomy</td><td><a href="index.html" class="fw-bold text-info">Pattern 2 — Decentralized Spoke</a></td><td>Separate subscriptions &amp; VNets per team</td><td>~$7,360/mo</td></tr>
+                <tr><td>Shared models + team-specific RAG</td><td><a href="index.html" class="fw-bold text-success">Pattern 3 — Hybrid Central-Spoke</a></td><td>Central AOAI via APIM + spoke ML endpoints</td><td>~$5,685/mo</td></tr>
+                <tr><td>Full ML lifecycle: train → deploy → monitor</td><td><a href="index.html" class="fw-bold" style="color:#6f42c1">Pattern 4 — AI Factory / MLOps</a></td><td>Azure ML workspace with CI/CD pipelines</td><td>~$6,120/mo</td></tr>
+                <tr><td>Fast PoC, hackathon, minimal infra</td><td><a href="index.html" class="fw-bold text-warning">Pattern 5 — Serverless AI</a></td><td>Functions + Logic Apps; no VNet, pay-per-use</td><td>~$890/mo</td></tr>
+                <tr><td>Regulated data (HIPAA, PCI), zero trust</td><td><a href="index.html" class="fw-bold text-danger">Pattern 6 — Secure Private AI</a></td><td>Fully private VNet, Firewall Premium, HSM</td><td>~$10,240/mo</td></tr>
+                <tr><td>Data-heavy: Databricks, Synapse, Fabric</td><td><a href="index.html" class="fw-bold text-dark">Pattern 7 — Data-Centric Lakehouse</a></td><td>Medallion architecture + vector search</td><td>~$8,350/mo</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-info mt-3">
+            <i class="bi bi-lightbulb me-2"></i><strong>Tip:</strong> Use the <a href="landing-zone.html#decision-tree" class="alert-link">Landing Zone Decision Tree</a> for an interactive flowchart to guide your selection based on security, team structure, and data requirements.
+          </div>
+        </section>
+
+        <!-- Step-by-Step -->
+        <section id="step-by-step" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-list-ol me-2 text-primary"></i>Step-by-Step Deployment Guide</h2>
+
+          <div class="d-flex mb-4">
+            <div class="step-number bg-primary text-white me-3">1</div>
+            <div class="card step-card flex-grow-1 shadow-sm">
+              <div class="card-body">
+                <h5 class="fw-bold">Select Your Pattern</h5>
+                <p class="mb-2">Browse the <a href="index.html#patterns">7 Patterns</a> on the home page. Click any pattern card to see its overview, or click <strong>"View Full Details"</strong> to see the complete architecture diagram, BOM table, and service breakdown.</p>
+                <div class="bg-body-tertiary p-3 rounded">
+                  <strong>Compare patterns</strong> side-by-side using the <a href="index.html#comparison">Comparison Table</a> — it shows service count, SLA, cost, and networking model for all 7 patterns.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="step-number bg-primary text-white me-3">2</div>
+            <div class="card step-card flex-grow-1 shadow-sm">
+              <div class="card-body">
+                <h5 class="fw-bold">Review the Architecture</h5>
+                <p class="mb-2">Each pattern detail page includes:</p>
+                <ul class="mb-0">
+                  <li><strong>Mermaid architecture diagram</strong> — visual flow of all services and connections (click <em>Enlarge</em> for fullscreen view)</li>
+                  <li><strong>Bill of Materials table</strong> — every Azure service, SKU, monthly cost, and Bicep resource type</li>
+                  <li><strong>Service breakdown cards</strong> — deep-dive into each service's role, configuration, and security posture</li>
+                  <li><strong>Security considerations</strong> — networking, encryption, RBAC, private endpoints</li>
+                  <li><strong>Use cases &amp; constraints</strong> — when to use and when to avoid this pattern</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="step-number bg-primary text-white me-3">3</div>
+            <div class="card step-card flex-grow-1 shadow-sm">
+              <div class="card-body">
+                <h5 class="fw-bold">Generate a Deployment Spec</h5>
+                <p class="mb-2">Click the <span class="badge bg-success"><i class="bi bi-file-earmark-code me-1"></i>Generate Deployment Spec</span> button inside any pattern modal or detail page. This opens a form where you provide:</p>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <div class="card bg-body-tertiary border-0">
+                      <div class="card-body p-3">
+                        <h6 class="fw-bold"><i class="bi bi-github me-1"></i>GitHub Info</h6>
+                        <ul class="small mb-0">
+                          <li>Organization / Username</li>
+                          <li>Repository name</li>
+                          <li>Branch (default: <code>main</code>)</li>
+                          <li>Target folder path (default: <code>infra/patternN</code>)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card bg-body-tertiary border-0">
+                      <div class="card-body p-3">
+                        <h6 class="fw-bold"><i class="bi bi-cloud-fill text-primary me-1"></i>Azure Info</h6>
+                        <ul class="small mb-0">
+                          <li>Subscription ID</li>
+                          <li>Region (default: Canada Central)</li>
+                          <li>Resource group name (auto-generated)</li>
+                          <li>Environment (dev / staging / prod)</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="small text-muted mt-2 mb-0">The spec auto-fills pattern-specific defaults for folder path and resource group name.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="step-number bg-primary text-white me-3">4</div>
+            <div class="card step-card flex-grow-1 shadow-sm">
+              <div class="card-body">
+                <h5 class="fw-bold">Download &amp; Deploy</h5>
+                <p class="mb-2">The generator produces three downloadable artifacts:</p>
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <div class="card border-primary h-100">
+                      <div class="card-body text-center p-3">
+                        <i class="bi bi-file-earmark-text fs-2 text-primary"></i>
+                        <h6 class="fw-bold mt-2">Spec Sheet (.md)</h6>
+                        <p class="small text-muted mb-0">Full deployment spec with BOM, RBAC, checklist, and file structure</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card border-success h-100">
+                      <div class="card-body text-center p-3">
+                        <i class="bi bi-filetype-yml fs-2 text-success"></i>
+                        <h6 class="fw-bold mt-2">Workflow (.yml)</h6>
+                        <p class="small text-muted mb-0">GitHub Actions CI/CD pipeline with validate → deploy stages</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card border-secondary h-100">
+                      <div class="card-body text-center p-3">
+                        <i class="bi bi-clipboard-check fs-2 text-secondary"></i>
+                        <h6 class="fw-bold mt-2">Clipboard</h6>
+                        <p class="small text-muted mb-0">One-click copy to paste the spec into a GitHub issue or PR</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="step-number bg-success text-white me-3">5</div>
+            <div class="card step-card flex-grow-1 shadow-sm" style="border-left-color:#198754">
+              <div class="card-body">
+                <h5 class="fw-bold">Create Your Bicep Files</h5>
+                <p class="mb-2">Using the generated file structure as a guide, create your Bicep modules:</p>
+                <pre class="bg-body-tertiary p-3 rounded small"><code>infra/pattern1/
+├── main.bicep                  # Main orchestrator
+├── parameters.dev.bicepparam   # Dev parameters
+├── parameters.prod.bicepparam  # Prod parameters
+├── modules/
+│   ├── openai.bicep            # Azure OpenAI + model deployments
+│   ├── search.bicep            # Azure AI Search
+│   ├── keyvault.bicep          # Key Vault with RBAC
+│   ├── monitoring.bicep        # Log Analytics + App Insights
+│   ├── storage.bicep           # Storage Account(s)
+│   ├── networking.bicep        # VNet, subnets, NSGs, PEs
+│   └── rbac.bicep              # Role assignments
+└── .github/workflows/
+    └── deploy-pattern1.yml     # CI/CD workflow</code></pre>
+                <div class="alert alert-success mb-0 mt-3">
+                  <i class="bi bi-lightbulb me-2"></i><strong>Pro Tip:</strong> Use <strong>GitHub Copilot</strong> in VS Code to scaffold Bicep modules. Type a comment like <code>// Azure OpenAI with S0 SKU and private endpoint</code> and Copilot will generate the resource definition.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mb-4">
+            <div class="step-number bg-success text-white me-3">6</div>
+            <div class="card step-card flex-grow-1 shadow-sm" style="border-left-color:#198754">
+              <div class="card-body">
+                <h5 class="fw-bold">Push &amp; Watch It Deploy</h5>
+                <p class="mb-2">Commit your Bicep files and the GitHub Actions workflow, then push to trigger the pipeline:</p>
+                <pre class="bg-body-tertiary p-3 rounded small"><code class="language-bash">git add infra/ .github/
+git commit -m "Add Pattern 1 infrastructure"
+git push origin main</code></pre>
+                <p class="mb-0">The workflow will: <strong>validate Bicep</strong> → <strong>run what-if</strong> → <strong>create resource group</strong> → <strong>deploy resources</strong> → <strong>verify deployment</strong>.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Landing Zone Guide -->
+        <section id="landing-zone-guide" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-building-fill-gear me-2 text-success"></i>Using the Landing Zone Guide</h2>
+          <p>The <a href="landing-zone.html">Landing Zone Architecture</a> page provides an enterprise foundation before deploying any AI pattern. Here's how to use it:</p>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100 step-card shadow-sm">
+                <div class="card-body">
+                  <h6 class="fw-bold"><i class="bi bi-1-circle text-primary me-2"></i>Understand the CAF Hierarchy</h6>
+                  <p class="small mb-0">Review the <strong>Management Group structure</strong> — Root → Platform / Landing Zones / Sandbox. The AI &amp; ML management group sits under Landing Zones with Prod and NonProd subscriptions. This enables AI-specific Azure Policies, quota isolation, and cost tracking.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 step-card shadow-sm">
+                <div class="card-body">
+                  <h6 class="fw-bold"><i class="bi bi-2-circle text-primary me-2"></i>Design Your Network</h6>
+                  <p class="small mb-0">Use the <strong>Hub-Spoke topology</strong> diagram and <strong>Subnet Design table</strong> to plan your VNet layout. The AI spoke VNet (10.10.0.0/16) needs subnets for: AI services, private endpoints, compute (AKS/Databricks), data, and management.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 step-card shadow-sm">
+                <div class="card-body">
+                  <h6 class="fw-bold"><i class="bi bi-3-circle text-primary me-2"></i>Use the Decision Tree</h6>
+                  <p class="small mb-0">The interactive <a href="landing-zone.html#decision-tree"><strong>Decision Tree</strong></a> asks questions about security, team structure, and data needs to recommend the right pattern + landing zone type. Follow the flowchart to find your best match.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 step-card shadow-sm">
+                <div class="card-body">
+                  <h6 class="fw-bold"><i class="bi bi-4-circle text-primary me-2"></i>Complete the Checklist</h6>
+                  <p class="small mb-0">The <strong>24-item deployment checklist</strong> covers Foundation, Networking, Security &amp; Identity, and AI-specific readiness. Check off each item as you set up your landing zone — it's divided into 4 categories for easy tracking.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Education Guide -->
+        <section id="education-guide" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-mortarboard-fill me-2" style="color:#6f42c1"></i>Using the Education Platform</h2>
+          <p>The <a href="csi-education.html">CSI Education Platform</a> is a specialized AI vertical for higher education institutions. Here's how to navigate it:</p>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h5 class="fw-bold mb-3">Three AI Crawler Engines</h5>
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <div class="card bg-body-tertiary border-0 h-100">
+                    <div class="card-body text-center p-3">
+                      <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-primary text-white mb-2" style="width:48px;height:48px"><i class="bi bi-person-workspace fs-5"></i></div>
+                      <h6 class="fw-bold">Work IQ</h6>
+                      <p class="small text-muted mb-0">Crawls LMS data (Canvas, Moodle, Blackboard), student interactions, assignment submissions, and engagement signals to build a behavioral profile per student.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-body-tertiary border-0 h-100">
+                    <div class="card-body text-center p-3">
+                      <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-success text-white mb-2" style="width:48px;height:48px"><i class="bi bi-bank2 fs-5"></i></div>
+                      <h6 class="fw-bold">Foundry IQ</h6>
+                      <p class="small text-muted mb-0">Indexes institutional knowledge: course catalogs, policies, research publications, faculty expertise, and accreditation documents for RAG retrieval.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-body-tertiary border-0 h-100">
+                    <div class="card-body text-center p-3">
+                      <div class="rounded-circle d-inline-flex align-items-center justify-content-center bg-warning text-dark mb-2" style="width:48px;height:48px"><i class="bi bi-graph-up-arrow fs-5"></i></div>
+                      <h6 class="fw-bold">Fabric IQ</h6>
+                      <p class="small text-muted mb-0">Aggregates analytics: GPA trends, course outcomes, graduation rates, retention metrics, and institutional benchmarks for data-driven decisions.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="fw-bold mb-3">Three AI Applications</h5>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-person-video3 me-2"></i>AI Academic Advisor</div>
+                <div class="card-body">
+                  <ul class="small mb-0">
+                    <li>Conversational chatbot for course guidance</li>
+                    <li>Policy Q&amp;A with RAG over Foundry IQ data</li>
+                    <li>Career mapping based on major + electives</li>
+                    <li>Prerequisite chain visualization</li>
+                    <li>Uses: Azure OpenAI + AI Search + Cosmos DB</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 border-danger">
+                <div class="card-header bg-danger text-white fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>Dropout Risk Predictor</div>
+                <div class="card-body">
+                  <ul class="small mb-0">
+                    <li>ML model trained on Work IQ + Fabric IQ features</li>
+                    <li>4-tier risk scoring: Low / Moderate / High / Critical</li>
+                    <li>Early warning alerts to advisors</li>
+                    <li>Intervention recommendations</li>
+                    <li>Uses: Azure ML + AutoML + Power BI</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 border-success">
+                <div class="card-header bg-success text-white fw-bold"><i class="bi bi-journal-bookmark me-2"></i>Learning Planner</div>
+                <div class="card-body">
+                  <ul class="small mb-0">
+                    <li>Personalized semester-by-semester schedule</li>
+                    <li>Adaptive plans based on GPA &amp; workload</li>
+                    <li>Summer/intersession optimization</li>
+                    <li>Pre-med / pre-law / honors track support</li>
+                    <li>Uses: Azure OpenAI + Cosmos DB + Functions</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Deploy Spec Generator -->
+        <section id="deploy-spec" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2 text-success"></i>Deploy Spec Generator — Detailed Walkthrough</h2>
+          <p>The deployment spec generator creates a complete infrastructure-as-code plan tailored to your chosen pattern. Here's a detailed walkthrough:</p>
+
+          <div class="accordion" id="specAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#spec1">Step 1: Open the Generator</button></h2>
+              <div id="spec1" class="accordion-collapse collapse show" data-bs-parent="#specAccordion">
+                <div class="accordion-body">
+                  <p>There are two ways to open it:</p>
+                  <ul>
+                    <li><strong>From the home page</strong>: Click any pattern card → in the modal, click the green <em>"Generate Deployment Spec"</em> button at the bottom</li>
+                    <li><strong>From a pattern detail page</strong>: Scroll to the green <em>"Ready to Deploy This Pattern?"</em> section and click the button</li>
+                  </ul>
+                  <p class="mb-0">The generator will auto-detect which pattern you're viewing and pre-fill the pattern-specific defaults.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#spec2">Step 2: Fill In Your Details</button></h2>
+              <div id="spec2" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
+                <div class="accordion-body">
+                  <p>The form has two sections:</p>
+                  <table class="table table-sm table-bordered">
+                    <thead class="table-light"><tr><th>Field</th><th>Required</th><th>Default</th><th>Description</th></tr></thead>
+                    <tbody>
+                      <tr><td>GitHub Org / Username</td><td><span class="badge bg-danger">Yes</span></td><td>—</td><td>Your GitHub organization or personal username</td></tr>
+                      <tr><td>Repository Name</td><td><span class="badge bg-danger">Yes</span></td><td>—</td><td>Just the repo name (not the full URL)</td></tr>
+                      <tr><td>Branch</td><td>No</td><td><code>main</code></td><td>Target branch for the workflow trigger</td></tr>
+                      <tr><td>Target Folder Path</td><td>No</td><td><code>infra/patternN</code></td><td>Where the Bicep files will live</td></tr>
+                      <tr><td>Subscription ID</td><td><span class="badge bg-danger">Yes</span></td><td>—</td><td>Azure subscription GUID</td></tr>
+                      <tr><td>Region</td><td>No</td><td>Canada Central</td><td>Azure region for deployment</td></tr>
+                      <tr><td>Resource Group</td><td>No</td><td><code>rg-&lt;pattern-name&gt;-prod</code></td><td>Auto-generated from pattern + environment</td></tr>
+                      <tr><td>Environment</td><td>No</td><td>Production</td><td>Affects naming and parameter files</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#spec3">Step 3: Review the Prerequisites Panel</button></h2>
+              <div id="spec3" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
+                <div class="accordion-body">
+                  <p>The right side of the generator form shows exactly what you need <strong>before</strong> deploying:</p>
+                  <ul>
+                    <li><strong>Azure RBAC Roles</strong> — Owner/Contributor, Cognitive Services Contributor, Network Contributor, etc.</li>
+                    <li><strong>GitHub Requirements</strong> — Write access, Actions enabled, <code>AZURE_CREDENTIALS</code> secret</li>
+                    <li><strong>VS Code Extensions</strong> — Bicep, Azure Account, Azure CLI 2.60+</li>
+                    <li><strong>Quota Pre-Checks</strong> — OpenAI access, GPU quota, TPM/RPM limits, PE limits</li>
+                  </ul>
+                  <p class="mb-0">These are specific to each pattern — Pattern 6 (Secure) will show HSM roles; Pattern 4 (MLOps) will show ML-specific roles.</p>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#spec4">Step 4: Download &amp; Use the Output</button></h2>
+              <div id="spec4" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
+                <div class="accordion-body">
+                  <p>Click <strong>"Generate Deployment Spec Sheet"</strong>. The output includes:</p>
+                  <ol>
+                    <li><strong>Markdown Spec</strong> — environment table, full BOM, RBAC requirements, GitHub Actions YAML, Bicep file structure, and 12-item pre-deployment checklist</li>
+                    <li><strong>workflow.yml</strong> — A ready-to-use GitHub Actions CI/CD pipeline with <code>validate</code> and <code>deploy</code> jobs</li>
+                    <li><strong>Clipboard copy</strong> — Paste into a GitHub issue to track deployment tasks</li>
+                  </ol>
+                  <p class="mb-0">Place the workflow file in <code>.github/workflows/</code> and the spec in your repo's README or <code>docs/</code> folder.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tools -->
+        <section id="tools" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-tools me-2 text-info"></i>Tools &amp; Services Reference</h2>
+          <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex align-items-start">
+                  <div class="tool-icon bg-primary text-white me-3"><i class="bi bi-cloud-fill"></i></div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Azure OpenAI Service</h6>
+                    <p class="small text-muted mb-1">The core of every pattern — provides GPT-4o, text-embedding-3-large, and other models.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/" target="_blank" class="small">Documentation ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex align-items-start">
+                  <div class="tool-icon bg-success text-white me-3"><i class="bi bi-search"></i></div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Azure AI Search</h6>
+                    <p class="small text-muted mb-1">Vector + keyword hybrid search for RAG patterns. Indexes documents for retrieval.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" class="small">Documentation ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex align-items-start">
+                  <div class="tool-icon bg-info text-white me-3"><i class="bi bi-hdd-network"></i></div>
+                  <div>
+                    <h6 class="fw-bold mb-1">API Management</h6>
+                    <p class="small text-muted mb-1">Gateway for centralized patterns (1, 3). Rate limiting, auth, caching, load balancing.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/api-management/" target="_blank" class="small">Documentation ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex align-items-start">
+                  <div class="tool-icon bg-warning text-dark me-3"><i class="bi bi-key-fill"></i></div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Key Vault / Managed HSM</h6>
+                    <p class="small text-muted mb-1">Secure key, secret, and certificate storage. HSM for regulated patterns (6).</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/key-vault/" target="_blank" class="small">Documentation ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex align-items-start">
+                  <div class="tool-icon text-white me-3" style="background:#6f42c1"><i class="bi bi-robot"></i></div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Azure Machine Learning</h6>
+                    <p class="small text-muted mb-1">End-to-end ML platform for training, deployment, MLOps. Pattern 3, 4, 7.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/machine-learning/" target="_blank" class="small">Documentation ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+              <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body d-flex align-items-start">
+                  <div class="tool-icon bg-danger text-white me-3"><i class="bi bi-shield-lock-fill"></i></div>
+                  <div>
+                    <h6 class="fw-bold mb-1">Azure Firewall Premium</h6>
+                    <p class="small text-muted mb-1">TLS inspection, threat intel, application rules. Patterns 2, 3, 6.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/firewall/" target="_blank" class="small">Documentation ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section id="troubleshooting" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-bug me-2 text-danger"></i>Troubleshooting</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="table-danger"><tr><th style="width:30%">Problem</th><th>Solution</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Azure OpenAI quota exceeded</strong><br><code>429 Too Many Requests</code></td>
+                  <td>
+                    <ul class="mb-0 small">
+                      <li>Check your <strong>TPM (Tokens Per Minute)</strong> quota in <a href="https://portal.azure.com" target="_blank">Azure Portal</a> → Azure OpenAI → Deployment → Quotas</li>
+                      <li>Request a quota increase or use <strong>Provisioned Throughput (PTU)</strong> for guaranteed capacity</li>
+                      <li>For Pattern 1/3, use <strong>APIM</strong> rate limiting to distribute load</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Private Endpoint DNS not resolving</strong></td>
+                  <td>
+                    <ul class="mb-0 small">
+                      <li>Ensure Private DNS Zone is <strong>linked to the Hub VNet</strong> (Connectivity sub)</li>
+                      <li>Verify <strong>DNS proxy is enabled</strong> on Azure Firewall</li>
+                      <li>Check <code>nslookup &lt;service&gt;.privatelink.openai.azure.com</code> resolves to private IP</li>
+                      <li>For on-prem resolution, configure <strong>DNS Private Resolver</strong> forwarding rules</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Bicep deployment fails</strong><br><code>DeploymentFailed</code></td>
+                  <td>
+                    <ul class="mb-0 small">
+                      <li>Run <code>az bicep build --file main.bicep</code> locally to check syntax</li>
+                      <li>Use <code>az deployment group what-if</code> before deploying to see planned changes</li>
+                      <li>Check <strong>resource provider registration</strong>: <code>az provider register --namespace Microsoft.CognitiveServices</code></li>
+                      <li>Verify <strong>naming conventions</strong> — some resources (Storage, ACR) require globally unique names</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>GitHub Actions workflow fails</strong></td>
+                  <td>
+                    <ul class="mb-0 small">
+                      <li>Verify <code>AZURE_CREDENTIALS</code> secret is correctly formatted JSON</li>
+                      <li>Check Service Principal hasn't expired: <code>az ad sp show --id &lt;app-id&gt;</code></li>
+                      <li>Ensure the SP has <strong>Contributor</strong> role on the target subscription</li>
+                      <li>For <code>federated credentials</code>, check the <code>id-token: write</code> permission in workflow</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>GPU quota not available</strong><br>(Patterns 4, 6)</td>
+                  <td>
+                    <ul class="mb-0 small">
+                      <li>Request GPU quota increase via <a href="https://portal.azure.com/#view/Microsoft_Azure_Capacity/QuotaMenuBlade" target="_blank">Quotas page</a></li>
+                      <li>Try a different <strong>region</strong> — GPU availability varies by location</li>
+                      <li>Use <strong>Spot Instances</strong> for training workloads to reduce cost</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Mermaid diagrams not rendering</strong></td>
+                  <td>
+                    <ul class="mb-0 small">
+                      <li>Mermaid.js v11 is loaded from CDN — check your network/firewall isn't blocking <code>cdn.jsdelivr.net</code></li>
+                      <li>Try refreshing the page or switching browsers (Chrome/Edge recommended)</li>
+                      <li>Click the <strong>Enlarge</strong> button for a cleaner fullscreen view</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-chat-dots me-2 text-primary"></i>Frequently Asked Questions</h2>
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Which pattern is cheapest?</button></h2>
+              <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <strong>Pattern 5 — Serverless AI</strong> at ~$890/month. It uses Azure Functions (Consumption), Logic Apps, and pay-per-token OpenAI — no VNet, no Firewall, no VMs. Ideal for PoCs and internal tools. See the <a href="index.html#costs">Cost Comparison</a> for all patterns.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Which pattern is most secure?</button></h2>
+              <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <strong>Pattern 6 — Secure Private AI</strong>. Fully private VNet with zero public endpoints, Azure Firewall Premium with TLS inspection, Managed HSM for keys, DDoS Protection, Azure Bastion for management access. Required for HIPAA, PCI-DSS, and ITAR workloads.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">Can I combine multiple patterns?</button></h2>
+              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  Yes! <strong>Pattern 3 (Hybrid)</strong> is specifically designed as a combination of Pattern 1 (hub) and Pattern 2 (spokes). You can also layer Pattern 6 security on top of any other pattern by adding private endpoints, firewall, and HSM. The Landing Zone guide shows how to architect multi-pattern environments.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">Do I need Azure OpenAI access approval?</button></h2>
+              <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  Yes. Azure OpenAI requires an <a href="https://aka.ms/oai/access" target="_blank">access request</a> that must be approved before you can create an Azure OpenAI resource. Approval typically takes 1-2 business days. All 7 patterns require Azure OpenAI.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">What's the difference between Bicep and Terraform?</button></h2>
+              <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  Both are Infrastructure-as-Code (IaC) tools. <strong>Bicep</strong> is Azure-native (by Microsoft), compiles to ARM templates, and has first-class VS Code support. <strong>Terraform</strong> is multi-cloud (by HashiCorp) and uses HCL syntax. This portal focuses on Bicep but all patterns work equally well with Terraform. The generated spec sheets use Bicep resource types for reference.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">How do I estimate my own costs?</button></h2>
+              <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <ol class="mb-0">
+                    <li>Use the <a href="index.html#costs">Live Pricing</a> section on the home page for real-time Azure Retail API prices</li>
+                    <li>Use the <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank">Azure Pricing Calculator</a> for custom configurations</li>
+                    <li>Check the BOM table on each pattern detail page — it lists per-service monthly costs</li>
+                    <li>For OpenAI tokens, estimate: <code>tokens × price_per_1k_tokens / 1000</code></li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">Can I use this for the Education platform?</button></h2>
+              <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  Absolutely. The <a href="csi-education.html">CSI Education Platform</a> is built on the same Azure AI patterns. It uses <strong>Pattern 1 (Centralized Hub)</strong> or <strong>Pattern 4 (AI Factory)</strong> as its foundation, then adds education-specific layers: Work IQ, Foundry IQ, Fabric IQ crawlers, plus three AI applications (Academic Advisor, Dropout Risk Predictor, Learning Planner). FERPA compliance is built into the architecture.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">How do I set up a Service Principal for GitHub Actions?</button></h2>
+              <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Run these commands in Azure CLI:</p>
+                  <pre class="bg-body-tertiary p-3 rounded small"><code># Create Service Principal with Contributor role
+az ad sp create-for-rbac \
+  --name "sp-ai-deploy" \
+  --role Contributor \
+  --scopes /subscriptions/&lt;subscription-id&gt; \
+  --json-auth
+
+# Copy the JSON output and add it as a GitHub secret:
+# Repo → Settings → Secrets → Actions → New: AZURE_CREDENTIALS</code></pre>
+                  <p class="mb-0">For additional RBAC roles (Cognitive Services Contributor, etc.), assign them separately: <code>az role assignment create --assignee &lt;sp-app-id&gt; --role "Cognitive Services Contributor" --scope /subscriptions/&lt;sub-id&gt;</code></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Links -->
+        <section class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-link-45deg me-2 text-secondary"></i>Quick Links</h2>
+          <div class="row g-3">
+            <div class="col-md-4"><a href="index.html" class="btn btn-outline-primary w-100 py-3"><i class="bi bi-grid-3x3-gap-fill me-2"></i>AI Patterns Home</a></div>
+            <div class="col-md-4"><a href="landing-zone.html" class="btn btn-outline-success w-100 py-3"><i class="bi bi-building-fill-gear me-2"></i>Landing Zone Guide</a></div>
+            <div class="col-md-4"><a href="csi-education.html" class="btn btn-outline-primary w-100 py-3" style="border-color:#6f42c1;color:#6f42c1"><i class="bi bi-mortarboard-fill me-2"></i>Education Platform</a></div>
+            <div class="col-md-4"><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="btn btn-outline-dark w-100 py-3"><i class="bi bi-github me-2"></i>GitHub Repository</a></div>
+            <div class="col-md-4"><a href="https://portal.azure.com" target="_blank" class="btn btn-outline-info w-100 py-3"><i class="bi bi-cloud-fill me-2"></i>Azure Portal</a></div>
+            <div class="col-md-4"><a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank" class="btn btn-outline-warning w-100 py-3"><i class="bi bi-calculator me-2"></i>Pricing Calculator</a></div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2026</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-primary btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      const html=document.documentElement;
+      const isDark=html.getAttribute('data-bs-theme')==='dark';
+      html.setAttribute('data-bs-theme',isDark?'light':'dark');
+      toggle.querySelector('i').className=isDark?'bi bi-moon-stars-fill':'bi bi-sun-fill';
+    });
+    window.addEventListener('scroll',()=>{
+      document.getElementById('backToTop').style.display=window.scrollY>300?'block':'none';
+      const sections=document.querySelectorAll('section[id]');
+      let current='';
+      sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)current=s.id;});
+      document.querySelectorAll('.toc a').forEach(a=>{
+        a.classList.toggle('active',a.getAttribute('href')==='#'+current);
+      });
+    });
+  </script>
+</body>
+</html>

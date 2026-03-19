@@ -27,22 +27,36 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="#">
-        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI Patterns
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#patterns">Patterns</a></li>
-          <li class="nav-item"><a class="nav-link" href="#comparison">Compare</a></li>
-          <li class="nav-item"><a class="nav-link" href="#costs">Costs</a></li>
-          <li class="nav-item"><a class="nav-link" href="#sla">SLA &amp; WAF</a></li>
-          <li class="nav-item"><a class="nav-link" href="#modules">Modules</a></li>
-          <li class="nav-item"><a class="nav-link" href="#deploy">Deploy</a></li>
-          <li class="nav-item"><a class="nav-link text-success fw-semibold" href="#landing-zone"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="#education" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-semibold active" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#patterns"><i class="bi bi-collection me-2"></i>All 7 Patterns</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#comparison"><i class="bi bi-table me-2"></i>Compare</a></li>
+              <li><a class="dropdown-item" href="#costs"><i class="bi bi-currency-dollar me-2"></i>Costs</a></li>
+              <li><a class="dropdown-item" href="#sla"><i class="bi bi-shield-check me-2"></i>SLA &amp; WAF</a></li>
+              <li><a class="dropdown-item" href="#modules"><i class="bi bi-puzzle me-2"></i>Modules</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#deploy"><i class="bi bi-rocket-takeoff me-2"></i>Deploy</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="csi-education.html" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning" href="help.html"><i class="bi bi-question-circle-fill me-1"></i>Help</a>
+          </li>
         </ul>
         <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
           <i class="bi bi-moon-stars-fill"></i>
@@ -56,16 +70,58 @@
     <div class="container py-5">
       <div class="row align-items-center">
         <div class="col-lg-7">
-          <h1 class="display-4 fw-bold mb-3">Enterprise Azure AI Deployment Patterns</h1>
+          <h1 class="display-4 fw-bold mb-3">Enterprise Azure AI<br/>Deployment Patterns</h1>
           <p class="lead mb-4">Seven battle-tested architectural blueprints for deploying AI workloads on Azure — from centralized hubs to serverless endpoints.</p>
-          <a href="#patterns" class="btn btn-light btn-lg me-2"><i class="bi bi-grid-3x3-gap-fill me-1"></i> Explore Patterns</a>
-          <a href="landing-zone.html" class="btn btn-warning btn-lg me-2"><i class="bi bi-building-fill-gear me-1"></i> Landing Zone Guide</a>
-          <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="btn btn-outline-light btn-lg">
-            <i class="bi bi-github me-1"></i> GitHub
-          </a>
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <a href="#patterns" class="btn btn-light btn-lg"><i class="bi bi-grid-3x3-gap-fill me-1"></i>Explore Patterns</a>
+            <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="btn btn-outline-light btn-lg"><i class="bi bi-github me-1"></i>GitHub</a>
+          </div>
         </div>
-        <div class="col-lg-5 text-center d-none d-lg-block">
-          <i class="bi bi-diagram-3-fill" style="font-size:12rem;opacity:.25"></i>
+        <div class="col-lg-5 d-none d-lg-block">
+          <div class="row g-3">
+            <div class="col-12">
+              <a href="#patterns" class="text-decoration-none">
+                <div class="card bg-white bg-opacity-10 border-0 text-white p-3" style="backdrop-filter:blur(8px)">
+                  <div class="d-flex align-items-center">
+                    <div class="icon-circle bg-primary text-white me-3"><i class="bi bi-diagram-3-fill"></i></div>
+                    <div>
+                      <h6 class="fw-bold mb-0">7 AI Patterns</h6>
+                      <small class="opacity-75">Comparison, costs, SLA, BOM &amp; deploy specs</small>
+                    </div>
+                    <i class="bi bi-arrow-right ms-auto fs-5"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12">
+              <a href="landing-zone.html" class="text-decoration-none">
+                <div class="card bg-white bg-opacity-10 border-0 text-white p-3" style="backdrop-filter:blur(8px)">
+                  <div class="d-flex align-items-center">
+                    <div class="icon-circle text-white me-3" style="background:linear-gradient(135deg,#0b5ed7,#198754)"><i class="bi bi-building-fill-gear"></i></div>
+                    <div>
+                      <h6 class="fw-bold mb-0">Landing Zone Architecture</h6>
+                      <small class="opacity-75">CAF hierarchy, hub-spoke, subnet design</small>
+                    </div>
+                    <i class="bi bi-arrow-right ms-auto fs-5"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div class="col-12">
+              <a href="csi-education.html" class="text-decoration-none">
+                <div class="card bg-white bg-opacity-10 border-0 text-white p-3" style="backdrop-filter:blur(8px)">
+                  <div class="d-flex align-items-center">
+                    <div class="icon-circle text-white me-3" style="background:linear-gradient(135deg,#6f42c1,#0d6efd)"><i class="bi bi-mortarboard-fill"></i></div>
+                    <div>
+                      <h6 class="fw-bold mb-0">CSI Education Platform</h6>
+                      <small class="opacity-75">Work IQ, Foundry IQ, Fabric IQ engines</small>
+                    </div>
+                    <i class="bi bi-arrow-right ms-auto fs-5"></i>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -853,7 +909,8 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label small fw-semibold">Repository Name <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="specGhRepo" placeholder="e.g. azure-ai-deployment" required />
+                  <input type="text" class="form-control" id="specGhRepo" placeholder="e.g. azure-ai-deployment (name only, not URL)" required />
+                  <div class="form-text text-muted">Just the repo name — the full URL will be constructed automatically.</div>
                 </div>
                 <div class="mb-3">
                   <label class="form-label small fw-semibold">Branch</label>
@@ -861,7 +918,7 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label small fw-semibold">Target Folder Path</label>
-                  <input type="text" class="form-control" id="specGhPath" placeholder="e.g. infra/pattern1" />
+                  <input type="text" class="form-control" id="specGhPath" />
                 </div>
               </div></div>
 
@@ -878,8 +935,8 @@
                 <div class="mb-3">
                   <label class="form-label small fw-semibold">Azure Region</label>
                   <select class="form-select" id="specAzRegion">
-                    <option value="canadacentral">Canada Central</option>
-                    <option value="eastus" selected>East US</option>
+                    <option value="canadacentral" selected>Canada Central</option>
+                    <option value="eastus">East US</option>
                     <option value="eastus2">East US 2</option>
                     <option value="westus2">West US 2</option>
                     <option value="westus3">West US 3</option>
@@ -894,7 +951,7 @@
                 </div>
                 <div class="mb-3">
                   <label class="form-label small fw-semibold">Resource Group Name</label>
-                  <input type="text" class="form-control" id="specAzRG" placeholder="e.g. rg-ai-pattern1-prod" />
+                  <input type="text" class="form-control" id="specAzRG" />
                 </div>
                 <div class="mb-3">
                   <label class="form-label small fw-semibold">Environment</label>
@@ -1150,6 +1207,14 @@
       document.getElementById('specPatternName').textContent = 'Pattern ' + patternId + ' — ' + p.name;
       document.getElementById('specStep1').style.display = '';
       document.getElementById('specStep2').style.display = 'none';
+
+      // Auto-fill pattern-specific defaults
+      const slug = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+      document.getElementById('specGhPath').value = 'infra/pattern' + patternId;
+      document.getElementById('specGhPath').placeholder = 'infra/pattern' + patternId;
+      document.getElementById('specAzRG').value = 'rg-' + slug + '-' + document.getElementById('specAzEnv').value;
+      document.getElementById('specAzRG').placeholder = 'rg-' + slug + '-prod';
+
       // Close any open pattern modal first
       const openModal = document.querySelector('.modal.show');
       if (openModal) {
@@ -1159,6 +1224,15 @@
         new bootstrap.Modal(document.getElementById('deploySpecModal')).show();
       }, 350);
     }
+
+    // Update RG name when environment changes
+    document.getElementById('specAzEnv').addEventListener('change', function() {
+      if (currentPatternId) {
+        const p = PATTERNS[currentPatternId];
+        const slug = p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,'');
+        document.getElementById('specAzRG').value = 'rg-' + slug + '-' + this.value;
+      }
+    });
 
     function backToInputs() {
       document.getElementById('specStep1').style.display = '';
