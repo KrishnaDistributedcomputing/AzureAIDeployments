@@ -557,75 +557,93 @@ graph LR
               <pre class="mermaid">
 graph TB
     subgraph DataSources["Institutional Data Sources"]
-        LMS["LMS\nCanvas / Blackboard\nMoodle"]
-        SIS2["Student Information\nSystem"]
-        CATALOG["Academic Catalog\n&amp; Policies"]
-        RESEARCH["Research\nRepositories"]
-        DW2["Data Warehouse\n&amp; BI"]
-    end
-    subgraph CrawlerLayer["CSI Crawler Layer (Aligned to Work/Foundry/Fabric)"]
         direction LR
-        W_CRAWL["Work IQ\nCrawler"]
-        F_CRAWL["Foundry IQ\nCrawler"]
-        FB_CRAWL["Fabric IQ\nCrawler"]
+        LMS["LMS&lt;br/&gt;Canvas / Blackboard&lt;br/&gt;Moodle"]
+        SIS2["Student Information&lt;br/&gt;System"]
+        CATALOG["Academic Catalog&lt;br/&gt;&amp; Policies"]
+        RESEARCH["Research&lt;br/&gt;Repositories"]
+        DW2["Data Warehouse&lt;br/&gt;&amp; BI"]
     end
+
+    subgraph CrawlerLayer["CSI Crawler Layer"]
+        direction LR
+        W_CRAWL["Work IQ&lt;br/&gt;Crawler"]
+        FB_CRAWL["Fabric IQ&lt;br/&gt;Crawler"]
+        F_CRAWL["Foundry IQ&lt;br/&gt;Crawler"]
+    end
+
     subgraph AzureAI["Azure AI Platform"]
         subgraph Ingest["Ingestion &amp; Processing"]
-            ADF2["Data Factory\nPipelines"]
-            DBX2["Databricks\nFeature Engineering"]
+            direction LR
+            ADF2["Data Factory&lt;br/&gt;Pipelines"]
+            DBX2["Databricks&lt;br/&gt;Feature Engineering"]
         end
         subgraph Storage2["Storage Layer"]
-            ADLS2["ADLS Gen2\nMedallion Architecture"]
-            COSMOS["Cosmos DB\nStudent Profiles\n&amp; Chat History"]
+            direction LR
+            ADLS2["ADLS Gen2&lt;br/&gt;Medallion Architecture"]
+            COSMOS["Cosmos DB&lt;br/&gt;Student Profiles"]
         end
         subgraph Intelligence["Intelligence Layer"]
-            SEARCH["AI Search\nVector + Semantic\nIndex"]
-            AOAI3["Azure OpenAI\nGPT-4o + Embeddings"]
-            AML3["Azure ML\nRisk Models\n&amp; Training"]
+            direction LR
+            SEARCH["AI Search&lt;br/&gt;Vector + Semantic"]
+            AOAI3["Azure OpenAI&lt;br/&gt;GPT-4o + Embeddings"]
+            AML3["Azure ML&lt;br/&gt;Risk Models"]
         end
         subgraph Apps2["AI Applications"]
-            APP_ADV["AI Academic\nAdvisor"]
-            APP_RISK["Dropout Risk\nPredictor"]
-            APP_PLAN["Learning\nPlanner"]
+            direction LR
+            APP_ADV["AI Academic&lt;br/&gt;Advisor"]
+            APP_RISK["Dropout Risk&lt;br/&gt;Predictor"]
+            APP_PLAN["Learning&lt;br/&gt;Planner"]
         end
     end
+
     subgraph Consumers["End Users"]
+        direction LR
         STUDENTS["Students"]
-        ADVISORS["Academic\nAdvisors"]
-        ADMIN["Administrators\n&amp; Deans"]
+        ADVISORS["Academic&lt;br/&gt;Advisors"]
+        ADMIN["Administrators"]
     end
+
     LMS --> W_CRAWL
     SIS2 --> W_CRAWL
-    SIS2 --> FB_CRAWL
     CATALOG --> F_CRAWL
     RESEARCH --> F_CRAWL
+    SIS2 --> FB_CRAWL
     DW2 --> FB_CRAWL
+
     W_CRAWL --> ADF2
-    F_CRAWL --> ADF2
     FB_CRAWL --> ADF2
-    ADF2 --> ADLS2
+    F_CRAWL --> ADF2
+
     ADF2 --> DBX2
     DBX2 --> ADLS2
+    ADF2 --> ADLS2
+
     ADLS2 --> SEARCH
     ADLS2 --> AML3
     COSMOS --> APP_ADV
+
     SEARCH --> AOAI3
     AOAI3 --> APP_ADV
     AOAI3 --> APP_PLAN
     AML3 --> APP_RISK
     SEARCH --> APP_PLAN
-    SEARCH --> APP_RISK
+
     APP_ADV --> STUDENTS
-    APP_RISK --> ADVISORS
     APP_PLAN --> STUDENTS
-    APP_RISK --> ADMIN
+    APP_RISK --> ADVISORS
     APP_PLAN --> ADVISORS
-    style W_CRAWL fill:#0d6efd,color:#fff
-    style F_CRAWL fill:#198754,color:#fff
-    style FB_CRAWL fill:#ffc107,color:#000
-    style APP_ADV fill:#0d6efd,color:#fff
-    style APP_RISK fill:#dc3545,color:#fff
-    style APP_PLAN fill:#198754,color:#fff
+    APP_RISK --> ADMIN
+
+    style W_CRAWL fill:#0d6efd,color:#fff,stroke:#0d6efd
+    style F_CRAWL fill:#198754,color:#fff,stroke:#198754
+    style FB_CRAWL fill:#e8a317,color:#fff,stroke:#e8a317
+    style APP_ADV fill:#0d6efd,color:#fff,stroke:#0d6efd
+    style APP_RISK fill:#dc3545,color:#fff,stroke:#dc3545
+    style APP_PLAN fill:#198754,color:#fff,stroke:#198754
+    style AOAI3 fill:#6f42c1,color:#fff,stroke:#6f42c1
+    style SEARCH fill:#0dcaf0,color:#000,stroke:#0dcaf0
+    style AML3 fill:#fd7e14,color:#fff,stroke:#fd7e14
               </pre>
               </div>
             </div>
