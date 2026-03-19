@@ -148,7 +148,7 @@
     </circle>
   </g>
 
-  <!-- Node: Azure OpenAI (top-left) -->
+  <!-- Node: AI Foundry / Centralized Hub (top-left) -->
   <g transform="translate(420,140)" filter="url(#softGlow)">
     <circle r="30" fill="rgba(0,120,212,0.25)" stroke="#50e6ff" stroke-width="1.5"/>
     <circle r="40" fill="url(#nodeGlow)"/>
@@ -159,20 +159,20 @@
     <line x1="0" y1="12" x2="0" y2="18" stroke="#fff" stroke-width="1.5"/>
     <line x1="-12" y1="0" x2="-18" y2="0" stroke="#fff" stroke-width="1.5"/>
     <line x1="12" y1="0" x2="18" y2="0" stroke="#fff" stroke-width="1.5"/>
-    <text y="48" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Azure OpenAI</text>
+    <text y="48" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">AI Foundry</text>
   </g>
 
-  <!-- Node: Security (top-right) -->
+  <!-- Node: Zero Trust / Secure Private AI (top-right) -->
   <g transform="translate(980,140)" filter="url(#softGlow)">
     <circle r="28" fill="rgba(25,135,84,0.25)" stroke="#20c997" stroke-width="1.5"/>
     <circle r="38" fill="url(#nodeGlow)"/>
     <!-- Shield -->
     <path d="M0,-15 L12,-8 L12,4 C12,12 6,18 0,20 C-6,18 -12,12 -12,4 L-12,-8Z" fill="none" stroke="#fff" stroke-width="1.5"/>
     <path d="M-4,2 L-1,6 L6,-2" fill="none" stroke="#20c997" stroke-width="2" stroke-linecap="round"/>
-    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Private AI</text>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Zero Trust AI</text>
   </g>
 
-  <!-- Node: Database (left) -->
+  <!-- Node: OneLake / Lakehouse AI (left) -->
   <g transform="translate(200,300)" filter="url(#softGlow)">
     <circle r="28" fill="rgba(13,110,253,0.25)" stroke="#6ea8fe" stroke-width="1.5"/>
     <circle r="38" fill="url(#nodeGlow)"/>
@@ -180,10 +180,10 @@
     <ellipse cx="0" cy="-10" rx="12" ry="5" fill="none" stroke="#fff" stroke-width="1.5"/>
     <path d="M-12,-10 L-12,10 C-12,13 -6,15 0,15 C6,15 12,13 12,10 L12,-10" fill="none" stroke="#fff" stroke-width="1.5"/>
     <ellipse cx="0" cy="0" rx="12" ry="5" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.5"/>
-    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Lakehouse</text>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">OneLake</text>
   </g>
 
-  <!-- Node: Serverless (right) -->
+  <!-- Node: Serverless AI (right) -->
   <g transform="translate(1200,300)" filter="url(#softGlow)">
     <circle r="28" fill="rgba(255,193,7,0.2)" stroke="#ffc107" stroke-width="1.5"/>
     <circle r="38" fill="url(#nodeGlow)"/>
@@ -192,7 +192,7 @@
     <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Serverless</text>
   </g>
 
-  <!-- Node: MLOps Factory (bottom-left) -->
+  <!-- Node: AI Factory / MLOps (bottom-left) -->
   <g transform="translate(420,460)" filter="url(#softGlow)">
     <circle r="28" fill="rgba(111,66,193,0.25)" stroke="#a78bfa" stroke-width="1.5"/>
     <circle r="38" fill="url(#nodeGlow)"/>
@@ -208,10 +208,10 @@
       <line x1="10" y1="-10" x2="6" y2="-6"/>
       <line x1="-6" y1="6" x2="-10" y2="10"/>
     </g>
-    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">MLOps</text>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">AI Factory</text>
   </g>
 
-  <!-- Node: Migration (bottom-right) -->
+  <!-- Node: Lift & Shift Migration (bottom-right) -->
   <g transform="translate(980,460)" filter="url(#softGlow)">
     <circle r="28" fill="rgba(230,126,34,0.25)" stroke="#e67e22" stroke-width="1.5"/>
     <circle r="38" fill="url(#nodeGlow)"/>
@@ -232,6 +232,7 @@
     <line x1="0" y1="0" x2="0" y2="-10" stroke="#fff" stroke-width="1" opacity="0.5"/>
     <line x1="0" y1="0" x2="9" y2="5" stroke="#fff" stroke-width="1" opacity="0.5"/>
     <line x1="0" y1="0" x2="-9" y2="5" stroke="#fff" stroke-width="1" opacity="0.5"/>
+    <text y="34" text-anchor="middle" fill="#fff" font-size="10" font-family="Segoe UI,sans-serif" opacity="0.7">Spoke AI</text>
   </g>
 
   <!-- Node: Greenfield (top-center-right) -->
@@ -240,6 +241,7 @@
     <!-- Rocket -->
     <path d="M0,-12 C4,-8 6,-2 6,4 L2,8 L0,6 L-2,8 L-6,4 C-6,-2 -4,-8 0,-12Z" fill="none" stroke="#fff" stroke-width="1.2"/>
     <circle cx="0" cy="-2" r="2" fill="#198754"/>
+    <text y="34" text-anchor="middle" fill="#fff" font-size="10" font-family="Segoe UI,sans-serif" opacity="0.7">Greenfield</text>
   </g>
 
   <!-- Node: Hybrid (bottom-center-left) -->
@@ -248,15 +250,17 @@
     <!-- Intersecting circles -->
     <circle cx="-5" cy="0" r="8" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.7"/>
     <circle cx="5" cy="0" r="8" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.7"/>
+    <text y="34" text-anchor="middle" fill="#fff" font-size="10" font-family="Segoe UI,sans-serif" opacity="0.7">Hybrid</text>
   </g>
 
-  <!-- Node: Analytics (bottom-center-right) -->
+  <!-- Node: SQL Migration (bottom-center-right) -->
   <g transform="translate(850,500)" filter="url(#softGlow)">
     <circle r="22" fill="rgba(220,53,69,0.2)" stroke="#dc3545" stroke-width="1.5"/>
     <!-- Bar chart -->
     <rect x="-9" y="2" width="4" height="8" rx="1" fill="#fff" opacity="0.7"/>
     <rect x="-3" y="-4" width="4" height="14" rx="1" fill="#fff" opacity="0.8"/>
     <rect x="3" y="-8" width="4" height="18" rx="1" fill="#fff" opacity="0.9"/>
+    <text y="34" text-anchor="middle" fill="#fff" font-size="10" font-family="Segoe UI,sans-serif" opacity="0.7">SQL Migration</text>
   </g>
 
   <!-- Floating particles -->
