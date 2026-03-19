@@ -21,6 +21,9 @@
     .persona-card { border-radius:16px; transition:transform .2s,box-shadow .2s; cursor:pointer; }
     .persona-card:hover { transform:translateY(-8px); box-shadow:0 12px 32px rgba(0,0,0,.15); }
     .persona-badge { display:inline-block; padding:.5rem 1rem; border-radius:50px; font-weight:600; font-size:.85rem; margin-bottom:1rem; }
+    .persona-tab { transition:all .2s ease; border-width:2px; }
+    .persona-tab:hover { transform:translateY(-2px); }
+    .persona-tab.active { background:var(--accent)!important; color:white!important; border-color:var(--accent)!important; box-shadow:0 4px 12px rgba(0,120,212,.25); }
     .course-card { border-left:4px solid var(--accent); border-radius:8px; transition:transform .15s,box-shadow .15s; }
     .course-card:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.1); }
     .course-icon { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
@@ -84,11 +87,31 @@
   <!-- Main Content -->
   <div class="container py-5">
 
-    <!-- Persona Selection -->
-    <section class="mb-5">
-      <h2 class="fw-bold mb-4"><i class="bi bi-people-fill me-2 text-primary"></i>Choose Your Learning Path</h2>
-      <p class="text-muted mb-4">Select your role to access SDD training tailored to your responsibilities and decision-making needs.</p>
+    <!-- Persona Selector Tabs -->
+    <section class="mb-5 pb-4 border-bottom">
+      <h2 class="fw-bold mb-4"><i class="bi bi-person-badge me-2 text-primary"></i>Select Your Role</h2>
       
+      <div class="d-flex flex-wrap gap-3 persona-tabs">
+        <button class="persona-tab btn btn-outline-primary rounded-pill fw-semibold px-4 py-2 active" data-persona="c-suite">
+          <i class="bi bi-gem-fill me-2"></i>C-Suite
+        </button>
+        <button class="persona-tab btn btn-outline-danger rounded-pill fw-semibold px-4 py-2" data-persona="sales">
+          <i class="bi bi-graph-up-arrow me-2"></i>Sales
+        </button>
+        <button class="persona-tab btn btn-outline-info rounded-pill fw-semibold px-4 py-2" data-persona="tech-mgmt">
+          <i class="bi bi-diagram-3-fill me-2"></i>Tech Manager
+        </button>
+        <button class="persona-tab btn btn-outline-primary rounded-pill fw-semibold px-4 py-2" data-persona="developer">
+          <i class="bi bi-code-slash me-2"></i>Developer
+        </button>
+        <button class="persona-tab btn btn-outline-success rounded-pill fw-semibold px-4 py-2" data-persona="devops">
+          <i class="bi bi-git me-2"></i>DevOps
+        </button>
+      </div>
+    </section>
+
+    <!-- Persona Selection (Hidden) -->
+    <section class="d-none">
       <div class="row g-4">
         <!-- C-Suite -->
         <div class="col-md-6 col-lg-4">
@@ -164,10 +187,7 @@
 
     <!-- C-Suite Courses -->
     <section id="c-suite" class="persona-content d-none mb-5">
-      <div class="mb-4">
-        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e67e22"><i class="bi bi-gem-fill me-2"></i>C-Suite Executive</span> — SDD Learning Path</h2>
-      </div>
+      <h2 class="fw-bold mb-4"><span style="color:#e67e22"><i class="bi bi-gem-fill me-2"></i>C-Suite Executive</span> — SDD Learning Path</h2>
 
       <div class="row g-4 mb-5">
         <div class="col-lg-6">
@@ -284,10 +304,7 @@
 
     <!-- Sales Leader Courses -->
     <section id="sales" class="persona-content d-none mb-5">
-      <div class="mb-4">
-        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e83e8c"><i class="bi bi-graph-up-arrow me-2"></i>Sales Leader</span> — SDD Learning Path</h2>
-      </div>
+      <h2 class="fw-bold mb-4"><span style="color:#e83e8c"><i class="bi bi-graph-up-arrow me-2"></i>Sales Leader</span> — SDD Learning Path</h2>
 
       <div class="row g-4 mb-5">
         <div class="col-lg-6">
@@ -404,10 +421,7 @@
 
     <!-- Technology Manager Courses -->
     <section id="tech-mgmt" class="persona-content d-none mb-5">
-      <div class="mb-4">
-        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0db7ed"><i class="bi bi-diagram-3-fill me-2"></i>Technology Manager</span> — SDD Learning Path</h2>
-      </div>
+      <h2 class="fw-bold mb-4"><span style="color:#0db7ed"><i class="bi bi-diagram-3-fill me-2"></i>Technology Manager</span> — SDD Learning Path</h2>
 
       <div class="row g-4 mb-5">
         <div class="col-lg-6">
@@ -524,10 +538,7 @@
 
     <!-- Developer Courses -->
     <section id="developer" class="persona-content d-none mb-5">
-      <div class="mb-4">
-        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0d6efd"><i class="bi bi-code-slash me-2"></i>Developer</span> — SDD Learning Path</h2>
-      </div>
+      <h2 class="fw-bold mb-4"><span style="color:#0d6efd"><i class="bi bi-code-slash me-2"></i>Developer</span> — SDD Learning Path</h2>
 
       <div class="row g-4 mb-5">
         <div class="col-lg-6">
@@ -644,10 +655,7 @@
 
     <!-- DevOps Engineer Courses -->
     <section id="devops" class="persona-content d-none mb-5">
-      <div class="mb-4">
-        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#198754"><i class="bi bi-git me-2"></i>DevOps Engineer</span> — SDD Learning Path</h2>
-      </div>
+      <h2 class="fw-bold mb-4"><span style="color:#198754"><i class="bi bi-git me-2"></i>DevOps Engineer</span> — SDD Learning Path</h2>
 
       <div class="row g-4 mb-5">
         <div class="col-lg-6">
@@ -818,37 +826,29 @@
         }
       });
 
-      // Persona Selection - Click handlers for persona cards
-      const personaCards = document.querySelectorAll('.persona-card');
-      personaCards.forEach(card => {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', function(e) {
-          e.stopPropagation();
+      // Persona Tabs - Click handlers for persona tabs
+      const personaTabs = document.querySelectorAll('.persona-tab');
+      personaTabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+          e.preventDefault();
           const persona = this.getAttribute('data-persona');
           if (persona) {
+            // Update active tab
+            personaTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
             // Hide all persona content
             const allPersonas = document.querySelectorAll('.persona-content');
             allPersonas.forEach(el => {
               el.classList.add('d-none');
             });
+            
             // Show selected persona
             const selectedPersona = document.getElementById(persona);
             if (selectedPersona) {
               selectedPersona.classList.remove('d-none');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 500, behavior: 'smooth' });
             }
-          }
-        });
-      });
-
-      // Back to Personas Button
-      const backButtons = document.querySelectorAll('.btn-outline-secondary');
-      backButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          if (e.target.closest('.persona-content')) {
-            e.preventDefault();
-            document.querySelectorAll('.persona-content').forEach(el => el.classList.add('d-none'));
-            window.scrollTo({ top: 0, behavior: 'smooth' });
           }
         });
       });
