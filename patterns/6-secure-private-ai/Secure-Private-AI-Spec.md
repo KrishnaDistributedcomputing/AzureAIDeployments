@@ -132,7 +132,7 @@ AI deployed in a **fully private, single-region network boundary**. All services
 - **Canadian data residency requirements** — all data stays in Canada Central
 - **Financial services workloads** — meets banking regulatory controls
 - **Healthcare workloads** — PHI isolation, audit logging, no public exposure
-- **CSI regulated customers** — Defender for Cloud, centralized logging, Zero Trust
+- **Regulated customers** — Defender for Cloud, centralized logging, Zero Trust
 
 ---
 

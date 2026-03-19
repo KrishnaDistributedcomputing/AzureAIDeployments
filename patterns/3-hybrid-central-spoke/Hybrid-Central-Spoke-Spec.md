@@ -102,7 +102,7 @@ Core AI services are **centralized in the Hub** (base models, model registry), w
 
 ## ✅ Use Cases
 
-- **CSI-style vertical applications** — custom RAG logic per business unit, shared base models
+- **Vertical applications** — custom RAG logic per business unit, shared base models
 - **RAG-based applications** — spoke owns the vector DB + documents, hub owns the LLM
 - **Controlled reuse of base models** — single OpenAI deployment, per-spoke search indexes
 - Cost-efficient pattern for organizations with many small AI-powered apps

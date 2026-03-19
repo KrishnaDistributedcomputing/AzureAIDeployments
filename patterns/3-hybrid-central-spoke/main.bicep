@@ -7,7 +7,7 @@
 // Hub: Azure OpenAI (base models), Model Registry (AML)
 // Spoke: Fine-tuned models, Vector DB (AI Search), App compute (AKS/App Svc)
 //
-// Use Cases: CSI-style vertical apps, RAG applications, controlled model reuse
+// Use Cases: Vertical apps, RAG applications, controlled model reuse
 // ============================================================================
 
 targetScope = 'resourceGroup'

@@ -92,7 +92,7 @@ A **single-region shared AI platform** hosted in the Platform Landing Zone (Hub)
 ## ✅ Use Cases
 
 - Enterprise-wide copilots (shared GPT-4o across multiple apps)
-- Shared AI services across CSI business units
+- Shared AI services across business units
 - Controlled cost + centralized governance
 - Standardized model management via AML registry
 
