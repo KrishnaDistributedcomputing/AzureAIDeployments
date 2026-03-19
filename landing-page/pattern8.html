@@ -223,19 +223,12 @@
     <div class="container">
       <h2 class="fw-bold mb-4"><i class="bi bi-diagram-2 me-2"></i>Architecture Diagrams</h2>
 
-      <!-- Tab Nav -->
-      <ul class="nav nav-tabs mb-3" role="tablist">
-        <li class="nav-item"><a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#mermaidTab" role="tab"><i class="bi bi-code-slash me-1"></i>Mermaid Diagram</a></li>
-        <li class="nav-item"><a class="nav-link fw-semibold" data-bs-toggle="tab" href="#drawioTab" role="tab"><i class="bi bi-pencil-square me-1"></i>Draw.io Diagram</a></li>
-      </ul>
-
-      <div class="tab-content">
-        <!-- Mermaid Tab -->
-        <div class="tab-pane fade show active" id="mermaidTab" role="tabpanel">
-          <div class="card shadow">
-            <div class="card-body text-center p-4">
-              <div class="diagram-wrapper">
-                <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+      <!-- Mermaid Diagram -->
+      <h4 class="fw-semibold mb-3"><i class="bi bi-code-slash me-2 text-primary"></i>Mermaid Diagram</h4>
+      <div class="card shadow mb-5">
+        <div class="card-body text-center p-4">
+          <div class="diagram-wrapper">
+            <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
           <pre class="mermaid">
 graph LR
     subgraph OnPrem["🏢 On-Premises Data Center"]
@@ -288,188 +281,17 @@ graph LR
     VM2 -.-> LAW
     SQLVM -.-> LAW
           </pre>
-              </div>
-            </div>
           </div>
         </div>
+      </div>
 
-        <!-- Draw.io Tab -->
-        <div class="tab-pane fade" id="drawioTab" role="tabpanel">
-          <div class="card shadow">
-            <div class="card-body p-4">
-              <div class="diagram-wrapper" style="overflow-x:auto">
-                <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDrawio(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
-                <svg id="drawio-diagram" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" style="width:100%;height:auto;min-height:500px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
-                  <defs>
-                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#5a6570"/></marker>
-                    <marker id="arrowOrange" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#e67e22"/></marker>
-                    <marker id="arrowBlue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#0078d4"/></marker>
-                    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#198754"/></marker>
-                    <filter id="shadow" x="-4%" y="-4%" width="108%" height="108%"><feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/></filter>
-                    <linearGradient id="onpremGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f8d7da"/><stop offset="100%" stop-color="#f5c6cb"/></linearGradient>
-                    <linearGradient id="assessGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff3cd"/><stop offset="100%" stop-color="#ffeeba"/></linearGradient>
-                    <linearGradient id="migrateGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d1ecf1"/><stop offset="100%" stop-color="#bee5eb"/></linearGradient>
-                    <linearGradient id="azureGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4edda"/><stop offset="100%" stop-color="#c3e6cb"/></linearGradient>
-                    <linearGradient id="nodeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#f0f4f8"/></linearGradient>
-                  </defs>
-
-                  <!-- On-Premises Zone -->
-                  <rect x="20" y="20" width="220" height="680" rx="12" fill="url(#onpremGrad)" stroke="#dc3545" stroke-width="2" filter="url(#shadow)"/>
-                  <text x="130" y="50" text-anchor="middle" font-size="15" font-weight="700" fill="#842029">🏢 On-Premises</text>
-
-                  <!-- On-Prem Nodes -->
-                  <rect x="40" y="80" width="180" height="70" rx="8" fill="url(#nodeGrad)" stroke="#dc3545" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="130" y="108" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Legacy VMs</text>
-                  <text x="130" y="126" text-anchor="middle" font-size="11" fill="#666">Windows / Linux</text>
-
-                  <rect x="40" y="180" width="180" height="70" rx="8" fill="url(#nodeGrad)" stroke="#dc3545" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="130" y="208" text-anchor="middle" font-size="12" font-weight="700" fill="#333">SQL Server on VM</text>
-                  <text x="130" y="226" text-anchor="middle" font-size="11" fill="#666">File Servers</text>
-
-                  <rect x="40" y="280" width="180" height="70" rx="8" fill="url(#nodeGrad)" stroke="#dc3545" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="130" y="308" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Legacy Apps</text>
-                  <text x="130" y="326" text-anchor="middle" font-size="11" fill="#666">IIS / Apache / Tomcat</text>
-
-                  <!-- Phase 1: Assess -->
-                  <rect x="280" y="20" width="180" height="200" rx="12" fill="url(#assessGrad)" stroke="#ffc107" stroke-width="2" filter="url(#shadow)"/>
-                  <text x="370" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="#856404">📋 Phase 1 — Assess</text>
-
-                  <rect x="300" y="80" width="140" height="80" rx="8" fill="url(#nodeGrad)" stroke="#ffc107" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="370" y="108" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Azure Migrate</text>
-                  <text x="370" y="126" text-anchor="middle" font-size="11" fill="#666">Discovery &amp;</text>
-                  <text x="370" y="141" text-anchor="middle" font-size="11" fill="#666">Assessment</text>
-
-                  <!-- Phase 2: Migrate -->
-                  <rect x="280" y="250" width="180" height="240" rx="12" fill="url(#migrateGrad)" stroke="#0dcaf0" stroke-width="2" filter="url(#shadow)"/>
-                  <text x="370" y="280" text-anchor="middle" font-size="14" font-weight="700" fill="#055160">🔄 Phase 2 — Migrate</text>
-
-                  <rect x="300" y="300" width="140" height="70" rx="8" fill="url(#nodeGrad)" stroke="#0dcaf0" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="370" y="328" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Site Recovery</text>
-                  <text x="370" y="346" text-anchor="middle" font-size="11" fill="#666">Replication Engine</text>
-
-                  <rect x="300" y="400" width="140" height="70" rx="8" fill="url(#nodeGrad)" stroke="#0dcaf0" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="370" y="428" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Database Migration</text>
-                  <text x="370" y="446" text-anchor="middle" font-size="11" fill="#666">Service (DMS)</text>
-
-                  <!-- Phase 3: Azure Target -->
-                  <rect x="500" y="20" width="680" height="680" rx="12" fill="url(#azureGrad)" stroke="#198754" stroke-width="2" filter="url(#shadow)"/>
-                  <text x="840" y="50" text-anchor="middle" font-size="15" font-weight="700" fill="#0f5132">☁️ Phase 3 — Azure Target Infrastructure</text>
-
-                  <!-- Compute Subnet -->
-                  <rect x="520" y="70" width="300" height="180" rx="10" fill="rgba(255,255,255,.6)" stroke="#0078d4" stroke-width="1.5" stroke-dasharray="6,3"/>
-                  <text x="670" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#0078d4">Compute Subnet /24</text>
-
-                  <rect x="540" y="105" width="120" height="65" rx="6" fill="url(#nodeGrad)" stroke="#0078d4" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="600" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure VM</text>
-                  <text x="600" y="148" text-anchor="middle" font-size="10" fill="#666">D4s_v5 Windows</text>
-
-                  <rect x="680" y="105" width="120" height="65" rx="6" fill="url(#nodeGrad)" stroke="#0078d4" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="740" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure VM</text>
-                  <text x="740" y="148" text-anchor="middle" font-size="10" fill="#666">D4s_v5 Linux</text>
-
-                  <rect x="540" y="180" width="260" height="55" rx="6" fill="url(#nodeGrad)" stroke="#0078d4" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="670" y="203" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Standard Load Balancer</text>
-                  <text x="670" y="220" text-anchor="middle" font-size="10" fill="#666">Traffic Distribution</text>
-
-                  <!-- Data Subnet -->
-                  <rect x="520" y="270" width="300" height="140" rx="10" fill="rgba(255,255,255,.6)" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="6,3"/>
-                  <text x="670" y="292" text-anchor="middle" font-size="12" font-weight="700" fill="#6f42c1">Data Subnet /24</text>
-
-                  <rect x="540" y="305" width="130" height="65" rx="6" fill="url(#nodeGrad)" stroke="#6f42c1" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="605" y="330" text-anchor="middle" font-size="11" font-weight="700" fill="#333">SQL on VM</text>
-                  <text x="605" y="348" text-anchor="middle" font-size="10" fill="#666">or Azure SQL MI</text>
-
-                  <rect x="690" y="305" width="110" height="65" rx="6" fill="url(#nodeGrad)" stroke="#6f42c1" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="745" y="330" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure Storage</text>
-                  <text x="745" y="348" text-anchor="middle" font-size="10" fill="#666">File Shares SMB</text>
-
-                  <!-- Management Subnet -->
-                  <rect x="850" y="70" width="310" height="180" rx="10" fill="rgba(255,255,255,.6)" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="6,3"/>
-                  <text x="1005" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#e67e22">Management Subnet /24</text>
-
-                  <rect x="870" y="110" width="130" height="65" rx="6" fill="url(#nodeGrad)" stroke="#e67e22" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="935" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure Bastion</text>
-                  <text x="935" y="153" text-anchor="middle" font-size="10" fill="#666">Secure RDP/SSH</text>
-
-                  <rect x="1020" y="110" width="120" height="65" rx="6" fill="url(#nodeGrad)" stroke="#e67e22" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="1080" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure Backup</text>
-                  <text x="1080" y="153" text-anchor="middle" font-size="10" fill="#666">Recovery Vault</text>
-
-                  <!-- Monitoring -->
-                  <rect x="850" y="270" width="310" height="140" rx="10" fill="rgba(255,255,255,.6)" stroke="#198754" stroke-width="1.5" stroke-dasharray="6,3"/>
-                  <text x="1005" y="292" text-anchor="middle" font-size="12" font-weight="700" fill="#198754">Monitoring</text>
-
-                  <rect x="900" y="310" width="210" height="65" rx="6" fill="url(#nodeGrad)" stroke="#198754" stroke-width="1.5" filter="url(#shadow)"/>
-                  <text x="1005" y="335" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Log Analytics</text>
-                  <text x="1005" y="353" text-anchor="middle" font-size="10" fill="#666">+ VM Insights + App Insights</text>
-
-                  <!-- NSG + VNet label -->
-                  <rect x="520" y="430" width="640" height="60" rx="10" fill="rgba(255,255,255,.4)" stroke="#6c757d" stroke-width="1" stroke-dasharray="4,4"/>
-                  <text x="840" y="458" text-anchor="middle" font-size="12" font-weight="600" fill="#6c757d">VNet 10.0.0.0/16 &nbsp;|&nbsp; NSG per Subnet &nbsp;|&nbsp; No Public IPs &nbsp;|&nbsp; Private DNS Zones</text>
-                  <text x="840" y="477" text-anchor="middle" font-size="11" fill="#6c757d">Optional: Azure Firewall in Hub for egress filtering &nbsp;|&nbsp; VPN Gateway / ExpressRoute for hybrid</text>
-
-                  <!-- CAF Modernization Path -->
-                  <rect x="520" y="520" width="640" height="160" rx="12" fill="rgba(230,126,34,.08)" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="8,4"/>
-                  <text x="840" y="548" text-anchor="middle" font-size="13" font-weight="700" fill="#e67e22">🚀 CAF Modernization Path (Post-Migration)</text>
-
-                  <rect x="545" y="570" width="130" height="46" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1"/>
-                  <text x="610" y="590" text-anchor="middle" font-size="10" font-weight="600" fill="#e67e22">Phase 1: Rehost</text>
-                  <text x="610" y="604" text-anchor="middle" font-size="9" fill="#888">VMs as-is (current)</text>
-
-                  <text x="688" y="596" text-anchor="middle" font-size="16" fill="#e67e22">→</text>
-
-                  <rect x="700" y="570" width="130" height="46" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1"/>
-                  <text x="765" y="590" text-anchor="middle" font-size="10" font-weight="600" fill="#0078d4">Phase 2: Refactor</text>
-                  <text x="765" y="604" text-anchor="middle" font-size="9" fill="#888">Containers / AKS</text>
-
-                  <text x="843" y="596" text-anchor="middle" font-size="16" fill="#e67e22">→</text>
-
-                  <rect x="855" y="570" width="130" height="46" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1"/>
-                  <text x="920" y="590" text-anchor="middle" font-size="10" font-weight="600" fill="#198754">Phase 3: Rearchitect</text>
-                  <text x="920" y="604" text-anchor="middle" font-size="9" fill="#888">App Service / PaaS</text>
-
-                  <text x="998" y="596" text-anchor="middle" font-size="16" fill="#e67e22">→</text>
-
-                  <rect x="1010" y="570" width="130" height="46" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1"/>
-                  <text x="1075" y="590" text-anchor="middle" font-size="10" font-weight="600" fill="#6f42c1">Phase 4: Rebuild</text>
-                  <text x="1075" y="604" text-anchor="middle" font-size="9" fill="#888">Cloud-Native / AI</text>
-
-                  <text x="840" y="658" text-anchor="middle" font-size="11" font-weight="600" fill="#e67e22">Azure Hybrid Benefit: Save up to 85% on Windows Server &amp; SQL Server licensing</text>
-
-                  <!-- Arrows: On-Prem to Assess -->
-                  <line x1="220" y1="115" x2="298" y2="115" stroke="#dc3545" stroke-width="2" marker-end="url(#arrowhead)"/>
-                  <line x1="220" y1="215" x2="298" y2="125" stroke="#dc3545" stroke-width="2" marker-end="url(#arrowhead)"/>
-                  <line x1="220" y1="315" x2="298" y2="135" stroke="#dc3545" stroke-width="2" marker-end="url(#arrowhead)"/>
-                  <text x="255" y="100" font-size="10" font-weight="600" fill="#dc3545">Discover</text>
-
-                  <!-- Assess to Migrate -->
-                  <line x1="370" y1="160" x2="370" y2="298" stroke="#ffc107" stroke-width="2" marker-end="url(#arrowhead)"/>
-                  <text x="380" y="235" font-size="10" font-weight="600" fill="#856404">Assess</text>
-
-                  <!-- ASR to VMs -->
-                  <line x1="440" y1="335" x2="538" y2="135" stroke="#0078d4" stroke-width="2" marker-end="url(#arrowBlue)"/>
-                  <text x="478" y="225" font-size="10" font-weight="600" fill="#0078d4">Failover</text>
-                  <line x1="440" y1="335" x2="678" y2="135" stroke="#0078d4" stroke-width="2" marker-end="url(#arrowBlue)"/>
-
-                  <!-- DMS to SQL -->
-                  <line x1="440" y1="435" x2="538" y2="340" stroke="#6f42c1" stroke-width="2" marker-end="url(#arrowhead)"/>
-                  <text x="478" y="395" font-size="10" font-weight="600" fill="#6f42c1">Migrate DB</text>
-
-                  <!-- Bastion to VMs (dashed) -->
-                  <line x1="870" y1="143" x2="800" y2="137" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-                  <line x1="870" y1="143" x2="660" y2="137" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-
-                  <!-- Backup to VMs (dashed) -->
-                  <line x1="1020" y1="175" x2="800" y2="170" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-                  <line x1="1020" y1="175" x2="660" y2="170" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowOrange)"/>
-
-                  <!-- VMs to Log Analytics (dashed) -->
-                  <line x1="820" y1="170" x2="900" y2="320" stroke="#198754" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-                  <line x1="800" y1="370" x2="900" y2="345" stroke="#198754" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arrowGreen)"/>
-                  <text x="878" y="260" font-size="10" font-weight="600" fill="#198754">Logs</text>
-                </svg>
-              </div>
-            </div>
+      <!-- Draw.io Style Diagram -->
+      <h4 class="fw-semibold mb-3"><i class="bi bi-pencil-square me-2" style="color:#e67e22"></i>Draw.io Style Diagram</h4>
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <div style="position:relative;overflow-x:auto;padding:1rem;background:#fff;border-radius:12px;border:1px solid #dee2e6">
+            <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDrawio(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+            <div id="drawio-container"></div>
           </div>
         </div>
       </div>
@@ -662,7 +484,153 @@ graph LR
   <script>
     mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
     function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
-    function enlargeDrawio(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner" style="max-width:98vw;padding:1.5rem"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
+    function enlargeDrawio(btn){const wrapper=btn.parentElement;const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner" style="max-width:98vw;padding:1.5rem"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
+
+    // Inject Draw.io SVG after Mermaid has finished to avoid interference
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var c = document.getElementById('drawio-container');
+        if (!c) return;
+        c.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" style="width:100%;height:auto;min-height:500px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;background:#fff">'
+        + '<defs>'
+        + '<marker id="d-ah" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#5a6570"/></marker>'
+        + '<marker id="d-ao" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#e67e22"/></marker>'
+        + '<marker id="d-ab" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#0078d4"/></marker>'
+        + '<marker id="d-ag" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#198754"/></marker>'
+        + '</defs>'
+        // White background
+        + '<rect x="0" y="0" width="1200" height="720" fill="#ffffff" rx="0"/>'
+        // On-Premises Zone
+        + '<rect x="20" y="20" width="220" height="340" rx="12" fill="#fef2f2" stroke="#dc3545" stroke-width="2"/>'
+        + '<text x="130" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="#842029">On-Premises Data Center</text>'
+        // On-Prem nodes
+        + '<rect x="40" y="70" width="180" height="60" rx="8" fill="#fff" stroke="#dc3545" stroke-width="1.5"/>'
+        + '<text x="130" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Legacy VMs</text>'
+        + '<text x="130" y="112" text-anchor="middle" font-size="10" fill="#666">Windows / Linux</text>'
+        + '<rect x="40" y="150" width="180" height="60" rx="8" fill="#fff" stroke="#dc3545" stroke-width="1.5"/>'
+        + '<text x="130" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#333">SQL Server on VM</text>'
+        + '<text x="130" y="192" text-anchor="middle" font-size="10" fill="#666">File Servers</text>'
+        + '<rect x="40" y="230" width="180" height="60" rx="8" fill="#fff" stroke="#dc3545" stroke-width="1.5"/>'
+        + '<text x="130" y="256" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Legacy Apps</text>'
+        + '<text x="130" y="272" text-anchor="middle" font-size="10" fill="#666">IIS / Apache / Tomcat</text>'
+        // Phase 1: Assess
+        + '<rect x="280" y="20" width="180" height="160" rx="12" fill="#fefce8" stroke="#eab308" stroke-width="2"/>'
+        + '<text x="370" y="48" text-anchor="middle" font-size="13" font-weight="700" fill="#854d0e">Phase 1 &#8212; Assess</text>'
+        + '<rect x="300" y="65" width="140" height="70" rx="8" fill="#fff" stroke="#eab308" stroke-width="1.5"/>'
+        + '<text x="370" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Azure Migrate</text>'
+        + '<text x="370" y="110" text-anchor="middle" font-size="10" fill="#666">Discovery &amp; Assessment</text>'
+        // Phase 2: Migrate
+        + '<rect x="280" y="210" width="180" height="210" rx="12" fill="#ecfdf5" stroke="#0dcaf0" stroke-width="2"/>'
+        + '<text x="370" y="238" text-anchor="middle" font-size="13" font-weight="700" fill="#055160">Phase 2 &#8212; Migrate</text>'
+        + '<rect x="300" y="255" width="140" height="60" rx="8" fill="#fff" stroke="#0dcaf0" stroke-width="1.5"/>'
+        + '<text x="370" y="281" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Site Recovery</text>'
+        + '<text x="370" y="297" text-anchor="middle" font-size="10" fill="#666">Replication Engine</text>'
+        + '<rect x="300" y="335" width="140" height="60" rx="8" fill="#fff" stroke="#0dcaf0" stroke-width="1.5"/>'
+        + '<text x="370" y="361" text-anchor="middle" font-size="12" font-weight="700" fill="#333">Database Migration</text>'
+        + '<text x="370" y="377" text-anchor="middle" font-size="10" fill="#666">Service (DMS)</text>'
+        // Phase 3: Azure Target
+        + '<rect x="500" y="20" width="680" height="520" rx="12" fill="#f0fdf4" stroke="#198754" stroke-width="2"/>'
+        + '<text x="840" y="48" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">Phase 3 &#8212; Azure Target Infrastructure</text>'
+        // Compute Subnet
+        + '<rect x="520" y="65" width="300" height="170" rx="10" fill="#eff6ff" stroke="#0078d4" stroke-width="1.5" stroke-dasharray="6,3"/>'
+        + '<text x="670" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#0078d4">Compute Subnet /24</text>'
+        + '<rect x="540" y="98" width="120" height="55" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1.5"/>'
+        + '<text x="600" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure VM</text>'
+        + '<text x="600" y="137" text-anchor="middle" font-size="10" fill="#666">D4s_v5 Windows</text>'
+        + '<rect x="680" y="98" width="120" height="55" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1.5"/>'
+        + '<text x="740" y="121" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure VM</text>'
+        + '<text x="740" y="137" text-anchor="middle" font-size="10" fill="#666">D4s_v5 Linux</text>'
+        + '<rect x="540" y="165" width="260" height="50" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1.5"/>'
+        + '<text x="670" y="187" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Standard Load Balancer</text>'
+        + '<text x="670" y="202" text-anchor="middle" font-size="10" fill="#666">Traffic Distribution</text>'
+        // Data Subnet
+        + '<rect x="520" y="250" width="300" height="120" rx="10" fill="#faf5ff" stroke="#6f42c1" stroke-width="1.5" stroke-dasharray="6,3"/>'
+        + '<text x="670" y="270" text-anchor="middle" font-size="11" font-weight="700" fill="#6f42c1">Data Subnet /24</text>'
+        + '<rect x="540" y="285" width="130" height="55" rx="6" fill="#fff" stroke="#6f42c1" stroke-width="1.5"/>'
+        + '<text x="605" y="308" text-anchor="middle" font-size="11" font-weight="700" fill="#333">SQL on VM</text>'
+        + '<text x="605" y="323" text-anchor="middle" font-size="10" fill="#666">or Azure SQL MI</text>'
+        + '<rect x="690" y="285" width="110" height="55" rx="6" fill="#fff" stroke="#6f42c1" stroke-width="1.5"/>'
+        + '<text x="745" y="308" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure Storage</text>'
+        + '<text x="745" y="323" text-anchor="middle" font-size="10" fill="#666">File Shares SMB</text>'
+        // Management Subnet
+        + '<rect x="850" y="65" width="310" height="170" rx="10" fill="#fff7ed" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="6,3"/>'
+        + '<text x="1005" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#e67e22">Management Subnet /24</text>'
+        + '<rect x="870" y="100" width="130" height="55" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1.5"/>'
+        + '<text x="935" y="123" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure Bastion</text>'
+        + '<text x="935" y="139" text-anchor="middle" font-size="10" fill="#666">Secure RDP/SSH</text>'
+        + '<rect x="1020" y="100" width="120" height="55" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1.5"/>'
+        + '<text x="1080" y="123" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Azure Backup</text>'
+        + '<text x="1080" y="139" text-anchor="middle" font-size="10" fill="#666">Recovery Vault</text>'
+        // Monitoring
+        + '<rect x="850" y="250" width="310" height="120" rx="10" fill="#f0fdf4" stroke="#198754" stroke-width="1.5" stroke-dasharray="6,3"/>'
+        + '<text x="1005" y="270" text-anchor="middle" font-size="11" font-weight="700" fill="#198754">Monitoring</text>'
+        + '<rect x="900" y="288" width="210" height="55" rx="6" fill="#fff" stroke="#198754" stroke-width="1.5"/>'
+        + '<text x="1005" y="311" text-anchor="middle" font-size="11" font-weight="700" fill="#333">Log Analytics</text>'
+        + '<text x="1005" y="327" text-anchor="middle" font-size="10" fill="#666">+ VM Insights + App Insights</text>'
+        // VNet bar
+        + '<rect x="520" y="385" width="640" height="50" rx="8" fill="#f8f9fa" stroke="#6c757d" stroke-width="1" stroke-dasharray="4,4"/>'
+        + '<text x="840" y="408" text-anchor="middle" font-size="11" font-weight="600" fill="#6c757d">VNet 10.0.0.0/16  |  NSG per Subnet  |  No Public IPs  |  Private DNS Zones</text>'
+        + '<text x="840" y="425" text-anchor="middle" font-size="10" fill="#999">Optional: Azure Firewall for egress  |  VPN Gateway / ExpressRoute for hybrid</text>'
+        // CAF Modernization Path
+        + '<rect x="520" y="455" width="640" height="85" rx="10" fill="#fef9f0" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="8,4"/>'
+        + '<text x="840" y="478" text-anchor="middle" font-size="12" font-weight="700" fill="#e67e22">CAF Modernization Path (Post-Migration)</text>'
+        + '<rect x="545" y="492" width="120" height="36" rx="6" fill="#fff" stroke="#e67e22" stroke-width="1"/>'
+        + '<text x="605" y="507" text-anchor="middle" font-size="10" font-weight="600" fill="#e67e22">1. Rehost</text>'
+        + '<text x="605" y="520" text-anchor="middle" font-size="8" fill="#888">VMs as-is</text>'
+        + '<text x="675" y="514" text-anchor="middle" font-size="14" fill="#e67e22">&#8594;</text>'
+        + '<rect x="690" y="492" width="120" height="36" rx="6" fill="#fff" stroke="#0078d4" stroke-width="1"/>'
+        + '<text x="750" y="507" text-anchor="middle" font-size="10" font-weight="600" fill="#0078d4">2. Refactor</text>'
+        + '<text x="750" y="520" text-anchor="middle" font-size="8" fill="#888">Containers</text>'
+        + '<text x="820" y="514" text-anchor="middle" font-size="14" fill="#e67e22">&#8594;</text>'
+        + '<rect x="835" y="492" width="120" height="36" rx="6" fill="#fff" stroke="#198754" stroke-width="1"/>'
+        + '<text x="895" y="507" text-anchor="middle" font-size="10" font-weight="600" fill="#198754">3. Rearchitect</text>'
+        + '<text x="895" y="520" text-anchor="middle" font-size="8" fill="#888">PaaS / App Svc</text>'
+        + '<text x="965" y="514" text-anchor="middle" font-size="14" fill="#e67e22">&#8594;</text>'
+        + '<rect x="980" y="492" width="120" height="36" rx="6" fill="#fff" stroke="#6f42c1" stroke-width="1"/>'
+        + '<text x="1040" y="507" text-anchor="middle" font-size="10" font-weight="600" fill="#6f42c1">4. Rebuild</text>'
+        + '<text x="1040" y="520" text-anchor="middle" font-size="8" fill="#888">Cloud-Native</text>'
+        // Legend
+        + '<rect x="20" y="560" width="1160" height="140" rx="10" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>'
+        + '<text x="600" y="585" text-anchor="middle" font-size="13" font-weight="700" fill="#333">Legend</text>'
+        + '<line x1="60" y1="610" x2="110" y2="610" stroke="#dc3545" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<text x="120" y="614" font-size="11" fill="#333">Discover / Assess</text>'
+        + '<line x1="280" y1="610" x2="330" y2="610" stroke="#0078d4" stroke-width="2" marker-end="url(#d-ab)"/>'
+        + '<text x="340" y="614" font-size="11" fill="#333">VM Failover</text>'
+        + '<line x1="480" y1="610" x2="530" y2="610" stroke="#6f42c1" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<text x="540" y="614" font-size="11" fill="#333">DB Migration</text>'
+        + '<line x1="680" y1="610" x2="730" y2="610" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ao)"/>'
+        + '<text x="740" y="614" font-size="11" fill="#333">Management (Bastion/Backup)</text>'
+        + '<line x1="960" y1="610" x2="1010" y2="610" stroke="#198754" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ag)"/>'
+        + '<text x="1020" y="614" font-size="11" fill="#333">Logs</text>'
+        + '<text x="600" y="680" text-anchor="middle" font-size="11" font-weight="600" fill="#e67e22">Azure Hybrid Benefit: Save up to 85% on Windows Server &amp; SQL Server licensing</text>'
+        // Arrows: On-Prem to Assess
+        + '<line x1="220" y1="100" x2="298" y2="95" stroke="#dc3545" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<line x1="220" y1="180" x2="298" y2="105" stroke="#dc3545" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<line x1="220" y1="260" x2="298" y2="115" stroke="#dc3545" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<text x="256" y="82" font-size="10" font-weight="600" fill="#dc3545">Discover</text>'
+        // Assess to Migrate
+        + '<line x1="370" y1="135" x2="370" y2="253" stroke="#eab308" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<text x="380" y="200" font-size="10" font-weight="600" fill="#854d0e">Assess</text>'
+        // ASR to VMs
+        + '<line x1="440" y1="285" x2="538" y2="125" stroke="#0078d4" stroke-width="2" marker-end="url(#d-ab)"/>'
+        + '<line x1="440" y1="285" x2="678" y2="125" stroke="#0078d4" stroke-width="2" marker-end="url(#d-ab)"/>'
+        + '<text x="480" y="195" font-size="10" font-weight="600" fill="#0078d4">Failover</text>'
+        // DMS to SQL
+        + '<line x1="440" y1="365" x2="538" y2="310" stroke="#6f42c1" stroke-width="2" marker-end="url(#d-ah)"/>'
+        + '<text x="480" y="345" font-size="10" font-weight="600" fill="#6f42c1">Migrate DB</text>'
+        // Bastion to VMs (dashed)
+        + '<line x1="870" y1="127" x2="800" y2="125" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ao)"/>'
+        + '<line x1="870" y1="127" x2="660" y2="125" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ao)"/>'
+        // Backup to VMs (dashed)
+        + '<line x1="1020" y1="155" x2="800" y2="153" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ao)"/>'
+        + '<line x1="1020" y1="155" x2="660" y2="153" stroke="#e67e22" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ao)"/>'
+        // VMs to Log Analytics (dashed)
+        + '<line x1="820" y1="153" x2="900" y2="295" stroke="#198754" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ag)"/>'
+        + '<line x1="800" y1="340" x2="898" y2="315" stroke="#198754" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#d-ag)"/>'
+        + '<text x="868" y="240" font-size="10" font-weight="600" fill="#198754">Logs</text>'
+        + '</svg>';
+      }, 500);
+    });
     const toggle=document.getElementById('themeToggle');
     toggle.addEventListener('click',()=>{
       const html=document.documentElement;
