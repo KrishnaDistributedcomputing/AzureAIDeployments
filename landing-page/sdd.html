@@ -90,7 +90,7 @@
         <div class="col-6 col-md-3"><div class="bg-body rounded-4 shadow-sm p-3"><div class="fw-bold text-primary fs-4">5</div><div class="text-muted small">Workflow Phases</div></div></div>
         <div class="col-6 col-md-3"><div class="bg-body rounded-4 shadow-sm p-3"><div class="fw-bold text-primary fs-4">3</div><div class="text-muted small">Maturity Patterns</div></div></div>
         <div class="col-6 col-md-3"><div class="bg-body rounded-4 shadow-sm p-3"><div class="fw-bold text-primary fs-4">Build</div><div class="text-muted small">Time Enforcement</div></div></div>
-        <div class="col-6 col-md-3"><div class="bg-body rounded-4 shadow-sm p-3"><div class="fw-bold text-primary fs-4"><i class="bi bi-shield-check"></i></div><div class="text-muted small">Shift-Left Governance</div></div></div>
+        <div class="col-6 col-md-3"><div class="bg-body rounded-4 shadow-sm p-3"><div class="fw-bold text-primary fs-4">12</div><div class="text-muted small">Spec Rule Categories</div></div></div>
       </div>
     </div>
   </section>
@@ -116,6 +116,7 @@
             <a href="#takeaway">Strategic Takeaway</a>
             <a href="#markdown">Power of .md Specs</a>
             <a href="#azure-samples">Azure Spec Samples</a>
+            <a href="#ruleset">Universal Spec Ruleset</a>
           </nav>
         </div>
       </div>
@@ -906,6 +907,542 @@ All data encrypted in use (memory), at rest, and in transit.
               <p class="text-muted mb-0">AI agents read the spec → generate Bicep/Terraform → CI validates against the spec → only compliant code deploys. The spec is the contract. The spec is the test. The spec is the source of truth.</p>
             </div>
           </div>
+        </section>
+
+        <!-- 15. Universal Spec Ruleset -->
+        <section id="ruleset" class="mb-5">
+          <h2 class="fw-bold mb-3"><span class="num-circle bg-primary text-white me-2">15</span>Universal Spec Ruleset</h2>
+          <p class="lead mb-4">The single source of truth for how specs are written, structured, reviewed, and maintained. Every specification — functional, deployment, architecture, data, or product — must comply before engineering handoff.</p>
+
+          <div class="callout mb-4">
+            <strong>SPEC-RULES-001</strong> &middot; v1.0 &middot; Active<br>
+            <span class="text-muted small">Applies to all specification documents. Uses RFC 2119 keywords: <strong>must</strong>, <strong>must not</strong>, <strong>should</strong>, <strong>should not</strong>, <strong>may</strong>.</span>
+          </div>
+
+          <div class="accordion" id="rulesetAccordion">
+
+            <!-- 1. Document Standards -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule1">1. Document Standards</button></h2>
+              <div id="rule1" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">1.1 Required Header</h6>
+                  <p>Every spec must begin with this header block — no field may be left blank:</p>
+<pre class="bg-body-secondary rounded p-3 small"><code>**Document ID:**   &lt;PREFIX&gt;-&lt;DOMAIN&gt;-&lt;NNN&gt;
+**Version:**       &lt;MAJOR.MINOR&gt;
+**Status:**        Draft | Review | Approved | Deprecated
+**Type:**          Functional | Deployment | Architecture | Data | Product
+**Owner:**         &lt;name or team&gt;
+**Date:**          &lt;YYYY-MM-DD&gt;
+**Applies to:**    &lt;system, service, or feature name&gt;</code></pre>
+
+                  <h6 class="fw-bold mt-3">1.2 Document ID Format</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Prefix</th><th>Use</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>SPEC</code></td><td>General / product specifications</td></tr>
+                      <tr><td><code>FS</code></td><td>Functional specifications</td></tr>
+                      <tr><td><code>DS</code></td><td>Deployment specifications</td></tr>
+                      <tr><td><code>AS</code></td><td>Architecture specifications</td></tr>
+                      <tr><td><code>SEC</code></td><td>Security specifications</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="small text-muted">Full format: <code>&lt;PREFIX&gt;-&lt;DOMAIN&gt;-&lt;NNN&gt;</code> — e.g. <code>FS-AVM-001</code>. Addenda: <code>&lt;PARENT-ID&gt;-ADD-&lt;NNN&gt;</code></p>
+
+                  <h6 class="fw-bold mt-3">1.3 Version Numbering</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Change Type</th><th>Version Bump</th></tr></thead>
+                    <tbody>
+                      <tr><td>Structural section added/removed</td><td>Major (<code>x.0</code>)</td></tr>
+                      <tr><td>Content updated, rule changed</td><td>Minor (<code>x.y</code>)</td></tr>
+                      <tr><td>Typo, formatting fix</td><td>No bump — update date only</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">1.4 Status Definitions</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Status</th><th>Meaning</th><th>Who Can Set</th></tr></thead>
+                    <tbody>
+                      <tr><td><span class="badge bg-secondary">Draft</span></td><td>Being written — not ready for engineering</td><td>Author</td></tr>
+                      <tr><td><span class="badge bg-warning text-dark">Review</span></td><td>Complete — pending stakeholder sign-off</td><td>Author</td></tr>
+                      <tr><td><span class="badge bg-success">Approved</span></td><td>Signed off — safe to build against</td><td>Owner + reviewer</td></tr>
+                      <tr><td><span class="badge bg-danger">Deprecated</span></td><td>Superseded — do not build against</td><td>Owner</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="small text-muted mb-0">A spec cannot advance to <strong>Approved</strong> without at least one reviewer who is not the author.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Structure Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule2">2. Structure Rules</button></h2>
+              <div id="rule2" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">2.1 Required Sections</h6>
+                  <p class="small">Every spec must contain all of the following. Sections may be marked <code>N/A</code> with a reason but must not be silently omitted.</p>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>#</th><th>Section</th><th>Required In</th></tr></thead>
+                    <tbody>
+                      <tr><td>1</td><td>Purpose / Overview</td><td>All specs</td></tr>
+                      <tr><td>2</td><td>Scope</td><td>All specs</td></tr>
+                      <tr><td>3</td><td>Stakeholders</td><td>All specs</td></tr>
+                      <tr><td>4</td><td>Functional / Technical Requirements</td><td>Functional, Deployment, Architecture</td></tr>
+                      <tr><td>5</td><td>Data Schemas</td><td>Functional, Data specs</td></tr>
+                      <tr><td>6</td><td>Error Handling</td><td>Functional, Deployment specs</td></tr>
+                      <tr><td>7</td><td>Security</td><td>All specs</td></tr>
+                      <tr><td>8</td><td>Cost Estimate (itemised)</td><td>Deployment, Architecture specs</td></tr>
+                      <tr><td>9</td><td>Network Specification</td><td>Deployment, Architecture specs</td></tr>
+                      <tr><td>10</td><td>Rollback / Recovery</td><td>Deployment specs</td></tr>
+                      <tr><td>11</td><td>Acceptance Criteria</td><td>Functional, Deployment specs</td></tr>
+                      <tr><td>12</td><td>Out of Scope</td><td>All specs</td></tr>
+                      <tr><td>13</td><td>Glossary</td><td>All specs</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">2.2 Table of Contents</h6>
+                  <p class="small mb-1">Every spec with more than 5 sections must include a linked Table of Contents immediately after the header block.</p>
+
+                  <h6 class="fw-bold mt-3">2.3 Section Numbering</h6>
+                  <ul class="small mb-1">
+                    <li>Top-level: <code>## 1.  Title</code></li>
+                    <li>Subsections: <code>### 1.1 Title</code></li>
+                    <li>Maximum three levels deep</li>
+                  </ul>
+
+                  <h6 class="fw-bold mt-3">2.4 One Document, One Responsibility</h6>
+                  <p class="small mb-0">Each spec covers one system, service, or feature. Multi-system specs must be split. Addenda (<code>-ADD-NNN</code>) augment — they do not replace parent sections.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Content Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule3">3. Content Rules</button></h2>
+              <div id="rule3" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">3.1 Language</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Rule</th><th>Rationale</th></tr></thead>
+                    <tbody>
+                      <tr><td>Use <strong>must</strong>, <strong>must not</strong>, <strong>should</strong>, <strong>should not</strong>, <strong>may</strong> (RFC 2119)</td><td>Removes ambiguity about mandatory vs. optional</td></tr>
+                      <tr><td>Write in active voice</td><td>"The system must send an alert" not "An alert must be sent"</td></tr>
+                      <tr><td>Use present tense for requirements</td><td>"The API returns…" not "The API will return…"</td></tr>
+                      <tr><td>No jargon without definition</td><td>Every acronym must appear in the Glossary</td></tr>
+                      <tr><td>No vague quantifiers</td><td>Never write "fast", "soon", "large" without a measurable value</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">3.2 Prohibited Phrases</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Banned</th><th>Replace With</th></tr></thead>
+                    <tbody>
+                      <tr><td>"As soon as possible"</td><td>Specific SLA or time target</td></tr>
+                      <tr><td>"Best effort"</td><td>Quantified availability or throughput target</td></tr>
+                      <tr><td>"TBD" / "TBC"</td><td>Placeholder with owner + due date</td></tr>
+                      <tr><td>"etc." / "And so on"</td><td>Complete the list</td></tr>
+                      <tr><td>"Fast" / "efficient"</td><td>Specific latency, throughput, or time target</td></tr>
+                      <tr><td>"Scalable"</td><td>Specific scale target (e.g. 10,000 concurrent users)</td></tr>
+                      <tr><td>"Secure"</td><td>Specific security control (e.g. TLS 1.2 minimum)</td></tr>
+                      <tr><td>"Simple" / "Obviously"</td><td>Omit — not measurable</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">3.3 Placeholder Policy</h6>
+<pre class="bg-body-secondary rounded p-3 small"><code>&lt;placeholder-name&gt;                    e.g. &lt;subscription-id&gt;
+&lt;placeholder-name:type&gt;               e.g. &lt;budget-limit:USD&gt;
+&lt;placeholder-name:owner:due-date&gt;     e.g. &lt;api-key:@devops:2026-04-01&gt;</code></pre>
+                  <p class="small mb-1">A spec with more than <strong>5 unresolved placeholders</strong> must not advance to Approved.</p>
+
+                  <h6 class="fw-bold mt-3">3.4 Requirements Format</h6>
+<pre class="bg-body-secondary rounded p-3 small"><code><strong>&lt;ID&gt;</strong> — &lt;Component&gt; must &lt;requirement&gt;.
+Rationale: &lt;why this requirement exists&gt;
+
+Example:
+<strong>FR-04</strong> — The API must return a response within 200ms at P95 under normal load.
+Rationale: User-facing requests exceeding 200ms measurably increase abandonment rate.</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Technical Specification Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule4">4. Technical Specification Rules</button></h2>
+              <div id="rule4" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">4.1 No Ambiguous Architecture</h6>
+                  <p class="small">Every architecture diagram must be accompanied by a written description showing: all services/components, direction of data flow, where authentication occurs, and where data is persisted.</p>
+
+                  <h6 class="fw-bold mt-3">4.2 API Specifications</h6>
+                  <p class="small">Any API referenced in a spec must include:</p>
+                  <ul class="small">
+                    <li>Full endpoint URL (or URL template with placeholders)</li>
+                    <li>HTTP method + authentication method</li>
+                    <li>Required parameters + response schema (key fields and types)</li>
+                    <li>Rate limits (if applicable) + link to official documentation</li>
+                  </ul>
+
+                  <h6 class="fw-bold mt-3">4.3 No Assumed Defaults</h6>
+                  <p class="small">Every configurable value must be explicitly stated — defaults change between versions. Specify: SKU/tier, region, replication factor, retention period, timeout values, retry counts and backoff strategy.</p>
+
+                  <h6 class="fw-bold mt-3">4.4 Technology Choices Must Be Justified</h6>
+<pre class="bg-body-secondary rounded p-3 small mb-0"><code>| Technology | Choice     | Rationale                                          |
+|------------|------------|-----------------------------------------------------|
+| Database   | PostgreSQL | ACID compliance required; team has existing expertise |</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Data & Schema Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule5">5. Data &amp; Schema Rules</button></h2>
+              <div id="rule5" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">5.1 All Schemas Must Be Typed</h6>
+                  <p class="small">Every schema must include: field name, data type, required/optional, constraints, and an example value.</p>
+
+                  <h6 class="fw-bold mt-3">5.2 Schema Format</h6>
+<pre class="bg-body-secondary rounded p-3 small"><code>{
+  "restaurant_id": "UUID        // required — v4 UUID",
+  "rating":        "float       // optional — range: 0.0–5.0 — example: 4.2",
+  "price_range":   "enum        // required — values: $ | $$ | $$$",
+  "last_seen":     "datetime    // required — ISO 8601 UTC"
+}</code></pre>
+
+                  <h6 class="fw-bold mt-3">5.3 No Unnamed Fields</h6>
+                  <p class="small mb-1">Schemas must not contain unnamed fields, wildcard keys, or <code>object</code> types without definition.</p>
+
+                  <h6 class="fw-bold mt-3">5.4 Enum Values Must Be Exhaustive</h6>
+                  <p class="small mb-0">Every enum must list all possible values. Note if extensible: <code>// extensible enum — new values require schema version bump</code>.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Security Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule6">6. Security Rules</button></h2>
+              <div id="rule6" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">6.1 Mandatory Security Section</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Area</th><th>Required Content</th></tr></thead>
+                    <tbody>
+                      <tr><td>Authentication</td><td>Mechanism (Entra ID, OAuth, JWT, API key) + token lifetime</td></tr>
+                      <tr><td>Authorization</td><td>RBAC roles, permission model, least-privilege rationale</td></tr>
+                      <tr><td>Secrets Management</td><td>Where secrets live + rotation policy</td></tr>
+                      <tr><td>Encryption in Transit</td><td>TLS version minimum, protocols enforced</td></tr>
+                      <tr><td>Encryption at Rest</td><td>Method (PMK/CMK), key management</td></tr>
+                      <tr><td>Data Classification</td><td>Sensitivity level per data type</td></tr>
+                      <tr><td>Compliance</td><td>Frameworks applicable (SOC 2, ISO 27001, GDPR, HIPAA)</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">6.2 No Hardcoded Credentials</h6>
+                  <p class="small mb-1">Specs must never contain real credentials, connection strings, API keys, or tokens — even as examples.</p>
+
+                  <h6 class="fw-bold mt-3">6.3 No "Security TBD"</h6>
+                  <p class="small mb-1">Security requirements must be fully specified before <strong>Approved</strong> status. Security is not a post-deployment concern.</p>
+
+                  <h6 class="fw-bold mt-3">6.4 Zero Trust Checklist</h6>
+<pre class="bg-body-secondary rounded p-3 small mb-0"><code>[ ] All service-to-service calls use Managed Identity — no shared secrets
+[ ] Least-privilege RBAC roles documented per component
+[ ] Network access restricted to required flows only
+[ ] All data classified and handling rules documented
+[ ] Audit logging enabled on all sensitive operations
+[ ] MFA enforced for human access to production systems</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7. Cost & Estimation Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule7">7. Cost &amp; Estimation Rules</button></h2>
+              <div id="rule7" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">7.1 No Unitemised Cost Estimates</h6>
+                  <p class="small">A total monthly cost must never appear without a line-item breakdown: service name, SKU/config, unit price, estimated usage, monthly cost, source.</p>
+
+                  <h6 class="fw-bold mt-3">7.2 Cost Estimate Format</h6>
+<pre class="bg-body-secondary rounded p-3 small"><code>| Service   | SKU / Config | Unit Price | Est. Usage | Monthly Cost |
+|-----------|-------------|-----------|-----------|-------------|
+| &lt;name&gt;    | &lt;sku&gt;       | $x.xx/unit | &lt;volume&gt;  | $xx.xx      |
+| <strong>Total</strong>     |             |           |           | <strong>$xxx.xx</strong>     |
+| <strong>+ 20% buffer</strong> |          |           |           | <strong>$xxx.xx</strong>     |</code></pre>
+                  <p class="small text-muted">The 20% buffer is mandatory on all estimates. A budget ceiling must be stated.</p>
+
+                  <h6 class="fw-bold mt-3">7.3 Cost Sensitivity Analysis</h6>
+                  <p class="small mb-1">Identify the top 3 cost drivers and state what happens if usage doubles.</p>
+
+                  <h6 class="fw-bold mt-3">7.4 Budget Alerts Are Mandatory</h6>
+                  <ul class="small mb-0">
+                    <li>80% of budget — Warning</li>
+                    <li>100% of budget — Critical</li>
+                    <li>90% of budget (forecasted) — Early warning</li>
+                  </ul>
+                  <p class="small text-muted mb-0">Alert configuration must be included as runnable CLI or IaC code — not just described.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8. Network & Infrastructure Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule8">8. Network &amp; Infrastructure Rules</button></h2>
+              <div id="rule8" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">8.1 Make a Decision — No Contradictions</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Option</th><th>When to Use</th></tr></thead>
+                    <tbody>
+                      <tr><td>Public PaaS</td><td>Default — no compliance requirement for private connectivity</td></tr>
+                      <tr><td>Private (VNet + PE)</td><td>Compliance requires private connectivity (SOC 2, HIPAA, enterprise policy)</td></tr>
+                      <tr><td>Hybrid</td><td>On-premises connectivity required — specify ExpressRoute or VPN Gateway</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">8.2 Subnet Specifications (Private)</h6>
+<pre class="bg-body-secondary rounded p-3 small"><code>| Subnet Name | CIDR | Purpose | Min Size | NSG |</code></pre>
+                  <p class="small text-muted">CIDRs must be non-overlapping, sized with 30% headroom for growth.</p>
+
+                  <h6 class="fw-bold mt-3">8.3 NSG Rules Must Be Complete</h6>
+                  <p class="small mb-1">Every NSG must include a full rule table: Priority, Name, Direction, Protocol, Source, Destination, Port, Action. Default deny-all rules must be explicit.</p>
+
+                  <h6 class="fw-bold mt-3">8.4 Private Endpoints Must Be Named</h6>
+                  <p class="small mb-1">Every PE: resource name, target service, DNS zone, NIC name, subnet placement.</p>
+
+                  <h6 class="fw-bold mt-3">8.5 DNS Must Be Explicit</h6>
+                  <p class="small mb-0">Specify: Azure-managed public DNS, Private DNS Zones (list each), custom DNS servers (IPs), or conditional forwarders.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 9. CI/CD & Deployment Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule9">9. CI/CD &amp; Deployment Rules</button></h2>
+              <div id="rule9" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">9.1 Rollback Strategy Required</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Layer</th><th>Rollback Mechanism</th></tr></thead>
+                    <tbody>
+                      <tr><td>Infrastructure (IaC)</td><td>Re-deploy previous Git tag; cancel in-flight deployment</td></tr>
+                      <tr><td>Application</td><td>Slot swap, revision rollback, or artifact re-deploy</td></tr>
+                      <tr><td>Data</td><td>Point-in-time restore or migration rollback script</td></tr>
+                      <tr><td>Configuration / Secrets</td><td>Key Vault version rollback</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="small text-muted">A rollback decision tree must be included showing which lever to pull and in what order.</p>
+
+                  <h6 class="fw-bold mt-3">9.2 – 9.4 Pipeline Gates</h6>
+                  <ul class="small">
+                    <li><strong>Validate gate:</strong> Every CI/CD pipeline must include a validate/what-if step before any deployment</li>
+                    <li><strong>Production approval:</strong> Named human approver via environment protection rule — no auto-deploy to prod on push</li>
+                    <li><strong>Tag on deploy:</strong> Successful production deployments must create a Git tag: <code>prod-YYYYMMDD-HHMMSS</code></li>
+                  </ul>
+
+                  <h6 class="fw-bold mt-3">9.5 Pipeline Secrets</h6>
+                  <p class="small mb-1">All secrets must be listed with: name, description, location. OIDC preferred over long-lived credentials.</p>
+
+                  <h6 class="fw-bold mt-3">9.6 Pre-Deployment Checklist</h6>
+<pre class="bg-body-secondary rounded p-3 small mb-0"><code>[ ] Subscription / account access verified
+[ ] Required IAM roles / permissions confirmed
+[ ] Quota pre-checked for all resource types
+[ ] IaC validated (what-if / plan) against target environment
+[ ] Rollback target identified and tagged
+[ ] On-call contact identified for deployment window
+[ ] Budget alert configured
+[ ] Monitoring dashboards ready</code></pre>
+                </div>
+              </div>
+            </div>
+
+            <!-- 10. Review & Approval Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule10">10. Review &amp; Approval Rules</button></h2>
+              <div id="rule10" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">10.1 Reviewer Requirements</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Spec Type</th><th>Min Reviewers</th><th>Required Expertise</th></tr></thead>
+                    <tbody>
+                      <tr><td>Functional</td><td>1</td><td>Engineering lead or senior developer</td></tr>
+                      <tr><td>Deployment</td><td>2</td><td>1 infrastructure + 1 security</td></tr>
+                      <tr><td>Architecture</td><td>2</td><td>1 architecture + 1 domain expert</td></tr>
+                      <tr><td>Data</td><td>1</td><td>Data engineer or DBA</td></tr>
+                      <tr><td>Security</td><td>2</td><td>Security engineer + legal/compliance</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">10.2 Review Checklist</h6>
+<pre class="bg-body-secondary rounded p-3 small"><code>[ ] All required sections present (Rule 2.1)
+[ ] No prohibited phrases (Rule 3.2)
+[ ] No more than 5 unresolved placeholders (Rule 3.3)
+[ ] All schemas typed with constraints (Rule 5.1)
+[ ] Security section complete (Rule 6.1)
+[ ] No hardcoded credentials (Rule 6.2)
+[ ] Cost estimate itemised with breakdown (Rule 7.1)
+[ ] Budget alerts defined as runnable code (Rule 7.4)
+[ ] Network decision explicit — no contradictions (Rule 8.1)
+[ ] Rollback strategy covers all layers (Rule 9.1)
+[ ] Pre-deployment checklist present (Rule 9.6)
+[ ] Acceptance criteria are binary pass/fail (Rule 10.3)</code></pre>
+
+                  <h6 class="fw-bold mt-3">10.3 Acceptance Criteria Standards</h6>
+                  <p class="small mb-1">Every AC must be: <strong>testable</strong> (a QA engineer can write a test without asking the author), <strong>binary</strong> (pass or fail), and <strong>assigned</strong> (maps to a feature or requirement ID).</p>
+                  <div class="small mb-0">
+                    <span class="text-danger"><i class="bi bi-x-circle me-1"></i>Bad:</span> "The system should be fast."<br>
+                    <span class="text-success"><i class="bi bi-check-circle me-1"></i>Good:</span> <strong>AC-07</strong> — The detail panel must render within 2s for a cached SKU at P95 under normal load.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 11. Maintenance Rules -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule11">11. Maintenance Rules</button></h2>
+              <div id="rule11" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">11.1 Update When Systems Change</h6>
+                  <p class="small mb-1">A spec that does not reflect the current system is worse than no spec. Update the spec before or simultaneously with the code change. Bump minor version + update date.</p>
+
+                  <h6 class="fw-bold mt-3">11.2 Deprecation Policy</h6>
+                  <ol class="small mb-1">
+                    <li>Set status to <strong>Deprecated</strong></li>
+                    <li>Add notice: <em>"This document is deprecated. See [replacement doc ID]."</em></li>
+                    <li>Retain for audit trail — do not delete</li>
+                  </ol>
+
+                  <h6 class="fw-bold mt-3">11.3 Review Cadence</h6>
+                  <table class="table table-sm table-bordered small">
+                    <thead class="table-light"><tr><th>Spec Type</th><th>Review Cadence</th></tr></thead>
+                    <tbody>
+                      <tr><td>Functional</td><td>Before each sprint that touches the feature</td></tr>
+                      <tr><td>Deployment</td><td>Before each production deployment</td></tr>
+                      <tr><td>Architecture</td><td>Quarterly or when a major component changes</td></tr>
+                      <tr><td>Security</td><td>Every 6 months or after any security incident</td></tr>
+                    </tbody>
+                  </table>
+
+                  <h6 class="fw-bold mt-3">11.4 Spec Ownership</h6>
+                  <p class="small mb-0">Every spec must have a named owner. When an owner leaves, ownership must be reassigned within 5 business days.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 12. Compliance Checklist -->
+            <div class="accordion-item">
+              <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#rule12">12. Compliance Checklist</button></h2>
+              <div id="rule12" class="accordion-collapse collapse" data-bs-parent="#rulesetAccordion">
+                <div class="accordion-body">
+                  <h6 class="fw-bold">Draft → Review</h6>
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <div class="card card-body small bg-body-secondary">
+                        <strong class="mb-1">Document &amp; Structure</strong>
+                        <code class="d-block text-start" style="white-space:pre-wrap">[ ] Header block complete
+[ ] Document ID follows convention
+[ ] Version set to 1.0
+[ ] Status set to "Review"
+[ ] TOC with working anchors
+[ ] All required sections present
+[ ] Max 3 heading levels</code>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card card-body small bg-body-secondary">
+                        <strong class="mb-1">Content &amp; Technical</strong>
+                        <code class="d-block text-start" style="white-space:pre-wrap">[ ] No prohibited phrases
+[ ] All acronyms in Glossary
+[ ] Requirements are measurable
+[ ] &lt;5 unresolved placeholders
+[ ] Architecture diagram present
+[ ] All APIs documented
+[ ] No assumed defaults</code>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card card-body small bg-body-secondary">
+                        <strong class="mb-1">Security &amp; Cost</strong>
+                        <code class="d-block text-start" style="white-space:pre-wrap">[ ] Security covers all 7 areas
+[ ] No hardcoded credentials
+[ ] Zero Trust checklist done
+[ ] Data classified per field
+[ ] Line-item cost breakdown
+[ ] 20% buffer applied
+[ ] Budget alerts as code</code>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="card card-body small bg-body-secondary">
+                        <strong class="mb-1">Network &amp; CI/CD</strong>
+                        <code class="d-block text-start" style="white-space:pre-wrap">[ ] Network option explicit
+[ ] No contradictions
+[ ] Subnet table (if VNet)
+[ ] Rollback strategy present
+[ ] Validate gate in pipeline
+[ ] Pre-deploy checklist done
+[ ] Pipeline secrets listed</code>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h6 class="fw-bold mt-4">Review → Approved</h6>
+<pre class="bg-body-secondary rounded p-3 small mb-0"><code>[ ] All Draft → Review items confirmed
+[ ] Review checklist completed by required reviewers
+[ ] All reviewer comments resolved or deferred with justification
+[ ] All placeholders resolved or approved as acceptable risk
+[ ] No open TBD items without named owner and due date
+[ ] Status updated to "Approved"
+[ ] Document committed to repository</code></pre>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /accordion -->
+
+          <!-- Quick Reference Card -->
+          <div class="strategic-box p-4 mt-4">
+            <h5 class="fw-bold text-center mb-3"><i class="bi bi-bookmark-check me-2"></i>Quick Reference Card</h5>
+            <div class="row g-4">
+              <div class="col-md-4">
+                <h6 class="fw-bold text-primary"><i class="bi bi-check2-all me-1"></i>Every Spec Needs</h6>
+                <ul class="small mb-0">
+                  <li>Header block (ID, version, status, owner, date)</li>
+                  <li>Table of contents</li>
+                  <li>Purpose + scope + stakeholders</li>
+                  <li>Requirements (FR-xx / NFR-xx format)</li>
+                  <li>Typed schemas with constraints</li>
+                  <li>Security (7 areas)</li>
+                  <li>Cost breakdown (itemised + 20% buffer)</li>
+                  <li>Network decision (explicit)</li>
+                  <li>Rollback strategy (infra + app + data)</li>
+                  <li>Acceptance criteria (binary, testable)</li>
+                  <li>Out of scope + Glossary</li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <h6 class="fw-bold text-danger"><i class="bi bi-x-circle me-1"></i>Never Write</h6>
+                <ul class="small mb-0">
+                  <li>TBD / TBC (without owner + date)</li>
+                  <li>"Fast" / "scalable" / "secure"</li>
+                  <li>"Etc." / "and so on"</li>
+                  <li>Real credentials or API keys</li>
+                  <li>Unitemised cost totals</li>
+                  <li>Contradictory network requirements</li>
+                </ul>
+              </div>
+              <div class="col-md-4">
+                <h6 class="fw-bold text-success"><i class="bi bi-shield-check me-1"></i>Before Approving</h6>
+                <ul class="small mb-0">
+                  <li>2 reviewers for deployment/architecture</li>
+                  <li>All prohibited phrases removed</li>
+                  <li>Fewer than 5 unresolved placeholders</li>
+                  <li>Budget alerts as runnable code</li>
+                  <li>Rollback decision tree present</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
         </section>
 
         <!-- CTA -->
