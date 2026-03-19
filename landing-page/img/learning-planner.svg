@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220">
+  <defs>
+    <linearGradient id="pg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ecfdf5"/><stop offset="100%" stop-color="#d1fae5"/></linearGradient>
+    <filter id="s6"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity=".1"/></filter>
+  </defs>
+  <rect width="400" height="220" fill="url(#pg1)" rx="14"/>
+  <!-- Timeline / Roadmap -->
+  <g transform="translate(20,40)" filter="url(#s6)">
+    <!-- Main path line -->
+    <path d="M30,90 C80,90 80,50 130,50 C180,50 180,90 230,90 C280,90 280,50 330,50" fill="none" stroke="#198754" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+    <path d="M30,90 C80,90 80,50 130,50 C180,50 180,90 230,90 C280,90 280,50 330,50" fill="none" stroke="#198754" stroke-width="3" stroke-linecap="round" stroke-dasharray="8,4" opacity=".6"/>
+    <!-- Semester cards -->
+    <g transform="translate(10,55)">
+      <rect x="0" y="0" width="60" height="65" rx="8" fill="#fff" stroke="#198754" stroke-width="1.5"/>
+      <rect x="0" y="0" width="60" height="18" rx="8" fill="#198754" opacity=".15"/>
+      <rect x="0" y="10" width="60" height="8" fill="#198754" opacity=".15"/>
+      <text x="30" y="13" text-anchor="middle" font-size="7" font-weight="700" fill="#198754" font-family="sans-serif">Fall 2026</text>
+      <text x="8" y="30" font-size="5.5" fill="#333" font-family="sans-serif">CS 301</text>
+      <text x="8" y="38" font-size="5.5" fill="#333" font-family="sans-serif">MATH 320</text>
+      <text x="8" y="46" font-size="5.5" fill="#333" font-family="sans-serif">CS 350</text>
+      <text x="8" y="54" font-size="5.5" fill="#666" font-family="sans-serif">15 credits</text>
+      <!-- Difficulty badge -->
+      <rect x="32" y="48" width="22" height="10" rx="5" fill="#ffc107" opacity=".3"/>
+      <text x="43" y="55" text-anchor="middle" font-size="5" font-weight="600" fill="#e8a317" font-family="sans-serif">Med</text>
+    </g>
+    <g transform="translate(100,15)">
+      <rect x="0" y="0" width="60" height="65" rx="8" fill="#fff" stroke="#0d6efd" stroke-width="1.5"/>
+      <rect x="0" y="0" width="60" height="18" rx="8" fill="#0d6efd" opacity=".15"/>
+      <rect x="0" y="10" width="60" height="8" fill="#0d6efd" opacity=".15"/>
+      <text x="30" y="13" text-anchor="middle" font-size="7" font-weight="700" fill="#0d6efd" font-family="sans-serif">Spr 2027</text>
+      <text x="8" y="30" font-size="5.5" fill="#333" font-family="sans-serif">CS 410 ML</text>
+      <text x="8" y="38" font-size="5.5" fill="#333" font-family="sans-serif">CS 360</text>
+      <text x="8" y="46" font-size="5.5" fill="#333" font-family="sans-serif">STAT 400</text>
+      <text x="8" y="54" font-size="5.5" fill="#666" font-family="sans-serif">14 credits</text>
+      <rect x="32" y="48" width="22" height="10" rx="5" fill="#dc3545" opacity=".2"/>
+      <text x="43" y="55" text-anchor="middle" font-size="5" font-weight="600" fill="#dc3545" font-family="sans-serif">High</text>
+    </g>
+    <g transform="translate(190,55)">
+      <rect x="0" y="0" width="60" height="65" rx="8" fill="#fff" stroke="#6f42c1" stroke-width="1.5"/>
+      <rect x="0" y="0" width="60" height="18" rx="8" fill="#6f42c1" opacity=".15"/>
+      <rect x="0" y="10" width="60" height="8" fill="#6f42c1" opacity=".15"/>
+      <text x="30" y="13" text-anchor="middle" font-size="7" font-weight="700" fill="#6f42c1" font-family="sans-serif">Sum 2027</text>
+      <text x="8" y="32" font-size="5.5" fill="#333" font-family="sans-serif">Internship</text>
+      <text x="8" y="40" font-size="5.5" fill="#666" font-family="sans-serif">ML Engineer</text>
+      <text x="8" y="52" font-size="5.5" fill="#666" font-family="sans-serif">3 credits</text>
+      <rect x="32" y="48" width="22" height="10" rx="5" fill="#198754" opacity=".2"/>
+      <text x="43" y="55" text-anchor="middle" font-size="5" font-weight="600" fill="#198754" font-family="sans-serif">Low</text>
+    </g>
+    <g transform="translate(280,15)">
+      <rect x="0" y="0" width="60" height="65" rx="8" fill="#fff" stroke="#ffc107" stroke-width="1.5"/>
+      <rect x="0" y="0" width="60" height="18" rx="8" fill="#ffc107" opacity=".15"/>
+      <rect x="0" y="10" width="60" height="8" fill="#ffc107" opacity=".15"/>
+      <text x="30" y="13" text-anchor="middle" font-size="7" font-weight="700" fill="#e8a317" font-family="sans-serif">Fall 2027</text>
+      <text x="8" y="30" font-size="5.5" fill="#333" font-family="sans-serif">CS 490 Cap</text>
+      <text x="8" y="38" font-size="5.5" fill="#333" font-family="sans-serif">CS 450</text>
+      <text x="8" y="46" font-size="5.5" fill="#333" font-family="sans-serif">Elective</text>
+      <text x="8" y="54" font-size="5.5" fill="#666" font-family="sans-serif">12 credits</text>
+      <rect x="32" y="48" width="22" height="10" rx="5" fill="#ffc107" opacity=".3"/>
+      <text x="43" y="55" text-anchor="middle" font-size="5" font-weight="600" fill="#e8a317" font-family="sans-serif">Med</text>
+    </g>
+    <!-- Connection dots on path -->
+    <circle cx="30" cy="90" r="5" fill="#198754"/>
+    <circle cx="130" cy="50" r="5" fill="#0d6efd"/>
+    <circle cx="230" cy="90" r="5" fill="#6f42c1"/>
+    <circle cx="330" cy="50" r="5" fill="#ffc107"/>
+  </g>
+  <!-- Graduation cap at end -->
+  <g transform="translate(365,45)">
+    <polygon points="15,0 0,8 15,16 30,8" fill="#ffc107"/>
+    <line x1="15" y1="8" x2="15" y2="22" stroke="#ffc107" stroke-width="2"/>
+    <circle cx="15" cy="22" r="2" fill="#ffc107"/>
+  </g>
+  <!-- Skill badges -->
+  <g transform="translate(30,180)">
+    <rect x="0" y="0" width="50" height="18" rx="9" fill="#198754" opacity=".15" stroke="#198754" stroke-width="1"/>
+    <text x="25" y="12" text-anchor="middle" font-size="6" font-weight="600" fill="#198754" font-family="sans-serif">Python ✓</text>
+    <rect x="58" y="0" width="40" height="18" rx="9" fill="#0d6efd" opacity=".15" stroke="#0d6efd" stroke-width="1"/>
+    <text x="78" y="12" text-anchor="middle" font-size="6" font-weight="600" fill="#0d6efd" font-family="sans-serif">ML ✓</text>
+    <rect x="106" y="0" width="55" height="18" rx="9" fill="#6f42c1" opacity=".15" stroke="#6f42c1" stroke-width="1"/>
+    <text x="134" y="12" text-anchor="middle" font-size="6" font-weight="600" fill="#6f42c1" font-family="sans-serif">Cloud ✓</text>
+    <rect x="169" y="0" width="50" height="18" rx="9" fill="#ffc107" opacity=".15" stroke="#ffc107" stroke-width="1"/>
+    <text x="194" y="12" text-anchor="middle" font-size="6" font-weight="600" fill="#e8a317" font-family="sans-serif">Stats ✓</text>
+    <rect x="227" y="0" width="70" height="18" rx="9" fill="#dc3545" opacity=".1" stroke="#dc3545" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="262" y="12" text-anchor="middle" font-size="6" font-weight="600" fill="#dc3545" font-family="sans-serif">DevOps (gap)</text>
+  </g>
+  <!-- Progress bar -->
+  <g transform="translate(30,205)">
+    <rect x="0" y="0" width="340" height="6" rx="3" fill="#e0e0e0"/>
+    <rect x="0" y="0" width="230" height="6" rx="3" fill="#198754"/>
+    <text x="342" y="5" font-size="7" font-weight="700" fill="#198754" font-family="sans-serif">68%</text>
+  </g>
+</svg>
