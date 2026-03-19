@@ -1243,16 +1243,15 @@
     }
 
     function generateSpec() {
-      const ghOrg = document.getElementById('specGhOrg').value.trim();
-      const ghRepo = document.getElementById('specGhRepo').value.trim();
+      const ghOrg = document.getElementById('specGhOrg').value.trim() || 'my-org';
+      const ghRepo = document.getElementById('specGhRepo').value.trim() || 'azure-ai-pattern' + currentPatternId;
       const ghBranch = document.getElementById('specGhBranch').value.trim() || 'main';
       const ghPath = document.getElementById('specGhPath').value.trim() || 'infra/pattern' + currentPatternId;
-      const azSub = document.getElementById('specAzSub').value.trim();
+      const azSub = document.getElementById('specAzSub').value.trim() || '00000000-0000-0000-0000-000000000000';
       const azSubName = document.getElementById('specAzSubName').value.trim() || 'AI Subscription';
       const azRegion = document.getElementById('specAzRegion').value;
       const azRG = document.getElementById('specAzRG').value.trim() || 'rg-ai-pattern' + currentPatternId + '-' + document.getElementById('specAzEnv').value;
       const azEnv = document.getElementById('specAzEnv').value;
-      if (!ghOrg || !ghRepo || !azSub) { alert('Please fill in all required fields (GitHub org, repo name, Azure subscription ID).'); return; }
       const p = PATTERNS[currentPatternId];
       const svcTable = p.services.map(s => '| ' + s.name + ' | `' + s.sku + '` | `' + s.bicep + '` |').join('\n');
       const models = p.openaiModels.map(m => '- ' + m).join('\n');
