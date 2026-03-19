@@ -40,7 +40,7 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle fw-semibold active" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#patterns"><i class="bi bi-collection me-2"></i>All 7 Patterns</a></li>
+              <li><a class="dropdown-item" href="#patterns"><i class="bi bi-collection me-2"></i>All 10 Patterns</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#comparison"><i class="bi bi-table me-2"></i>Compare</a></li>
               <li><a class="dropdown-item" href="#costs"><i class="bi bi-currency-dollar me-2"></i>Costs</a></li>
@@ -108,7 +108,7 @@
       <div class="row align-items-center">
         <div class="col-lg-7">
           <h1 class="display-4 fw-bold mb-3">Enterprise Azure AI<br/>Deployment Patterns</h1>
-          <p class="lead mb-4">Seven battle-tested architectural blueprints for deploying AI workloads on Azure — from centralized hubs to serverless endpoints.</p>
+          <p class="lead mb-4">Ten battle-tested architectural blueprints for deploying AI workloads on Azure — from centralized hubs to greenfield deployments and cloud migrations.</p>
           <div class="d-flex flex-wrap gap-2 mb-4">
             <a href="#patterns" class="btn btn-light btn-lg"><i class="bi bi-grid-3x3-gap-fill me-1"></i>Explore Patterns</a>
             <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="btn btn-outline-light btn-lg"><i class="bi bi-github me-1"></i>GitHub</a>
@@ -122,7 +122,7 @@
                   <div class="d-flex align-items-center">
                     <div class="icon-circle bg-primary text-white me-3"><i class="bi bi-diagram-3-fill"></i></div>
                     <div>
-                      <h6 class="fw-bold mb-0">7 AI Patterns</h6>
+                      <h6 class="fw-bold mb-0">10 AI Patterns</h6>
                       <small class="opacity-75">Comparison, costs, SLA, BOM &amp; deploy specs</small>
                     </div>
                     <i class="bi bi-arrow-right ms-auto fs-5"></i>
@@ -169,7 +169,7 @@
     <div class="container">
       <div class="row text-center g-3">
         <div class="col-6 col-md-3">
-          <div class="fs-2 fw-bold text-primary">7</div>
+          <div class="fs-2 fw-bold text-primary">10</div>
           <div class="text-muted small">Patterns</div>
         </div>
         <div class="col-6 col-md-3">
@@ -376,6 +376,81 @@
           </div>
         </div>
 
+        <!-- Card 8 -->
+        <div class="col-md-6 col-lg-4 pattern-item" data-keywords="lift shift migration legacy vm rehost iaas azure migrate site recovery">
+          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal8">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle me-3" style="background:rgba(230,126,34,.1);color:#e67e22"><i class="bi bi-box-arrow-in-up-right"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">Lift &amp; Shift Migration</h5>
+                  <span class="badge bg-warning text-dark badge-cost">~$4,200/mo</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">Migrate legacy on-premises VMs to modern Azure infrastructure with Azure Migrate and Site Recovery.</p>
+              <div class="mt-2">
+                <span class="badge me-1" style="background:#e67e22;color:#fff">Azure Migrate</span>
+                <span class="badge me-1" style="background:#e67e22;color:#fff">Site Recovery</span>
+                <span class="badge" style="background:#e67e22;color:#fff">Azure VMs</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+              <a href="pattern8.html" class="btn btn-sm" style="color:#e67e22;border-color:#e67e22"><i class="bi bi-arrow-right-circle me-1"></i>Full Details</a>
+              <small class="text-muted">SLA 99.95% &middot; Pattern 8</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 9 -->
+        <div class="col-md-6 col-lg-4 pattern-item" data-keywords="sql migration database azure sql managed instance dms data">
+          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal9">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle me-3" style="background:rgba(13,183,237,.1);color:#0db7ed"><i class="bi bi-database-fill-up"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">SQL to Azure SQL Migration</h5>
+                  <span class="badge bg-warning text-dark badge-cost">~$3,800/mo</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">Migrate SQL Server to Azure SQL Database, Managed Instance, or SQL on Azure VM with DMS.</p>
+              <div class="mt-2">
+                <span class="badge me-1" style="background:#0db7ed;color:#fff">SQL MI</span>
+                <span class="badge me-1" style="background:#0db7ed;color:#fff">Azure SQL DB</span>
+                <span class="badge" style="background:#0db7ed;color:#fff">DMS</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+              <a href="pattern9.html" class="btn btn-sm" style="color:#0db7ed;border-color:#0db7ed"><i class="bi bi-arrow-right-circle me-1"></i>Full Details</a>
+              <small class="text-muted">SLA 99.97% &middot; Pattern 9</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 10 -->
+        <div class="col-md-6 col-lg-4 pattern-item" data-keywords="greenfield zero hero new cloud adoption framework landing zone caf enterprise">
+          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal10">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle bg-success bg-opacity-10 text-success me-3"><i class="bi bi-rocket-takeoff-fill"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">Greenfield Azure Deployment</h5>
+                  <span class="badge bg-warning text-dark badge-cost">~$5,500/mo</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">Zero to Hero — build a brand-new Azure environment from scratch using CAF best practices and enterprise landing zones.</p>
+              <div class="mt-2">
+                <span class="badge bg-success-subtle text-success-emphasis me-1">CAF</span>
+                <span class="badge bg-success-subtle text-success-emphasis me-1">Landing Zone</span>
+                <span class="badge bg-success-subtle text-success-emphasis">Hub-Spoke</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex justify-content-between align-items-center">
+              <a href="pattern10.html" class="btn btn-sm btn-outline-success"><i class="bi bi-arrow-right-circle me-1"></i>Full Details</a>
+              <small class="text-muted">SLA 99.95% &middot; Pattern 10</small>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -404,6 +479,9 @@
             <tr><td><i class="bi bi-lightning-charge-fill text-danger me-1"></i> Serverless AI</td><td><span class="badge bg-warning text-dark">Medium</span></td><td>High</td><td>$</td><td>Low</td><td>Event-driven &amp; bursty workloads</td></tr>
             <tr><td><i class="bi bi-shield-lock-fill me-1"></i> Secure Private AI</td><td><span class="badge bg-success">High</span></td><td>Low</td><td>$$$$</td><td>Very High</td><td>Regulated / zero-trust environments</td></tr>
             <tr><td><i class="bi bi-database-fill-gear text-secondary me-1"></i> Data-Centric Lakehouse</td><td><span class="badge bg-success">High</span></td><td>Medium</td><td>$$$</td><td>High</td><td>Analytics-heavy AI workloads</td></tr>
+            <tr><td><i class="bi bi-box-arrow-in-up-right me-1" style="color:#e67e22"></i> Lift &amp; Shift Migration</td><td><span class="badge bg-warning text-dark">Medium</span></td><td>Low</td><td>$$</td><td>Medium</td><td>Legacy VM rehosting to Azure</td></tr>
+            <tr><td><i class="bi bi-database-fill-up me-1" style="color:#0db7ed"></i> SQL to Azure SQL</td><td><span class="badge bg-success">High</span></td><td>Low</td><td>$$</td><td>Medium</td><td>Database modernization &amp; migration</td></tr>
+            <tr><td><i class="bi bi-rocket-takeoff-fill text-success me-1"></i> Greenfield Azure</td><td><span class="badge bg-success">High</span></td><td>Medium</td><td>$$$</td><td>High</td><td>New cloud environment (Zero to Hero)</td></tr>
           </tbody>
         </table>
       </div>
@@ -925,6 +1003,99 @@
     </div>
   </div></div></div>
 
+  <!-- Modal 8 -->
+  <div class="modal fade" id="modal8" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header text-white" style="background:#e67e22"><h5 class="modal-title"><i class="bi bi-box-arrow-in-up-right me-2"></i>Pattern 8 &mdash; Lift &amp; Shift Migration</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <h6>Overview</h6><p>Migrate legacy on-premises VM workloads to modern Azure infrastructure. IaaS-first approach with a phased modernization path to PaaS services, containers, and managed databases.</p>
+      <h6>Key Services</h6><ul><li>Azure Migrate (discovery &amp; assessment)</li><li>Azure Site Recovery (replication &amp; failover)</li><li>Azure VMs (D4s_v5)</li><li>Azure Bastion (secure access)</li><li>Azure Backup, Log Analytics</li></ul>
+      <h6>When to Use</h6><ul><li>Moving legacy Windows/Linux VMs to Azure</li><li>Rehosting with minimal application changes</li><li>First phase of a broader cloud migration</li><li>Tight timeline — need to exit data center fast</li></ul>
+      <h6>T-Shirt Sizing</h6>
+      <table class="table table-sm table-bordered mb-2"><tbody>
+        <tr><td><span class="badge bg-success">Small</span> Dev/Test</td><td>2 VMs (D2s_v5), no Bastion</td><td class="text-end">~$800/mo</td></tr>
+        <tr><td><span class="badge bg-primary">Medium</span> Production</td><td>5 VMs (D4s_v5), Bastion, Backup</td><td class="text-end">~$4,200/mo</td></tr>
+        <tr><td><span class="badge bg-warning text-dark">Large</span> Enterprise</td><td>15+ VMs (D8s_v5), VMSS, Firewall</td><td class="text-end">~$12,500/mo</td></tr>
+      </tbody></table>
+      <h6>Cost Breakdown (Medium — Azure Live Prices)</h6>
+      <table class="table table-sm table-bordered mb-2"><tbody>
+        <tr><td>Azure VMs × 2 (D4s_v5)</td><td class="text-end">~$560</td></tr>
+        <tr><td>SQL Server on VM (D4s_v5 + SQL Std)</td><td class="text-end">~$620</td></tr>
+        <tr><td>Azure Bastion (Standard)</td><td class="text-end">~$330</td></tr>
+        <tr><td>Azure Backup (Vault)</td><td class="text-end">~$120</td></tr>
+        <tr><td>Azure Site Recovery (5 VMs)</td><td class="text-end">~$125</td></tr>
+        <tr><td>Load Balancer + Storage + Monitor</td><td class="text-end">~$110</td></tr>
+        <tr class="table-secondary"><td><strong>Total (Medium)</strong></td><td class="text-end"><strong>~$4,200/mo</strong></td></tr>
+      </tbody></table>
+      <p>Composite SLA <strong>99.95%</strong></p>
+      <div class="text-center mt-3">
+        <a href="pattern8.html" class="btn me-2" style="background:#e67e22;color:#fff"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(8)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
+    </div>
+  </div></div></div>
+
+  <!-- Modal 9 -->
+  <div class="modal fade" id="modal9" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header text-white" style="background:#0db7ed"><h5 class="modal-title"><i class="bi bi-database-fill-up me-2"></i>Pattern 9 &mdash; SQL to Azure SQL Migration</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <h6>Overview</h6><p>Comprehensive database migration from SQL Server on VMs to Azure SQL — covering Azure SQL Database, Managed Instance, and SQL on Azure VM.</p>
+      <h6>Target Options</h6><ul><li><strong>Azure SQL Database</strong> — fully managed PaaS, best for cloud-native</li><li><strong>SQL Managed Instance</strong> — near-100% compatibility, VNet-native</li><li><strong>SQL on Azure VM</strong> — full SQL Server parity, self-managed</li></ul>
+      <h6>When to Use</h6><ul><li>SQL Server end-of-support migration</li><li>Database consolidation (many → few)</li><li>Compliance-driven migration (TDE, auditing built-in)</li><li>Cost optimization with Azure Hybrid Benefit</li></ul>
+      <h6>T-Shirt Sizing</h6>
+      <table class="table table-sm table-bordered mb-2"><tbody>
+        <tr><td><span class="badge bg-success">Small</span> Dev/Test</td><td>Azure SQL DB (S2, 50 DTU)</td><td class="text-end">~$150/mo</td></tr>
+        <tr><td><span class="badge bg-primary">Medium</span> Production</td><td>SQL MI GP (4 vCores) + SQL DB</td><td class="text-end">~$3,800/mo</td></tr>
+        <tr><td><span class="badge bg-warning text-dark">Large</span> Enterprise</td><td>SQL MI BC (8+ vCores), 50+ DBs</td><td class="text-end">~$9,500/mo</td></tr>
+      </tbody></table>
+      <h6>Cost Breakdown (Medium — Azure Live Prices)</h6>
+      <table class="table table-sm table-bordered mb-2"><tbody>
+        <tr><td>Azure SQL MI (GP 4 vCores, 256GB)</td><td class="text-end">~$1,500</td></tr>
+        <tr><td>Azure SQL Database (GP S_Gen5_2)</td><td class="text-end">~$370</td></tr>
+        <tr><td>SQL on Azure VM (D4s_v5 + SQL Std)</td><td class="text-end">~$620</td></tr>
+        <tr><td>Azure DMS (Standard)</td><td class="text-end">~$410</td></tr>
+        <tr><td>Key Vault + Log Analytics + Backup + PE</td><td class="text-end">~$140</td></tr>
+        <tr class="table-secondary"><td><strong>Total (Medium)</strong></td><td class="text-end"><strong>~$3,800/mo</strong></td></tr>
+      </tbody></table>
+      <p>Composite SLA <strong>99.97%</strong></p>
+      <div class="text-center mt-3">
+        <a href="pattern9.html" class="btn me-2" style="background:#0db7ed;color:#fff"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(9)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
+    </div>
+  </div></div></div>
+
+  <!-- Modal 10 -->
+  <div class="modal fade" id="modal10" tabindex="-1"><div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header bg-success text-white"><h5 class="modal-title"><i class="bi bi-rocket-takeoff-fill me-2"></i>Pattern 10 &mdash; Greenfield Azure Deployment</h5><button class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
+    <div class="modal-body">
+      <h6>Overview</h6><p>Build a brand-new Azure environment from zero using CAF best practices. Complete landing zone with management groups, hub-spoke networking, centralized identity, policy governance, and AI-ready infrastructure.</p>
+      <h6>Key Services</h6><ul><li>Management Groups + Azure Policy</li><li>Azure Firewall (hub egress)</li><li>Azure Bastion + VPN Gateway</li><li>Azure OpenAI + AI Search</li><li>Defender for Cloud + Cost Management</li></ul>
+      <h6>When to Use</h6><ul><li>No existing Azure footprint — starting fresh</li><li>Cloud-first startup or digital transformation</li><li>Regulated industry needing governance from day one</li><li>Building an AI platform from scratch</li></ul>
+      <h6>T-Shirt Sizing</h6>
+      <table class="table table-sm table-bordered mb-2"><tbody>
+        <tr><td><span class="badge bg-success">Small</span> Startup</td><td>1 sub, single VNet, AOAI + KV</td><td class="text-end">~$1,200/mo</td></tr>
+        <tr><td><span class="badge bg-primary">Medium</span> Production</td><td>3 subs, hub-spoke, Firewall, Policy</td><td class="text-end">~$5,500/mo</td></tr>
+        <tr><td><span class="badge bg-warning text-dark">Large</span> Enterprise</td><td>10+ subs, full MG, Sentinel, ExpressRoute</td><td class="text-end">~$18,000/mo</td></tr>
+      </tbody></table>
+      <h6>Cost Breakdown (Medium — Azure Live Prices)</h6>
+      <table class="table table-sm table-bordered mb-2"><tbody>
+        <tr><td>Azure OpenAI (GPT-4o + embeddings)</td><td class="text-end">~$1,800</td></tr>
+        <tr><td>Azure SQL MI (GP 4 vCores)</td><td class="text-end">~$1,100</td></tr>
+        <tr><td>Azure Firewall (Standard)</td><td class="text-end">~$912</td></tr>
+        <tr><td>Azure Bastion + VPN Gateway</td><td class="text-end">~$470</td></tr>
+        <tr><td>AI Search S1 + App Service P1v3</td><td class="text-end">~$385</td></tr>
+        <tr><td>Defender + Log Analytics + Storage + PE</td><td class="text-end">~$273</td></tr>
+        <tr class="table-secondary"><td><strong>Total (Medium)</strong></td><td class="text-end"><strong>~$5,500/mo</strong></td></tr>
+      </tbody></table>
+      <p>Composite SLA <strong>99.95%</strong></p>
+      <p class="small text-muted">Follows all 6 CAF phases: Strategy → Plan → Ready → Adopt → Govern → Manage</p>
+      <div class="text-center mt-3">
+        <a href="pattern10.html" class="btn btn-success me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(10)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
+    </div>
+  </div></div></div>
+
   <!-- Deploy Spec Generator Modal -->
   <div class="modal fade" id="deploySpecModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content">
     <div class="modal-header bg-success text-white">
@@ -1395,6 +1566,93 @@
         diagnostics: 'Synapse: Spark pool metrics, pipeline runs, SQL pool DMVs. Databricks: cluster logs → Log Analytics (via LA agent). Fabric: capacity metrics. ADF: pipeline monitoring dashboard.',
         budgetAlert: 'Monthly budget: $10,000. Fabric F64 is largest fixed cost — monitor CU consumption. Spark compute bursty — set per-pipeline budgets. Alert at 75%.',
         complianceFrameworks: 'SOC 2, ISO 27001, data governance via Purview/Unity Catalog, data lineage tracking'
+      },
+      8: {
+        name: 'Lift & Shift Migration', cost: '~$4,200/mo', sla: '99.95%',
+        services: [
+          { name: 'Azure Migrate', sku: 'Free', bicep: 'Microsoft.Migrate/migrateProjects' },
+          { name: 'Azure Site Recovery', sku: 'Per-instance', bicep: 'Microsoft.RecoveryServices/vaults' },
+          { name: 'Azure VM (×2)', sku: 'D4s_v5', bicep: 'Microsoft.Compute/virtualMachines' },
+          { name: 'SQL Server on VM', sku: 'D4s_v5 + SQL Std', bicep: 'Microsoft.SqlVirtualMachine/sqlVirtualMachines' },
+          { name: 'Azure Bastion', sku: 'Standard', bicep: 'Microsoft.Network/bastionHosts' },
+          { name: 'Azure Backup', sku: 'Recovery Vault', bicep: 'Microsoft.RecoveryServices/vaults' },
+          { name: 'Azure Storage', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' },
+          { name: 'Load Balancer', sku: 'Standard', bicep: 'Microsoft.Network/loadBalancers' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Virtual Network + NSGs', sku: 'n/a', bicep: 'Microsoft.Network/virtualNetworks' }
+        ],
+        openaiModels: [],
+        rbacExtra: ['Virtual Machine Contributor', 'Site Recovery Contributor', 'Backup Contributor', 'Storage Blob Data Contributor'],
+        networking: 'Hub-spoke VNet. Azure Bastion in hub. VMs in spoke compute subnet. NSGs per subnet. Optional Azure Firewall for egress.',
+        securityTier: 'Standard',
+        ha: 'Availability Sets or Availability Zones for VM placement. Load Balancer for multi-VM workloads. Azure Backup for data protection.',
+        dr: 'Azure Site Recovery for VM replication to paired region. Recovery Vault with geo-redundant storage. Automated failover runbooks.',
+        slaCalc: '0.9995 (VM AZ) × 0.9999 (Storage) × 0.9995 (Bastion) × 0.9999 (LB) = 99.95%',
+        slaServices: [{name:'Azure VM (Avail Zone)',sla:'99.95%'},{name:'Azure Storage (LRS)',sla:'99.99%'},{name:'Azure Bastion',sla:'99.95%'},{name:'Load Balancer',sla:'99.99%'},{name:'Azure Backup',sla:'99.9%'},{name:'Log Analytics',sla:'99.9%'}],
+        encryption: 'Azure Disk Encryption (ADE) or platform SSE with PMK. Storage Account encryption at rest. SQL TDE on SQL VM.',
+        managedIdentity: 'System-assigned MI on VMs for Azure service access. MI for Azure Backup agent. MI for Log Analytics agent (AMA).',
+        diagnostics: 'Azure Monitor Agent (AMA) on all VMs. VM Insights for performance. Log Analytics for centralized logging. Azure Backup reports.',
+        budgetAlert: 'Monthly budget: $5,000. VM compute is largest cost. Alert at 80% ($4,000). Use Azure Advisor for right-sizing recommendations.',
+        complianceFrameworks: 'SOC 2, ISO 27001, Azure Hybrid Benefit for license compliance'
+      },
+      9: {
+        name: 'SQL to Azure SQL Migration', cost: '~$3,800/mo', sla: '99.97%',
+        services: [
+          { name: 'Azure SQL Managed Instance', sku: 'GP 4 vCores, 256GB', bicep: 'Microsoft.Sql/managedInstances' },
+          { name: 'Azure SQL Database', sku: 'GP S_Gen5_2', bicep: 'Microsoft.Sql/servers/databases' },
+          { name: 'SQL on Azure VM', sku: 'D4s_v5 + SQL Std', bicep: 'Microsoft.SqlVirtualMachine/sqlVirtualMachines' },
+          { name: 'Azure DMS', sku: 'Standard', bicep: 'Microsoft.DataMigration/services' },
+          { name: 'Azure Migrate', sku: 'Free', bicep: 'Microsoft.Migrate/migrateProjects' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Azure Backup', sku: 'Recovery Vault', bicep: 'Microsoft.RecoveryServices/vaults' },
+          { name: 'Virtual Network + PE', sku: 'n/a', bicep: 'Microsoft.Network/virtualNetworks' }
+        ],
+        openaiModels: [],
+        rbacExtra: ['SQL Server Contributor', 'SQL Managed Instance Contributor', 'SQL DB Contributor', 'Data Migration Contributor'],
+        networking: 'SQL MI: VNet-native (dedicated /27 subnet). SQL DB: Private Endpoints. SQL VM: NSG-protected subnet. Private DNS zones.',
+        securityTier: 'Enhanced',
+        ha: 'SQL MI: auto-failover groups across regions. SQL DB: active geo-replication. SQL VM: Always On Availability Groups.',
+        dr: 'SQL MI: auto-failover group to paired region (RPO <5s). SQL DB: geo-restore or active geo-rep. SQL VM: Log shipping or AG to secondary region.',
+        slaCalc: '0.9999 (SQL MI) × 0.9999 (SQL DB) × 0.9995 (SQL VM) × 0.9999 (Key Vault) = 99.97%',
+        slaServices: [{name:'Azure SQL MI (GP)',sla:'99.99%'},{name:'Azure SQL Database',sla:'99.99%'},{name:'SQL on Azure VM',sla:'99.95%'},{name:'Key Vault',sla:'99.99%'},{name:'Log Analytics',sla:'99.9%'}],
+        encryption: 'Transparent Data Encryption (TDE) enabled by default on all Azure SQL targets. Key Vault for CMK. Always Encrypted for sensitive columns.',
+        managedIdentity: 'App Service / Function → Azure SQL (MI auth via system MI). DMS → source SQL Server (service account). SQL MI → Key Vault for TDE CMK.',
+        diagnostics: 'SQL Insights (Azure Monitor). SQL MI: resource logs to Log Analytics. SQL DB: Intelligent Performance (auto-tuning). SQL VM: SQL best practices assessment.',
+        budgetAlert: 'Monthly budget: $4,500. SQL MI is largest cost — monitor vCore usage. Alert at 80%. Consider reserved capacity (1yr = 33% savings).',
+        complianceFrameworks: 'SOC 2, ISO 27001, HIPAA, PCI-DSS (with TDE, auditing, Advanced Threat Protection)'
+      },
+      10: {
+        name: 'Greenfield Azure Deployment', cost: '~$5,500/mo', sla: '99.95%',
+        services: [
+          { name: 'Azure Firewall', sku: 'Standard', bicep: 'Microsoft.Network/azureFirewalls' },
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'Azure SQL Managed Instance', sku: 'GP 4 vCores', bicep: 'Microsoft.Sql/managedInstances' },
+          { name: 'Azure AI Search', sku: 'standard (S1)', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'App Service', sku: 'P1v3, Linux', bicep: 'Microsoft.Web/sites' },
+          { name: 'Azure Bastion', sku: 'Standard', bicep: 'Microsoft.Network/bastionHosts' },
+          { name: 'VPN Gateway', sku: 'VpnGw1', bicep: 'Microsoft.Network/virtualNetworkGateways' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Storage Account', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Defender for Cloud', sku: 'Plan 2', bicep: 'Microsoft.Security/pricings' },
+          { name: 'Azure Policy', sku: 'Free', bicep: 'Microsoft.Authorization/policyAssignments' },
+          { name: 'Cost Management', sku: 'Free', bicep: 'Microsoft.CostManagement/budgets' },
+          { name: 'Virtual Network + NSGs + PE', sku: 'Hub + Spoke', bicep: 'Microsoft.Network/virtualNetworks' }
+        ],
+        openaiModels: ['gpt-4o (~350M tokens/mo)', 'text-embedding-3-large'],
+        rbacExtra: ['Management Group Contributor', 'Policy Contributor', 'Security Admin', 'Cost Management Contributor', 'Blueprint Contributor'],
+        networking: 'Hub-spoke topology. Azure Firewall as central egress (UDR 0.0.0.0/0). VPN Gateway for hybrid. Private Endpoints for all PaaS. Centralized Private DNS.',
+        securityTier: 'Enhanced',
+        ha: 'Azure Firewall zone-redundant. SQL MI zone-redundant. App Service zone-redundant (P1v3+). AI Search with 2+ replicas recommended.',
+        dr: 'Active-Passive to paired region. IaC (Bicep) enables identical deployment. Azure Front Door for global failover. SQL MI auto-failover group.',
+        slaCalc: '0.9999 (Firewall) × 0.999 (AOAI) × 0.9999 (SQL MI) × 0.999 (AI Search) × 0.9995 (App Svc) = 99.95%',
+        slaServices: [{name:'Azure Firewall',sla:'99.99%'},{name:'Azure OpenAI',sla:'99.9%'},{name:'Azure SQL MI',sla:'99.99%'},{name:'AI Search (S1)',sla:'99.9%'},{name:'App Service (P1v3)',sla:'99.95%'},{name:'Azure Bastion',sla:'99.95%'},{name:'VPN Gateway',sla:'99.95%'},{name:'Key Vault',sla:'99.99%'}],
+        encryption: 'All services use platform SSE by default. CMK recommended for SQL MI, Storage, AI Search via Key Vault. TLS 1.2+ enforced.',
+        managedIdentity: 'App Service → AOAI, AI Search, SQL MI, Key Vault, Storage (system MI). Firewall: managed by platform. Defender: service principal.',
+        diagnostics: 'All resources → central Log Analytics workspace. Firewall logs, NSG flow logs, SQL MI audit, AOAI usage, App Service diagnostics. Azure Monitor workbooks.',
+        budgetAlert: 'Monthly budget: $6,500. Firewall ($912) and AOAI ($1,800) are top costs. Alert at 75% and 100%. Use Azure Advisor for optimization.',
+        complianceFrameworks: 'SOC 2, ISO 27001, NIST 800-53, CIS Azure Benchmark, Azure Security Benchmark (ASB), CAF governance baseline'
       }
     };
 

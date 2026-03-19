@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Pattern 8: Lift &amp; Shift Migration — Azure AI Patterns</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root{--accent:#0078d4;--accent-dark:#50e6ff}
+    [data-bs-theme="dark"]{--accent:#50e6ff}
+    .hero-pattern{min-height:260px;background:linear-gradient(135deg,#e67e22 0%,#f0a85c 100%)}
+    [data-bs-theme="dark"] .hero-pattern{background:linear-gradient(135deg,#7d4412 0%,#e67e22 100%)}
+    .service-card{border-left:4px solid var(--accent);transition:transform .2s}
+    .service-card:hover{transform:translateY(-4px);box-shadow:0 8px 16px rgba(0,0,0,.12)}
+    .bom-table th{position:sticky;top:0;z-index:2}
+    .stat-card{border:none;border-radius:1rem}
+    .mermaid{background:transparent}
+    .mermaid svg{min-height:350px;shape-rendering:crispEdges}
+    .mermaid svg text{text-rendering:optimizeLegibility !important}
+    .mermaid .node rect,.mermaid .node circle,.mermaid .node polygon{stroke-width:2px !important}
+    .mermaid .edgePath path{stroke-width:2px !important}
+    .diagram-wrapper{position:relative;overflow-x:auto;overflow-y:hidden;padding:1.5rem;background:var(--bs-body-bg);border-radius:12px}
+    .diagram-wrapper .mermaid svg{font-size:18px !important}
+    .diagram-wrapper .mermaid .nodeLabel{font-size:16px !important;font-weight:600 !important;letter-spacing:0.01em}
+    .diagram-wrapper .mermaid .edgeLabel{font-size:14px !important;font-weight:600 !important;background-color:rgba(255,255,255,.92) !important;padding:4px 10px !important;border-radius:6px !important;border:1px solid rgba(0,0,0,.1) !important}
+    .diagram-wrapper .mermaid .cluster-label .nodeLabel{font-size:17px !important;font-weight:700 !important}
+    [data-bs-theme="dark"] .diagram-wrapper .mermaid .edgeLabel{background-color:rgba(33,37,41,.92) !important;color:#dee2e6 !important;border-color:rgba(255,255,255,.15) !important}
+    .btn-enlarge{position:absolute;top:.75rem;right:.75rem;z-index:10;opacity:.7;transition:opacity .2s}
+    .btn-enlarge:hover{opacity:1}
+    .diagram-fullscreen{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out}
+    .diagram-fullscreen .diagram-inner{background:var(--bs-body-bg);border-radius:1rem;padding:2rem;max-width:95vw;max-height:92vh;overflow:auto;position:relative;cursor:default}
+    .diagram-fullscreen .diagram-inner svg{min-height:auto;width:100%;height:auto}
+    .diagram-fullscreen .btn-close-fs{position:absolute;top:1rem;right:1rem;z-index:1}
+    #backToTop{position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold active" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="csi-education.html" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning" href="help.html"><i class="bi bi-question-circle-fill me-1"></i>Help</a>
+          </li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-pattern text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-box-arrow-in-up-right me-3"></i>Lift &amp; Shift Migration</h1>
+          <p class="lead mb-0">Migrate legacy on-premises VM workloads to modern Azure infrastructure. IaaS-first approach with a phased modernization path to PaaS services, containers, and managed databases.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <span class="badge bg-light text-dark fs-5 px-4 py-2">~$4,200/mo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-body-secondary py-4">
+    <div class="container">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-cloud-fill fs-3" style="color:#e67e22"></i>
+            <div class="fw-bold fs-5">10</div>
+            <small class="text-body-secondary">Azure Services</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-currency-dollar text-success fs-3"></i>
+            <div class="fw-bold fs-5">~$4,200</div>
+            <small class="text-body-secondary">Monthly Cost</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-arrow-repeat fs-3" style="color:#e67e22"></i>
+            <div class="fw-bold fs-5">3 Phases</div>
+            <small class="text-body-secondary">Assess → Migrate → Optimize</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-shield-check fs-3" style="color:#e67e22"></i>
+            <div class="fw-bold fs-5">99.95%</div>
+            <small class="text-body-secondary">Composite SLA</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="overview">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <p>The <strong>Lift &amp; Shift Migration</strong> pattern uses an <strong>IaaS-first approach</strong> to migrate on-premises VMs to Azure. Azure Migrate discovers and assesses workloads, Azure Site Recovery replicates VMs with near-zero downtime, and Azure VMs serve as the initial landing targets. A phased modernization path moves workloads from VMs to containers and PaaS over time.</p>
+          <p>This is the ideal pattern for organizations that need to <strong>exit their data center quickly</strong> while maintaining existing application architectures and minimizing risk.</p>
+          <h5 class="mt-4">Key Characteristics</h5>
+          <ul>
+            <li><strong>Azure Migrate</strong> for discovery and assessment of on-premises VMs</li>
+            <li><strong>Azure Site Recovery (ASR)</strong> for replication and failover</li>
+            <li><strong>Azure VM (D-series)</strong> as initial IaaS landing targets</li>
+            <li><strong>Azure Bastion</strong> for secure RDP/SSH without public IPs</li>
+            <li><strong>Phased modernization:</strong> VM → Container → PaaS</li>
+            <li><strong>CAF Migration methodology</strong> aligned</li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <div class="card bg-body-tertiary">
+            <div class="card-body">
+              <h6 class="card-title fw-bold">Migration Phases</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>Phase 1</td><td><span class="badge" style="background:#e67e22">Assess</span></td></tr>
+                <tr><td>Phase 2</td><td><span class="badge" style="background:#e67e22">Migrate</span></td></tr>
+                <tr><td>Phase 3</td><td><span class="badge" style="background:#e67e22">Optimize</span></td></tr>
+              </table>
+              <h6 class="card-title fw-bold mt-3">Target Compute</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>VM SKU</td><td>D4s_v5</td></tr>
+                <tr><td>OS</td><td>Windows + Linux</td></tr>
+                <tr><td>Access</td><td><span class="badge bg-success">Bastion</span></td></tr>
+              </table>
+              <h6 class="card-title fw-bold mt-3">Data</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>Database</td><td>SQL on VM / SQL MI</td></tr>
+                <tr><td>Storage</td><td><span class="badge bg-secondary">Azure Files (SMB)</span></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- T-Shirt Sizing -->
+  <section class="py-5 bg-body-secondary" id="sizing">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-rulers me-2"></i>T-Shirt Sizing</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-secondary">
+            <div class="card-body text-center">
+              <i class="bi bi-egg fs-1 text-secondary"></i>
+              <h4 class="mt-2">Small</h4>
+              <p class="text-body-secondary">Dev / Test</p>
+              <div class="text-start">
+                <ul class="mb-3">
+                  <li>2 VMs (D2s_v5), 1 SQL on VM</li>
+                  <li>No Bastion (public IP + NSG)</li>
+                  <li>Basic monitoring</li>
+                </ul>
+              </div>
+              <span class="badge fs-6 px-3 py-2" style="background:#e67e22">~$800/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100" style="border-color:#e67e22">
+            <div class="card-body text-center">
+              <i class="bi bi-box-fill fs-1" style="color:#e67e22"></i>
+              <h4 class="mt-2">Medium</h4>
+              <p class="text-body-secondary">Production</p>
+              <div class="text-start">
+                <ul class="mb-3">
+                  <li>5 VMs (D4s_v5), Load Balancer</li>
+                  <li>Azure Bastion, Azure Backup</li>
+                  <li>Standard monitoring + alerts</li>
+                </ul>
+              </div>
+              <span class="badge fs-6 px-3 py-2" style="background:#e67e22">~$4,200/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-danger">
+            <div class="card-body text-center">
+              <i class="bi bi-building fs-1 text-danger"></i>
+              <h4 class="mt-2">Large</h4>
+              <p class="text-body-secondary">Enterprise</p>
+              <div class="text-start">
+                <ul class="mb-3">
+                  <li>15+ VMs (D8s_v5), VMSS</li>
+                  <li>Azure Firewall, ExpressRoute</li>
+                  <li>Azure Monitor full stack, Defender for Cloud</li>
+                </ul>
+              </div>
+              <span class="badge fs-6 px-3 py-2" style="background:#e67e22">~$12,500/mo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="architecture">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-diagram-2 me-2"></i>Architecture Diagram</h2>
+      <div class="card shadow">
+        <div class="card-body text-center p-4">
+          <div class="diagram-wrapper">
+                <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+          <pre class="mermaid">
+graph TB
+    subgraph OnPrem["On-Premises Data Center"]
+        LEGACY["Legacy VMs&lt;br/&gt;Windows / Linux"]
+        LEGDB["SQL Server on VM&lt;br/&gt;File Servers"]
+        LEGAPP["Legacy Apps&lt;br/&gt;IIS / Apache / Tomcat"]
+    end
+    subgraph Azure["Azure Landing Zone"]
+        subgraph Assess["Phase 1 — Assess"]
+            MIGRATE["Azure Migrate&lt;br/&gt;Discovery &amp; Assessment"]
+        end
+        subgraph Migrate["Phase 2 — Migrate"]
+            ASR["Azure Site Recovery&lt;br/&gt;Replication Engine"]
+            DMS["Database Migration Service"]
+        end
+        subgraph Target["Phase 3 — Target Infrastructure"]
+            subgraph Compute["Compute Subnet /24"]
+                VM1["Azure VM (D4s_v5)&lt;br/&gt;Windows Server"]
+                VM2["Azure VM (D4s_v5)&lt;br/&gt;Linux RHEL/Ubuntu"]
+            end
+            subgraph Data["Data Subnet /24"]
+                SQLVM["SQL Server on VM&lt;br/&gt;or Azure SQL MI"]
+                STOR["Azure Storage&lt;br/&gt;File Shares (SMB)"]
+            end
+            subgraph Mgmt["Management Subnet /24"]
+                BAST["Azure Bastion&lt;br/&gt;Secure Access"]
+                BKUP["Azure Backup&lt;br/&gt;Recovery Vault"]
+            end
+            subgraph Monitor["Monitoring"]
+                LAW["Log Analytics&lt;br/&gt;+ VM Insights"]
+            end
+        end
+    end
+    LEGACY -->|"Discover"| MIGRATE
+    MIGRATE -->|"Replicate"| ASR
+    ASR -->|"Failover"| VM1
+    ASR -->|"Failover"| VM2
+    LEGDB -->|"Migrate"| DMS
+    DMS --> SQLVM
+    LEGAPP -->|"Re-host"| VM1
+    BAST --> VM1
+    BAST --> VM2
+    VM1 --> LAW
+    VM2 --> LAW
+    BKUP --> VM1
+    BKUP --> VM2
+          </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="bom">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-receipt me-2"></i>Bill of Materials</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover bom-table">
+          <thead class="table-dark">
+            <tr><th>#</th><th>Service</th><th>SKU / Tier</th><th>Purpose</th><th class="text-end">Monthly Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><i class="bi bi-search me-1" style="color:#e67e22"></i>Azure Migrate</td><td>Free</td><td>Discovery &amp; assessment</td><td class="text-end fw-bold">Free</td></tr>
+            <tr><td>2</td><td><i class="bi bi-arrow-repeat me-1" style="color:#e67e22"></i>Azure Site Recovery</td><td>Per-instance</td><td>VM replication &amp; failover</td><td class="text-end fw-bold">~$25/VM</td></tr>
+            <tr><td>3</td><td><i class="bi bi-pc-display me-1" style="color:#e67e22"></i>Azure VM × 2</td><td>D4s_v5</td><td>Application compute (Windows + Linux)</td><td class="text-end fw-bold">~$560</td></tr>
+            <tr><td>4</td><td><i class="bi bi-database me-1" style="color:#e67e22"></i>SQL Server on VM</td><td>D4s_v5 + SQL Std</td><td>Database server</td><td class="text-end fw-bold">~$620</td></tr>
+            <tr><td>5</td><td><i class="bi bi-shield-lock me-1" style="color:#e67e22"></i>Azure Bastion</td><td>Standard</td><td>Secure VM access (no public IPs)</td><td class="text-end fw-bold">~$330</td></tr>
+            <tr><td>6</td><td><i class="bi bi-cloud-arrow-up me-1" style="color:#e67e22"></i>Azure Backup</td><td>Vault</td><td>VM &amp; SQL backup, 30-day retention</td><td class="text-end fw-bold">~$120</td></tr>
+            <tr><td>7</td><td><i class="bi bi-hdd me-1" style="color:#e67e22"></i>Azure Storage</td><td>Standard_LRS</td><td>File shares (SMB), diagnostics</td><td class="text-end fw-bold">~$50</td></tr>
+            <tr><td>8</td><td><i class="bi bi-diagram-3 me-1" style="color:#e67e22"></i>Load Balancer</td><td>Standard</td><td>Traffic distribution</td><td class="text-end fw-bold">~$25</td></tr>
+            <tr><td>9</td><td><i class="bi bi-graph-up me-1" style="color:#e67e22"></i>Log Analytics</td><td>PerGB2018</td><td>Monitoring, VM Insights</td><td class="text-end fw-bold">~$35</td></tr>
+            <tr><td>10</td><td><i class="bi bi-diagram-2 me-1" style="color:#e67e22"></i>VNet + NSGs</td><td>—</td><td>Network backbone</td><td class="text-end">Free</td></tr>
+          </tbody>
+          <tfoot class="table-dark">
+            <tr><td colspan="4" class="fw-bold">Estimated Total (Medium Production)</td><td class="text-end fw-bold">~$4,200/mo</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p class="text-body-secondary small">Costs based on Medium (Production) sizing. Small dev/test deployments start at ~$800/mo. Enterprise deployments with Firewall and ExpressRoute reach ~$12,500/mo.</p>
+    </div>
+  </section>
+
+  <section class="py-5" id="services">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-layers me-2"></i>Service Breakdown</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-search me-2" style="color:#e67e22"></i>Azure Migrate</h5>
+            <span class="badge mb-2" style="background:#e67e22">Free</span>
+            <p>Discovery, assessment, dependency mapping for on-premises VMs. Server Assessment + Database Assessment tools.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-arrow-repeat me-2" style="color:#e67e22"></i>Azure Site Recovery</h5>
+            <span class="badge mb-2" style="background:#e67e22">Per-instance</span><span class="badge bg-dark mb-2 ms-1">~$25/VM</span>
+            <p>Continuous replication from on-premises to Azure. Automated failover/failback with near-zero RPO.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-pc-display me-2" style="color:#e67e22"></i>Azure VMs (D4s_v5)</h5>
+            <span class="badge mb-2" style="background:#e67e22">D4s_v5</span><span class="badge bg-dark mb-2 ms-1">~$280/each</span>
+            <p>Modern Azure compute with Gen2 support, accelerated networking. Right-sized from assessment.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-shield-lock me-2" style="color:#e67e22"></i>Azure Bastion</h5>
+            <span class="badge mb-2" style="background:#e67e22">Standard</span><span class="badge bg-dark mb-2 ms-1">~$330/mo</span>
+            <p>Secure RDP/SSH over TLS directly from Azure portal. No public IPs on VMs.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-cloud-arrow-up me-2" style="color:#e67e22"></i>Azure Backup</h5>
+            <span class="badge mb-2" style="background:#e67e22">Vault</span><span class="badge bg-dark mb-2 ms-1">~$120/mo</span>
+            <p>Automated daily backups with 30-day retention. Application-consistent snapshots for SQL.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-database me-2" style="color:#e67e22"></i>Database Migration Service</h5>
+            <span class="badge mb-2" style="background:#e67e22">Free tier</span>
+            <p>Online migration with minimal downtime. Supports SQL Server to Azure SQL MI or SQL on VM.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="security">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-shield-lock me-2"></i>Security &amp; Networking</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100"><div class="card-body">
+            <h5><i class="bi bi-lock-fill me-2" style="color:#e67e22"></i>Network</h5>
+            <ul>
+              <li><strong>Hub-spoke VNet topology</strong></li>
+              <li>Azure Bastion eliminates <strong>public IP exposure</strong></li>
+              <li><strong>NSGs on each subnet</strong> (deny-all-inbound default)</li>
+              <li>UDRs for traffic inspection (if Firewall in hub)</li>
+              <li><strong>ExpressRoute or VPN Gateway</strong> for hybrid connectivity</li>
+            </ul>
+          </div></div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100"><div class="card-body">
+            <h5><i class="bi bi-person-fill-check me-2" style="color:#e67e22"></i>Identity &amp; Data</h5>
+            <ul>
+              <li><strong>Microsoft Defender for Cloud</strong> (server protection)</li>
+              <li>Azure Backup with <strong>geo-redundant vault</strong></li>
+              <li>Disk encryption (<strong>Azure Disk Encryption</strong> or platform SSE)</li>
+              <li><strong>Managed Identity</strong> for VM-to-Azure service auth</li>
+              <li><strong>90-day log retention</strong> in Log Analytics</li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="usecases">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-lightbulb me-2"></i>Use Cases</h2>
+      <div class="row g-3">
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-windows me-2" style="color:#e67e22"></i>Legacy Windows Server Migration</h5>
+          <p>Migrate IIS, .NET Framework, Active Directory workloads to Azure VMs with minimal application changes.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-ubuntu me-2" style="color:#e67e22"></i>Linux Workload Rehosting</h5>
+          <p>Move RHEL, Ubuntu, SUSE VMs running Apache, Tomcat, or custom services to Azure with same OS versions.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-database-fill-gear me-2" style="color:#e67e22"></i>SQL Server Consolidation</h5>
+          <p>Consolidate multiple on-premises SQL Server instances to Azure SQL VM or Azure SQL Managed Instance.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-folder2-open me-2" style="color:#e67e22"></i>File Server to Azure Files</h5>
+          <p>Replace on-premises file servers with Azure Files (SMB 3.0) with Azure File Sync for hybrid scenarios.</p>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="constraints">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-exclamation-triangle me-2"></i>Constraints &amp; Considerations</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-warning"><tr><th>Constraint</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>VMs retain on-premises architecture debt</td><td>Plan modernization roadmap (6-12 months)</td></tr>
+            <tr><td>Licensing costs (BYOL vs PAYG)</td><td>Use Azure Hybrid Benefit for Windows/SQL</td></tr>
+            <tr><td>Network bandwidth for initial replication</td><td>Use Azure Data Box for bulk data, throttle ASR replication</td></tr>
+            <tr><td>VM size mapping not always direct</td><td>Run Azure Migrate assessment with performance-based sizing</td></tr>
+            <tr><td>Application dependencies may break</td><td>Use dependency analysis in Azure Migrate before cutover</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deploy Spec Generator CTA -->
+  <section class="py-4 bg-warning-subtle">
+    <div class="container text-center">
+      <h5 class="fw-bold mb-2"><i class="bi bi-file-earmark-code me-2"></i>Ready to Deploy This Pattern?</h5>
+      <p class="text-muted mb-3">Generate a complete deployment spec sheet with GitHub Actions workflow, Bicep file structure, and prerequisite checklist.</p>
+      <a href="index.html" class="btn btn-warning btn-lg" onclick="sessionStorage.setItem('openDeploySpec','8')"><i class="bi bi-gear-wide-connected me-2"></i>Generate Deployment Spec Sheet</a>
+    </div>
+  </section>
+
+  <section class="py-4" style="background:#e67e22">
+    <div class="container text-white">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="pattern7.html" class="btn btn-outline-light" style="border-color:#20c997;color:#20c997"><i class="bi bi-arrow-left me-2"></i>Pattern 7: Data-Centric Lakehouse</a>
+        <span class="fw-bold">Pattern 8 of 10</span>
+        <a href="pattern9.html" class="btn btn-info text-white"><i class="bi bi-arrow-right ms-2"></i>Pattern 9: SQL to Azure SQL</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2025</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-sm rounded-circle shadow" style="position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none;background:#e67e22;color:#fff" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
+    function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      const html=document.documentElement;
+      const isDark=html.getAttribute('data-bs-theme')==='dark';
+      html.setAttribute('data-bs-theme',isDark?'light':'dark');
+      toggle.querySelector('i').className=isDark?'bi bi-moon-stars-fill':'bi bi-sun-fill';
+    });
+    window.addEventListener('scroll',()=>{
+      document.querySelector('[onclick*="scrollTo"]').style.display=window.scrollY>300?'block':'none';
+    });
+  </script>
+</body>
+</html>

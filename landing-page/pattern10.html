@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Pattern 10: Greenfield Azure Deployment — Azure AI Patterns</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root{--accent:#0078d4;--accent-dark:#50e6ff}
+    [data-bs-theme="dark"]{--accent:#50e6ff}
+    .hero-pattern{min-height:260px;background:linear-gradient(135deg,#198754 0%,#5cb85c 100%)}
+    [data-bs-theme="dark"] .hero-pattern{background:linear-gradient(135deg,#0d4028 0%,#198754 100%)}
+    .service-card{border-left:4px solid var(--accent);transition:transform .2s}
+    .service-card:hover{transform:translateY(-4px);box-shadow:0 8px 16px rgba(0,0,0,.12)}
+    .bom-table th{position:sticky;top:0;z-index:2}
+    .stat-card{border:none;border-radius:1rem}
+    .mermaid{background:transparent}
+    .mermaid svg{min-height:350px;shape-rendering:crispEdges}
+    .mermaid svg text{text-rendering:optimizeLegibility !important}
+    .mermaid .node rect,.mermaid .node circle,.mermaid .node polygon{stroke-width:2px !important}
+    .mermaid .edgePath path{stroke-width:2px !important}
+    .diagram-wrapper{position:relative;overflow-x:auto;overflow-y:hidden;padding:1.5rem;background:var(--bs-body-bg);border-radius:12px}
+    .diagram-wrapper .mermaid svg{font-size:18px !important}
+    .diagram-wrapper .mermaid .nodeLabel{font-size:16px !important;font-weight:600 !important;letter-spacing:0.01em}
+    .diagram-wrapper .mermaid .edgeLabel{font-size:14px !important;font-weight:600 !important;background-color:rgba(255,255,255,.92) !important;padding:4px 10px !important;border-radius:6px !important;border:1px solid rgba(0,0,0,.1) !important}
+    .diagram-wrapper .mermaid .cluster-label .nodeLabel{font-size:17px !important;font-weight:700 !important}
+    [data-bs-theme="dark"] .diagram-wrapper .mermaid .edgeLabel{background-color:rgba(33,37,41,.92) !important;color:#dee2e6 !important;border-color:rgba(255,255,255,.15) !important}
+    .btn-enlarge{position:absolute;top:.75rem;right:.75rem;z-index:10;opacity:.7;transition:opacity .2s}
+    .btn-enlarge:hover{opacity:1}
+    .diagram-fullscreen{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out}
+    .diagram-fullscreen .diagram-inner{background:var(--bs-body-bg);border-radius:1rem;padding:2rem;max-width:95vw;max-height:92vh;overflow:auto;position:relative;cursor:default}
+    .diagram-fullscreen .diagram-inner svg{min-height:auto;width:100%;height:auto}
+    .diagram-fullscreen .btn-close-fs{position:absolute;top:1rem;right:1rem;z-index:1}
+    #backToTop{position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none}
+    .phase-card{border-radius:1rem;padding:1.5rem}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold active" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="csi-education.html" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning" href="help.html"><i class="bi bi-question-circle-fill me-1"></i>Help</a>
+          </li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-pattern text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-rocket-takeoff-fill me-3"></i>Greenfield Azure Deployment</h1>
+          <p class="lead mb-0">Build a brand-new Azure environment from zero using Cloud Adoption Framework best practices. Complete landing zone setup with management groups, networking, identity, governance, and AI-ready infrastructure — the "Zero to Hero" approach.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <span class="badge bg-light text-dark fs-5 px-4 py-2">~$5,500/mo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-body-secondary py-4">
+    <div class="container">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-cloud-fill fs-3" style="color:#198754"></i>
+            <div class="fw-bold fs-5">14</div>
+            <small class="text-body-secondary">Azure Services</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-currency-dollar text-success fs-3"></i>
+            <div class="fw-bold fs-5">~$5,500</div>
+            <small class="text-body-secondary">Monthly Cost</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-diagram-3 fs-3" style="color:#198754"></i>
+            <div class="fw-bold fs-5">6 CAF Phases</div>
+            <small class="text-body-secondary">Strategy → Manage</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-shield-check fs-3" style="color:#198754"></i>
+            <div class="fw-bold fs-5">99.95%</div>
+            <small class="text-body-secondary">Composite SLA</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="overview">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <p>The <strong>Greenfield Azure Deployment</strong> pattern is for organizations starting fresh on Azure with no existing cloud infrastructure. Following the Microsoft <strong>Cloud Adoption Framework (CAF)</strong>, this pattern establishes a complete enterprise landing zone from scratch — management group hierarchy, hub networking, centralized identity, policy governance, and AI-ready spoke workloads.</p>
+          <h5 class="mt-4">Key Characteristics</h5>
+          <ul>
+            <li><strong>CAF Enterprise-Scale Landing Zone</strong> architecture</li>
+            <li><strong>Management Group hierarchy</strong> (Platform + Landing Zones)</li>
+            <li><strong>Hub-Spoke networking</strong> with Azure Firewall</li>
+            <li><strong>Centralized identity</strong> via Entra ID with Conditional Access</li>
+            <li><strong>Policy-as-Code governance</strong> with Azure Policy initiatives</li>
+            <li><strong>Cost Management</strong> with budgets and alerts from day one</li>
+            <li><strong>AI-ready spoke</strong> with Azure OpenAI, AI Search, and Key Vault</li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <div class="card bg-body-tertiary">
+            <div class="card-body">
+              <h6 class="card-title fw-bold">CAF Pillars</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>Strategy</td><td><span class="badge" style="background:#198754">Define</span></td></tr>
+                <tr><td>Plan</td><td><span class="badge" style="background:#198754">Assess</span></td></tr>
+                <tr><td>Ready</td><td><span class="badge" style="background:#198754">Landing Zone</span></td></tr>
+                <tr><td>Adopt</td><td><span class="badge" style="background:#198754">Deploy</span></td></tr>
+                <tr><td>Govern</td><td><span class="badge" style="background:#198754">Policy</span></td></tr>
+                <tr><td>Manage</td><td><span class="badge" style="background:#198754">Operate</span></td></tr>
+              </table>
+              <h6 class="card-title fw-bold mt-3">Hub-Spoke</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>Hub VNet</td><td>10.0.0.0/16</td></tr>
+                <tr><td>Spoke VNet</td><td>10.1.0.0/16</td></tr>
+                <tr><td>Firewall</td><td><span class="badge bg-success">Standard</span></td></tr>
+                <tr><td>Bastion</td><td><span class="badge bg-success">Standard</span></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- T-Shirt Sizing -->
+  <section class="py-5 bg-body-secondary" id="sizing">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-rulers me-2"></i>T-Shirt Sizing</h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card phase-card h-100 border-success">
+            <div class="card-body text-center">
+              <i class="bi bi-egg fs-1 text-success"></i>
+              <h4 class="mt-2">Small (Startup/MVP)</h4>
+              <p class="text-body-secondary">Quick start, minimal governance</p>
+              <div class="text-start">
+                <ul class="mb-2">
+                  <li>1 subscription, no management groups</li>
+                  <li>Single VNet (no hub-spoke)</li>
+                  <li>Azure OpenAI + Key Vault + Storage</li>
+                  <li>Basic NSGs, no Firewall</li>
+                </ul>
+              </div>
+              <span class="badge bg-success fs-6 px-3 py-2">~$1,200/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card phase-card h-100 border-primary">
+            <div class="card-body text-center">
+              <i class="bi bi-building fs-1 text-primary"></i>
+              <h4 class="mt-2">Medium (Production)</h4>
+              <p class="text-body-secondary">Enterprise-ready with governance</p>
+              <div class="text-start">
+                <ul class="mb-2">
+                  <li>3 subscriptions (Platform, Corp, Online)</li>
+                  <li>Hub-spoke with Azure Firewall Standard</li>
+                  <li>Entra ID P1, Conditional Access</li>
+                  <li>Azure Policy baseline, Cost Management</li>
+                </ul>
+              </div>
+              <span class="badge bg-primary fs-6 px-3 py-2">~$5,500/mo</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card phase-card h-100 border-warning">
+            <div class="card-body text-center">
+              <i class="bi bi-building-fill fs-1 text-warning"></i>
+              <h4 class="mt-2">Large (Enterprise)</h4>
+              <p class="text-body-secondary">Full-scale with advanced security</p>
+              <div class="text-start">
+                <ul class="mb-2">
+                  <li>10+ subscriptions, full MG hierarchy</li>
+                  <li>Hub-spoke with Firewall Premium + ExpressRoute</li>
+                  <li>Entra ID P2, PIM, Defender for Cloud P2</li>
+                  <li>Full Azure Policy initiatives, Sentinel SIEM</li>
+                </ul>
+              </div>
+              <span class="badge bg-warning text-dark fs-6 px-3 py-2">~$18,000/mo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAF Journey -->
+  <section class="py-5" id="caf-journey">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-signpost-split me-2"></i>CAF Journey</h2>
+      <div class="row g-3">
+        <div class="col-md-4 col-lg-2">
+          <div class="card phase-card h-100 text-center border-0 shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-bullseye fs-1" style="color:#198754"></i>
+              <h6 class="mt-2 fw-bold">Phase 1: Strategy</h6>
+              <p class="small text-body-secondary mb-0">Define objectives, business outcomes, financial model</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <div class="card phase-card h-100 text-center border-0 shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-clipboard-check fs-1" style="color:#198754"></i>
+              <h6 class="mt-2 fw-bold">Phase 2: Plan</h6>
+              <p class="small text-body-secondary mb-0">Digital estate assessment, skills readiness, adoption plan</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <div class="card phase-card h-100 text-center border-0 shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-tools fs-1" style="color:#198754"></i>
+              <h6 class="mt-2 fw-bold">Phase 3: Ready</h6>
+              <p class="small text-body-secondary mb-0">Landing zone setup, management groups, hub networking</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <div class="card phase-card h-100 text-center border-0 shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-rocket-takeoff fs-1" style="color:#198754"></i>
+              <h6 class="mt-2 fw-bold">Phase 4: Adopt</h6>
+              <p class="small text-body-secondary mb-0">Deploy workloads, migrate or innovate</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <div class="card phase-card h-100 text-center border-0 shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-shield-check fs-1" style="color:#198754"></i>
+              <h6 class="mt-2 fw-bold">Phase 5: Govern</h6>
+              <p class="small text-body-secondary mb-0">Policy baselines, cost management, security baseline</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <div class="card phase-card h-100 text-center border-0 shadow-sm">
+            <div class="card-body">
+              <i class="bi bi-gear-wide-connected fs-1" style="color:#198754"></i>
+              <h6 class="mt-2 fw-bold">Phase 6: Manage</h6>
+              <p class="small text-body-secondary mb-0">Monitor, optimize, protect, operate</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="architecture">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-diagram-2 me-2"></i>Architecture Diagram</h2>
+      <div class="card shadow">
+        <div class="card-body text-center p-4">
+          <div class="diagram-wrapper">
+                <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+          <pre class="mermaid">
+graph TB
+    subgraph MG["Management Group Hierarchy"]
+        ROOT["Tenant Root Group"]
+        ORG["Organization MG"]
+        PLAT["Platform MG"]
+        LZ["Landing Zones MG"]
+        MGMT["Management Sub"]
+        CONN["Connectivity Sub"]
+        IDENT["Identity Sub"]
+        CORP["Corp LZ Sub"]
+        ONLINE["Online LZ Sub"]
+    end
+    subgraph Hub["Hub VNet (Connectivity Sub) 10.0.0.0/16"]
+        FW["Azure Firewall&lt;br/&gt;Standard"]
+        BASTION["Azure Bastion&lt;br/&gt;Secure Access"]
+        VGW["VPN Gateway&lt;br/&gt;or ExpressRoute"]
+        DNS["Private DNS Zones&lt;br/&gt;Centralized"]
+    end
+    subgraph Spoke["Spoke VNet (Corp LZ) 10.1.0.0/16"]
+        subgraph AppSubnet["Application Subnet /24"]
+            APP["App Service&lt;br/&gt;or Container Apps"]
+        end
+        subgraph AISubnet["AI Subnet /24"]
+            AOAI["Azure OpenAI&lt;br/&gt;GPT-4o"]
+            SEARCH["AI Search&lt;br/&gt;Standard S1"]
+        end
+        subgraph DataSubnet["Data Subnet /24"]
+            SQL["Azure SQL&lt;br/&gt;Managed Instance"]
+            STOR["Storage Account&lt;br/&gt;ADLS Gen2"]
+        end
+        subgraph PESubnet["Private Endpoint Subnet /24"]
+            PE["Private Endpoints&lt;br/&gt;All PaaS Services"]
+        end
+    end
+    subgraph SharedSvc["Shared Services (Management Sub)"]
+        LAW["Log Analytics&lt;br/&gt;Central Workspace"]
+        POLICY["Azure Policy&lt;br/&gt;Governance"]
+        COST["Cost Management&lt;br/&gt;Budgets &amp; Alerts"]
+        DEFENDER["Defender for Cloud&lt;br/&gt;Security Posture"]
+    end
+    ROOT --> ORG
+    ORG --> PLAT
+    ORG --> LZ
+    PLAT --> MGMT
+    PLAT --> CONN
+    PLAT --> IDENT
+    LZ --> CORP
+    LZ --> ONLINE
+    Hub -->|"Peering"| Spoke
+    FW -->|"Egress Filter"| Spoke
+    VGW -->|"Hybrid"| Hub
+    APP --> PE
+    PE --> AOAI
+    PE --> SEARCH
+    PE --> SQL
+    PE --> STOR
+    AOAI --> LAW
+    SEARCH --> LAW
+    SQL --> LAW
+    POLICY --> CORP
+          </pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="bom">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-receipt me-2"></i>Bill of Materials</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover bom-table">
+          <thead class="table-dark">
+            <tr><th>#</th><th>Service</th><th>SKU / Tier</th><th>Purpose</th><th class="text-end">Monthly Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><i class="bi bi-fire me-1" style="color:#198754"></i>Azure Firewall</td><td>Standard</td><td>Hub egress filtering &amp; inspection</td><td class="text-end fw-bold">~$912</td></tr>
+            <tr><td>2</td><td><i class="bi bi-cpu me-1" style="color:#198754"></i>Azure OpenAI</td><td>S0</td><td>GPT-4o + embeddings</td><td class="text-end fw-bold">~$1,800</td></tr>
+            <tr><td>3</td><td><i class="bi bi-database me-1" style="color:#198754"></i>Azure SQL MI</td><td>GP 4 vCores</td><td>Primary database</td><td class="text-end fw-bold">~$1,100</td></tr>
+            <tr><td>4</td><td><i class="bi bi-search me-1" style="color:#198754"></i>AI Search</td><td>Standard S1</td><td>Vector + semantic search</td><td class="text-end fw-bold">~$245</td></tr>
+            <tr><td>5</td><td><i class="bi bi-window me-1" style="color:#198754"></i>App Service</td><td>P1v3 Linux</td><td>Application compute</td><td class="text-end fw-bold">~$140</td></tr>
+            <tr><td>6</td><td><i class="bi bi-shield-fill me-1" style="color:#198754"></i>Azure Bastion</td><td>Standard</td><td>Secure VM/resource access</td><td class="text-end fw-bold">~$330</td></tr>
+            <tr><td>7</td><td><i class="bi bi-globe2 me-1" style="color:#198754"></i>VPN Gateway</td><td>VpnGw1</td><td>Hybrid connectivity</td><td class="text-end fw-bold">~$140</td></tr>
+            <tr><td>8</td><td><i class="bi bi-key-fill me-1" style="color:#198754"></i>Key Vault</td><td>Standard</td><td>Secrets, keys, certificates</td><td class="text-end">~$5</td></tr>
+            <tr><td>9</td><td><i class="bi bi-hdd me-1" style="color:#198754"></i>Storage Account</td><td>Standard_LRS</td><td>ADLS Gen2, blobs, files</td><td class="text-end">~$50</td></tr>
+            <tr><td>10</td><td><i class="bi bi-graph-up me-1" style="color:#198754"></i>Log Analytics</td><td>PerGB2018</td><td>Central monitoring workspace</td><td class="text-end fw-bold">~$75</td></tr>
+            <tr><td>11</td><td><i class="bi bi-shield-fill-check me-1" style="color:#198754"></i>Defender for Cloud</td><td>Plan 2</td><td>CSPM + server protection</td><td class="text-end fw-bold">~$100</td></tr>
+            <tr><td>12</td><td><i class="bi bi-card-checklist me-1" style="color:#198754"></i>Azure Policy</td><td>Free</td><td>Governance (built-in)</td><td class="text-end">Free</td></tr>
+            <tr><td>13</td><td><i class="bi bi-currency-dollar me-1" style="color:#198754"></i>Cost Management</td><td>Free</td><td>Budgets &amp; alerts (built-in)</td><td class="text-end">Free</td></tr>
+            <tr><td>14</td><td><i class="bi bi-diagram-2 me-1" style="color:#198754"></i>VNet + NSGs + PE</td><td>—</td><td>Hub + Spoke + 6 endpoints</td><td class="text-end">~$48</td></tr>
+          </tbody>
+          <tfoot class="table-dark">
+            <tr><td colspan="4" class="fw-bold">Estimated Total (Medium Production)</td><td class="text-end fw-bold">~$5,500/mo</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="services">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-layers me-2"></i>Service Breakdown</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-fire me-2" style="color:#198754"></i>Azure Firewall</h5>
+            <span class="badge mb-2" style="background:#198754">Standard</span><span class="badge bg-dark mb-2 ms-1">~$912/mo</span>
+            <p>Central egress point for all spoke traffic. Application and network rules for AOAI, SQL, and internet access. DNS proxy enabled.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-cpu me-2" style="color:#198754"></i>Azure OpenAI</h5>
+            <span class="badge mb-2" style="background:#198754">S0</span><span class="badge bg-dark mb-2 ms-1">~$1,800/mo</span>
+            <p>GPT-4o and text-embedding-3-large deployments. Private endpoint in AI subnet. Used for RAG, chat, and document processing.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-database me-2" style="color:#198754"></i>Azure SQL MI</h5>
+            <span class="badge mb-2" style="background:#198754">GP 4 vCores</span><span class="badge bg-dark mb-2 ms-1">~$1,100/mo</span>
+            <p>VNet-native managed database. Auto-failover groups, TDE, Advanced Threat Protection. Entra ID auth enabled.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-shield-fill me-2" style="color:#198754"></i>Azure Bastion</h5>
+            <span class="badge mb-2" style="background:#198754">Standard</span><span class="badge bg-dark mb-2 ms-1">~$330/mo</span>
+            <p>Secure access to all resources without public IPs. Supports RDP, SSH, and native client. Deployed in hub VNet.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-shield-fill-check me-2" style="color:#198754"></i>Defender for Cloud</h5>
+            <span class="badge mb-2" style="background:#198754">Plan 2</span><span class="badge bg-dark mb-2 ms-1">~$100/mo</span>
+            <p>Cloud Security Posture Management. Vulnerability assessment, regulatory compliance dashboard, just-in-time VM access.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-card-checklist me-2" style="color:#198754"></i>Azure Policy</h5>
+            <span class="badge mb-2" style="background:#198754">Free</span><span class="badge bg-dark mb-2 ms-1">Free</span>
+            <p>Enforce CAF guardrails: require tags, allowed locations, require encryption, deny public endpoints. Initiative assignments at MG level.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="security">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-shield-lock me-2"></i>Security &amp; Networking</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100"><div class="card-body">
+            <h5><i class="bi bi-lock-fill me-2" style="color:#198754"></i>Network</h5>
+            <ul>
+              <li>Hub-Spoke topology with <strong>VNet peering</strong></li>
+              <li>Azure Firewall as central egress (<strong>UDR 0.0.0.0/0</strong>)</li>
+              <li><strong>Azure Bastion</strong> in hub for secure access</li>
+              <li><strong>Private Endpoints</strong> for all PaaS services in spoke</li>
+              <li><strong>Private DNS Zones</strong> in hub (centralized resolution)</li>
+              <li><strong>NSGs on every subnet</strong> (deny-all-inbound default)</li>
+            </ul>
+          </div></div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100"><div class="card-body">
+            <h5><i class="bi bi-person-fill-check me-2" style="color:#198754"></i>Identity &amp; Data</h5>
+            <ul>
+              <li><strong>Entra ID</strong> as sole identity provider</li>
+              <li>Conditional Access: require <strong>MFA for Azure management</strong></li>
+              <li><strong>PIM</strong> (Privileged Identity Management) for just-in-time admin access</li>
+              <li><strong>Managed Identity</strong> for all service-to-service auth</li>
+              <li>Zero stored secrets — <strong>Key Vault</strong> for external integrations only</li>
+              <li><strong>Microsoft Defender for Cloud</strong> on all subscriptions</li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="usecases">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-lightbulb me-2"></i>Use Cases</h2>
+      <div class="row g-3">
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-rocket-takeoff me-2" style="color:#198754"></i>Cloud-First Startup</h5>
+          <p>Start on Azure with enterprise-grade governance from day one. No technical debt. Scale from 1 to 100 workloads with the same foundation.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-arrow-repeat me-2" style="color:#198754"></i>Digital Transformation</h5>
+          <p>Organization moving to cloud for the first time. Establish landing zone, migrate first workloads, and build AI capabilities simultaneously.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-building-check me-2" style="color:#198754"></i>Regulated Industry Entry</h5>
+          <p>Healthcare, financial services, or government deploying to Azure. Built-in compliance (HIPAA, SOC 2, FedRAMP) from the foundation layer.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-stars me-2" style="color:#198754"></i>AI-First Platform Build</h5>
+          <p>Build an AI platform from scratch with Azure OpenAI, AI Search, and modern data services. All CAF best practices baked in from the start.</p>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="constraints">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-exclamation-triangle me-2"></i>Constraints &amp; Considerations</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-warning"><tr><th>Constraint</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>Full landing zone setup takes 2-4 weeks</td><td>Use Azure Landing Zone Accelerator (Bicep/Terraform) to automate</td></tr>
+            <tr><td>Azure Firewall is the largest fixed cost (~$912/mo)</td><td>Use Firewall Basic ($274/mo) for smaller deployments</td></tr>
+            <tr><td>Management group design is hard to change later</td><td>Follow CAF recommended hierarchy; plan with stakeholders first</td></tr>
+            <tr><td>Skills gap — team new to Azure</td><td>Budget for Azure training (AZ-900, AZ-104, AZ-305); use this portal for guidance</td></tr>
+            <tr><td>Over-engineering for small workloads</td><td>Start with Small T-shirt size; add governance layers as you grow</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Deploy Spec Generator CTA -->
+  <section class="py-4 bg-success-subtle">
+    <div class="container text-center">
+      <h5 class="fw-bold mb-2"><i class="bi bi-file-earmark-code me-2"></i>Ready to Deploy This Pattern?</h5>
+      <p class="text-muted mb-3">Generate a complete deployment spec sheet with GitHub Actions workflow, Bicep file structure, and prerequisite checklist.</p>
+      <a href="index.html" class="btn btn-success btn-lg" onclick="sessionStorage.setItem('openDeploySpec','10')"><i class="bi bi-gear-wide-connected me-2"></i>Generate Deployment Spec Sheet</a>
+    </div>
+  </section>
+
+  <section class="py-4" style="background:#198754">
+    <div class="container text-white">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="pattern9.html" class="btn btn-outline-light" style="border-color:#0db7ed;color:#0db7ed"><i class="bi bi-arrow-left me-2"></i>Pattern 9: SQL to Azure SQL</a>
+        <span class="fw-bold">Pattern 10 of 10</span>
+        <a href="index.html" class="btn btn-light"><i class="bi bi-house me-2"></i>Back to All Patterns</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2025</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-sm rounded-circle shadow" style="position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none;background:#198754;color:#fff" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
+    function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      const html=document.documentElement;
+      const isDark=html.getAttribute('data-bs-theme')==='dark';
+      html.setAttribute('data-bs-theme',isDark?'light':'dark');
+      toggle.querySelector('i').className=isDark?'bi bi-moon-stars-fill':'bi bi-sun-fill';
+    });
+    window.addEventListener('scroll',()=>{
+      document.querySelector('[onclick*="scrollTo"]').style.display=window.scrollY>300?'block':'none';
+    });
+  </script>
+</body>
+</html>
