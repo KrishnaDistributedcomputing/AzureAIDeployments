@@ -589,17 +589,18 @@ git push origin main</code></pre>
               <div id="spec2" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
                 <div class="accordion-body">
                   <p>The form has two sections:</p>
+                  <p><strong>All fields have sensible defaults</strong> — you can generate a spec without filling in anything. Override only what you need:</p>
                   <table class="table table-sm table-bordered">
-                    <thead class="table-light"><tr><th>Field</th><th>Required</th><th>Default</th><th>Description</th></tr></thead>
+                    <thead class="table-light"><tr><th>Field</th><th>Default</th><th>Description</th></tr></thead>
                     <tbody>
-                      <tr><td>GitHub Org / Username</td><td><span class="badge bg-danger">Yes</span></td><td>—</td><td>Your GitHub organization or personal username</td></tr>
-                      <tr><td>Repository Name</td><td><span class="badge bg-danger">Yes</span></td><td>—</td><td>Just the repo name (not the full URL)</td></tr>
-                      <tr><td>Branch</td><td>No</td><td><code>main</code></td><td>Target branch for the workflow trigger</td></tr>
-                      <tr><td>Target Folder Path</td><td>No</td><td><code>infra/patternN</code></td><td>Where the Bicep files will live</td></tr>
-                      <tr><td>Subscription ID</td><td><span class="badge bg-danger">Yes</span></td><td>—</td><td>Azure subscription GUID</td></tr>
-                      <tr><td>Region</td><td>No</td><td>Canada Central</td><td>Azure region for deployment</td></tr>
-                      <tr><td>Resource Group</td><td>No</td><td><code>rg-&lt;pattern-name&gt;-prod</code></td><td>Auto-generated from pattern + environment</td></tr>
-                      <tr><td>Environment</td><td>No</td><td>Production</td><td>Affects naming and parameter files</td></tr>
+                      <tr><td>GitHub Org / Username</td><td><code>my-org</code></td><td>Your GitHub organization or personal username</td></tr>
+                      <tr><td>Repository Name</td><td><code>azure-ai-patternN</code></td><td>Just the repo name (not the full URL)</td></tr>
+                      <tr><td>Branch</td><td><code>main</code></td><td>Target branch for the workflow trigger</td></tr>
+                      <tr><td>Target Folder Path</td><td><code>infra/patternN</code></td><td>Where the Bicep files will live</td></tr>
+                      <tr><td>Subscription ID</td><td><code>00000000-...</code></td><td>Azure subscription GUID — replace with yours</td></tr>
+                      <tr><td>Region</td><td>Canada Central</td><td>Azure region for deployment</td></tr>
+                      <tr><td>Resource Group</td><td><code>rg-ai-&lt;env&gt;-&lt;region&gt;-001</code></td><td>CAF-compliant name auto-generated</td></tr>
+                      <tr><td>Environment</td><td>Production</td><td>Affects naming and parameter files</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -624,11 +625,16 @@ git push origin main</code></pre>
               <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#spec4">Step 4: Download &amp; Use the Output</button></h2>
               <div id="spec4" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
                 <div class="accordion-body">
-                  <p>Click <strong>"Generate Deployment Spec Sheet"</strong>. The output includes:</p>
+                  <p>Click <strong>"Generate Deployment Spec Sheet"</strong>. The output includes 8 sections following <strong>Microsoft CAF best practices</strong>:</p>
                   <ol>
-                    <li><strong>Markdown Spec</strong> — environment table, full BOM, RBAC requirements, GitHub Actions YAML, Bicep file structure, and 12-item pre-deployment checklist</li>
-                    <li><strong>workflow.yml</strong> — A ready-to-use GitHub Actions CI/CD pipeline with <code>validate</code> and <code>deploy</code> jobs</li>
-                    <li><strong>Clipboard copy</strong> — Paste into a GitHub issue to track deployment tasks</li>
+                    <li><strong>Target Environment</strong> — environment table with all deployment parameters</li>
+                    <li><strong>CAF Resource Naming Convention</strong> — auto-generated CAF-compliant names for every Azure service using the <code>&lt;abbreviation&gt;-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;-&lt;instance&gt;</code> pattern (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank">CAF reference</a>)</li>
+                    <li><strong>CAF Tagging Strategy</strong> — 6 required + 6 recommended tags, a ready-to-use <code>tags.bicep</code> module, and Azure Policy JSON to enforce tagging (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging" target="_blank">CAF reference</a>)</li>
+                    <li><strong>Azure Services BOM</strong> — full Bill of Materials with SKUs and Bicep resource types</li>
+                    <li><strong>Required Access &amp; Privileges</strong> — RBAC roles, GitHub access, VS Code setup</li>
+                    <li><strong>Pre-Deployment Checklist</strong> — 14-item checklist including CAF naming/tagging verification</li>
+                    <li><strong>GitHub Actions Workflow</strong> — CI/CD pipeline YAML with CAF tags on resource group</li>
+                    <li><strong>Bicep File Structure</strong> — including the shared <code>tags.bicep</code> module</li>
                   </ol>
                   <p class="mb-0">Place the workflow file in <code>.github/workflows/</code> and the spec in your repo's README or <code>docs/</code> folder.</p>
                 </div>
