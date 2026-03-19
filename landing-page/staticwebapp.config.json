@@ -11,6 +11,7 @@
     { "route": "/patterns/sql-migration", "rewrite": "/pattern9.html" },
     { "route": "/patterns/greenfield-azure", "rewrite": "/pattern10.html" },
     { "route": "/landing-zone", "rewrite": "/landing-zone.html" },
+    { "route": "/sdd", "rewrite": "/sdd.html" },
     { "route": "/education", "rewrite": "/csi-education.html" },
     { "route": "/help", "rewrite": "/help.html" }
   ],
