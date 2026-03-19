@@ -91,6 +91,21 @@
     .stat-number { font-size:2.4rem; font-weight:800; background:linear-gradient(135deg,#0078d4,#50e6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .pattern-card { transition: transform .2s, box-shadow .2s; cursor: pointer; }
     .pattern-card:hover { transform: translateY(-6px); box-shadow: 0 12px 24px rgba(0,0,0,.15); }
+    /* Category boxes */
+    .category-box { border:2px solid; border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; position:relative; }
+    .category-box .category-label { position:absolute; top:-14px; left:20px; padding:2px 14px; border-radius:8px; font-weight:700; font-size:.85rem; letter-spacing:.02em; }
+    .cat-ai { border-color:#0078d4; background:rgba(0,120,212,.03); }
+    .cat-ai .category-label { background:#0078d4; color:#fff; }
+    .cat-ai .pattern-card { border-left:4px solid #0078d4 !important; }
+    [data-bs-theme="dark"] .cat-ai { background:rgba(0,120,212,.08); }
+    .cat-migration { border-color:#e67e22; background:rgba(230,126,34,.03); }
+    .cat-migration .category-label { background:#e67e22; color:#fff; }
+    .cat-migration .pattern-card { border-left:4px solid #e67e22 !important; }
+    [data-bs-theme="dark"] .cat-migration { background:rgba(230,126,34,.08); }
+    .cat-greenfield { border-color:#198754; background:rgba(25,135,84,.03); }
+    .cat-greenfield .category-label { background:#198754; color:#fff; }
+    .cat-greenfield .pattern-card { border-left:4px solid #198754 !important; }
+    [data-bs-theme="dark"] .cat-greenfield { background:rgba(25,135,84,.08); }
     .badge-cost { font-size: .75rem; }
     .icon-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
     .table-compare th { position: sticky; top: 0; z-index: 2; }
@@ -304,17 +319,17 @@
       </div>
       <div class="row g-4" id="patternGrid">
 
-        <!-- Category: AI Architecture Patterns -->
-        <div class="col-12 pattern-item" data-keywords="">
-          <div class="d-flex align-items-center mb-2 mt-2">
-            <span class="badge bg-primary rounded-pill me-2 px-3 py-2"><i class="bi bi-cpu me-1"></i>AI Architecture</span>
-            <small class="text-muted">Patterns 1–7 — Cloud-native AI workloads on Azure</small>
-          </div>
-        </div>
+      </div><!-- close #patternGrid row -->
+
+      <!-- AI Architecture Box -->
+      <div class="category-box cat-ai mt-4">
+        <span class="category-label"><i class="bi bi-cpu me-1"></i>AI Architecture — Patterns 1–7</span>
+        <p class="text-muted small mt-2 mb-3">Cloud-native AI workloads on Azure</p>
+        <div class="row g-4">
 
         <!-- Card 1 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="centralized hub shared services openai cognitive">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal1">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal1">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3"><i class="bi bi-diagram-3-fill"></i></div>
@@ -339,7 +354,7 @@
 
         <!-- Card 2 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="decentralized spoke autonomous teams independent">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal2">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal2">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-info bg-opacity-10 text-info me-3"><i class="bi bi-share-fill"></i></div>
@@ -364,7 +379,7 @@
 
         <!-- Card 3 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="hybrid central spoke gateway balance mixed">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal3">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal3">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-success bg-opacity-10 text-success me-3"><i class="bi bi-intersect"></i></div>
@@ -389,7 +404,7 @@
 
         <!-- Card 4 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="factory mlops machine learning pipeline devops cicd">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal4">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal4">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-warning bg-opacity-10 text-warning me-3"><i class="bi bi-gear-wide-connected"></i></div>
@@ -414,7 +429,7 @@
 
         <!-- Card 5 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="serverless functions event-driven consumption low cost">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal5">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal5">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-danger bg-opacity-10 text-danger me-3"><i class="bi bi-lightning-charge-fill"></i></div>
@@ -439,7 +454,7 @@
 
         <!-- Card 6 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="secure private network endpoint vnet confidential zero trust">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal6">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal6">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-dark bg-opacity-10 text-dark me-3"><i class="bi bi-shield-lock-fill"></i></div>
@@ -464,7 +479,7 @@
 
         <!-- Card 7 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="data centric lakehouse analytics synapse fabric databricks">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal7">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal7">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-secondary bg-opacity-10 text-secondary me-3"><i class="bi bi-database-fill-gear"></i></div>
@@ -487,17 +502,18 @@
           </div>
         </div>
 
-        <!-- Category: Migration Patterns -->
-        <div class="col-12 pattern-item" data-keywords="">
-          <div class="d-flex align-items-center mb-2 mt-3">
-            <span class="badge rounded-pill me-2 px-3 py-2" style="background:#e67e22"><i class="bi bi-box-arrow-in-up-right me-1"></i>Migration</span>
-            <small class="text-muted">Patterns 8–9 — Migrate existing workloads to Azure</small>
-          </div>
-        </div>
+        </div><!-- close AI Architecture row -->
+      </div><!-- close cat-ai box -->
+
+      <!-- Migration Box -->
+      <div class="category-box cat-migration">
+        <span class="category-label"><i class="bi bi-box-arrow-in-up-right me-1"></i>Migration — Patterns 8–9</span>
+        <p class="text-muted small mt-2 mb-3">Migrate existing workloads to Azure</p>
+        <div class="row g-4">
 
         <!-- Card 8 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="lift shift migration legacy vm rehost iaas azure migrate site recovery">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal8">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal8">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle me-3" style="background:rgba(230,126,34,.1);color:#e67e22"><i class="bi bi-box-arrow-in-up-right"></i></div>
@@ -522,7 +538,7 @@
 
         <!-- Card 9 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="sql migration database azure sql managed instance dms data">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal9">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal9">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle me-3" style="background:rgba(13,183,237,.1);color:#0db7ed"><i class="bi bi-database-fill-up"></i></div>
@@ -545,17 +561,18 @@
           </div>
         </div>
 
-        <!-- Category: Greenfield -->
-        <div class="col-12 pattern-item" data-keywords="">
-          <div class="d-flex align-items-center mb-2 mt-3">
-            <span class="badge bg-success rounded-pill me-2 px-3 py-2"><i class="bi bi-rocket-takeoff me-1"></i>Greenfield</span>
-            <small class="text-muted">Pattern 10 — Build a new Azure environment from scratch</small>
-          </div>
-        </div>
+        </div><!-- close Migration row -->
+      </div><!-- close cat-migration box -->
+
+      <!-- Greenfield Box -->
+      <div class="category-box cat-greenfield">
+        <span class="category-label"><i class="bi bi-rocket-takeoff me-1"></i>Greenfield — Pattern 10</span>
+        <p class="text-muted small mt-2 mb-3">Build a new Azure environment from scratch</p>
+        <div class="row g-4">
 
         <!-- Card 10 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="greenfield zero hero new cloud adoption framework landing zone caf enterprise">
-          <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal10">
+          <div class="card h-100 pattern-card shadow-sm" data-bs-toggle="modal" data-bs-target="#modal10">
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
                 <div class="icon-circle bg-success bg-opacity-10 text-success me-3"><i class="bi bi-rocket-takeoff-fill"></i></div>
@@ -578,7 +595,9 @@
           </div>
         </div>
 
-      </div>
+        </div><!-- close Greenfield row -->
+      </div><!-- close cat-greenfield box -->
+
     </div>
   </section>
 
