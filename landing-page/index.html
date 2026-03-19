@@ -674,7 +674,10 @@
       <p>Composite SLA <strong>99.72%</strong></p>
       <h6>Service Limits</h6><ul><li>AOAI: 30 deployments/resource, 240K TPM (GPT-4o)</li><li>APIM: 4,000 req/sec (Standard v2)</li></ul>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/" target="_blank">AOAI</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/api-management/" target="_blank">APIM</a></p>
-      <div class="text-center mt-3"><a href="pattern1.html" class="btn btn-primary"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern1.html" class="btn btn-primary me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(1)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
     </div>
   </div></div></div>
 
@@ -695,7 +698,10 @@
       </tbody></table>
       <p>Composite SLA <strong>99.67%</strong></p>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/azure-firewall/" target="_blank">Firewall</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/search/" target="_blank">AI Search</a></p>
-      <div class="text-center mt-3"><a href="pattern2.html" class="btn btn-info text-white"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern2.html" class="btn btn-info text-white me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(2)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
     </div>
   </div></div></div>
 
@@ -717,7 +723,10 @@
       </tbody></table>
       <p>Composite SLA <strong>99.54%</strong></p>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/machine-learning/" target="_blank">Azure ML</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/api-management/" target="_blank">APIM</a></p>
-      <div class="text-center mt-3"><a href="pattern3.html" class="btn btn-success"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern3.html" class="btn btn-success me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-outline-success" onclick="openDeploySpec(3)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
     </div>
   </div></div></div>
 
@@ -739,7 +748,10 @@
       </tbody></table>
       <p>Composite SLA <strong>99.72%</strong></p>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/machine-learning/" target="_blank">Azure ML</a> &middot; GPU: NC4as T4 v3 at $383.98/mo</p>
-      <div class="text-center mt-3"><a href="pattern4.html" class="btn btn-warning"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern4.html" class="btn btn-warning me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(4)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
     </div>
   </div></div></div>
 
@@ -761,7 +773,10 @@
       </tbody></table>
       <p>Composite SLA <strong>99.73%</strong></p>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/functions/" target="_blank">Functions</a> — 1M free exec + 400K GB-s/mo included</p>
-      <div class="text-center mt-3"><a href="pattern5.html" class="btn btn-danger"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern5.html" class="btn btn-danger me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(5)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
     </div>
   </div></div></div>
 
@@ -784,7 +799,10 @@
       </tbody></table>
       <p>Composite SLA <strong>99.68%</strong></p>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/azure-firewall/" target="_blank">Firewall Premium</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/key-vault/" target="_blank">Managed HSM</a></p>
-      <div class="text-center mt-3"><a href="pattern6.html" class="btn btn-dark"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern6.html" class="btn btn-dark me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(6)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
     </div>
   </div></div></div>
 
@@ -806,7 +824,164 @@
       </tbody></table>
       <p>Composite SLA <strong>99.67%</strong></p>
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/synapse-analytics/" target="_blank">Synapse</a> — Spark: $0.138/vCore-hr (mem optimized)</p>
-      <div class="text-center mt-3"><a href="pattern7.html" class="btn btn-secondary"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a></div>
+      <div class="text-center mt-3">
+        <a href="pattern7.html" class="btn btn-secondary me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
+        <button class="btn btn-success" onclick="openDeploySpec(7)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+      </div>
+    </div>
+  </div></div></div>
+
+  <!-- Deploy Spec Generator Modal -->
+  <div class="modal fade" id="deploySpecModal" tabindex="-1"><div class="modal-dialog modal-xl modal-dialog-scrollable"><div class="modal-content">
+    <div class="modal-header bg-success text-white">
+      <h5 class="modal-title"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec — <span id="specPatternName"></span></h5>
+      <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Step 1: Inputs -->
+      <div id="specStep1">
+        <div class="row g-4">
+          <div class="col-lg-7">
+            <h5 class="fw-bold mb-3"><i class="bi bi-input-cursor-text me-2"></i>Deployment Configuration</h5>
+            <form id="specForm">
+              <div class="card mb-3"><div class="card-body">
+                <h6 class="fw-bold"><i class="bi bi-github me-2"></i>GitHub Repository</h6>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">GitHub Organization / Username <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="specGhOrg" placeholder="e.g. contoso-ai" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Repository Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="specGhRepo" placeholder="e.g. azure-ai-deployment" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Branch</label>
+                  <input type="text" class="form-control" id="specGhBranch" value="main" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Target Folder Path</label>
+                  <input type="text" class="form-control" id="specGhPath" placeholder="e.g. infra/pattern1" />
+                </div>
+              </div></div>
+
+              <div class="card mb-3"><div class="card-body">
+                <h6 class="fw-bold"><i class="bi bi-cloud-fill text-primary me-2"></i>Azure Subscription</h6>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Subscription ID <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control font-monospace" id="specAzSub" placeholder="00000000-0000-0000-0000-000000000000" required pattern="[0-9a-fA-F\-]{36}" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Subscription Name</label>
+                  <input type="text" class="form-control" id="specAzSubName" placeholder="e.g. Production AI" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Azure Region</label>
+                  <select class="form-select" id="specAzRegion">
+                    <option value="canadacentral">Canada Central</option>
+                    <option value="eastus" selected>East US</option>
+                    <option value="eastus2">East US 2</option>
+                    <option value="westus2">West US 2</option>
+                    <option value="westus3">West US 3</option>
+                    <option value="centralus">Central US</option>
+                    <option value="northeurope">North Europe</option>
+                    <option value="westeurope">West Europe</option>
+                    <option value="uksouth">UK South</option>
+                    <option value="southeastasia">Southeast Asia</option>
+                    <option value="australiaeast">Australia East</option>
+                    <option value="japaneast">Japan East</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Resource Group Name</label>
+                  <input type="text" class="form-control" id="specAzRG" placeholder="e.g. rg-ai-pattern1-prod" />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label small fw-semibold">Environment</label>
+                  <select class="form-select" id="specAzEnv">
+                    <option value="dev">Development</option>
+                    <option value="staging">Staging</option>
+                    <option value="prod" selected>Production</option>
+                  </select>
+                </div>
+              </div></div>
+
+              <button type="button" class="btn btn-success btn-lg w-100" onclick="generateSpec()"><i class="bi bi-gear-wide-connected me-2"></i>Generate Deployment Spec Sheet</button>
+            </form>
+          </div>
+
+          <div class="col-lg-5">
+            <h5 class="fw-bold mb-3"><i class="bi bi-shield-exclamation me-2 text-danger"></i>Required Access &amp; Prerequisites</h5>
+
+            <div class="card border-danger mb-3"><div class="card-body">
+              <h6 class="fw-bold text-danger"><i class="bi bi-cloud-fill me-2"></i>Azure RBAC Requirements</h6>
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>Owner</strong> or <strong>Contributor</strong> + <strong>User Access Administrator</strong> on the target subscription</td></tr>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>Cognitive Services Contributor</strong> — to create Azure OpenAI resources</td></tr>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>Network Contributor</strong> — for VNet, NSG, Private Endpoints</td></tr>
+                  <tr><td><span class="badge bg-warning text-dark">Conditional</span></td><td><strong>Key Vault Administrator</strong> — if creating Key Vaults with RBAC</td></tr>
+                  <tr><td><span class="badge bg-warning text-dark">Conditional</span></td><td><strong>Search Service Contributor</strong> — for AI Search</td></tr>
+                  <tr><td><span class="badge bg-info">Recommended</span></td><td><strong>Monitoring Contributor</strong> — for diagnostics &amp; alerts</td></tr>
+                </tbody>
+              </table>
+            </div></div>
+
+            <div class="card border-dark mb-3"><div class="card-body">
+              <h6 class="fw-bold"><i class="bi bi-github me-2"></i>GitHub Requirements</h6>
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>Write access</strong> to the target repository (push to branch)</td></tr>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>GitHub Actions</strong> enabled on the repository</td></tr>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td>GitHub secret: <code>AZURE_CREDENTIALS</code> — Service Principal JSON</td></tr>
+                  <tr><td><span class="badge bg-warning text-dark">Recommended</span></td><td>GitHub <strong>Pro / Team / Enterprise</strong> for private repo Actions minutes</td></tr>
+                  <tr><td><span class="badge bg-info">Optional</span></td><td><strong>GitHub Environments</strong> for deploy protection rules</td></tr>
+                </tbody>
+              </table>
+            </div></div>
+
+            <div class="card border-primary mb-3"><div class="card-body">
+              <h6 class="fw-bold text-primary"><i class="bi bi-pc-display me-2"></i>VS Code Requirements</h6>
+              <table class="table table-sm mb-0">
+                <tbody>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>VS Code 1.85+</strong> with <strong>Azure Account</strong> extension</td></tr>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>Bicep</strong> extension (ms-azuretools.vscode-bicep)</td></tr>
+                  <tr><td><span class="badge bg-danger">Required</span></td><td><strong>Azure CLI 2.60+</strong> installed and logged in (<code>az login</code>)</td></tr>
+                  <tr><td><span class="badge bg-warning text-dark">Recommended</span></td><td><strong>GitHub Copilot</strong> for assisted IaC authoring</td></tr>
+                  <tr><td><span class="badge bg-warning text-dark">Recommended</span></td><td><strong>Azure Resources</strong> extension for resource management</td></tr>
+                  <tr><td><span class="badge bg-info">Optional</span></td><td><strong>Terraform</strong> extension (if using TF instead of Bicep)</td></tr>
+                </tbody>
+              </table>
+            </div></div>
+
+            <div class="card bg-warning-subtle"><div class="card-body">
+              <h6 class="fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>Azure Quota Pre-Checks</h6>
+              <ul class="small mb-0">
+                <li>Request <strong>Azure OpenAI access</strong> if not already approved</li>
+                <li>Check <strong>GPU quota</strong> for NC/ND-series (Patterns 4, 6)</li>
+                <li>Verify <strong>OpenAI TPM/RPM limits</strong> for your region</li>
+                <li>Ensure <strong>vCPU quota</strong> is sufficient for AKS/VMs</li>
+                <li>Check <strong>Private Endpoint limits</strong> (default 1,000/sub)</li>
+              </ul>
+            </div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Generated Output -->
+      <div id="specStep2" style="display:none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0"><i class="bi bi-check-circle-fill text-success me-2"></i>Deployment Spec Generated</h5>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm" onclick="copySpec()"><i class="bi bi-clipboard me-1"></i>Copy to Clipboard</button>
+            <button class="btn btn-primary btn-sm" onclick="downloadSpec()"><i class="bi bi-download me-1"></i>Download .md</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="downloadSpecYaml()"><i class="bi bi-filetype-yml me-1"></i>Download workflow.yml</button>
+            <button class="btn btn-outline-dark btn-sm" onclick="backToInputs()"><i class="bi bi-arrow-left me-1"></i>Back</button>
+          </div>
+        </div>
+        <pre id="specOutput" class="bg-body-tertiary border rounded-3 p-4" style="max-height:65vh;overflow:auto;white-space:pre-wrap;font-size:.85rem"></pre>
+      </div>
+
     </div>
   </div></div></div>
 
@@ -840,6 +1015,407 @@
     // Back to top visibility
     window.addEventListener('scroll', () => {
       document.getElementById('backToTop').style.display = window.scrollY > 400 ? 'block' : 'none';
+    });
+
+    // ── Deploy Spec Generator ──────────────────────────────────
+    const PATTERNS = {
+      1: {
+        name: 'Centralized Hub AI', cost: '~$3,723/mo', sla: '99.72%',
+        services: [
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'API Management', sku: 'StandardV2', bicep: 'Microsoft.ApiManagement/service' },
+          { name: 'Azure AI Search', sku: 'standard (S1)', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Application Insights', sku: 'web', bicep: 'Microsoft.Insights/components' },
+          { name: 'Storage Account (ADLS Gen2)', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' }
+        ],
+        openaiModels: ['gpt-4o (GlobalStandard, 80K TPM)', 'text-embedding-3-large (350K TPM)'],
+        rbacExtra: ['Cognitive Services OpenAI User (for app identities)'],
+        networking: 'Hub VNet with PE subnet. Optional: VNet peering to spokes.'
+      },
+      2: {
+        name: 'Decentralized Spoke AI', cost: '~$7,360/mo', sla: '99.67%',
+        services: [
+          { name: 'Azure OpenAI Service (×N spokes)', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'Azure Firewall', sku: 'Standard', bicep: 'Microsoft.Network/azureFirewalls' },
+          { name: 'Azure AI Search (×N)', sku: 'basic', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'Key Vault (×N)', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Virtual Network (Hub)', sku: 'n/a', bicep: 'Microsoft.Network/virtualNetworks' },
+          { name: 'Virtual Network (Spoke ×N)', sku: 'n/a', bicep: 'Microsoft.Network/virtualNetworks' },
+          { name: 'NSG (per subnet)', sku: 'n/a', bicep: 'Microsoft.Network/networkSecurityGroups' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Storage Account (×N)', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' }
+        ],
+        openaiModels: ['gpt-4o (per spoke, 80K TPM each)', 'text-embedding-3-large'],
+        rbacExtra: ['Network Contributor (spoke VNets)', 'Per-spoke Cognitive Services Contributor'],
+        networking: 'Hub-Spoke topology. Azure Firewall in hub. VNet peering per spoke. UDR 0.0.0.0/0 → Firewall.'
+      },
+      3: {
+        name: 'Hybrid Central-Spoke', cost: '~$5,685/mo', sla: '99.54%',
+        services: [
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'API Management', sku: 'StandardV2', bicep: 'Microsoft.ApiManagement/service' },
+          { name: 'Azure Machine Learning', sku: 'Free (workspace)', bicep: 'Microsoft.MachineLearningServices/workspaces' },
+          { name: 'Azure AI Search', sku: 'standard (S1)', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'Azure Firewall', sku: 'Standard', bicep: 'Microsoft.Network/azureFirewalls' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Virtual Network (Hub + Spokes)', sku: 'n/a', bicep: 'Microsoft.Network/virtualNetworks' },
+          { name: 'Storage Account', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' }
+        ],
+        openaiModels: ['gpt-4o (hub, 80K TPM)', 'text-embedding-3-large', 'Spoke fine-tuned models via Azure ML'],
+        rbacExtra: ['AzureML Compute Operator (spoke endpoints)', 'APIM Service Contributor'],
+        networking: 'Hub VNet (APIM + Firewall) peered to N spoke VNets. Central AOAI behind APIM gateway. Spoke ML endpoints.'
+      },
+      4: {
+        name: 'AI Factory / MLOps', cost: '~$6,120/mo', sla: '99.72%',
+        services: [
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'Azure Machine Learning', sku: 'Free (workspace)', bicep: 'Microsoft.MachineLearningServices/workspaces' },
+          { name: 'Azure AI Search', sku: 'standard (S1)', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'Container Registry', sku: 'Standard', bicep: 'Microsoft.ContainerRegistry/registries' },
+          { name: 'Cosmos DB', sku: 'Serverless', bicep: 'Microsoft.DocumentDB/databaseAccounts' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Application Insights', sku: 'web', bicep: 'Microsoft.Insights/components' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Storage Account (ADLS Gen2)', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' },
+          { name: 'Compute: NC4as T4 v3 (GPU)', sku: 'NC4as_T4_v3', bicep: 'Microsoft.MachineLearningServices/workspaces/computes' }
+        ],
+        openaiModels: ['gpt-4o (80K TPM)', 'text-embedding-3-large', 'Custom trained models via Azure ML'],
+        rbacExtra: ['AzureML Data Scientist', 'AzureML Compute Operator', 'ACR Push/Pull'],
+        networking: 'Single VNet with 5+ subnets: ML compute, PE, AKS, management, training.'
+      },
+      5: {
+        name: 'Serverless AI', cost: '~$890/mo', sla: '99.73%',
+        services: [
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'Azure Functions', sku: 'Consumption (Y1)', bicep: 'Microsoft.Web/sites' },
+          { name: 'Logic Apps', sku: 'Consumption', bicep: 'Microsoft.Logic/workflows' },
+          { name: 'Event Grid', sku: 'n/a', bicep: 'Microsoft.EventGrid/topics' },
+          { name: 'Cosmos DB', sku: 'Serverless', bicep: 'Microsoft.DocumentDB/databaseAccounts' },
+          { name: 'Azure AI Search', sku: 'basic', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Application Insights', sku: 'web', bicep: 'Microsoft.Insights/components' },
+          { name: 'Storage Account', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' }
+        ],
+        openaiModels: ['gpt-4o (pay-per-token, ~200M tokens/mo)', 'text-embedding-3-large'],
+        rbacExtra: ['Logic App Contributor', 'EventGrid Contributor'],
+        networking: 'No VNet required (public PaaS). Optional: VNet integration for Functions Premium.'
+      },
+      6: {
+        name: 'Secure Private AI', cost: '~$10,240/mo', sla: '99.68%',
+        services: [
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'Azure Firewall', sku: 'Premium', bicep: 'Microsoft.Network/azureFirewalls' },
+          { name: 'DDoS Protection Plan', sku: 'Standard', bicep: 'Microsoft.Network/ddosProtectionPlans' },
+          { name: 'Managed HSM', sku: 'Standard_B1', bicep: 'Microsoft.KeyVault/managedHSMs' },
+          { name: 'Azure AI Search', sku: 'standard2 (S2)', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'Private Endpoints (6-12)', sku: 'n/a', bicep: 'Microsoft.Network/privateEndpoints' },
+          { name: 'Private DNS Zones (8+)', sku: 'n/a', bicep: 'Microsoft.Network/privateDnsZones' },
+          { name: 'Virtual Network (isolated)', sku: 'n/a', bicep: 'Microsoft.Network/virtualNetworks' },
+          { name: 'NSG (per subnet)', sku: 'DenyAllInbound', bicep: 'Microsoft.Network/networkSecurityGroups' },
+          { name: 'Bastion', sku: 'Standard', bicep: 'Microsoft.Network/bastionHosts' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' },
+          { name: 'Storage Account (CMK-encrypted)', sku: 'Standard_LRS', bicep: 'Microsoft.Storage/storageAccounts' }
+        ],
+        openaiModels: ['gpt-4o (private endpoint only, 80K TPM)', 'text-embedding-3-large'],
+        rbacExtra: ['Managed HSM Crypto Officer', 'Private DNS Zone Contributor', 'Bastion Contributor'],
+        networking: 'Fully private VNet. All services behind Private Endpoints. Firewall Premium with TLS inspection. No public endpoints.'
+      },
+      7: {
+        name: 'Data-Centric Lakehouse AI', cost: '~$8,350/mo', sla: '99.67%',
+        services: [
+          { name: 'Microsoft Fabric', sku: 'F64', bicep: 'Microsoft.Fabric/capacities' },
+          { name: 'Synapse Analytics', sku: 'Spark pool (8 vCores)', bicep: 'Microsoft.Synapse/workspaces' },
+          { name: 'Azure OpenAI Service', sku: 'S0', bicep: 'Microsoft.CognitiveServices/accounts', kind: 'OpenAI' },
+          { name: 'Azure AI Search', sku: 'standard (S1)', bicep: 'Microsoft.Search/searchServices' },
+          { name: 'ADLS Gen2 (×3 medallion)', sku: 'Standard_LRS, HNS', bicep: 'Microsoft.Storage/storageAccounts' },
+          { name: 'Azure Databricks', sku: 'Premium', bicep: 'Microsoft.Databricks/workspaces' },
+          { name: 'Data Factory', sku: 'V2', bicep: 'Microsoft.DataFactory/factories' },
+          { name: 'Key Vault', sku: 'Standard', bicep: 'Microsoft.KeyVault/vaults' },
+          { name: 'Log Analytics Workspace', sku: 'PerGB2018', bicep: 'Microsoft.OperationalInsights/workspaces' }
+        ],
+        openaiModels: ['gpt-4o (~300M tokens/mo)', 'text-embedding-3-large'],
+        rbacExtra: ['Synapse Contributor', 'Databricks Workspace Contributor', 'Data Factory Contributor', 'Storage Blob Data Contributor (×3 accounts)'],
+        networking: 'Single VNet with 6+ subnets: Databricks public/private, PE, Synapse, management, data.'
+      }
+    };
+
+    let currentPatternId = null;
+
+    function openDeploySpec(patternId) {
+      currentPatternId = patternId;
+      const p = PATTERNS[patternId];
+      document.getElementById('specPatternName').textContent = 'Pattern ' + patternId + ' — ' + p.name;
+      document.getElementById('specStep1').style.display = '';
+      document.getElementById('specStep2').style.display = 'none';
+      // Close any open pattern modal first
+      const openModal = document.querySelector('.modal.show');
+      if (openModal) {
+        bootstrap.Modal.getInstance(openModal).hide();
+      }
+      setTimeout(() => {
+        new bootstrap.Modal(document.getElementById('deploySpecModal')).show();
+      }, 350);
+    }
+
+    function backToInputs() {
+      document.getElementById('specStep1').style.display = '';
+      document.getElementById('specStep2').style.display = 'none';
+    }
+
+    function generateSpec() {
+      const ghOrg = document.getElementById('specGhOrg').value.trim();
+      const ghRepo = document.getElementById('specGhRepo').value.trim();
+      const ghBranch = document.getElementById('specGhBranch').value.trim() || 'main';
+      const ghPath = document.getElementById('specGhPath').value.trim() || 'infra/pattern' + currentPatternId;
+      const azSub = document.getElementById('specAzSub').value.trim();
+      const azSubName = document.getElementById('specAzSubName').value.trim() || 'AI Subscription';
+      const azRegion = document.getElementById('specAzRegion').value;
+      const azRG = document.getElementById('specAzRG').value.trim() || 'rg-ai-pattern' + currentPatternId + '-' + document.getElementById('specAzEnv').value;
+      const azEnv = document.getElementById('specAzEnv').value;
+      if (!ghOrg || !ghRepo || !azSub) { alert('Please fill in all required fields (GitHub org, repo name, Azure subscription ID).'); return; }
+      const p = PATTERNS[currentPatternId];
+      const svcTable = p.services.map(s => '| ' + s.name + ' | `' + s.sku + '` | `' + s.bicep + '` |').join('\n');
+      const models = p.openaiModels.map(m => '- ' + m).join('\n');
+      const extraRbac = p.rbacExtra.map(r => '- ' + r).join('\n');
+      const timestamp = new Date().toISOString().split('T')[0];
+
+      const spec = `# Deployment Spec Sheet
+## Pattern ${currentPatternId} — ${p.name}
+
+> Generated: ${timestamp} | Est. Cost: **${p.cost}** | Composite SLA: **${p.sla}**
+
+---
+
+## 1. Target Environment
+
+| Parameter | Value |
+|-----------|-------|
+| **GitHub Repository** | \`${ghOrg}/${ghRepo}\` |
+| **Branch** | \`${ghBranch}\` |
+| **IaC Path** | \`${ghPath}/\` |
+| **Azure Subscription** | \`${azSub}\` (${azSubName}) |
+| **Region** | \`${azRegion}\` |
+| **Resource Group** | \`${azRG}\` |
+| **Environment** | \`${azEnv}\` |
+
+---
+
+## 2. Azure Services — Bill of Materials
+
+| Service | SKU / Tier | Bicep Resource Type |
+|---------|-----------|-------------------|
+${svcTable}
+
+### OpenAI Model Deployments
+${models}
+
+### Networking
+${p.networking}
+
+---
+
+## 3. Required Access & Privileges
+
+### Azure RBAC (on subscription \`${azSub}\`)
+- **Owner** or **Contributor** + **User Access Administrator** — to create resources and assign roles
+- **Cognitive Services Contributor** — to provision Azure OpenAI
+- **Network Contributor** — for VNet, NSG, Private Endpoints, Firewall
+- **Key Vault Administrator** — to create vaults with RBAC authorization
+- **Search Service Contributor** — for Azure AI Search
+- **Monitoring Contributor** — for Log Analytics, App Insights, diagnostic settings
+${extraRbac}
+
+### GitHub Repository Access
+- **Write access** (push) to \`${ghOrg}/${ghRepo}\` on branch \`${ghBranch}\`
+- **GitHub Actions** must be enabled on the repository
+- **Repository Secret** \`AZURE_CREDENTIALS\` — Azure Service Principal with Contributor role:
+  \`\`\`json
+  {
+    "clientId": "<sp-app-id>",
+    "clientSecret": "<sp-secret>",
+    "subscriptionId": "${azSub}",
+    "tenantId": "<tenant-id>"
+  }
+  \`\`\`
+- **Repository Secret** \`AZURE_SUBSCRIPTION_ID\` = \`${azSub}\`
+
+### VS Code + Local Development
+- **VS Code 1.85+** with extensions:
+  - \`ms-azuretools.vscode-bicep\` (Bicep language support)
+  - \`ms-vscode.azure-account\` (Azure Account sign-in)
+  - \`ms-azuretools.vscode-azureresourcegroups\` (Azure Resources)
+  - \`GitHub.copilot\` (recommended — AI-assisted IaC authoring)
+  - \`hashicorp.terraform\` (optional — if using Terraform)
+- **Azure CLI 2.60+** — \`az login\` authenticated to subscription
+- **Bicep CLI** — installed via \`az bicep install\` (or VS Code extension)
+- **Git** — configured with push access to GitHub
+
+---
+
+## 4. Pre-Deployment Checklist
+
+- [ ] Azure subscription \`${azSub}\` is active with sufficient spending limit
+- [ ] Azure OpenAI access approved for the subscription
+- [ ] Required RBAC roles assigned to deploying identity (Service Principal or user)
+- [ ] GPU quota verified (if applicable — Patterns 4, 6)
+- [ ] OpenAI TPM/RPM quota checked for region \`${azRegion}\`
+- [ ] Resource group \`${azRG}\` created (or will be created by IaC)
+- [ ] GitHub repo \`${ghOrg}/${ghRepo}\` exists with Actions enabled
+- [ ] \`AZURE_CREDENTIALS\` secret configured in GitHub repo settings
+- [ ] VS Code + Bicep extension installed and authenticated
+- [ ] Private DNS Zones planned (if private networking pattern)
+- [ ] Resource naming convention agreed (e.g., \`<prefix>-<service>-<env>\`)
+- [ ] Tagging strategy: CostCenter, Owner, Environment, DataClassification
+
+---
+
+## 5. GitHub Actions Workflow
+
+Save as \`.github/workflows/deploy-pattern${currentPatternId}.yml\`:
+
+\`\`\`yaml
+name: Deploy Pattern ${currentPatternId} - ${p.name}
+
+on:
+  push:
+    branches: [${ghBranch}]
+    paths: ['${ghPath}/**']
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_SUBSCRIPTION_ID: \${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  RESOURCE_GROUP: ${azRG}
+  LOCATION: ${azRegion}
+  ENVIRONMENT: ${azEnv}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          creds: \${{ secrets.AZURE_CREDENTIALS }}
+      - name: Validate Bicep
+        run: az bicep build --file ${ghPath}/main.bicep
+      - name: What-If Deployment
+        run: |
+          az deployment sub what-if \\
+            --location \${{ env.LOCATION }} \\
+            --template-file ${ghPath}/main.bicep \\
+            --parameters ${ghPath}/parameters.\${{ env.ENVIRONMENT }}.bicepparam
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: validate
+    environment: ${azEnv}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with:
+          creds: \${{ secrets.AZURE_CREDENTIALS }}
+      - name: Create Resource Group
+        run: |
+          az group create \\
+            --name \${{ env.RESOURCE_GROUP }} \\
+            --location \${{ env.LOCATION }} \\
+            --tags Environment=\${{ env.ENVIRONMENT }} Pattern=pattern${currentPatternId}
+      - name: Deploy Bicep
+        run: |
+          az deployment group create \\
+            --resource-group \${{ env.RESOURCE_GROUP }} \\
+            --template-file ${ghPath}/main.bicep \\
+            --parameters ${ghPath}/parameters.\${{ env.ENVIRONMENT }}.bicepparam \\
+            --name pattern${currentPatternId}-\${{ github.run_number }}
+      - name: Verify Deployment
+        run: |
+          az deployment group show \\
+            --resource-group \${{ env.RESOURCE_GROUP }} \\
+            --name pattern${currentPatternId}-\${{ github.run_number }} \\
+            --query properties.provisioningState -o tsv
+\`\`\`
+
+---
+
+## 6. File Structure
+
+\`\`\`
+${ghPath}/
+├── main.bicep                          # Main orchestrator
+├── parameters.dev.bicepparam           # Dev environment parameters
+├── parameters.prod.bicepparam          # Prod environment parameters
+├── modules/
+│   ├── openai.bicep                    # Azure OpenAI + model deployments
+│   ├── search.bicep                    # Azure AI Search
+│   ├── keyvault.bicep                  # Key Vault with RBAC
+│   ├── monitoring.bicep                # Log Analytics + App Insights
+│   ├── storage.bicep                   # Storage Account(s)
+│   ├── networking.bicep                # VNet, subnets, NSGs, PEs
+│   └── rbac.bicep                      # Role assignments
+├── .github/
+│   └── workflows/
+│       └── deploy-pattern${currentPatternId}.yml    # CI/CD workflow
+└── README.md                           # Deployment instructions
+\`\`\`
+
+---
+
+*Generated by Azure AI Deployment Patterns — https://calm-ocean-0e8faaa10.4.azurestaticapps.net*
+`;
+      document.getElementById('specOutput').textContent = spec;
+      document.getElementById('specStep1').style.display = 'none';
+      document.getElementById('specStep2').style.display = '';
+      window._lastSpec = spec;
+      window._lastSpecId = currentPatternId;
+      window._lastSpecName = p.name;
+    }
+
+    function copySpec() {
+      navigator.clipboard.writeText(window._lastSpec).then(() => {
+        const btn = event.target.closest('button');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Copied!';
+        btn.classList.replace('btn-outline-primary','btn-success');
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('btn-success','btn-outline-primary'); }, 2000);
+      });
+    }
+
+    function downloadSpec() {
+      const blob = new Blob([window._lastSpec], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'deployment-spec-pattern' + window._lastSpecId + '.md';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function downloadSpecYaml() {
+      const lines = window._lastSpec.split('```yaml\n');
+      if (lines.length > 1) {
+        const yaml = lines[1].split('\n```')[0];
+        const blob = new Blob([yaml], { type: 'text/yaml' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'deploy-pattern' + window._lastSpecId + '.yml';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+    }
+
+    // Auto-open spec modal if redirected from pattern detail page
+    window.addEventListener('DOMContentLoaded', () => {
+      const pid = sessionStorage.getItem('openDeploySpec');
+      if (pid) {
+        sessionStorage.removeItem('openDeploySpec');
+        setTimeout(() => openDeploySpec(parseInt(pid)), 500);
+      }
     });
   </script>
 </body>
