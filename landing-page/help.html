@@ -625,18 +625,48 @@ git push origin main</code></pre>
               <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#spec4">Step 4: Download &amp; Use the Output</button></h2>
               <div id="spec4" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
                 <div class="accordion-body">
-                  <p>Click <strong>"Generate Deployment Spec Sheet"</strong>. The output includes 8 sections following <strong>Microsoft CAF best practices</strong>:</p>
+                  <p>Click <strong>"Generate Deployment Spec Sheet"</strong>. The output follows a logical <strong>Microsoft CAF lifecycle</strong> across 6 phases and 15 sections:</p>
+
+                  <h6 class="fw-semibold mt-3 text-primary">Phase 1 — CAF Ready: Landing Zone Foundation</h6>
                   <ol>
-                    <li><strong>Target Environment</strong> — environment table with all deployment parameters</li>
-                    <li><strong>CAF Resource Naming Convention</strong> — auto-generated CAF-compliant names for every Azure service using the <code>&lt;abbreviation&gt;-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;-&lt;instance&gt;</code> pattern (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank">CAF reference</a>)</li>
-                    <li><strong>CAF Tagging Strategy</strong> — 6 required + 6 recommended tags, a ready-to-use <code>tags.bicep</code> module, and Azure Policy JSON to enforce tagging (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging" target="_blank">CAF reference</a>)</li>
-                    <li><strong>Azure Services BOM</strong> — full Bill of Materials with SKUs and Bicep resource types</li>
-                    <li><strong>Required Access &amp; Privileges</strong> — RBAC roles, GitHub access, VS Code setup</li>
-                    <li><strong>Pre-Deployment Checklist</strong> — 14-item checklist including CAF naming/tagging verification</li>
-                    <li><strong>GitHub Actions Workflow</strong> — CI/CD pipeline YAML with CAF tags on resource group</li>
-                    <li><strong>Bicep File Structure</strong> — including the shared <code>tags.bicep</code> module</li>
+                    <li><strong>Target Environment</strong> — subscription, region, resource group, GitHub repo, and CAF management group hierarchy</li>
+                    <li><strong>CAF Resource Naming Convention</strong> — auto-generated names using <code>&lt;abbreviation&gt;-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;-&lt;instance&gt;</code> (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank">CAF reference</a>)</li>
+                    <li><strong>CAF Tagging Strategy</strong> — 6 required + 6 recommended tags, <code>tags.bicep</code> module, and Azure Policy JSON (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging" target="_blank">CAF reference</a>)</li>
                   </ol>
-                  <p class="mb-0">Place the workflow file in <code>.github/workflows/</code> and the spec in your repo's README or <code>docs/</code> folder.</p>
+
+                  <h6 class="fw-semibold mt-3 text-success">Phase 2 — CAF Adopt: Resource Provisioning</h6>
+                  <ol start="4">
+                    <li><strong>Azure Services BOM</strong> — full Bill of Materials with SKUs, Bicep resource types, model deployments, and network topology</li>
+                    <li><strong>Network &amp; Connectivity</strong> — topology, private DNS, NSG rules, firewall, and forced tunneling guidance</li>
+                  </ol>
+
+                  <h6 class="fw-semibold mt-3 text-danger">Phase 3 — CAF Secure: Identity, Security &amp; Compliance</h6>
+                  <ol start="6">
+                    <li><strong>Identity &amp; Access Management</strong> — RBAC roles, Managed Identities, Zero Trust principles</li>
+                    <li><strong>Data Protection &amp; Encryption</strong> — encryption at rest/transit, Key Vault, compliance frameworks, Azure Policy</li>
+                    <li><strong>GitHub &amp; DevOps Access</strong> — repo access, OIDC credentials, branch protection</li>
+                  </ol>
+
+                  <h6 class="fw-semibold mt-3 text-warning">Phase 4 — CAF Manage: Operations &amp; Resilience</h6>
+                  <ol start="9">
+                    <li><strong>Monitoring &amp; Diagnostics</strong> — Log Analytics, alerts, dashboards</li>
+                    <li><strong>High Availability</strong> — HA strategy, composite SLA calculation with per-service breakdown</li>
+                    <li><strong>Disaster Recovery</strong> — DR strategy, RPO/RTO targets, failover checklist</li>
+                  </ol>
+
+                  <h6 class="fw-semibold mt-3 text-info">Phase 5 — CAF Govern: Cost Management</h6>
+                  <ol start="12">
+                    <li><strong>Cost Management</strong> — budget alerts, optimization best practices, VS Code tooling</li>
+                  </ol>
+
+                  <h6 class="fw-semibold mt-3" style="color:#6f42c1">Phase 6 — Deployment Execution</h6>
+                  <ol start="13">
+                    <li><strong>Pre-Deployment Checklist</strong> — 25+ items across Azure, governance, networking, security, and DevOps readiness</li>
+                    <li><strong>GitHub Actions CI/CD Workflow</strong> — validate → deploy pipeline YAML with CAF tags</li>
+                    <li><strong>Bicep File Structure</strong> — modules for tags, identity, networking, monitoring, policies, and tests</li>
+                  </ol>
+
+                  <p class="mt-3 mb-0">The spec ends with a <strong>CAF Alignment Summary</strong> table mapping each CAF pillar (Strategy, Plan, Ready, Adopt, Govern, Manage, Secure) to its corresponding sections.</p>
                 </div>
               </div>
             </div>

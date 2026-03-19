@@ -1218,7 +1218,17 @@
         ],
         openaiModels: ['gpt-4o (GlobalStandard, 80K TPM)', 'text-embedding-3-large (350K TPM)'],
         rbacExtra: ['Cognitive Services OpenAI User (for app identities)'],
-        networking: 'Hub VNet with PE subnet. Optional: VNet peering to spokes.'
+        networking: 'Hub VNet with PE subnet. Optional: VNet peering to spokes.',
+        securityTier: 'Standard',
+        ha: 'Single-region with zone-redundant services. APIM Standard v2 supports AZ. AI Search S1 has 3 replicas. AOAI provides built-in regional redundancy.',
+        dr: 'Active-Passive. Deploy secondary stamp in paired region. Use Azure Front Door for failover. AOAI global models fail over automatically. Backup Key Vault secrets to secondary region.',
+        slaCalc: '0.999 (AOAI) × 0.999 (APIM) × 0.9999 (Key Vault) × 0.999 (AI Search) × 0.9999 (Storage) = 99.72%',
+        slaServices: [{name:'Azure OpenAI',sla:'99.9%'},{name:'API Management v2',sla:'99.9%'},{name:'Key Vault',sla:'99.99%'},{name:'AI Search (S1, 3 replicas)',sla:'99.9%'},{name:'Storage (LRS)',sla:'99.99%'},{name:'Log Analytics',sla:'99.9%'}],
+        encryption: 'Platform-managed keys (PMK) by default. Optional CMK via Key Vault for AOAI, Storage, Search.',
+        managedIdentity: 'System-assigned MI on APIM to access AOAI, Key Vault, Storage. User-assigned MI for CI/CD pipeline.',
+        diagnostics: 'All resources → Log Analytics workspace. AOAI: prompt/completion logging (opt-in). APIM: request/response logs. Key Vault: audit events.',
+        budgetAlert: 'Monthly budget: $4,500. Alert at 80% ($3,600) and 100% ($4,500). Action group: email + Teams webhook.',
+        complianceFrameworks: 'SOC 2, ISO 27001, GDPR (with data residency configuration)'
       },
       2: {
         name: 'Decentralized Spoke AI', cost: '~$7,360/mo', sla: '99.67%',
@@ -1235,7 +1245,17 @@
         ],
         openaiModels: ['gpt-4o (per spoke, 80K TPM each)', 'text-embedding-3-large'],
         rbacExtra: ['Network Contributor (spoke VNets)', 'Per-spoke Cognitive Services Contributor'],
-        networking: 'Hub-Spoke topology. Azure Firewall in hub. VNet peering per spoke. UDR 0.0.0.0/0 → Firewall.'
+        networking: 'Hub-Spoke topology. Azure Firewall in hub. VNet peering per spoke. UDR 0.0.0.0/0 → Firewall.',
+        securityTier: 'Enhanced',
+        ha: 'Per-spoke zone redundancy. Azure Firewall is zone-redundant by default. Each spoke independently resilient. AOAI per-spoke provides blast radius isolation.',
+        dr: 'Active-Active across spokes. Each spoke is independently deployable. Cross-region DR: replicate spoke template to paired region. Firewall Policy exported and re-applied.',
+        slaCalc: '0.999 (AOAI) × 0.9999 (Firewall) × 0.999 (AI Search) × 0.9999 (Key Vault) × 0.9999 (Storage) = 99.67%',
+        slaServices: [{name:'Azure OpenAI (per spoke)',sla:'99.9%'},{name:'Azure Firewall',sla:'99.99%'},{name:'AI Search (Basic)',sla:'99.9%'},{name:'Key Vault (per spoke)',sla:'99.99%'},{name:'Storage (per spoke)',sla:'99.99%'},{name:'VNet Peering',sla:'99.99%'}],
+        encryption: 'PMK default. Per-spoke Key Vault for secrets. NSG flow logs encrypted at rest.',
+        managedIdentity: 'Per-spoke system-assigned MI. No cross-spoke identity sharing. Hub Firewall uses system MI for policy.',
+        diagnostics: 'Central Log Analytics in hub. Per-spoke diagnostic settings forwarded to hub. Firewall logs: AzureFirewallApplicationRule, AzureFirewallNetworkRule.',
+        budgetAlert: 'Monthly budget: $8,500. Per-spoke sub-budgets recommended. Alert at 80% per spoke.',
+        complianceFrameworks: 'SOC 2, ISO 27001, data residency per spoke for multi-geo compliance'
       },
       3: {
         name: 'Hybrid Central-Spoke', cost: '~$5,685/mo', sla: '99.54%',
@@ -1252,7 +1272,17 @@
         ],
         openaiModels: ['gpt-4o (hub, 80K TPM)', 'text-embedding-3-large', 'Spoke fine-tuned models via Azure ML'],
         rbacExtra: ['AzureML Compute Operator (spoke endpoints)', 'APIM Service Contributor'],
-        networking: 'Hub VNet (APIM + Firewall) peered to N spoke VNets. Central AOAI behind APIM gateway. Spoke ML endpoints.'
+        networking: 'Hub VNet (APIM + Firewall) peered to N spoke VNets. Central AOAI behind APIM gateway. Spoke ML endpoints.',
+        securityTier: 'Enhanced',
+        ha: 'Hub services zone-redundant (APIM, Firewall, AOAI). Spoke ML endpoints auto-scale with health probes. AI Search S1 with 3 replicas for query HA.',
+        dr: 'Active-Passive. Hub redeployed in paired region. Spoke ML model registry backed up to secondary ACR. APIM config exported via APIOps. Firewall Policy portable.',
+        slaCalc: '0.999 (AOAI) × 0.999 (APIM) × 0.999 (ML endpoints) × 0.9999 (Firewall) × 0.999 (AI Search) = 99.54%',
+        slaServices: [{name:'Azure OpenAI',sla:'99.9%'},{name:'API Management v2',sla:'99.9%'},{name:'Azure ML Endpoints',sla:'99.9%'},{name:'Azure Firewall',sla:'99.99%'},{name:'AI Search (S1)',sla:'99.9%'},{name:'Key Vault',sla:'99.99%'}],
+        encryption: 'PMK default. ML workspace secrets in Key Vault. Model artifacts encrypted in Storage.',
+        managedIdentity: 'APIM → AOAI (system MI). ML workspace → Storage, Key Vault, ACR (system MI). Spoke compute → ML workspace (user-assigned MI).',
+        diagnostics: 'Central Log Analytics. APIM analytics + AOAI token metrics. ML workspace: experiment tracking, endpoint latency, model drift.',
+        budgetAlert: 'Monthly budget: $6,500. Separate budget for ML compute (burst-capable). Alert at 80%.',
+        complianceFrameworks: 'SOC 2, ISO 27001, AI-specific: EU AI Act transparency logging'
       },
       4: {
         name: 'AI Factory / MLOps', cost: '~$6,120/mo', sla: '99.72%',
@@ -1270,7 +1300,17 @@
         ],
         openaiModels: ['gpt-4o (80K TPM)', 'text-embedding-3-large', 'Custom trained models via Azure ML'],
         rbacExtra: ['AzureML Data Scientist', 'AzureML Compute Operator', 'ACR Push/Pull'],
-        networking: 'Single VNet with 5+ subnets: ML compute, PE, AKS, management, training.'
+        networking: 'Single VNet with 5+ subnets: ML compute, PE, AKS, management, training.',
+        securityTier: 'Enhanced',
+        ha: 'ML compute auto-scales. Managed online endpoints with multiple instances. Cosmos DB multi-region (optional). GPU quota spread across AZs where available.',
+        dr: 'Active-Passive. Model Registry in ACR with geo-replication. ML pipelines re-runnable from artifact store. Cosmos DB automatic failover with multi-write. GPU quota pre-reserved in DR region.',
+        slaCalc: '0.999 (AOAI) × 0.999 (ML endpoints) × 0.9999 (Key Vault) × 0.999 (AI Search) × 0.9999 (Cosmos DB) = 99.72%',
+        slaServices: [{name:'Azure OpenAI',sla:'99.9%'},{name:'Azure ML Endpoints',sla:'99.9%'},{name:'Key Vault',sla:'99.99%'},{name:'AI Search (S1)',sla:'99.9%'},{name:'Cosmos DB',sla:'99.99%'},{name:'Container Registry',sla:'99.9%'}],
+        encryption: 'CMK recommended for ML workspace. Model artifacts encrypted. Training data encrypted in ADLS Gen2. Cosmos DB encryption at rest.',
+        managedIdentity: 'ML workspace → Storage, Key Vault, ACR, AOAI (system MI). Compute clusters → workspace (system MI). CI/CD SP → ML workspace (federated credential).',
+        diagnostics: 'ML workspace: experiment metrics, model versions, endpoint latency. GPU utilization via Azure Monitor. Training run logs → Log Analytics. Model data drift detection.',
+        budgetAlert: 'Monthly budget: $7,500. GPU compute can spike — set separate compute budget with auto-shutdown. Alert at 70% for GPU bursts.',
+        complianceFrameworks: 'SOC 2, ISO 27001, ML model lineage & reproducibility (EU AI Act), responsible AI dashboard'
       },
       5: {
         name: 'Serverless AI', cost: '~$890/mo', sla: '99.73%',
@@ -1287,7 +1327,17 @@
         ],
         openaiModels: ['gpt-4o (pay-per-token, ~200M tokens/mo)', 'text-embedding-3-large'],
         rbacExtra: ['Logic App Contributor', 'EventGrid Contributor'],
-        networking: 'No VNet required (public PaaS). Optional: VNet integration for Functions Premium.'
+        networking: 'No VNet required (public PaaS). Optional: VNet integration for Functions Premium.',
+        securityTier: 'Standard',
+        ha: 'Functions Consumption auto-scales to 200 instances. Event Grid guarantees 24hr retry. Cosmos DB serverless multi-region optional. Logic Apps built-in retry policies.',
+        dr: 'Active-Active. Deploy stamps in 2 regions behind Azure Front Door. Functions code deployed from same repo. Cosmos DB multi-region write. Event Grid cross-region subscriptions.',
+        slaCalc: '0.999 (AOAI) × 0.9999 (Functions) × 0.9999 (Event Grid) × 0.9995 (Cosmos DB) × 0.999 (AI Search) = 99.73%',
+        slaServices: [{name:'Azure OpenAI',sla:'99.9%'},{name:'Azure Functions',sla:'99.99%'},{name:'Event Grid',sla:'99.99%'},{name:'Cosmos DB (serverless)',sla:'99.95%'},{name:'AI Search (Basic)',sla:'99.9%'},{name:'Key Vault',sla:'99.99%'}],
+        encryption: 'PMK default. Function app settings in Key Vault references. Cosmos DB encryption at rest.',
+        managedIdentity: 'Functions → AOAI, Cosmos DB, Key Vault, Storage (system MI). Logic Apps → AOAI, Key Vault (managed connector identity).',
+        diagnostics: 'Application Insights: function execution traces, dependency tracking, live metrics. Event Grid: delivery metrics, dead-letter queue. Cosmos DB: RU consumption.',
+        budgetAlert: 'Monthly budget: $1,200. Pay-per-use — set anomaly detection alert. Alert if daily spend exceeds $50.',
+        complianceFrameworks: 'SOC 2, ISO 27001, serverless reduces attack surface'
       },
       6: {
         name: 'Secure Private AI', cost: '~$10,240/mo', sla: '99.68%',
@@ -1307,7 +1357,17 @@
         ],
         openaiModels: ['gpt-4o (private endpoint only, 80K TPM)', 'text-embedding-3-large'],
         rbacExtra: ['Managed HSM Crypto Officer', 'Private DNS Zone Contributor', 'Bastion Contributor'],
-        networking: 'Fully private VNet. All services behind Private Endpoints. Firewall Premium with TLS inspection. No public endpoints.'
+        networking: 'Fully private VNet. All services behind Private Endpoints. Firewall Premium with TLS inspection. No public endpoints.',
+        securityTier: 'Zero Trust',
+        ha: 'All services zone-redundant. Firewall Premium HA across 3 AZs. Bastion Standard with scaling. HSM backed by FIPS 140-2 Level 3. AI Search S2 supports 12 replicas.',
+        dr: 'Active-Passive with full private connectivity. DR site requires mirror VNet, PE, DNS zones. HSM backup to secondary region with secure transport. Firewall Policy portable. DDoS Plan is global.',
+        slaCalc: '0.999 (AOAI) × 0.9999 (Firewall Premium) × 0.999 (AI Search S2) × 0.9999 (HSM) × 0.9999 (Storage) = 99.68%',
+        slaServices: [{name:'Azure OpenAI (private)',sla:'99.9%'},{name:'Firewall Premium',sla:'99.99%'},{name:'AI Search (S2)',sla:'99.9%'},{name:'Managed HSM',sla:'99.99%'},{name:'DDoS Protection',sla:'99.99%'},{name:'Bastion',sla:'99.99%'},{name:'Storage (CMK)',sla:'99.99%'}],
+        encryption: 'CMK mandatory. Managed HSM for key lifecycle. Storage: CMK + infrastructure encryption (double). AOAI: CMK. AI Search: CMK. TLS 1.3 enforced end-to-end.',
+        managedIdentity: 'All services use system-assigned MI. No service principal secrets stored. HSM RBAC for key access. Bastion: no VM credentials exposed.',
+        diagnostics: 'All logs → private Log Analytics (no public endpoint). Firewall Premium: TLS inspection logs, threat intel logs. NSG flow logs v2 → Storage (encrypted). Sentinel integration recommended.',
+        budgetAlert: 'Monthly budget: $12,000. DDoS + HSM are fixed costs. Alert at 80%. Security spend is non-negotiable — do not reduce.',
+        complianceFrameworks: 'SOC 2, ISO 27001, HIPAA, FedRAMP, PCI-DSS, NIST 800-53, zero-trust architecture'
       },
       7: {
         name: 'Data-Centric Lakehouse AI', cost: '~$8,350/mo', sla: '99.67%',
@@ -1324,7 +1384,17 @@
         ],
         openaiModels: ['gpt-4o (~300M tokens/mo)', 'text-embedding-3-large'],
         rbacExtra: ['Synapse Contributor', 'Databricks Workspace Contributor', 'Data Factory Contributor', 'Storage Blob Data Contributor (×3 accounts)'],
-        networking: 'Single VNet with 6+ subnets: Databricks public/private, PE, Synapse, management, data.'
+        networking: 'Single VNet with 6+ subnets: Databricks public/private, PE, Synapse, management, data.',
+        securityTier: 'Enhanced',
+        ha: 'Fabric capacity auto-recovers. Synapse Spark pools auto-scale. Databricks HA with driver/worker node placement across AZs. ADLS Gen2 ZRS recommended for medallion layers.',
+        dr: 'Active-Passive. Medallion data replicated via ADF to paired region ADLS Gen2. Fabric capacity portable. Databricks workspace exportable via Terraform. Synapse artifacts in Git (Synapse DevOps).',
+        slaCalc: '0.999 (AOAI) × 0.999 (Fabric) × 0.999 (Synapse) × 0.999 (AI Search) × 0.9999 (Storage) = 99.67%',
+        slaServices: [{name:'Azure OpenAI',sla:'99.9%'},{name:'Microsoft Fabric',sla:'99.9%'},{name:'Synapse Analytics',sla:'99.9%'},{name:'AI Search (S1)',sla:'99.9%'},{name:'ADLS Gen2 (LRS)',sla:'99.99%'},{name:'Databricks',sla:'99.95%'},{name:'Data Factory',sla:'99.9%'}],
+        encryption: 'ADLS Gen2: CMK recommended for gold layer. Databricks: DBFS encrypted. Synapse: workspace-level CMK. Fabric: Microsoft-managed encryption.',
+        managedIdentity: 'Synapse workspace → ADLS Gen2, Key Vault (system MI). Databricks → ADLS Gen2 (service principal or Unity Catalog). ADF → all data stores (system MI). Fabric: workspace identity.',
+        diagnostics: 'Synapse: Spark pool metrics, pipeline runs, SQL pool DMVs. Databricks: cluster logs → Log Analytics (via LA agent). Fabric: capacity metrics. ADF: pipeline monitoring dashboard.',
+        budgetAlert: 'Monthly budget: $10,000. Fabric F64 is largest fixed cost — monitor CU consumption. Spark compute bursty — set per-pipeline budgets. Alert at 75%.',
+        complianceFrameworks: 'SOC 2, ISO 27001, data governance via Purview/Unity Catalog, data lineage tracking'
       }
     };
 
@@ -1422,82 +1492,123 @@
         return '  • ' + s.name.padEnd(42) + 'Abbr: ' + abbr.padEnd(10) + 'Name: ' + cafName;
       }).join('\n');
 
+      // Build SLA calculation lines
+      const slaLines = p.slaServices.map(s => '  • ' + s.name.padEnd(36) + s.sla).join('\n');
+
       const spec = `════════════════════════════════════════════════════════════════════════════════
-  DEPLOYMENT SPEC SHEET
+  DEPLOYMENT SPEC SHEET — MICROSOFT CAF ALIGNED
   Pattern ${currentPatternId} — ${p.name}
 ════════════════════════════════════════════════════════════════════════════════
 
-  Generated .......... ${timestamp}
-  Est. Monthly Cost .. ${p.cost}
-  Composite SLA ...... ${p.sla}
-  Naming Standard .... Microsoft CAF
-  Reference .......... https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
+  Generated ............. ${timestamp}
+  Est. Monthly Cost ..... ${p.cost}
+  Composite SLA ......... ${p.sla}
+  Security Tier ......... ${p.securityTier}
+  Compliance ............ ${p.complianceFrameworks}
+
+  CAF References:
+  • Strategy    https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/strategy/
+  • Plan        https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/plan/
+  • Ready       https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/
+  • Adopt       https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/adopt/
+  • Govern      https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/govern/
+  • Manage      https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/manage/
+  • Secure      https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 1 — CAF READY: LANDING ZONE FOUNDATION                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
 
 ────────────────────────────────────────────────────────────────────────────────
   1. TARGET ENVIRONMENT
 ────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/
+
+  AZURE TARGET:
+
+  Subscription ........ ${azSub} (${azSubName})
+  Region .............. ${azRegion}
+  Resource Group ...... ${azRG}
+  Environment ......... ${azEnv} (${envShort})
+
+  SOURCE CONTROL:
 
   GitHub Repository ... ${ghOrg}/${ghRepo}
-  Branch ............. ${ghBranch}
-  IaC Path ........... ${ghPath}/
-  Azure Subscription . ${azSub} (${azSubName})
-  Region ............. ${azRegion}
-  Resource Group ..... ${azRG}
-  Environment ........ ${azEnv} (${envShort})
+  Branch .............. ${ghBranch}
+  IaC Path ............ ${ghPath}/
+
+  CAF MANAGEMENT GROUP HIERARCHY (recommended):
+
+  Tenant Root Group
+  └── Organization
+      ├── Platform
+      │   ├── Management          ← Log Analytics, Sentinel, Automation
+      │   ├── Connectivity        ← Hub VNet, Firewall, DNS, ExpressRoute
+      │   └── Identity            ← Entra ID, Conditional Access
+      └── Landing Zones
+          ├── Corp                ← Internal workloads (private networking)
+          │   └── ${azSubName}   ← THIS DEPLOYMENT
+          └── Online              ← Public-facing workloads
 
 ────────────────────────────────────────────────────────────────────────────────
   2. CAF RESOURCE NAMING CONVENTION
 ────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+  Abbreviations: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
 
-  Pattern: <resource-abbreviation>-<workload>-<environment>-<region>-<instance>
-  Reference: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
+  NAMING PATTERN:
+  <resource-type>-<workload>-<environment>-<region>-<instance>
+
+  RESOURCE NAMES FOR THIS DEPLOYMENT:
 
   Resource Group                                Abbr: rg        Name: ${azRG}
 ${cafNamingRows}
 
-  Notes:
+  NAMING RULES:
   • Storage Accounts & Container Registries: alphanumeric only (no hyphens), 3-24 chars
-  • Key Vault names must be globally unique, 3-24 chars
-  • Use consistent workload identifier across all resources (default: ${workload})
+  • Key Vault names: globally unique, 3-24 chars, alphanumeric + hyphens
+  • Use consistent workload identifier: "${workload}" across all resources
   • Append -<instance> (001, 002…) for multiple instances of the same type
+  • Avoid abbreviations in display names; use them only in resource names
+  • Region abbreviation: ${regionShort} (from ${azRegion})
 
 ────────────────────────────────────────────────────────────────────────────────
   3. CAF TAGGING STRATEGY
 ────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging
 
-  Reference: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging
-
-  REQUIRED TAGS (apply to Resource Group and all resources):
+  REQUIRED TAGS (apply to Resource Group + all child resources):
 
   Tag                   Value                                    Purpose
-  ───                   ─────                                    ───────
-  Environment           ${azEnv}                                 Deployment environment
-  Workload              AI Pattern ${currentPatternId} - ${p.name}               Application workload
-  Owner                 <team-or-user-email>                     Responsible team/individual
-  CostCenter            <cost-center-code>                       Financial tracking & chargeback
-  DataClassification    Confidential                             Data sensitivity level
-  Criticality           High                                     Business criticality for SLA
+  ───────────────────   ─────────────────────────────────────    ────────────────────────────
+  Environment           ${azEnv}                                 Lifecycle stage
+  Workload              AI Pattern ${currentPatternId} - ${p.name}     Application name
+  Owner                 <team-or-user-email>                     Accountable party
+  CostCenter            <cost-center-code>                       Financial chargeback
+  DataClassification    Confidential                             Data sensitivity (CAF security)
+  Criticality           High                                     Business impact tier
 
   RECOMMENDED TAGS:
 
   Tag                   Value                                    Purpose
-  ───                   ─────                                    ───────
-  CreatedBy             IaC-GitHubActions                        Deployment method traceability
-  DeploymentDate        ${timestamp}                              When last deployed
-  Pattern               Pattern${currentPatternId}                                Links to AI pattern reference
-  ComplianceScope       SOC2 / HIPAA / FERPA                     Regulatory compliance scope
-  MaintenanceWindow     Sun 02:00-06:00 UTC                      Planned maintenance schedule
-  ExpirationDate        <yyyy-mm-dd>                             Non-production auto-cleanup date
+  ───────────────────   ─────────────────────────────────────    ────────────────────────────
+  CreatedBy             IaC-GitHubActions                        Provenance tracking
+  DeploymentDate        ${timestamp}                              Last deployment timestamp
+  Pattern               Pattern${currentPatternId}                                Architecture reference
+  ComplianceScope       ${p.complianceFrameworks}    Regulatory scope
+  MaintenanceWindow     Sun 02:00-06:00 UTC                      Change window
+  ExpirationDate        <yyyy-mm-dd>                             Auto-cleanup (non-prod only)
 
-  BICEP IMPLEMENTATION (tags.bicep):
+  BICEP IMPLEMENTATION — modules/tags.bicep:
 
-    @description('Required tags per CAF tagging strategy')
+    @description('CAF-aligned tags module')
     param environment string
     param workload string = 'AI Pattern ${currentPatternId}'
     param owner string
     param costCenter string
 
-    var requiredTags = {
+    var tags = {
       Environment: environment
       Workload: workload
       Owner: owner
@@ -1508,14 +1619,13 @@ ${cafNamingRows}
       DeploymentDate: utcNow('yyyy-MM-dd')
       Pattern: 'Pattern${currentPatternId}'
     }
+    output tags object = tags
 
-    output tags object = requiredTags
-
-  AZURE POLICY — ENFORCE TAGGING:
+  AZURE POLICY — ENFORCE TAGGING (assign at Management Group level):
 
     {
       "if": {
-        "allOf": [
+        "anyOf": [
           { "field": "tags['Environment']", "exists": "false" },
           { "field": "tags['Owner']", "exists": "false" },
           { "field": "tags['CostCenter']", "exists": "false" }
@@ -1524,37 +1634,121 @@ ${cafNamingRows}
       "then": { "effect": "deny" }
     }
 
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 2 — CAF ADOPT: RESOURCE PROVISIONING                                ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
 ────────────────────────────────────────────────────────────────────────────────
   4. AZURE SERVICES — BILL OF MATERIALS
 ────────────────────────────────────────────────────────────────────────────────
 
 ${svcList}
 
-  OpenAI Model Deployments:
+  OPENAI MODEL DEPLOYMENTS:
 ${models}
 
-  Networking:
+  NETWORK TOPOLOGY:
   ${p.networking}
 
 ────────────────────────────────────────────────────────────────────────────────
-  5. REQUIRED ACCESS & PRIVILEGES
+  5. NETWORK & CONNECTIVITY (CAF Ready — Connectivity)
 ────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology
 
-  AZURE RBAC (on subscription ${azSub}):
+  TOPOLOGY:
+  ${p.networking}
 
-  • Owner or Contributor + User Access Administrator — create resources & assign roles
-  • Cognitive Services Contributor — provision Azure OpenAI
-  • Network Contributor — VNet, NSG, Private Endpoints, Firewall
-  • Key Vault Administrator — create vaults with RBAC authorization
-  • Search Service Contributor — Azure AI Search
-  • Monitoring Contributor — Log Analytics, App Insights, diagnostic settings
+  DNS ARCHITECTURE:
+  • Private DNS Zones hosted in Connectivity subscription (Platform MG)
+  • Zones linked to Hub VNet for centralized resolution
+  • AI services use private DNS: privatelink.openai.azure.com,
+    privatelink.search.windows.net, privatelink.vaultcore.azure.net
+  • Conditional forwarders for on-premises resolution (if hybrid)
+
+  NETWORK SECURITY:
+  • NSG on every subnet — deny-all-inbound by default, allow only required flows
+  • No public IP addresses on AI resources (except Serverless pattern)
+  • Service endpoints or Private Endpoints for all PaaS services
+  • Azure Firewall for egress filtering (application rules for AOAI endpoints)
+  • UDR 0.0.0.0/0 → Azure Firewall for forced tunneling (hub-spoke patterns)
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 3 — CAF SECURE: IDENTITY, SECURITY & COMPLIANCE                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+────────────────────────────────────────────────────────────────────────────────
+  6. IDENTITY & ACCESS MANAGEMENT (CAF Secure — Zero Trust)
+────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/
+
+  SECURITY TIER: ${p.securityTier}
+
+  AZURE RBAC ROLES (on subscription ${azSub}):
+
+  • Owner or Contributor + User Access Administrator
+    → Create resources and assign roles
+  • Cognitive Services Contributor
+    → Provision Azure OpenAI
+  • Network Contributor
+    → VNet, NSG, Private Endpoints, Firewall
+  • Key Vault Administrator
+    → Create vaults with RBAC authorization
+  • Search Service Contributor
+    → Azure AI Search provisioning
+  • Monitoring Contributor
+    → Log Analytics, App Insights, diagnostic settings
 ${extraRbac}
 
-  GITHUB REPOSITORY ACCESS:
+  MANAGED IDENTITIES (prefer over secrets — CAF best practice):
+
+  ${p.managedIdentity}
+
+  ZERO TRUST PRINCIPLES:
+  • Verify explicitly: Entra ID authentication for all service-to-service calls
+  • Least privilege: Use narrow RBAC roles, avoid Owner where possible
+  • Assume breach: Network segmentation, micro-segmentation via NSGs
+  • No stored secrets: Use Managed Identities; Key Vault for external secrets only
+  • Conditional Access: Enforce MFA for portal and CLI access to AI resources
+
+────────────────────────────────────────────────────────────────────────────────
+  7. DATA PROTECTION & ENCRYPTION (CAF Secure — Data)
+────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/secure/
+
+  ENCRYPTION AT REST:
+  ${p.encryption}
+
+  ENCRYPTION IN TRANSIT:
+  • TLS 1.2 minimum enforced on all services (TLS 1.3 preferred)
+  • HTTPS-only access — HTTP disabled on all storage accounts
+  • Azure Firewall TLS inspection (Premium SKU patterns only)
+
+  KEY MANAGEMENT:
+  • Key Vault with RBAC authorization (not access policies)
+  • Key rotation: automated via Key Vault rotation policy (90-day for secrets)
+  • Soft-delete and purge protection enabled on all Key Vaults
+  • Backup Key Vault secrets before any destructive operations
+
+  COMPLIANCE FRAMEWORKS:
+  ${p.complianceFrameworks}
+
+  AZURE POLICY ASSIGNMENTS (recommended):
+  • "Allowed locations" — restrict to ${azRegion} and paired region
+  • "Require encryption" — deny storage without encryption
+  • "Require HTTPS" — deny non-HTTPS endpoints
+  • "Audit public network access" — flag any public-facing resources
+  • "Require managed identity" — deny deployments without MI
+  • "Require tag" — enforce required tags (see Section 3)
+
+────────────────────────────────────────────────────────────────────────────────
+  8. GITHUB & DEVOPS ACCESS
+────────────────────────────────────────────────────────────────────────────────
 
   • Write access (push) to ${ghOrg}/${ghRepo} on branch ${ghBranch}
-  • GitHub Actions must be enabled on the repository
-  • Repository Secret AZURE_CREDENTIALS — Service Principal with Contributor role:
+  • GitHub Actions enabled on the repository
+  • Repository Secret AZURE_CREDENTIALS — Service Principal:
 
       {
         "clientId": "<sp-app-id>",
@@ -1563,10 +1757,105 @@ ${extraRbac}
         "tenantId": "<tenant-id>"
       }
 
+    Best Practice: Use OIDC federated credentials (no secrets) →
+    https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure
+
   • Repository Secret AZURE_SUBSCRIPTION_ID = ${azSub}
+  • Branch protection: require PR reviews + status checks before merge to ${ghBranch}
 
-  VS CODE + LOCAL DEVELOPMENT:
 
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 4 — CAF MANAGE: OPERATIONS, MONITORING & RESILIENCE                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+────────────────────────────────────────────────────────────────────────────────
+  9. MONITORING & DIAGNOSTICS (CAF Manage — Monitor)
+────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/manage/monitor/
+
+  DIAGNOSTICS CONFIGURATION:
+  ${p.diagnostics}
+
+  RECOMMENDED ALERTS:
+  • AOAI: Token consumption > 80% of quota → warning
+  • AOAI: HTTP 429 (throttling) rate > 5% → critical
+  • Key Vault: Unauthorized access attempts → critical
+  • All services: Availability < 99.9% over 5min window → critical
+  • Storage: Capacity > 80% → warning
+  • Network: NSG deny count spike → investigation
+
+  DASHBOARDS:
+  • Azure Monitor workbook for Pattern ${currentPatternId} — all resources
+  • AOAI token usage per model deployment per hour
+  • Cost trends dashboard linked to Cost Management
+  • Service health alerts for ${azRegion}
+
+────────────────────────────────────────────────────────────────────────────────
+  10. HIGH AVAILABILITY (CAF Manage — Business Alignment)
+────────────────────────────────────────────────────────────────────────────────
+
+  HA STRATEGY:
+  ${p.ha}
+
+  COMPOSITE SLA CALCULATION:
+
+${slaLines}
+  ─────────────────────────────────────────────
+  Composite SLA = Product of all individual SLAs
+               = ${p.slaCalc}
+               = ${p.sla}
+
+  SLA improvement options:
+  • Add Availability Zones (zone-redundant deployments)
+  • Increase AI Search replicas (3+ for 99.9% SLA)
+  • Use Premium/Standard v2 tiers for higher SLAs
+  • Deploy active-active across 2 regions (raises to ~99.99%)
+
+────────────────────────────────────────────────────────────────────────────────
+  11. DISASTER RECOVERY (CAF Manage — Business Continuity)
+────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/manage/considerations/business-continuity
+
+  DR STRATEGY:
+  ${p.dr}
+
+  RPO / RTO TARGETS:
+  • RPO (Recovery Point Objective): 1 hour (data loss tolerance)
+  • RTO (Recovery Time Objective): 4 hours (time to restore service)
+
+  DR CHECKLIST:
+  • [ ] Paired region identified and quota pre-approved
+  • [ ] IaC templates can deploy to secondary region without changes
+  • [ ] Key Vault secrets backed up or replicated
+  • [ ] DNS failover mechanism tested (Azure Front Door / Traffic Manager)
+  • [ ] Runbook documented and tested quarterly
+  • [ ] AOAI global model deployments auto-failover verified
+  • [ ] Data replication validated (Storage GRS / Cosmos DB multi-region)
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 5 — CAF GOVERN: COST MANAGEMENT & POLICY                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+────────────────────────────────────────────────────────────────────────────────
+  12. COST MANAGEMENT (CAF Govern — Cost Management)
+────────────────────────────────────────────────────────────────────────────────
+  CAF Ref: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/govern/cost-management/
+
+  ESTIMATED MONTHLY COST: ${p.cost}
+
+  BUDGET & ALERTS:
+  ${p.budgetAlert}
+
+  COST OPTIMIZATION BEST PRACTICES:
+  • Use Reserved Instances (1yr/3yr) for fixed compute (Firewall, VMs, APIM)
+  • Use AOAI Provisioned Throughput for predictable token volumes
+  • Right-size AI Search tier based on actual index size & query volume
+  • Auto-shutdown dev/test GPU compute during non-business hours
+  • Monitor idle resources with Azure Advisor recommendations
+  • Tag-based cost allocation — group by CostCenter, Workload, Environment
+
+  VS CODE + LOCAL DEVELOPMENT TOOLS:
   • VS Code 1.85+ with extensions:
       ms-azuretools.vscode-bicep          Bicep language support
       ms-vscode.azure-account             Azure Account sign-in
@@ -1574,29 +1863,61 @@ ${extraRbac}
       GitHub.copilot                       AI-assisted IaC authoring (recommended)
       hashicorp.terraform                  Terraform support (optional)
   • Azure CLI 2.60+ — az login authenticated to subscription
-  • Bicep CLI — installed via az bicep install (or VS Code extension)
+  • Bicep CLI — installed via az bicep install
   • Git — configured with push access to GitHub
 
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  PHASE 6 — DEPLOYMENT EXECUTION                                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
 ────────────────────────────────────────────────────────────────────────────────
-  6. PRE-DEPLOYMENT CHECKLIST
+  13. PRE-DEPLOYMENT CHECKLIST
 ────────────────────────────────────────────────────────────────────────────────
 
-  [ ] Azure subscription ${azSub} is active with sufficient spending limit
+  AZURE READINESS:
+  [ ] Subscription ${azSub} is active with sufficient spending limit
   [ ] Azure OpenAI access approved for the subscription
   [ ] Required RBAC roles assigned to deploying identity (SP or user)
   [ ] GPU quota verified (if applicable — Patterns 4, 6)
   [ ] OpenAI TPM/RPM quota checked for region ${azRegion}
-  [ ] Resource group ${azRG} created (or will be created by IaC)
-  [ ] GitHub repo ${ghOrg}/${ghRepo} exists with Actions enabled
-  [ ] AZURE_CREDENTIALS secret configured in GitHub repo settings
-  [ ] VS Code + Bicep extension installed and authenticated
-  [ ] Private DNS Zones planned (if private networking pattern)
+  [ ] Resource group ${azRG} will be created by IaC
+
+  CAF GOVERNANCE:
+  [ ] Management group hierarchy established (see Section 1)
   [ ] CAF resource naming convention applied (see Section 2)
-  [ ] CAF tags applied to all resources (see Section 3)
-  [ ] Azure Policy for tag enforcement assigned to subscription
+  [ ] CAF tags defined and documented (see Section 3)
+  [ ] Azure Policy for tag enforcement assigned at MG level
+  [ ] Azure Policy for allowed locations assigned
+  [ ] Budget and alerts configured in Cost Management (see Section 12)
+
+  NETWORKING:
+  [ ] VNet address space planned and non-overlapping
+  [ ] Private DNS Zones created in Connectivity subscription
+  [ ] NSG rules documented and peer-reviewed
+  [ ] Firewall rules documented and peer-reviewed (if applicable)
+
+  SECURITY:
+  [ ] Managed Identities planned for all service-to-service auth
+  [ ] Key Vault created with RBAC authorization mode
+  [ ] Encryption strategy documented (PMK vs CMK per service)
+  [ ] Microsoft Defender for Cloud enabled on subscription
+  [ ] Conditional Access policies configured for AI resource access
+
+  DEVOPS:
+  [ ] GitHub repo ${ghOrg}/${ghRepo} exists with Actions enabled
+  [ ] AZURE_CREDENTIALS secret configured (or OIDC federated credential)
+  [ ] Branch protection rules enabled on ${ghBranch}
+  [ ] VS Code + Bicep extension installed and authenticated
+
+  OPERATIONS:
+  [ ] Log Analytics workspace provisioned
+  [ ] Diagnostic settings planned for all resources
+  [ ] Alert rules and action groups defined (see Section 9)
+  [ ] DR runbook drafted (see Section 11)
 
 ────────────────────────────────────────────────────────────────────────────────
-  7. GITHUB ACTIONS WORKFLOW
+  14. GITHUB ACTIONS CI/CD WORKFLOW
 ────────────────────────────────────────────────────────────────────────────────
 
   Save as: .github/workflows/deploy-pattern${currentPatternId}.yml
@@ -1651,10 +1972,13 @@ ${extraRbac}
             az group create \\
               --name \${{ env.RESOURCE_GROUP }} \\
               --location \${{ env.LOCATION }} \\
-              --tags Environment=\${{ env.ENVIRONMENT }} Workload="AI-Pattern${currentPatternId}" \\
+              --tags Environment=\${{ env.ENVIRONMENT }} \\
+                     Workload="AI-Pattern${currentPatternId}" \\
                      Owner="deploy-pipeline" CostCenter="TBD" \\
-                     DataClassification="Confidential" Criticality="High" \\
-                     CreatedBy="IaC-GitHubActions" Pattern="Pattern${currentPatternId}"
+                     DataClassification="Confidential" \\
+                     Criticality="High" \\
+                     CreatedBy="IaC-GitHubActions" \\
+                     Pattern="Pattern${currentPatternId}"
         - name: Deploy Bicep
           run: |
             az deployment group create \\
@@ -1671,26 +1995,49 @@ ${extraRbac}
   ---
 
 ────────────────────────────────────────────────────────────────────────────────
-  8. FILE STRUCTURE
+  15. BICEP FILE STRUCTURE
 ────────────────────────────────────────────────────────────────────────────────
 
   ${ghPath}/
   ├── main.bicep                          Main orchestrator
   ├── parameters.dev.bicepparam           Dev environment parameters
+  ├── parameters.staging.bicepparam       Staging environment parameters
   ├── parameters.prod.bicepparam          Prod environment parameters
   ├── modules/
   │   ├── tags.bicep                      CAF shared tags module
   │   ├── openai.bicep                    Azure OpenAI + model deployments
   │   ├── search.bicep                    Azure AI Search
   │   ├── keyvault.bicep                  Key Vault with RBAC
-  │   ├── monitoring.bicep                Log Analytics + App Insights
+  │   ├── monitoring.bicep                Log Analytics + App Insights + alerts
   │   ├── storage.bicep                   Storage Account(s)
-  │   ├── networking.bicep                VNet, subnets, NSGs, PEs
-  │   └── rbac.bicep                      Role assignments
+  │   ├── networking.bicep                VNet, subnets, NSGs, PEs, DNS
+  │   ├── identity.bicep                  Managed Identities + role assignments
+  │   └── rbac.bicep                      Subscription-level RBAC
+  ├── policies/
+  │   ├── require-tags.json               Tag enforcement policy
+  │   ├── allowed-locations.json          Region restriction policy
+  │   └── require-encryption.json         Encryption enforcement policy
   ├── .github/
   │   └── workflows/
   │       └── deploy-pattern${currentPatternId}.yml    CI/CD workflow
-  └── README.md                           Deployment instructions
+  ├── tests/
+  │   └── main.test.bicep                 Bicep deployment validation tests
+  └── README.md                           Deployment instructions + architecture diagram
+
+
+════════════════════════════════════════════════════════════════════════════════
+  CAF ALIGNMENT SUMMARY
+════════════════════════════════════════════════════════════════════════════════
+
+  CAF Pillar          Status    Section
+  ──────────────────  ────────  ──────────────────────────────────────────
+  Strategy            ✓         Pattern selection (Pattern ${currentPatternId})
+  Plan                ✓         Resource inventory (Section 4)
+  Ready               ✓         Landing zone, naming, tagging (Sections 1-3)
+  Adopt               ✓         IaC deployment (Sections 14-15)
+  Govern              ✓         Cost management, policy (Sections 3, 12)
+  Manage              ✓         Monitoring, HA, DR (Sections 9-11)
+  Secure              ✓         Identity, encryption, compliance (Sections 6-8)
 
 ════════════════════════════════════════════════════════════════════════════════
   Generated by Azure AI Deployment Patterns
