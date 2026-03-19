@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Pattern 5: Serverless AI — Azure AI Patterns</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root{--accent:#0078d4;--accent-dark:#50e6ff}
+    [data-bs-theme="dark"]{--accent:#50e6ff}
+    .hero-pattern{min-height:260px;background:linear-gradient(135deg,#fd7e14 0%,#ffc078 100%)}
+    [data-bs-theme="dark"] .hero-pattern{background:linear-gradient(135deg,#7c3a00 0%,#fd7e14 100%)}
+    .service-card{border-left:4px solid var(--accent);transition:transform .2s}
+    .service-card:hover{transform:translateY(-4px);box-shadow:0 8px 16px rgba(0,0,0,.12)}
+    .bom-table th{position:sticky;top:0;z-index:2}
+    .stat-card{border:none;border-radius:1rem}
+    .mermaid{background:transparent}
+    #backToTop{position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html"><i class="bi bi-arrow-left me-2"></i>All Patterns</a>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-warning text-dark">Pattern 5 of 7</span>
+        <button id="themeToggle" class="btn btn-outline-secondary btn-sm" title="Toggle dark mode"><i class="bi bi-moon-stars-fill"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero-pattern text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-lightning-charge-fill me-3"></i>Serverless AI</h1>
+          <p class="lead mb-0">Minimal infrastructure using fully managed, serverless services. Designed for rapid prototyping, internal copilots, and low-operational-overhead applications. No VNets or private endpoints — pure PaaS simplicity.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <span class="badge bg-light text-dark fs-5 px-4 py-2">~$890/mo</span>
+          <div class="small mt-1 opacity-75">Lowest cost pattern</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-body-secondary py-4">
+    <div class="container">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-cloud-fill text-warning fs-3"></i>
+            <div class="fw-bold fs-5">8</div>
+            <small class="text-body-secondary">Azure Services</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-currency-dollar text-success fs-3"></i>
+            <div class="fw-bold fs-5">~$890</div>
+            <small class="text-body-secondary">Monthly Cost</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-clock text-warning fs-3"></i>
+            <div class="fw-bold fs-5">&lt; 30 min</div>
+            <small class="text-body-secondary">Deploy Time</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-lightning-charge text-danger fs-3"></i>
+            <div class="fw-bold fs-5">Serverless</div>
+            <small class="text-body-secondary">Zero Infra</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="overview">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <p>The <strong>Serverless AI</strong> pattern is the lightest-weight deployment option. It uses Azure Functions (Consumption plan) for event-driven processing, Azure OpenAI with GPT-4o-mini for cost-efficient inference, and AI Search Basic for vector search.</p>
+          <p>This pattern gets you from <strong>zero to a working AI app in minutes</strong>. Ideal for <strong>hackathons</strong>, <strong>internal tools</strong>, <strong>MVPs</strong>, and <strong>PoC validation</strong> before investing in production infrastructure.</p>
+          <div class="alert alert-warning mt-3">
+            <i class="bi bi-exclamation-triangle me-2"></i><strong>Note:</strong> Services use public endpoints with service-level auth. For production or regulated workloads, consider Pattern 6 (Secure AI) instead.
+          </div>
+          <h5 class="mt-3">Key Characteristics</h5>
+          <ul>
+            <li><strong>No VNets</strong> — Pure PaaS, public endpoints with service auth</li>
+            <li><strong>Consumption Billing</strong> — Pay per execution, near-zero idle cost</li>
+            <li><strong>GPT-4o-mini</strong> — Cost-efficient model (~10x cheaper than GPT-4o)</li>
+            <li><strong>Optional APIM</strong> — API facade for rate limiting and key management</li>
+            <li><strong>30-day Logs</strong> — Minimal retention for PoC scenarios</li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <div class="card bg-body-tertiary">
+            <div class="card-body">
+              <h6 class="card-title fw-bold">OpenAI Models</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>GPT-4o-mini</td><td><span class="badge bg-warning text-dark">20K TPM</span></td></tr>
+                <tr><td>text-embedding-3-small</td><td><span class="badge bg-secondary">60K TPM</span></td></tr>
+              </table>
+              <h6 class="card-title fw-bold mt-3">Functions Config</h6>
+              <table class="table table-sm mb-0">
+                <tr><td>Runtime</td><td>Python 3.11</td></tr>
+                <tr><td>Plan</td><td>Consumption (Y1)</td></tr>
+                <tr><td>HTTPS Only</td><td><span class="badge bg-success">Yes</span></td></tr>
+                <tr><td>FTPS</td><td><span class="badge bg-danger">Disabled</span></td></tr>
+              </table>
+              <h6 class="card-title fw-bold mt-3">Storage</h6>
+              <span class="badge bg-info me-1">documents</span>
+              <span class="badge bg-info">embeddings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="architecture">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-diagram-2 me-2"></i>Architecture Diagram</h2>
+      <div class="card shadow">
+        <div class="card-body text-center p-4">
+          <pre class="mermaid">
+graph TB
+    CLIENT["Client Apps&lt;br/&gt;Web / Mobile / Teams"]
+    subgraph Optional["Optional API Layer"]
+        APIM["Azure API Management&lt;br/&gt;Consumption Tier"]
+    end
+    subgraph Compute["Serverless Compute"]
+        FUNC["Azure Functions&lt;br/&gt;Consumption Plan Y1&lt;br/&gt;Python 3.11"]
+    end
+    subgraph AI["AI Services"]
+        AOAI["Azure OpenAI&lt;br/&gt;GPT-4o-mini"]
+        AIS["Azure AI Search&lt;br/&gt;Basic Tier"]
+    end
+    subgraph Storage["Storage"]
+        BLOB["Azure Blob Storage&lt;br/&gt;Documents"]
+        FUNCSA["Functions Storage&lt;br/&gt;Runtime"]
+    end
+    subgraph Monitor["Monitoring"]
+        MON["Log Analytics&lt;br/&gt;30-day retention"]
+        APPINS["App Insights"]
+    end
+    CLIENT --> APIM
+    APIM --> FUNC
+    CLIENT -.->|"Direct"| FUNC
+    FUNC --> AOAI
+    FUNC --> AIS
+    FUNC --> BLOB
+    AIS --> BLOB
+    FUNC --> APPINS
+    APPINS --> MON
+          </pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="bom">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-receipt me-2"></i>Bill of Materials</h2>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover bom-table">
+          <thead class="table-dark">
+            <tr><th>#</th><th>Service</th><th>Resource Name</th><th>SKU / Tier</th><th>Purpose</th><th class="text-end">Monthly Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td><i class="bi bi-cpu text-warning me-1"></i>Azure OpenAI</td><td><code>{base}-{env}-openai</code></td><td>S0</td><td>GPT-4o-mini (20K TPM) + embeddings (60K TPM)</td><td class="text-end fw-bold">~$450</td></tr>
+            <tr><td>2</td><td><i class="bi bi-search text-warning me-1"></i>Azure AI Search</td><td><code>{base}-{env}-search</code></td><td>Basic</td><td>Vector + keyword search (2 GB)</td><td class="text-end fw-bold">$73.73</td></tr>
+            <tr><td>3</td><td><i class="bi bi-lightning text-warning me-1"></i>Azure Functions</td><td><code>{base}-{env}-func</code></td><td>Consumption (Y1)</td><td>Event-driven compute (pay per execution)</td><td class="text-end fw-bold">~$20</td></tr>
+            <tr><td>4</td><td><i class="bi bi-hdd text-warning me-1"></i>Functions Storage</td><td><code>{base}{env}funcsa</code></td><td>Standard_LRS</td><td>Functions runtime storage</td><td class="text-end">~$2</td></tr>
+            <tr><td>5</td><td><i class="bi bi-database text-warning me-1"></i>Blob Storage</td><td><code>{base}{env}sa</code></td><td>Standard_LRS (no HNS)</td><td>Document and embedding storage</td><td class="text-end fw-bold">~$15</td></tr>
+            <tr><td>6</td><td><i class="bi bi-graph-up text-warning me-1"></i>Log Analytics</td><td><code>{base}-{env}-law</code></td><td>PerGB2018, 30-day</td><td>Centralized logging</td><td class="text-end">~$10</td></tr>
+            <tr><td>7</td><td><i class="bi bi-speedometer2 text-warning me-1"></i>Application Insights</td><td><code>{base}-{env}-ai</code></td><td>Workspace-based</td><td>APM and request tracing</td><td class="text-end">Incl.</td></tr>
+            <tr><td>8</td><td><i class="bi bi-signpost-2 text-warning me-1"></i>API Management (opt.)</td><td><code>{base}-{env}-apim</code></td><td>Consumption</td><td>API facade, rate limiting, key mgmt</td><td class="text-end fw-bold">~$3.50/M calls</td></tr>
+          </tbody>
+          <tfoot class="table-dark">
+            <tr><td colspan="5" class="fw-bold">Estimated Total (Moderate PoC/Internal)</td><td class="text-end fw-bold">~$890/mo</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p class="text-body-secondary small">Consumption pricing means near-zero cost when idle. Token costs based on ~200M tokens/month with GPT-4o-mini.</p>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="services">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-layers me-2"></i>Service Breakdown</h2>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-cpu text-warning me-2"></i>Azure OpenAI</h5>
+            <span class="badge bg-warning text-dark mb-2">S0</span><span class="badge bg-success mb-2 ms-1">~$450/mo</span>
+            <p>GPT-4o-mini for cost-efficient chat completions (20K TPM) and text-embedding-3-small for lightweight vector embeddings (60K TPM). ~10x cheaper than GPT-4o per token.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-lightning text-warning me-2"></i>Azure Functions</h5>
+            <span class="badge bg-warning text-dark mb-2">Consumption Y1</span><span class="badge bg-success mb-2 ms-1">~$20/mo</span>
+            <p>Event-driven serverless compute. Python 3.11 runtime. Pay only for execution time. 1M free executions/month. HTTPS-only, FTPS disabled.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-search text-warning me-2"></i>AI Search (Basic)</h5>
+            <span class="badge bg-warning text-dark mb-2">Basic</span><span class="badge bg-success mb-2 ms-1">$73.73/mo</span>
+            <p>Lightweight vector and keyword search. 2 GB storage, 1 replica, 1 partition. Semantic search on free tier. Upgrade to Standard for production.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-database text-warning me-2"></i>Blob Storage</h5>
+            <span class="badge bg-warning text-dark mb-2">Standard LRS</span><span class="badge bg-success mb-2 ms-1">~$15/mo</span>
+            <p>Simple blob storage for source documents and pre-computed embeddings. No HNS (flat namespace). Cost-efficient for PoC-scale data.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-signpost-2 text-warning me-2"></i>APIM (Optional)</h5>
+            <span class="badge bg-warning text-dark mb-2">Consumption</span><span class="badge bg-success mb-2 ms-1">~$3.50/M</span>
+            <p>Optional API facade providing rate limiting, API key management, and usage analytics. Consumption tier means pay per call with no fixed cost.</p>
+          </div></div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="card service-card h-100"><div class="card-body">
+            <h5 class="card-title"><i class="bi bi-graph-up text-warning me-2"></i>Monitoring</h5>
+            <span class="badge bg-warning text-dark mb-2">PerGB2018</span><span class="badge bg-success mb-2 ms-1">~$10/mo</span>
+            <p>Log Analytics with 30-day retention. Application Insights for request tracing, dependency tracking, and exception logging.</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="security">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-shield-lock me-2"></i>Security &amp; Networking</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100 border-warning"><div class="card-body">
+            <h5><i class="bi bi-exclamation-triangle text-warning me-2"></i>Public Endpoints</h5>
+            <ul>
+              <li><strong>No VNet / Private Endpoints</strong> — services use public endpoints</li>
+              <li>Service-level authentication (API keys, managed identity)</li>
+              <li>Storage enforces <strong>TLS 1.2</strong> and <strong>HTTPS-only</strong></li>
+              <li>FTPS <strong>disabled</strong> on Functions</li>
+              <li>Optional APIM for <strong>API key management</strong></li>
+            </ul>
+          </div></div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100"><div class="card-body">
+            <h5><i class="bi bi-person-fill-check text-warning me-2"></i>Identity</h5>
+            <ul>
+              <li>Functions use <strong>System-Assigned Managed Identity</strong></li>
+              <li>OpenAI endpoint injected via <strong>App Settings</strong></li>
+              <li>AI Search name injected via <strong>App Settings</strong></li>
+              <li>Optional APIM provides <strong>rate limiting</strong></li>
+              <li>HTTPS-only on all endpoints</li>
+            </ul>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5 bg-body-secondary" id="usecases">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-lightbulb me-2"></i>Use Cases</h2>
+      <div class="row g-3">
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-chat-dots text-warning me-2"></i>Internal Copilots</h5>
+          <p>Slack/Teams bots, internal knowledge assistants, document Q&A for teams.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-rocket-takeoff text-warning me-2"></i>MVPs / Rapid Prototyping</h5>
+          <p>Validate AI concepts before investing in full infrastructure. From idea to API in under 30 minutes.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-trophy text-warning me-2"></i>Hackathons / Innovation</h5>
+          <p>Deploy a full AI stack in minutes for innovation sprints and competitive hackathons.</p>
+        </div></div></div>
+        <div class="col-md-6"><div class="card h-100"><div class="card-body">
+          <h5><i class="bi bi-gear text-warning me-2"></i>Low-Ops Applications</h5>
+          <p>No clusters, no VNets, no private endpoints. Minimal operational burden and near-zero idle cost.</p>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5" id="constraints">
+    <div class="container">
+      <h2 class="fw-bold mb-4"><i class="bi bi-exclamation-triangle me-2"></i>Constraints &amp; Considerations</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="table-warning"><tr><th>Constraint</th><th>Mitigation</th></tr></thead>
+          <tbody>
+            <tr><td>No VNet isolation — public-facing services</td><td>Acceptable for PoC; upgrade to Pattern 1/6 for production</td></tr>
+            <tr><td>Cold start latency on Consumption plan</td><td>Use Premium plan for latency-sensitive workloads</td></tr>
+            <tr><td>Basic AI Search has limited capacity (2 GB)</td><td>Upgrade to Standard for production scale</td></tr>
+            <tr><td>Not ideal for strict enterprise environments</td><td>Add private endpoints if moving to production</td></tr>
+            <tr><td>Limited scaling control</td><td>Acceptable for PoC; use dedicated plans for production</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-4" style="background:#fd7e14">
+    <div class="container text-white">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="pattern4.html" class="btn btn-outline-light"><i class="bi bi-arrow-left me-2"></i>Pattern 4: AI Factory</a>
+        <span class="fw-bold">Pattern 5 of 7</span>
+        <a href="pattern6.html" class="btn btn-light"><i class="bi bi-arrow-right me-2"></i>Pattern 6: Secure Private</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2025</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-warning btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose'});
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      const html=document.documentElement;
+      const isDark=html.getAttribute('data-bs-theme')==='dark';
+      html.setAttribute('data-bs-theme',isDark?'light':'dark');
+      toggle.querySelector('i').className=isDark?'bi bi-moon-stars-fill':'bi bi-sun-fill';
+    });
+    window.addEventListener('scroll',()=>{
+      document.getElementById('backToTop').style.display=window.scrollY>300?'block':'none';
+    });
+  </script>
+</body>
+</html>
