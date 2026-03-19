@@ -1074,7 +1074,7 @@
             <button class="btn btn-outline-dark btn-sm" onclick="backToInputs()"><i class="bi bi-arrow-left me-1"></i>Back</button>
           </div>
         </div>
-        <pre id="specOutput" class="bg-body-tertiary border rounded-3 p-4" style="max-height:65vh;overflow:auto;white-space:pre-wrap;font-size:.85rem"></pre>
+        <pre id="specOutput" class="bg-body-tertiary border rounded-3 p-4" style="max-height:65vh;overflow:auto;white-space:pre-wrap;font-size:.82rem;font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;line-height:1.5"></pre>
       </div>
 
     </div>
@@ -1379,9 +1379,9 @@
       const azRG = document.getElementById('specAzRG').value.trim() || 'rg-ai-' + document.getElementById('specAzEnv').value + '-' + azRegion + '-' + String(currentPatternId).padStart(3, '0');
       const azEnv = document.getElementById('specAzEnv').value;
       const p = PATTERNS[currentPatternId];
-      const svcTable = p.services.map(s => '| ' + s.name + ' | `' + s.sku + '` | `' + s.bicep + '` |').join('\n');
-      const models = p.openaiModels.map(m => '- ' + m).join('\n');
-      const extraRbac = p.rbacExtra.map(r => '- ' + r).join('\n');
+      const svcList = p.services.map(s => '  • ' + s.name.padEnd(42) + 'SKU: ' + s.sku.padEnd(22) + 'Bicep: ' + s.bicep).join('\n');
+      const models = p.openaiModels.map(m => '  • ' + m).join('\n');
+      const extraRbac = p.rbacExtra.map(r => '  • ' + r).join('\n');
       const timestamp = new Date().toISOString().split('T')[0];
 
       // CAF abbreviation map: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
@@ -1419,284 +1419,283 @@
         const cafName = (s.bicep === 'Microsoft.Storage/storageAccounts' || s.bicep === 'Microsoft.ContainerRegistry/registries')
           ? abbr + workload + envShort + regionShort + instance   // no hyphens for storage/ACR
           : abbr + '-' + workload + '-' + envShort + '-' + regionShort + '-' + instance;
-        return '| ' + s.name + ' | `' + abbr + '` | `' + cafName + '` |';
+        return '  • ' + s.name.padEnd(42) + 'Abbr: ' + abbr.padEnd(10) + 'Name: ' + cafName;
       }).join('\n');
 
-      const spec = `# Deployment Spec Sheet
-## Pattern ${currentPatternId} — ${p.name}
+      const spec = `════════════════════════════════════════════════════════════════════════════════
+  DEPLOYMENT SPEC SHEET
+  Pattern ${currentPatternId} — ${p.name}
+════════════════════════════════════════════════════════════════════════════════
 
-> Generated: ${timestamp} | Est. Cost: **${p.cost}** | Composite SLA: **${p.sla}**
-> Naming Standard: **Microsoft CAF** ([Resource abbreviations](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations))
+  Generated .......... ${timestamp}
+  Est. Monthly Cost .. ${p.cost}
+  Composite SLA ...... ${p.sla}
+  Naming Standard .... Microsoft CAF
+  Reference .......... https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
 
----
+────────────────────────────────────────────────────────────────────────────────
+  1. TARGET ENVIRONMENT
+────────────────────────────────────────────────────────────────────────────────
 
-## 1. Target Environment
+  GitHub Repository ... ${ghOrg}/${ghRepo}
+  Branch ............. ${ghBranch}
+  IaC Path ........... ${ghPath}/
+  Azure Subscription . ${azSub} (${azSubName})
+  Region ............. ${azRegion}
+  Resource Group ..... ${azRG}
+  Environment ........ ${azEnv} (${envShort})
 
-| Parameter | Value |
-|-----------|-------|
-| **GitHub Repository** | \`${ghOrg}/${ghRepo}\` |
-| **Branch** | \`${ghBranch}\` |
-| **IaC Path** | \`${ghPath}/\` |
-| **Azure Subscription** | \`${azSub}\` (${azSubName}) |
-| **Region** | \`${azRegion}\` |
-| **Resource Group** | \`${azRG}\` |
-| **Environment** | \`${azEnv}\` (\`${envShort}\`) |
+────────────────────────────────────────────────────────────────────────────────
+  2. CAF RESOURCE NAMING CONVENTION
+────────────────────────────────────────────────────────────────────────────────
 
----
+  Pattern: <resource-abbreviation>-<workload>-<environment>-<region>-<instance>
+  Reference: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming
 
-## 2. CAF Resource Naming Convention
-
-> **Pattern:** \`<resource-abbreviation>-<workload>-<environment>-<region>-<instance>\`
-> **Reference:** [CAF — Define your naming convention](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming)
-
-| Service | CAF Abbr | Recommended Name |
-|---------|----------|-----------------|
-| Resource Group | \`rg\` | \`${azRG}\` |
+  Resource Group                                Abbr: rg        Name: ${azRG}
 ${cafNamingRows}
 
-> **Notes:**
-> - Storage Accounts and Container Registries must be alphanumeric only (no hyphens), 3-24 chars
-> - Key Vault names must be globally unique, 3-24 chars
-> - Use consistent \`<workload>\` across all resources (default: \`${workload}\`)
-> - Append \`-<instance>\` (001, 002…) for multiple instances of the same type
+  Notes:
+  • Storage Accounts & Container Registries: alphanumeric only (no hyphens), 3-24 chars
+  • Key Vault names must be globally unique, 3-24 chars
+  • Use consistent workload identifier across all resources (default: ${workload})
+  • Append -<instance> (001, 002…) for multiple instances of the same type
 
----
+────────────────────────────────────────────────────────────────────────────────
+  3. CAF TAGGING STRATEGY
+────────────────────────────────────────────────────────────────────────────────
 
-## 3. CAF Tagging Strategy
+  Reference: https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging
 
-> **Reference:** [CAF — Define your tagging strategy](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging)
+  REQUIRED TAGS (apply to Resource Group and all resources):
 
-### Required Tags (apply to Resource Group and all resources)
+  Tag                   Value                                    Purpose
+  ───                   ─────                                    ───────
+  Environment           ${azEnv}                                 Deployment environment
+  Workload              AI Pattern ${currentPatternId} - ${p.name}               Application workload
+  Owner                 <team-or-user-email>                     Responsible team/individual
+  CostCenter            <cost-center-code>                       Financial tracking & chargeback
+  DataClassification    Confidential                             Data sensitivity level
+  Criticality           High                                     Business criticality for SLA
 
-| Tag Name | Value | Purpose |
-|----------|-------|---------|
-| \`Environment\` | \`${azEnv}\` | Identifies deployment environment |
-| \`Workload\` | \`AI Pattern ${currentPatternId} - ${p.name}\` | Identifies the application workload |
-| \`Owner\` | \`<team-or-user-email>\` | Responsible team/individual |
-| \`CostCenter\` | \`<cost-center-code>\` | Financial tracking & chargeback |
-| \`DataClassification\` | \`Confidential\` | Data sensitivity level |
-| \`Criticality\` | \`High\` | Business criticality for SLA decisions |
+  RECOMMENDED TAGS:
 
-### Recommended Tags
+  Tag                   Value                                    Purpose
+  ───                   ─────                                    ───────
+  CreatedBy             IaC-GitHubActions                        Deployment method traceability
+  DeploymentDate        ${timestamp}                              When last deployed
+  Pattern               Pattern${currentPatternId}                                Links to AI pattern reference
+  ComplianceScope       SOC2 / HIPAA / FERPA                     Regulatory compliance scope
+  MaintenanceWindow     Sun 02:00-06:00 UTC                      Planned maintenance schedule
+  ExpirationDate        <yyyy-mm-dd>                             Non-production auto-cleanup date
 
-| Tag Name | Value | Purpose |
-|----------|-------|---------|
-| \`CreatedBy\` | \`IaC-GitHubActions\` | Deployment method traceability |
-| \`DeploymentDate\` | \`${timestamp}\` | When last deployed |
-| \`Pattern\` | \`Pattern${currentPatternId}\` | Links to AI pattern reference |
-| \`ComplianceScope\` | \`SOC2\` / \`HIPAA\` / \`FERPA\` | Regulatory compliance scope |
-| \`MaintenanceWindow\` | \`Sun 02:00-06:00 UTC\` | Planned maintenance schedule |
-| \`ExpirationDate\` | \`<yyyy-mm-dd>\` | For non-production, auto-cleanup date |
+  BICEP IMPLEMENTATION (tags.bicep):
 
-### Bicep Implementation
+    @description('Required tags per CAF tagging strategy')
+    param environment string
+    param workload string = 'AI Pattern ${currentPatternId}'
+    param owner string
+    param costCenter string
 
-\`\`\`bicep
-// tags.bicep — shared tags module
-@description('Required tags per CAF tagging strategy')
-param environment string
-param workload string = 'AI Pattern ${currentPatternId}'
-param owner string
-param costCenter string
+    var requiredTags = {
+      Environment: environment
+      Workload: workload
+      Owner: owner
+      CostCenter: costCenter
+      DataClassification: 'Confidential'
+      Criticality: 'High'
+      CreatedBy: 'IaC-GitHubActions'
+      DeploymentDate: utcNow('yyyy-MM-dd')
+      Pattern: 'Pattern${currentPatternId}'
+    }
 
-var requiredTags = {
-  Environment: environment
-  Workload: workload
-  Owner: owner
-  CostCenter: costCenter
-  DataClassification: 'Confidential'
-  Criticality: 'High'
-  CreatedBy: 'IaC-GitHubActions'
-  DeploymentDate: utcNow('yyyy-MM-dd')
-  Pattern: 'Pattern${currentPatternId}'
-}
+    output tags object = requiredTags
 
-output tags object = requiredTags
-\`\`\`
+  AZURE POLICY — ENFORCE TAGGING:
 
-### Azure Policy — Enforce Tagging
+    {
+      "if": {
+        "allOf": [
+          { "field": "tags['Environment']", "exists": "false" },
+          { "field": "tags['Owner']", "exists": "false" },
+          { "field": "tags['CostCenter']", "exists": "false" }
+        ]
+      },
+      "then": { "effect": "deny" }
+    }
 
-\`\`\`json
-{
-  "if": {
-    "allOf": [
-      { "field": "tags['Environment']", "exists": "false" },
-      { "field": "tags['Owner']", "exists": "false" },
-      { "field": "tags['CostCenter']", "exists": "false" }
-    ]
-  },
-  "then": { "effect": "deny" }
-}
-\`\`\`
+────────────────────────────────────────────────────────────────────────────────
+  4. AZURE SERVICES — BILL OF MATERIALS
+────────────────────────────────────────────────────────────────────────────────
 
----
+${svcList}
 
-## 4. Azure Services — Bill of Materials
-
-| Service | SKU / Tier | Bicep Resource Type |
-|---------|-----------|-------------------|
-${svcTable}
-
-### OpenAI Model Deployments
+  OpenAI Model Deployments:
 ${models}
 
-### Networking
-${p.networking}
+  Networking:
+  ${p.networking}
 
----
+────────────────────────────────────────────────────────────────────────────────
+  5. REQUIRED ACCESS & PRIVILEGES
+────────────────────────────────────────────────────────────────────────────────
 
-## 5. Required Access & Privileges
+  AZURE RBAC (on subscription ${azSub}):
 
-### Azure RBAC (on subscription \`${azSub}\`)
-- **Owner** or **Contributor** + **User Access Administrator** — to create resources and assign roles
-- **Cognitive Services Contributor** — to provision Azure OpenAI
-- **Network Contributor** — for VNet, NSG, Private Endpoints, Firewall
-- **Key Vault Administrator** — to create vaults with RBAC authorization
-- **Search Service Contributor** — for Azure AI Search
-- **Monitoring Contributor** — for Log Analytics, App Insights, diagnostic settings
+  • Owner or Contributor + User Access Administrator — create resources & assign roles
+  • Cognitive Services Contributor — provision Azure OpenAI
+  • Network Contributor — VNet, NSG, Private Endpoints, Firewall
+  • Key Vault Administrator — create vaults with RBAC authorization
+  • Search Service Contributor — Azure AI Search
+  • Monitoring Contributor — Log Analytics, App Insights, diagnostic settings
 ${extraRbac}
 
-### GitHub Repository Access
-- **Write access** (push) to \`${ghOrg}/${ghRepo}\` on branch \`${ghBranch}\`
-- **GitHub Actions** must be enabled on the repository
-- **Repository Secret** \`AZURE_CREDENTIALS\` — Azure Service Principal with Contributor role:
-  \`\`\`json
-  {
-    "clientId": "<sp-app-id>",
-    "clientSecret": "<sp-secret>",
-    "subscriptionId": "${azSub}",
-    "tenantId": "<tenant-id>"
-  }
-  \`\`\`
-- **Repository Secret** \`AZURE_SUBSCRIPTION_ID\` = \`${azSub}\`
+  GITHUB REPOSITORY ACCESS:
 
-### VS Code + Local Development
-- **VS Code 1.85+** with extensions:
-  - \`ms-azuretools.vscode-bicep\` (Bicep language support)
-  - \`ms-vscode.azure-account\` (Azure Account sign-in)
-  - \`ms-azuretools.vscode-azureresourcegroups\` (Azure Resources)
-  - \`GitHub.copilot\` (recommended — AI-assisted IaC authoring)
-  - \`hashicorp.terraform\` (optional — if using Terraform)
-- **Azure CLI 2.60+** — \`az login\` authenticated to subscription
-- **Bicep CLI** — installed via \`az bicep install\` (or VS Code extension)
-- **Git** — configured with push access to GitHub
+  • Write access (push) to ${ghOrg}/${ghRepo} on branch ${ghBranch}
+  • GitHub Actions must be enabled on the repository
+  • Repository Secret AZURE_CREDENTIALS — Service Principal with Contributor role:
 
----
+      {
+        "clientId": "<sp-app-id>",
+        "clientSecret": "<sp-secret>",
+        "subscriptionId": "${azSub}",
+        "tenantId": "<tenant-id>"
+      }
 
-## 6. Pre-Deployment Checklist
+  • Repository Secret AZURE_SUBSCRIPTION_ID = ${azSub}
 
-- [ ] Azure subscription \`${azSub}\` is active with sufficient spending limit
-- [ ] Azure OpenAI access approved for the subscription
-- [ ] Required RBAC roles assigned to deploying identity (Service Principal or user)
-- [ ] GPU quota verified (if applicable — Patterns 4, 6)
-- [ ] OpenAI TPM/RPM quota checked for region \`${azRegion}\`
-- [ ] Resource group \`${azRG}\` created (or will be created by IaC)
-- [ ] GitHub repo \`${ghOrg}/${ghRepo}\` exists with Actions enabled
-- [ ] \`AZURE_CREDENTIALS\` secret configured in GitHub repo settings
-- [ ] VS Code + Bicep extension installed and authenticated
-- [ ] Private DNS Zones planned (if private networking pattern)
-- [ ] CAF resource naming convention applied (see Section 2 above)
-- [ ] CAF tags applied to all resources (see Section 3 above)
-- [ ] Azure Policy for tag enforcement assigned to subscription
+  VS CODE + LOCAL DEVELOPMENT:
 
----
+  • VS Code 1.85+ with extensions:
+      ms-azuretools.vscode-bicep          Bicep language support
+      ms-vscode.azure-account             Azure Account sign-in
+      ms-azuretools.vscode-azureresourcegroups  Azure Resources
+      GitHub.copilot                       AI-assisted IaC authoring (recommended)
+      hashicorp.terraform                  Terraform support (optional)
+  • Azure CLI 2.60+ — az login authenticated to subscription
+  • Bicep CLI — installed via az bicep install (or VS Code extension)
+  • Git — configured with push access to GitHub
 
-## 7. GitHub Actions Workflow
+────────────────────────────────────────────────────────────────────────────────
+  6. PRE-DEPLOYMENT CHECKLIST
+────────────────────────────────────────────────────────────────────────────────
 
-Save as \`.github/workflows/deploy-pattern${currentPatternId}.yml\`:
+  [ ] Azure subscription ${azSub} is active with sufficient spending limit
+  [ ] Azure OpenAI access approved for the subscription
+  [ ] Required RBAC roles assigned to deploying identity (SP or user)
+  [ ] GPU quota verified (if applicable — Patterns 4, 6)
+  [ ] OpenAI TPM/RPM quota checked for region ${azRegion}
+  [ ] Resource group ${azRG} created (or will be created by IaC)
+  [ ] GitHub repo ${ghOrg}/${ghRepo} exists with Actions enabled
+  [ ] AZURE_CREDENTIALS secret configured in GitHub repo settings
+  [ ] VS Code + Bicep extension installed and authenticated
+  [ ] Private DNS Zones planned (if private networking pattern)
+  [ ] CAF resource naming convention applied (see Section 2)
+  [ ] CAF tags applied to all resources (see Section 3)
+  [ ] Azure Policy for tag enforcement assigned to subscription
 
-\`\`\`yaml
-name: Deploy Pattern ${currentPatternId} - ${p.name}
+────────────────────────────────────────────────────────────────────────────────
+  7. GITHUB ACTIONS WORKFLOW
+────────────────────────────────────────────────────────────────────────────────
 
-on:
-  push:
-    branches: [${ghBranch}]
-    paths: ['${ghPath}/**']
-  workflow_dispatch:
+  Save as: .github/workflows/deploy-pattern${currentPatternId}.yml
 
-permissions:
-  id-token: write
-  contents: read
+  ---
+  name: Deploy Pattern ${currentPatternId} - ${p.name}
 
-env:
-  AZURE_SUBSCRIPTION_ID: \${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  RESOURCE_GROUP: ${azRG}
-  LOCATION: ${azRegion}
-  ENVIRONMENT: ${azEnv}
+  on:
+    push:
+      branches: [${ghBranch}]
+      paths: ['${ghPath}/**']
+    workflow_dispatch:
 
-jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: azure/login@v2
-        with:
-          creds: \${{ secrets.AZURE_CREDENTIALS }}
-      - name: Validate Bicep
-        run: az bicep build --file ${ghPath}/main.bicep
-      - name: What-If Deployment
-        run: |
-          az deployment sub what-if \\
-            --location \${{ env.LOCATION }} \\
-            --template-file ${ghPath}/main.bicep \\
-            --parameters ${ghPath}/parameters.\${{ env.ENVIRONMENT }}.bicepparam
+  permissions:
+    id-token: write
+    contents: read
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: validate
-    environment: ${azEnv}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: azure/login@v2
-        with:
-          creds: \${{ secrets.AZURE_CREDENTIALS }}
-      - name: Create Resource Group
-        run: |
-          az group create \\
-            --name \${{ env.RESOURCE_GROUP }} \\
-            --location \${{ env.LOCATION }} \\
-            --tags Environment=\${{ env.ENVIRONMENT }} Workload="AI-Pattern${currentPatternId}" Owner="deploy-pipeline" CostCenter="TBD" DataClassification="Confidential" Criticality="High" CreatedBy="IaC-GitHubActions" Pattern="Pattern${currentPatternId}"
-      - name: Deploy Bicep
-        run: |
-          az deployment group create \\
-            --resource-group \${{ env.RESOURCE_GROUP }} \\
-            --template-file ${ghPath}/main.bicep \\
-            --parameters ${ghPath}/parameters.\${{ env.ENVIRONMENT }}.bicepparam \\
-            --name pattern${currentPatternId}-\${{ github.run_number }}
-      - name: Verify Deployment
-        run: |
-          az deployment group show \\
-            --resource-group \${{ env.RESOURCE_GROUP }} \\
-            --name pattern${currentPatternId}-\${{ github.run_number }} \\
-            --query properties.provisioningState -o tsv
-\`\`\`
+  env:
+    AZURE_SUBSCRIPTION_ID: \${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    RESOURCE_GROUP: ${azRG}
+    LOCATION: ${azRegion}
+    ENVIRONMENT: ${azEnv}
 
----
+  jobs:
+    validate:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: azure/login@v2
+          with:
+            creds: \${{ secrets.AZURE_CREDENTIALS }}
+        - name: Validate Bicep
+          run: az bicep build --file ${ghPath}/main.bicep
+        - name: What-If Deployment
+          run: |
+            az deployment sub what-if \\
+              --location \${{ env.LOCATION }} \\
+              --template-file ${ghPath}/main.bicep \\
+              --parameters ${ghPath}/parameters.\${{ env.ENVIRONMENT }}.bicepparam
 
-## 8. File Structure
+    deploy:
+      runs-on: ubuntu-latest
+      needs: validate
+      environment: ${azEnv}
+      steps:
+        - uses: actions/checkout@v4
+        - uses: azure/login@v2
+          with:
+            creds: \${{ secrets.AZURE_CREDENTIALS }}
+        - name: Create Resource Group
+          run: |
+            az group create \\
+              --name \${{ env.RESOURCE_GROUP }} \\
+              --location \${{ env.LOCATION }} \\
+              --tags Environment=\${{ env.ENVIRONMENT }} Workload="AI-Pattern${currentPatternId}" \\
+                     Owner="deploy-pipeline" CostCenter="TBD" \\
+                     DataClassification="Confidential" Criticality="High" \\
+                     CreatedBy="IaC-GitHubActions" Pattern="Pattern${currentPatternId}"
+        - name: Deploy Bicep
+          run: |
+            az deployment group create \\
+              --resource-group \${{ env.RESOURCE_GROUP }} \\
+              --template-file ${ghPath}/main.bicep \\
+              --parameters ${ghPath}/parameters.\${{ env.ENVIRONMENT }}.bicepparam \\
+              --name pattern${currentPatternId}-\${{ github.run_number }}
+        - name: Verify Deployment
+          run: |
+            az deployment group show \\
+              --resource-group \${{ env.RESOURCE_GROUP }} \\
+              --name pattern${currentPatternId}-\${{ github.run_number }} \\
+              --query properties.provisioningState -o tsv
+  ---
 
-\`\`\`
-${ghPath}/
-├── main.bicep                          # Main orchestrator
-├── parameters.dev.bicepparam           # Dev environment parameters
-├── parameters.prod.bicepparam          # Prod environment parameters
-├── modules/
-│   ├── tags.bicep                      # CAF shared tags module
-│   ├── openai.bicep                    # Azure OpenAI + model deployments
-│   ├── search.bicep                    # Azure AI Search
-│   ├── keyvault.bicep                  # Key Vault with RBAC
-│   ├── monitoring.bicep                # Log Analytics + App Insights
-│   ├── storage.bicep                   # Storage Account(s)
-│   ├── networking.bicep                # VNet, subnets, NSGs, PEs
-│   └── rbac.bicep                      # Role assignments
-├── .github/
-│   └── workflows/
-│       └── deploy-pattern${currentPatternId}.yml    # CI/CD workflow
-└── README.md                           # Deployment instructions
-\`\`\`
+────────────────────────────────────────────────────────────────────────────────
+  8. FILE STRUCTURE
+────────────────────────────────────────────────────────────────────────────────
 
----
+  ${ghPath}/
+  ├── main.bicep                          Main orchestrator
+  ├── parameters.dev.bicepparam           Dev environment parameters
+  ├── parameters.prod.bicepparam          Prod environment parameters
+  ├── modules/
+  │   ├── tags.bicep                      CAF shared tags module
+  │   ├── openai.bicep                    Azure OpenAI + model deployments
+  │   ├── search.bicep                    Azure AI Search
+  │   ├── keyvault.bicep                  Key Vault with RBAC
+  │   ├── monitoring.bicep                Log Analytics + App Insights
+  │   ├── storage.bicep                   Storage Account(s)
+  │   ├── networking.bicep                VNet, subnets, NSGs, PEs
+  │   └── rbac.bicep                      Role assignments
+  ├── .github/
+  │   └── workflows/
+  │       └── deploy-pattern${currentPatternId}.yml    CI/CD workflow
+  └── README.md                           Deployment instructions
 
-*Generated by Azure AI Deployment Patterns — https://calm-ocean-0e8faaa10.4.azurestaticapps.net*
+════════════════════════════════════════════════════════════════════════════════
+  Generated by Azure AI Deployment Patterns
+  https://calm-ocean-0e8faaa10.4.azurestaticapps.net
+════════════════════════════════════════════════════════════════════════════════
 `;
       document.getElementById('specOutput').textContent = spec;
       document.getElementById('specStep1').style.display = 'none';
@@ -1717,10 +1716,10 @@ ${ghPath}/
     }
 
     function downloadSpec() {
-      const blob = new Blob([window._lastSpec], { type: 'text/markdown' });
+      const blob = new Blob([window._lastSpec], { type: 'text/plain' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'deployment-spec-pattern' + window._lastSpecId + '.md';
+      a.download = 'deployment-spec-pattern' + window._lastSpecId + '.txt';
       a.click();
       URL.revokeObjectURL(a.href);
     }
