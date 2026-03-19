@@ -114,6 +114,8 @@
             <a href="#limitations">Limitations</a>
             <a href="#benefits">Benefits</a>
             <a href="#takeaway">Strategic Takeaway</a>
+            <a href="#markdown">Power of .md Specs</a>
+            <a href="#azure-samples">Azure Spec Samples</a>
           </nav>
         </div>
       </div>
@@ -538,6 +540,370 @@
             <div class="text-center">
               <p class="fw-bold mb-1"><i class="bi bi-lightbulb-fill text-warning me-2"></i>Treat specifications as active system controls, not passive documentation.</p>
               <p class="small text-muted mb-0">Every constraint in the spec is a test that runs on every build. Every gap in the spec is a vulnerability waiting to surface in production.</p>
+            </div>
+          </div>
+        </section>
+
+        </section>
+
+        <!-- 13. Power of .md Specs -->
+        <section id="markdown" class="mb-5">
+          <h2 class="fw-bold mb-3"><span class="num-circle bg-primary text-white me-2">13</span>The Power of <code>.md</code> as a Spec Format</h2>
+          <div class="callout mb-4">
+            <i class="bi bi-filetype-md text-primary me-2 fs-5"></i><strong>Markdown is the most underestimated specification format.</strong> It's human-readable, version-controllable, diff-friendly, and parseable by AI agents — making it the ideal bridge between business intent and machine execution.
+          </div>
+
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-check2-all me-2"></i>Why .md Works for Specs</div>
+                <div class="card-body">
+                  <ul class="mb-0">
+                    <li><strong>Git-native</strong> — full version history, branching, PR reviews on specs</li>
+                    <li><strong>Diff-friendly</strong> — line-by-line change tracking (unlike JSON/YAML blobs)</li>
+                    <li><strong>Human-readable</strong> — execs, architects, and developers all understand it</li>
+                    <li><strong>AI-parseable</strong> — LLMs natively understand Markdown structure</li>
+                    <li><strong>Zero tooling</strong> — no IDE plugins or compilers needed</li>
+                    <li><strong>Embeds code</strong> — fenced blocks for Bicep, JSON, YAML, HCL inline</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold"><i class="bi bi-layers me-2"></i>Spec .md — Anatomy</div>
+                <div class="card-body">
+                  <table class="table table-sm table-bordered mb-0 small">
+                    <thead class="table-light"><tr><th>Section</th><th>Purpose</th></tr></thead>
+                    <tbody>
+                      <tr><td><code>## Overview</code></td><td>What this component does, why it exists</td></tr>
+                      <tr><td><code>## Requirements</code></td><td>Functional &amp; non-functional constraints</td></tr>
+                      <tr><td><code>## Architecture</code></td><td>Service boundaries, dependencies, data flow</td></tr>
+                      <tr><td><code>## API Contract</code></td><td>Endpoints, schemas, error codes</td></tr>
+                      <tr><td><code>## Security</code></td><td>AuthN/AuthZ, encryption, network rules</td></tr>
+                      <tr><td><code>## IaC</code></td><td>Bicep/Terraform resource blocks inline</td></tr>
+                      <tr><td><code>## Validation</code></td><td>CI/CD gates, acceptance criteria, SLA targets</td></tr>
+                      <tr><td><code>## Cost</code></td><td>Estimated monthly cost, SKU decisions</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-body-tertiary fw-bold"><i class="bi bi-arrow-repeat me-2 text-primary"></i>.md Spec Lifecycle</div>
+            <div class="card-body">
+              <div class="row text-center g-3">
+                <div class="col"><div class="p-2 rounded-3 bg-primary-subtle"><i class="bi bi-pencil-square d-block fs-4 text-primary mb-1"></i><small class="fw-bold">Author</small><br/><small class="text-muted">Write spec.md</small></div></div>
+                <div class="col-auto d-flex align-items-center"><i class="bi bi-arrow-right text-muted"></i></div>
+                <div class="col"><div class="p-2 rounded-3 bg-info-subtle"><i class="bi bi-git d-block fs-4 text-info mb-1"></i><small class="fw-bold">Version</small><br/><small class="text-muted">Git commit + PR</small></div></div>
+                <div class="col-auto d-flex align-items-center"><i class="bi bi-arrow-right text-muted"></i></div>
+                <div class="col"><div class="p-2 rounded-3 bg-warning-subtle"><i class="bi bi-robot d-block fs-4 text-warning mb-1"></i><small class="fw-bold">Generate</small><br/><small class="text-muted">AI reads spec → code</small></div></div>
+                <div class="col-auto d-flex align-items-center"><i class="bi bi-arrow-right text-muted"></i></div>
+                <div class="col"><div class="p-2 rounded-3 bg-success-subtle"><i class="bi bi-shield-check d-block fs-4 text-success mb-1"></i><small class="fw-bold">Validate</small><br/><small class="text-muted">CI checks vs spec</small></div></div>
+                <div class="col-auto d-flex align-items-center"><i class="bi bi-arrow-right text-muted"></i></div>
+                <div class="col"><div class="p-2 rounded-3 bg-danger-subtle"><i class="bi bi-rocket-takeoff d-block fs-4 text-danger mb-1"></i><small class="fw-bold">Deploy</small><br/><small class="text-muted">Spec-compliant only</small></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info small mb-0">
+            <i class="bi bi-lightbulb me-2"></i><strong>Key insight:</strong> A single <code>spec.md</code> file in your repo replaces scattered Confluence pages, Slack threads, and tribal knowledge. It becomes the single source of truth that both humans and AI agents can execute against.
+          </div>
+        </section>
+
+        <!-- 14. Azure Infrastructure Spec Samples -->
+        <section id="azure-samples" class="mb-5">
+          <h2 class="fw-bold mb-3"><span class="num-circle bg-primary text-white me-2">14</span>Azure Infrastructure — Spec Samples</h2>
+          <p class="text-muted mb-4">Real-world examples of Azure components defined as executable <code>.md</code> specifications. Each spec is self-contained — an AI agent or engineer can build the entire component from the spec alone.</p>
+
+          <!-- Sample 1: APIM GenAI Gateway -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary text-white fw-bold d-flex align-items-center">
+              <i class="bi bi-cloud-arrow-up me-2"></i>Sample 1 — APIM GenAI Gateway
+              <span class="badge bg-white text-primary ms-auto">spec-apim-genai.md</span>
+            </div>
+            <div class="card-body p-0">
+              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+API Management v2 (Standard) acting as a GenAI gateway for Azure OpenAI.
+Routes, rate-limits, caches, and circuit-breaks all LLM traffic.
+
+<span style="color:#569cd6">## Requirements</span>
+- SKU: Standard v2 (supports GenAI policies)
+- Region: East US 2
+- Token rate limit: 80K TPM per subscription key
+- Semantic caching: enabled (Azure AI Search backend)
+- Circuit breaker: 5 failures in 60s → open for 30s
+
+<span style="color:#569cd6">## Architecture</span>
+- Backend pool: 2× Azure OpenAI endpoints (East US 2 + West US 3)
+- Load balancing: round-robin with priority failover
+- Private Endpoint in hub VNet, PE subnet /27
+
+<span style="color:#569cd6">## Security</span>
+- Managed Identity → Azure OpenAI (Cognitive Services OpenAI User)
+- Managed Identity → Key Vault (Key Vault Secrets User)
+- mTLS for backend connections
+- Subscription key required for all consumers
+
+<span style="color:#569cd6">## IaC (Bicep)</span>
+```bicep
+resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
+  name: 'apim-genai-${env}'
+  location: location
+  sku: { name: 'StandardV2', capacity: 1 }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    publisherEmail: publisherEmail
+    publisherName: orgName
+  }
+}
+```
+
+<span style="color:#569cd6">## Validation Gates</span>
+- [ ] APIM responds on private endpoint only (no public access)
+- [ ] Token rate limit enforced (test with 100K TPM burst)
+- [ ] Semantic cache hit ratio > 0% after warm-up
+- [ ] Circuit breaker triggers on backend failure simulation
+- [ ] Managed Identity has no Key Vault secret list permission
+
+<span style="color:#569cd6">## Cost</span>
+~$700/mo (Standard v2, 1 unit)</code></pre>
+            </div>
+          </div>
+
+          <!-- Sample 2: AI Foundry Hub -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header text-white fw-bold d-flex align-items-center" style="background:#6f42c1">
+              <i class="bi bi-stars me-2"></i>Sample 2 — Azure AI Foundry Hub + Project
+              <span class="badge bg-white ms-auto" style="color:#6f42c1">spec-ai-foundry.md</span>
+            </div>
+            <div class="card-body p-0">
+              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+Central AI Foundry workspace (Hub) with one Project for the ML team.
+Includes Prompt flow, AI Evaluation, and model catalog access.
+
+<span style="color:#569cd6">## Requirements</span>
+- Hub workspace: managed VNet (AllowInternetOutbound)
+- Project workspace: inherits Hub networking
+- Connected services: Azure OpenAI, AI Search, Storage, Key Vault
+- Compute: 1× Standard_DS3_v2 (dev), NC A100 v4 (training)
+
+<span style="color:#569cd6">## Architecture</span>
+- Hub → Storage Account (ADLS Gen2) for artifacts
+- Hub → Key Vault for secrets &amp; connection strings
+- Hub → Container Registry for model images
+- Hub → Azure OpenAI (gpt-4o, gpt-4o-mini, text-embedding-3-large)
+- Project inherits all Hub connections
+
+<span style="color:#569cd6">## Security</span>
+- Managed VNet isolation (no public endpoint on Hub)
+- RBAC: AzureML Data Scientist → Project scope only
+- RBAC: AzureML Workspace Contributor → Hub admins only
+- System MI on Hub → Storage, KV, ACR, AOAI
+
+<span style="color:#569cd6">## IaC (Bicep)</span>
+```bicep
+resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
+  name: 'aih-${env}'
+  location: location
+  kind: 'Hub'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    friendlyName: 'AI Foundry Hub'
+    storageAccount: storage.id
+    keyVault: keyVault.id
+    containerRegistry: acr.id
+    managedNetwork: { isolationMode: 'AllowInternetOutbound' }
+  }
+}
+```
+
+<span style="color:#569cd6">## Validation Gates</span>
+- [ ] Hub has no public endpoint (private access only)
+- [ ] Project workspace created under Hub
+- [ ] Prompt flow deployment responds via managed endpoint
+- [ ] AI Evaluation runs on sample dataset with groundedness score
+- [ ] Only Data Scientist role can access Project (no Contributor)
+
+<span style="color:#569cd6">## Cost</span>
+Hub: free tier (pay for compute). NC A100 v4: ~$1,802/mo when running.</code></pre>
+            </div>
+          </div>
+
+          <!-- Sample 3: Hub-Spoke Network -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-success text-white fw-bold d-flex align-items-center">
+              <i class="bi bi-diagram-2 me-2"></i>Sample 3 — Hub-Spoke Network + Firewall
+              <span class="badge bg-white text-success ms-auto">spec-network-hub.md</span>
+            </div>
+            <div class="card-body p-0">
+              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+Hub VNet with Azure Firewall, Bastion, and VPN Gateway.
+All spoke traffic routes through the hub via UDR 0.0.0.0/0.
+
+<span style="color:#569cd6">## Requirements</span>
+- Hub VNet: 10.0.0.0/16
+  - AzureFirewallSubnet: 10.0.1.0/26
+  - AzureBastionSubnet: 10.0.2.0/26
+  - GatewaySubnet: 10.0.3.0/27
+  - PrivateEndpointSubnet: 10.0.4.0/24
+  - ManagementSubnet: 10.0.5.0/24
+- Firewall: Standard SKU, DNS proxy enabled
+- Bastion: Standard SKU (file transfer, native client)
+- VPN Gateway: VpnGw1 (P2S for admin access)
+
+<span style="color:#569cd6">## Architecture</span>
+- Spoke VNets peer to Hub (allow forwarded traffic)
+- UDR on every spoke subnet: 0.0.0.0/0 → Firewall private IP
+- Firewall rules: allow HTTPS, deny all else by default
+- Firewall application rules: allow *.openai.azure.com, *.cognitiveservices.azure.com
+
+<span style="color:#569cd6">## Security</span>
+- NSG on every subnet (deny inbound by default)
+- Firewall threat intelligence: Alert &amp; Deny
+- Bastion: no public IP on any VM
+- DNS: Azure Firewall as DNS proxy → Azure DNS
+
+<span style="color:#569cd6">## IaC (Bicep)</span>
+```bicep
+resource hubVnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
+  name: 'vnet-hub-${env}'
+  location: location
+  properties: {
+    addressSpace: { addressPrefixes: ['10.0.0.0/16'] }
+    subnets: [
+      { name: 'AzureFirewallSubnet', properties: { addressPrefix: '10.0.1.0/26' } }
+      { name: 'AzureBastionSubnet', properties: { addressPrefix: '10.0.2.0/26' } }
+      { name: 'GatewaySubnet', properties: { addressPrefix: '10.0.3.0/27' } }
+    ]
+  }
+}
+```
+
+<span style="color:#569cd6">## Validation Gates</span>
+- [ ] No VM has a public IP (Bastion-only access)
+- [ ] Spoke-to-internet traffic routes through Firewall (traceroute)
+- [ ] Firewall denies non-HTTPS outbound by default
+- [ ] DNS resolution works via Firewall DNS proxy
+- [ ] VPN P2S connection established from dev machine
+
+<span style="color:#569cd6">## Cost</span>
+Firewall: ~$912/mo + data. Bastion: ~$329/mo. VPN GW1: ~$140/mo.</code></pre>
+            </div>
+          </div>
+
+          <!-- Sample 4: Azure SQL MI -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header text-white fw-bold d-flex align-items-center" style="background:#0db7ed">
+              <i class="bi bi-database-fill-up me-2"></i>Sample 4 — Azure SQL Managed Instance
+              <span class="badge bg-white ms-auto" style="color:#0db7ed">spec-sql-mi.md</span>
+            </div>
+            <div class="card-body p-0">
+              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+Azure SQL Managed Instance (Next-gen General Purpose) for migrated
+on-premises SQL Server databases. MI Link for near-zero cutover.
+
+<span style="color:#569cd6">## Requirements</span>
+- SKU: Next-gen GP, 4 vCores, 256 GB storage
+- Zone-redundant: enabled
+- Dedicated subnet: /27 minimum (delegated)
+- TDE: enabled (service-managed key, CMK optional)
+- Ledger tables: enabled for audit trail
+
+<span style="color:#569cd6">## Architecture</span>
+- VNet-native: SQL MI deployed in dedicated /27 subnet
+- Private DNS zone: privatelink.database.windows.net
+- MI Link: real-time replication from on-prem SQL Server
+- Auto-failover group to paired region (RPO &lt;5s)
+
+<span style="color:#569cd6">## Security</span>
+- Entra ID authentication (primary), SQL auth disabled
+- No public endpoint → private access only
+- Advanced Threat Protection: enabled
+- Auditing → Log Analytics workspace
+- Vulnerability Assessment: weekly scans
+
+<span style="color:#569cd6">## IaC (Bicep)</span>
+```bicep
+resource sqlMI 'Microsoft.Sql/managedInstances@2024-05-01-preview' = {
+  name: 'sqlmi-${env}'
+  location: location
+  sku: { name: 'GP_Gen5', tier: 'GeneralPurpose', capacity: 4 }
+  properties: {
+    subnetId: sqlSubnet.id
+    administratorLogin: adminUser
+    administratorLoginPassword: adminPassword
+    zoneRedundant: true
+    publicDataEndpointEnabled: false
+  }
+}
+```
+
+<span style="color:#569cd6">## Validation Gates</span>
+- [ ] No public endpoint accessible
+- [ ] Entra ID login succeeds, SQL auth rejected
+- [ ] TDE status = enabled on all databases
+- [ ] Ledger table insert produces verifiable hash
+- [ ] Auto-failover group failover completes in &lt;30s
+
+<span style="color:#569cd6">## Cost</span>
+~$1,200/mo (Next-gen GP, 4 vCores, zone-redundant)</code></pre>
+            </div>
+          </div>
+
+          <!-- Sample 5: Zero Trust Private AI -->
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-dark text-white fw-bold d-flex align-items-center">
+              <i class="bi bi-shield-lock me-2"></i>Sample 5 — Confidential AI (Zero Trust)
+              <span class="badge bg-white text-dark ms-auto">spec-confidential-ai.md</span>
+            </div>
+            <div class="card-body p-0">
+              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+Confidential computing environment for regulated AI workloads.
+All data encrypted in use (memory), at rest, and in transit.
+
+<span style="color:#569cd6">## Requirements</span>
+- VMs: DCesv5 (AMD SEV-SNP) for confidential compute
+- Managed HSM: FIPS 140-2 Level 3 for key management
+- DDoS Network Protection: Standard
+- Azure Firewall: Premium (IDPS + TLS inspection)
+- Confidential Ledger: immutable audit trail
+
+<span style="color:#569cd6">## Architecture</span>
+- Isolated VNet: all PaaS behind Private Endpoints
+- 8+ Private DNS zones for PE resolution
+- Azure Firewall Premium at the perimeter
+- AI Foundry Hub: managed VNet isolation mode
+- Confidential Ledger for tamper-proof operation logs
+
+<span style="color:#569cd6">## Security</span>
+- Zero Trust: no implicit trust, verify explicitly
+- Entra Workload ID: secretless authentication everywhere
+- CMK mandatory: Managed HSM for all key operations
+- TLS 1.3 enforced end-to-end
+- NSG: DenyAllInbound on every subnet
+- DCesv5: AMD SEV-SNP memory encryption (data in use)
+
+<span style="color:#569cd6">## Validation Gates</span>
+- [ ] No service has a public endpoint (scan all resources)
+- [ ] HSM key rotation succeeds without downtime
+- [ ] DCesv5 attestation report validates SEV-SNP
+- [ ] Confidential Ledger entry is immutable (tamper test)
+- [ ] Firewall IDPS blocks known malicious payload
+- [ ] Entra Workload ID — no secrets in Key Vault for service auth
+
+<span style="color:#569cd6">## Cost</span>
+~$11,038/mo (Firewall Premium + DDoS + HSM + DCesv5 + Ledger)</code></pre>
+            </div>
+          </div>
+
+          <div class="strategic-box p-4">
+            <div class="text-center">
+              <i class="bi bi-file-earmark-code fs-1 text-primary mb-2 d-block"></i>
+              <h5 class="fw-bold">One <code>.md</code> file per component. The entire Azure environment defined in a folder of specs.</h5>
+              <p class="text-muted mb-0">AI agents read the spec → generate Bicep/Terraform → CI validates against the spec → only compliant code deploys. The spec is the contract. The spec is the test. The spec is the source of truth.</p>
             </div>
           </div>
         </section>
