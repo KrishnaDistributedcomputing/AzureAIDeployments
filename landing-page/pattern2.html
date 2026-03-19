@@ -168,141 +168,83 @@
         <div class="btn-group">
           <button class="btn btn-sm btn-outline-primary" onclick="downloadDiagram('png')" title="Download as PNG"><i class="bi bi-image me-1"></i>PNG</button>
           <button class="btn btn-sm btn-outline-primary" onclick="downloadDiagram('svg')" title="Download as SVG"><i class="bi bi-file-earmark-svg me-1"></i>SVG</button>
-          <a href="https://app.diagrams.net/?url=https://ai.azuretools.wiki/diagrams/pattern2-spoke-ai.xml&edit=_blank" class="btn btn-sm btn-outline-primary" target="_blank" title="Edit in Draw.io"><i class="bi bi-pencil-square me-1"></i>Edit</a>
         </div>
       </div>
       <div class="card shadow">
-        <div class="card-body text-center p-4 bg-white" style="min-height:600px;display:flex;align-items:center;justify-content:center">
-          <div id="diagramContainer" style="width:100%;position:relative">
-            <!-- Draw.io Embedded Diagram -->
-            <svg viewBox="0 0 1200 650" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:100%;border:1px solid #e0e0e0;border-radius:8px;background:#fafafa">
-              <!-- Shared Services Box -->
-              <rect x="50" y="20" width="1100" height="100" fill="none" stroke="#2196F3" stroke-width="2" rx="4"/>
-              <text x="60" y="45" font-weight="bold" font-size="16" fill="#2196F3">Shared Services & Management Hub</text>
-              
-              <!-- Firewall -->
-              <rect x="70" y="60" width="140" height="40" fill="#E3F2FD" stroke="#2196F3" stroke-width="2" rx="4"/>
-              <text x="140" y="85" font-size="13" font-weight="600" fill="#1565C0" text-anchor="middle">Azure Firewall</text>
-              
-              <!-- Log Analytics -->
-              <rect x="270" y="60" width="140" height="40" fill="#E3F2FD" stroke="#2196F3" stroke-width="2" rx="4"/>
-              <text x="340" y="85" font-size="13" font-weight="600" fill="#1565C0" text-anchor="middle">Log Analytics</text>
-              
-              <!-- Key Vault Management -->
-              <rect x="470" y="60" width="140" height="40" fill="#E3F2FD" stroke="#2196F3" stroke-width="2" rx="4"/>
-              <text x="540" y="85" font-size="13" font-weight="600" fill="#1565C0" text-anchor="middle">Key Vault Mgmt</text>
-              
-              <!-- Spoke 1 -->
-              <g>
-                <rect x="50" y="150" width="350" height="450" fill="none" stroke="#4CAF50" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
-                <text x="70" y="175" font-weight="bold" font-size="14" fill="#2E7D32">Spoke 1 VNet (10.10.0.0/16)</text>
-                
-                <rect x="70" y="190" width="310" height="35" fill="#F1F8E9" stroke="#4CAF50" stroke-width="1" rx="3"/>
-                <text x="225" y="212" font-size="12" font-weight="600" fill="#2E7D32" text-anchor="middle">AKS Cluster (D4s_v5 × 3)</text>
-                
-                <rect x="70" y="240" width="140" height="35" fill="#C8E6C9" stroke="#4CAF50" stroke-width="1" rx="3"/>
-                <text x="140" y="262" font-size="12" font-weight="600" fill="#1B5E20" text-anchor="middle">Azure OpenAI</text>
-                
-                <rect x="220" y="240" width="160" height="35" fill="#C8E6C9" stroke="#4CAF50" stroke-width="1" rx="3"/>
-                <text x="300" y="262" font-size="12" font-weight="600" fill="#1B5E20" text-anchor="middle">AI Search (S1)</text>
-                
-                <rect x="70" y="295" width="100" height="35" fill="#A5D6A7" stroke="#4CAF50" stroke-width="1" rx="3"/>
-                <text x="120" y="317" font-size="12" font-weight="600" fill="#1B5E20" text-anchor="middle">ADLS Gen2</text>
-                
-                <rect x="230" y="295" width="100" height="35" fill="#A5D6A7" stroke="#4CAF50" stroke-width="1" rx="3"/>
-                <text x="280" y="317" font-size="12" font-weight="600" fill="#1B5E20" text-anchor="middle">Key Vault</text>
-                
-                <!-- Connections within Spoke 1 -->
-                <line x1="150" y1="225" x2="140" y2="240" stroke="#4CAF50" stroke-width="2" marker-end="url(#arrowgreen)"/>
-                <line x1="250" y1="225" x2="300" y2="240" stroke="#4CAF50" stroke-width="2" marker-end="url(#arrowgreen)"/>
-                <line x1="120" y1="275" x2="120" y2="295" stroke="#4CAF50" stroke-width="2" marker-end="url(#arrowgreen)"/>
-                <line x1="300" y1="275" x2="300" y2="295" stroke="#4CAF50" stroke-width="2" marker-end="url(#arrowgreen)"/>
-              </g>
-              
-              <!-- Spoke 2 -->
-              <g>
-                <rect x="425" y="150" width="350" height="450" fill="none" stroke="#FF9800" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
-                <text x="445" y="175" font-weight="bold" font-size="14" fill="#E65100">Spoke 2 VNet (10.20.0.0/16)</text>
-                
-                <rect x="445" y="190" width="310" height="35" fill="#FFF3E0" stroke="#FF9800" stroke-width="1" rx="3"/>
-                <text x="600" y="212" font-size="12" font-weight="600" fill="#E65100" text-anchor="middle">AKS Cluster (D4s_v5 × 3)</text>
-                
-                <rect x="445" y="240" width="140" height="35" fill="#FFE0B2" stroke="#FF9800" stroke-width="1" rx="3"/>
-                <text x="515" y="262" font-size="12" font-weight="600" fill="#BF360C" text-anchor="middle">Azure OpenAI</text>
-                
-                <rect x="595" y="240" width="160" height="35" fill="#FFE0B2" stroke="#FF9800" stroke-width="1" rx="3"/>
-                <text x="675" y="262" font-size="12" font-weight="600" fill="#BF360C" text-anchor="middle">AI Search (S1)</text>
-                
-                <rect x="445" y="295" width="100" height="35" fill="#FFCC80" stroke="#FF9800" stroke-width="1" rx="3"/>
-                <text x="495" y="317" font-size="12" font-weight="600" fill="#BF360C" text-anchor="middle">ADLS Gen2</text>
-                
-                <rect x="605" y="295" width="100" height="35" fill="#FFCC80" stroke="#FF9800" stroke-width="1" rx="3"/>
-                <text x="655" y="317" font-size="12" font-weight="600" fill="#BF360C" text-anchor="middle">Key Vault</text>
-                
-                <!-- Connections within Spoke 2 -->
-                <line x1="525" y1="225" x2="515" y2="240" stroke="#FF9800" stroke-width="2" marker-end="url(#arroworange)"/>
-                <line x1="625" y1="225" x2="675" y2="240" stroke="#FF9800" stroke-width="2" marker-end="url(#arroworange)"/>
-                <line x1="495" y1="275" x2="495" y2="295" stroke="#FF9800" stroke-width="2" marker-end="url(#arroworange)"/>
-                <line x1="675" y1="275" x2="675" y2="295" stroke="#FF9800" stroke-width="2" marker-end="url(#arroworange)"/>
-              </g>
-              
-              <!-- Spoke 3 -->
-              <g>
-                <rect x="800" y="150" width="350" height="450" fill="none" stroke="#9C27B0" stroke-width="2" stroke-dasharray="5,5" rx="4"/>
-                <text x="820" y="175" font-weight="bold" font-size="14" fill="#6A1B9A">Spoke 3 VNet (10.30.0.0/16)</text>
-                
-                <rect x="820" y="190" width="310" height="35" fill="#F3E5F5" stroke="#9C27B0" stroke-width="1" rx="3"/>
-                <text x="975" y="212" font-size="12" font-weight="600" fill="#6A1B9A" text-anchor="middle">AKS Cluster (D4s_v5 × 3)</text>
-                
-                <rect x="820" y="240" width="140" height="35" fill="#E1BEE7" stroke="#9C27B0" stroke-width="1" rx="3"/>
-                <text x="890" y="262" font-size="12" font-weight="600" fill="#4A148C" text-anchor="middle">Azure OpenAI</text>
-                
-                <rect x="970" y="240" width="160" height="35" fill="#E1BEE7" stroke="#9C27B0" stroke-width="1" rx="3"/>
-                <text x="1050" y="262" font-size="12" font-weight="600" fill="#4A148C" text-anchor="middle">AI Search (S1)</text>
-                
-                <rect x="820" y="295" width="100" height="35" fill="#CE93D8" stroke="#9C27B0" stroke-width="1" rx="3"/>
-                <text x="870" y="317" font-size="12" font-weight="600" fill="#4A148C" text-anchor="middle">ADLS Gen2</text>
-                
-                <rect x="980" y="295" width="100" height="35" fill="#CE93D8" stroke="#9C27B0" stroke-width="1" rx="3"/>
-                <text x="1030" y="317" font-size="12" font-weight="600" fill="#4A148C" text-anchor="middle">Key Vault</text>
-                
-                <!-- Connections within Spoke 3 -->
-                <line x1="900" y1="225" x2="890" y2="240" stroke="#9C27B0" stroke-width="2" marker-end="url(#arrowpurple)"/>
-                <line x1="1000" y1="225" x2="1050" y2="240" stroke="#9C27B0" stroke-width="2" marker-end="url(#arrowpurple)"/>
-                <line x1="870" y1="275" x2="870" y2="295" stroke="#9C27B0" stroke-width="2" marker-end="url(#arrowpurple)"/>
-                <line x1="1050" y1="275" x2="1030" y2="295" stroke="#9C27B0" stroke-width="2" marker-end="url(#arrowpurple)"/>
-              </g>
-              
-              <!-- Firewall connections to Spokes -->
-              <line x1="140" y1="100" x2="225" y2="150" stroke="#2196F3" stroke-width="2.5" marker-end="url(#arrowblue)" stroke-dasharray="5,5"/>
-              <line x1="140" y1="100" x2="600" y2="150" stroke="#2196F3" stroke-width="2.5" marker-end="url(#arrowblue)" stroke-dasharray="5,5"/>
-              <line x1="140" y1="100" x2="975" y2="150" stroke="#2196F3" stroke-width="2.5" marker-end="url(#arrowblue)" stroke-dasharray="5,5"/>
-              
-              <!-- Monitoring connections (dotted) -->
-              <line x1="340" y1="100" x2="225" y2="370" stroke="#757575" stroke-width="1.5" marker-end="url(#arrowgray)" stroke-dasharray="5,3" opacity="0.6"/>
-              <line x1="340" y1="100" x2="600" y2="370" stroke="#757575" stroke-width="1.5" marker-end="url(#arrowgray)" stroke-dasharray="5,3" opacity="0.6"/>
-              <line x1="340" y1="100" x2="975" y2="370" stroke="#757575" stroke-width="1.5" marker-end="url(#arrowgray)" stroke-dasharray="5,3" opacity="0.6"/>
-              
-              <!-- Legend -->
-              <g font-size="11" fill="#666">
-                <text x="50" y="620" font-weight="bold">Legend:</text>
-                <line x1="120" y1="615" x2="150" y2="615" stroke="#2196F3" stroke-width="2"/>
-                <text x="160" y="620">Firewall/Mgmt</text>
-                <line x1="320" y1="615" x2="350" y2="615" stroke="#4CAF50" stroke-width="2"/>
-                <text x="360" y="620">Data Flow</text>
-                <line x1="520" y1="615" x2="550" y2="615" stroke="#757575" stroke-width="1.5" stroke-dasharray="5,3"/>
-                <text x="560" y="620">Monitoring</text>
-              </g>
-              
-              <!-- Arrow markers -->
-              <defs>
-                <marker id="arrowblue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#2196F3"/></marker>
-                <marker id="arrowgreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#4CAF50"/></marker>
-                <marker id="arroworange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#FF9800"/></marker>
-                <marker id="arrowpurple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#9C27B0"/></marker>
-                <marker id="arrowgray" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#757575"/></marker>
-              </defs>
-            </svg>
+        <div class="card-body text-center p-4 bg-white">
+          <div class="diagram-wrapper" style="min-height:600px;display:flex;align-items:center;justify-content:center">
+            <pre class="mermaid">
+graph TB
+    subgraph Shared["🔧 Shared Services & Management"]
+        FW["🔥 Azure Firewall<br/>Standard Tier<br/>10.0.0.0/24"]
+        MON["📊 Log Analytics<br/>Centralized Monitoring"]
+        KV0["🔐 Key Vault<br/>Management Secrets"]
+    end
+    
+    subgraph Spoke1["🟢 Spoke 1 VNet<br/>10.10.0.0/16"]
+        direction TB
+        AKS1["☸️ AKS Cluster<br/>D4s_v5 x3 Nodes"]
+        AOAI1["🤖 Azure OpenAI<br/>S0 Tier"]
+        AIS1["🔍 AI Search<br/>Basic Tier"]
+        ADLS1["💾 ADLS Gen2<br/>LRS Storage"]
+        KV1["🔐 Key Vault"]
+    end
+    
+    subgraph Spoke2["🟠 Spoke 2 VNet<br/>10.20.0.0/16"]
+        direction TB
+        AKS2["☸️ AKS Cluster<br/>D4s_v5 x3 Nodes"]
+        AOAI2["🤖 Azure OpenAI<br/>S0 Tier"]
+        AIS2["🔍 AI Search<br/>Basic Tier"]
+        ADLS2["💾 ADLS Gen2<br/>LRS Storage"]
+        KV2["🔐 Key Vault"]
+    end
+    
+    subgraph Spoke3["🟣 Spoke 3 VNet<br/>10.30.0.0/16"]
+        direction TB
+        AKS3["☸️ AKS Cluster<br/>D4s_v5 x3 Nodes"]
+        AOAI3["🤖 Azure OpenAI<br/>S0 Tier"]
+        AIS3["🔍 AI Search<br/>Basic Tier"]
+        ADLS3["💾 ADLS Gen2<br/>LRS Storage"]
+        KV3["🔐 Key Vault"]
+    end
+    
+    %% Firewall routing to spokes
+    FW -->|"Egress Control"| AKS1
+    FW -->|"Egress Control"| AKS2
+    FW -->|"Egress Control"| AKS3
+    
+    %% Within Spoke 1
+    AKS1 -->|"Call LLM APIs"| AOAI1
+    AKS1 -->|"Vector Search"| AIS1
+    AKS1 -->|"Data Access"| ADLS1
+    AIS1 -->|"Index Data"| ADLS1
+    AKS1 -->|"Secrets"| KV1
+    AOAI1 -->|"Auth"| KV1
+    
+    %% Within Spoke 2
+    AKS2 -->|"Call LLM APIs"| AOAI2
+    AKS2 -->|"Vector Search"| AIS2
+    AKS2 -->|"Data Access"| ADLS2
+    AIS2 -->|"Index Data"| ADLS2
+    AKS2 -->|"Secrets"| KV2
+    AOAI2 -->|"Auth"| KV2
+    
+    %% Within Spoke 3
+    AKS3 -->|"Call LLM APIs"| AOAI3
+    AKS3 -->|"Vector Search"| AIS3
+    AKS3 -->|"Data Access"| ADLS3
+    AIS3 -->|"Index Data"| ADLS3
+    AKS3 -->|"Secrets"| KV3
+    AOAI3 -->|"Auth"| KV3
+    
+    %% Monitoring connections (dotted)
+    AKS1 -.->|"Metrics & Logs"| MON
+    AOAI1 -.->|"Performance"| MON
+    AKS2 -.->|"Metrics & Logs"| MON
+    AOAI2 -.->|"Performance"| MON
+    AKS3 -.->|"Metrics & Logs"| MON
+    AOAI3 -.->|"Performance"| MON
+            </pre>
           </div>
         </div>
       </div>
@@ -529,10 +471,42 @@
   <button id="backToTop" class="btn btn-info btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <script>
+    // Initialize Mermaid
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        htmlLabels: true,
+        curve: 'linear',
+        nodeSpacing: 50,
+        rankSpacing: 60,
+        padding: 20,
+        useMaxWidth: true,
+        wrappingWidth: 200
+      },
+      themeVariables: {
+        fontSize: '16px',
+        fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',
+        primaryColor: '#4a90d9',
+        primaryTextColor: '#fff',
+        primaryBorderColor: '#2c6fad',
+        lineColor: '#5a6570',
+        secondaryColor: '#f0f4f8',
+        tertiaryColor: '#e8f4e8'
+      }
+    });
+    
+    mermaid.contentLoaded();
+    
     function downloadDiagram(format) {
-      const svg = document.querySelector('#diagramContainer svg');
-      if (!svg) return;
+      const svg = document.querySelector('.diagram-wrapper svg');
+      if (!svg) {
+        alert('Diagram not found. Please wait for it to load.');
+        return;
+      }
       
       const svgString = new XMLSerializer().serializeToString(svg);
       
@@ -542,7 +516,7 @@
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'pattern2-spoke-ai-architecture.svg';
+        link.download = 'pattern2-decentralized-spoke-ai.svg';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -561,53 +535,16 @@
           
           const link = document.createElement('a');
           link.href = canvas.toDataURL('image/png');
-          link.download = 'pattern2-spoke-ai-architecture.png';
+          link.download = 'pattern2-decentralized-spoke-ai.png';
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
         };
+        img.onerror = function() {
+          alert('Failed to convert diagram to PNG. Try SVG instead.');
+        };
         img.src = 'data:image/svg+xml;base64,' + btoa(svgString);
       }
-    }
-    
-    function enlargeDiagram(btn) {
-      const container = document.getElementById('diagramContainer');
-      const svg = container.querySelector('svg');
-      if (!svg) return;
-      
-      const overlay = document.createElement('div');
-      overlay.className = 'diagram-fullscreen';
-      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:9999;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;';
-      
-      const inner = document.createElement('div');
-      inner.style.cssText = 'background:white;padding:20px;border-radius:8px;max-width:90vw;max-height:90vh;overflow:auto;position:relative;';
-      
-      const closeBtn = document.createElement('button');
-      closeBtn.className = 'btn btn-sm btn-danger';
-      closeBtn.style.cssText = 'position:absolute;top:10px;right:10px;';
-      closeBtn.innerHTML = '<i class="bi bi-x me-1"></i>Close';
-      closeBtn.onclick = () => overlay.remove();
-      
-      const svgClone = svg.cloneNode(true);
-      svgClone.style.maxWidth = '100%';
-      svgClone.style.height = 'auto';
-      
-      inner.appendChild(closeBtn);
-      inner.appendChild(svgClone);
-      overlay.appendChild(inner);
-      
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.remove();
-      });
-      
-      document.addEventListener('keydown', function esc(e) {
-        if (e.key === 'Escape') {
-          overlay.remove();
-          document.removeEventListener('keydown', esc);
-        }
-      });
-      
-      document.body.appendChild(overlay);
     }
 
     const toggle=document.getElementById('themeToggle');
