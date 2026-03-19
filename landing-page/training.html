@@ -797,91 +797,131 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Theme Toggle
-    const toggle = document.getElementById('themeToggle');
-    toggle.addEventListener('click', () => {
-      const html = document.documentElement;
-      const isDark = html.getAttribute('data-bs-theme') === 'dark';
-      html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
-      toggle.querySelector('i').className = isDark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
-    });
+    // Ensure DOM is ready
+    function initializeTraining() {
+      // Theme Toggle
+      const toggle = document.getElementById('themeToggle');
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          const html = document.documentElement;
+          const isDark = html.getAttribute('data-bs-theme') === 'dark';
+          html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+          toggle.querySelector('i').className = isDark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+        });
+      }
 
-    // Back to Top
-    window.addEventListener('scroll', () => {
-      document.getElementById('backToTop').style.display = window.scrollY > 300 ? 'block' : 'none';
-    });
-
-    // Persona Selection
-    document.querySelectorAll('.persona-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const persona = card.dataset.persona;
-        document.querySelectorAll('.persona-content').forEach(el => el.classList.add('d-none'));
-        document.getElementById(persona).classList.remove('d-none');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-
-    // Back to Personas Button
-    document.querySelectorAll('.btn-outline-secondary').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll('.persona-content').forEach(el => el.classList.add('d-none'));
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-
-    // Quiz Questions
-    const quizzes = {
-      'c-suite': [
-        { q: 'What is the primary benefit of SDD?', options: ['Faster coding', 'Enforcement of architecture and quality at build time', 'Cheaper developers'], correct: 1 },
-        { q: 'How does SDD reduce risk?', options: ['Smaller teams', 'Prevents drift with executable specs', 'More meetings'], correct: 1 },
-        { q: 'What does SDD enforce?', options: ['Dress code', 'Architecture, security, and compliance constraints', 'Coffee breaks'], correct: 1 }
-      ],
-      'sales': [
-        { q: 'What industries benefit most from SDD?', options: ['Retail only', 'Regulated industries (finance, healthcare)', 'Gaming companies'], correct: 1 },
-        { q: 'What customer pain point solves?', options: ['Tech issues', 'Quality and compliance doubts', 'Support speed'], correct: 1 }
-      ],
-      'tech-mgmt': [
-        { q: 'How do you implement SDD in teams?', options: ['Force it overnight', 'Phased approach with training', 'Ignore feedback'], correct: 1 },
-        { q: 'Where do specs validate in CI/CD?', options: ['Not at all', 'Manual only', 'Automated gates'], correct: 2 }
-      ],
-      'developer': [
-        { q: 'What format for SDD specs?', options: ['Binary', 'Markdown (.md)', 'PowerPoint'], correct: 1 },
-        { q: 'How do specs become executable?', options: ['Magic', 'Validation tools &amp; testing', 'Manual'], correct: 1 }
-      ],
-      'devops': [
-        { q: 'When validate specs?', options: ['After deploy', 'At build time', 'Never'], correct: 1 },
-        { q: 'What causes spec drift?', options: ['Weather', 'Infrastructure changes', 'Time'], correct: 1 }
-      ]
-    };
-
-    // Quiz Modal Handler
-    document.querySelectorAll('.quiz-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const persona = btn.dataset.persona;
-        const course = btn.dataset.course;
-        const quiz = quizzes[persona] || [];
-        if (quiz && quiz.length > 0) {
-          let html = '<form id="quizForm">';
-          quiz.forEach((q, i) => {
-            html += `<div class="mb-4"><h6 class="fw-bold">${i + 1}. ${q.q}</h6>`;
-            q.options.forEach((opt, j) => {
-              html += `<div class="form-check"><input class="form-check-input" type="radio" name="q${i}" value="${j}"><label class="form-check-label">${opt}</label></div>`;
-            });
-            html += '</div>';
-          });
-          html += '</form>';
-          document.getElementById('quizContent').innerHTML = html;
-          document.getElementById('quizTitle').textContent = `Course ${course} Quiz`;
+      // Back to Top
+      window.addEventListener('scroll', () => {
+        const btn = document.getElementById('backToTop');
+        if (btn) {
+          btn.style.display = window.scrollY > 300 ? 'block' : 'none';
         }
       });
-    });
 
-    // Submit Quiz
-    document.getElementById('submitQuiz').addEventListener('click', () => {
-      alert('Quiz submitted! Review course material for deeper understanding.');
-    });
+      // Persona Selection - Click handlers for persona cards
+      const personaCards = document.querySelectorAll('.persona-card');
+      personaCards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const persona = this.getAttribute('data-persona');
+          if (persona) {
+            // Hide all persona content
+            const allPersonas = document.querySelectorAll('.persona-content');
+            allPersonas.forEach(el => {
+              el.classList.add('d-none');
+            });
+            // Show selected persona
+            const selectedPersona = document.getElementById(persona);
+            if (selectedPersona) {
+              selectedPersona.classList.remove('d-none');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }
+        });
+      });
+
+      // Back to Personas Button
+      const backButtons = document.querySelectorAll('.btn-outline-secondary');
+      backButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          if (e.target.closest('.persona-content')) {
+            e.preventDefault();
+            document.querySelectorAll('.persona-content').forEach(el => el.classList.add('d-none'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Quiz Questions
+      const quizzes = {
+        'c-suite': [
+          { q: 'What is the primary benefit of SDD?', options: ['Faster coding', 'Enforcement of architecture and quality at build time', 'Cheaper developers'], correct: 1 },
+          { q: 'How does SDD reduce risk?', options: ['Smaller teams', 'Prevents drift with executable specs', 'More meetings'], correct: 1 },
+          { q: 'What does SDD enforce?', options: ['Dress code', 'Architecture, security, and compliance constraints', 'Coffee breaks'], correct: 1 }
+        ],
+        'sales': [
+          { q: 'What industries benefit most from SDD?', options: ['Retail only', 'Regulated industries (finance, healthcare)', 'Gaming companies'], correct: 1 },
+          { q: 'What customer pain point solves?', options: ['Tech issues', 'Quality and compliance doubts', 'Support speed'], correct: 1 }
+        ],
+        'tech-mgmt': [
+          { q: 'How do you implement SDD in teams?', options: ['Force it overnight', 'Phased approach with training', 'Ignore feedback'], correct: 1 },
+          { q: 'Where do specs validate in CI/CD?', options: ['Not at all', 'Manual only', 'Automated gates'], correct: 2 }
+        ],
+        'developer': [
+          { q: 'What format for SDD specs?', options: ['Binary', 'Markdown (.md)', 'PowerPoint'], correct: 1 },
+          { q: 'How do specs become executable?', options: ['Magic', 'Validation tools &amp; testing', 'Manual'], correct: 1 }
+        ],
+        'devops': [
+          { q: 'When validate specs?', options: ['After deploy', 'At build time', 'Never'], correct: 1 },
+          { q: 'What causes spec drift?', options: ['Weather', 'Infrastructure changes', 'Time'], correct: 1 }
+        ]
+      };
+
+      // Quiz Modal Handler
+      const quizBtns = document.querySelectorAll('.quiz-btn');
+      quizBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const persona = btn.getAttribute('data-persona');
+          const course = btn.getAttribute('data-course');
+          const quiz = quizzes[persona] || [];
+          if (quiz && quiz.length > 0) {
+            let html = '<form id="quizForm">';
+            quiz.forEach((q, i) => {
+              html += `<div class="mb-4"><h6 class="fw-bold">${i + 1}. ${q.q}</h6>`;
+              q.options.forEach((opt, j) => {
+                html += `<div class="form-check"><input class="form-check-input" type="radio" name="q${i}" value="${j}"><label class="form-check-label">${opt}</label></div>`;
+              });
+              html += '</div>';
+            });
+            html += '</form>';
+            const quizContent = document.getElementById('quizContent');
+            if (quizContent) {
+              quizContent.innerHTML = html;
+            }
+            const quizTitle = document.getElementById('quizTitle');
+            if (quizTitle) {
+              quizTitle.textContent = `Course ${course} Quiz`;
+            }
+          }
+        });
+      });
+
+      // Submit Quiz
+      const submitBtn = document.getElementById('submitQuiz');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => {
+          alert('Quiz submitted! Review course material for deeper understanding.');
+        });
+      }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeTraining);
+    } else {
+      initializeTraining();
+    }
   </script>
 </body>
 </html>
