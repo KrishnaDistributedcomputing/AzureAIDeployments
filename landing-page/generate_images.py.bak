@@ -1,0 +1,103 @@
+"""Generate DALL-E images for the Education AI Platform page."""
+import os, base64, time
+from openai import OpenAI
+
+client = OpenAI()
+OUT = os.path.join(os.path.dirname(__file__), "img")
+os.makedirs(OUT, exist_ok=True)
+
+# Image prompts: (filename, prompt, size)
+IMAGES = [
+    (
+        "hero-education.png",
+        "A stunning wide-angle digital illustration of a futuristic university campus at golden hour. "
+        "Glowing holographic data streams and AI neural network patterns float above modern glass buildings. "
+        "Diverse students walk along pathways with digital tablets, surrounded by floating icons representing "
+        "knowledge graphs, graduation caps, and analytics charts. Color palette: deep purple (#6f42c1), "
+        "royal blue (#0d6efd), and cyan (#0dcaf0) glow effects on a warm twilight background. "
+        "Ultra-clean modern design, no text, cinematic lighting, 4K quality.",
+        "1792x1024"
+    ),
+    (
+        "work-iq.png",
+        "A modern flat illustration showing a student interacting with a glowing laptop in a university library. "
+        "Floating around the student are abstract icons: chat bubbles, calendar events, assignment checkmarks, "
+        "login indicators, collaboration arrows. The style is minimal corporate flat design with a royal blue (#0d6efd) "
+        "color scheme on a light background. Clean vector-style illustration, no text, professional infographic style.",
+        "1024x1024"
+    ),
+    (
+        "foundry-iq.png",
+        "A modern flat illustration of an open glowing book/academic catalog at the center, with floating research "
+        "papers, policy documents, diploma scrolls, and knowledge graph connections radiating outward. Abstract "
+        "neural network nodes connect the documents. Green (#198754) color scheme on a light background. "
+        "Clean vector-style illustration, no text, professional infographic style, subtle gradients.",
+        "1024x1024"
+    ),
+    (
+        "fabric-iq.png",
+        "A modern flat illustration of a dynamic analytics dashboard floating in 3D space, showing bar charts, "
+        "line graphs trending upward, GPA indicators, retention rate gauges, and graduation cap metrics. "
+        "Data streams flow into the dashboard from multiple sources below. Warm amber/yellow (#ffc107) color scheme "
+        "on a light background. Clean vector-style illustration, no text, professional infographic style.",
+        "1024x1024"
+    ),
+    (
+        "ai-advisor.png",
+        "A modern illustration of a friendly AI chatbot interface on a large screen, with a student sitting in front "
+        "asking questions. The AI displays a holographic degree pathway map and course recommendations. Floating "
+        "bubbles show course names, career paths, and checkmarks. Blue and purple color scheme (#0d6efd, #6f42c1). "
+        "Clean digital art style, no text, warm and approachable feel, soft lighting.",
+        "1024x1024"
+    ),
+    (
+        "dropout-risk.png",
+        "A modern illustration showing a protective shield/safety net catching students, with an AI-powered early "
+        "warning system dashboard in the background. Abstract risk indicators (green-yellow-orange-red gauge), "
+        "alert bells, and intervention arrows. Colors: red (#dc3545) accents with data visualization elements. "
+        "Clean modern corporate illustration, no text, empathetic and supportive tone.",
+        "1024x1024"
+    ),
+    (
+        "learning-planner.png",
+        "A modern illustration of a personalized learning roadmap/timeline floating in 3D space, showing semester "
+        "blocks connected by glowing paths, with course cards, skill badges, internship markers, and a graduation "
+        "cap at the finish line. A student figure looks at the plan on a tablet. Green (#198754) color scheme. "
+        "Clean modern illustration, no text, optimistic forward-looking feel.",
+        "1024x1024"
+    ),
+    (
+        "use-case-data.png",
+        "A striking illustration of a university building at the center with multiple data streams flowing out: "
+        "LMS data, student records, research papers, financial data, career statistics. These data streams converge "
+        "into a glowing AI brain/processor at the top. Purple (#6f42c1) and blue gradient color scheme, dark background. "
+        "Abstract futuristic digital art, no text, clean and modern.",
+        "1024x1024"
+    ),
+]
+
+for i, (fname, prompt, size) in enumerate(IMAGES):
+    fpath = os.path.join(OUT, fname)
+    if os.path.exists(fpath):
+        print(f"[{i+1}/{len(IMAGES)}] SKIP (exists): {fname}")
+        continue
+    print(f"[{i+1}/{len(IMAGES)}] Generating: {fname} ...")
+    try:
+        resp = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            size=size,
+            quality="standard",
+            response_format="b64_json",
+            n=1,
+        )
+        img_b64 = resp.data[0].b64_json
+        with open(fpath, "wb") as f:
+            f.write(base64.b64decode(img_b64))
+        print(f"  -> Saved {fname} ({os.path.getsize(fpath)//1024} KB)")
+        time.sleep(1)  # rate-limit courtesy
+    except Exception as e:
+        print(f"  -> ERROR: {e}")
+        time.sleep(5)
+
+print("\nDone! All images in:", OUT)

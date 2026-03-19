@@ -3,7 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Azure AI Deployment Patterns</title>
+  <title>Azure AI Deployment Patterns — 10 Enterprise Architecture Blueprints</title>
+  <meta name="description" content="Ten battle-tested Azure AI deployment patterns: Centralized Hub, Decentralized Spoke, Hybrid, MLOps Factory, Serverless, Secure Private, Lakehouse, Lift &amp; Shift, SQL Migration, and Greenfield. Compare costs, SLAs, and deploy with Bicep." />
+  <meta name="keywords" content="Azure AI, deployment patterns, enterprise architecture, Azure OpenAI, MLOps, serverless AI, secure private AI, cloud migration, landing zone, CAF, Bicep, IaC" />
+  <meta name="author" content="Krishna Distributedcomputing" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <link rel="canonical" href="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/" />
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/" />
+  <meta property="og:title" content="Azure AI Deployment Patterns — 10 Enterprise Blueprints" />
+  <meta property="og:description" content="Compare 10 battle-tested Azure AI architecture patterns. Costs, SLAs, WAF alignment, Bicep IaC, and deploy spec generator included." />
+  <meta property="og:image" content="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/img/hero-education.svg" />
+  <meta property="og:site_name" content="Azure AI Deployment Patterns" />
+  <meta property="og:locale" content="en_US" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Azure AI Deployment Patterns — 10 Enterprise Blueprints" />
+  <meta name="twitter:description" content="Compare 10 battle-tested Azure AI architecture patterns with costs, SLAs, and deploy specs." />
+  <meta name="twitter:image" content="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/img/hero-education.svg" />
+  <!-- Geo targeting -->
+  <meta name="geo.region" content="US" />
+  <meta name="geo.placename" content="Global" />
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Azure AI Deployment Patterns",
+    "url": "https://calm-ocean-0e8faaa10.4.azurestaticapps.net/",
+    "description": "Ten battle-tested Azure AI deployment patterns for enterprise architecture.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Azure AI Patterns",
+      "url": "https://github.com/KrishnaDistributedcomputing/AzureAIDeployments"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://calm-ocean-0e8faaa10.4.azurestaticapps.net/#patterns?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Azure AI Deployment Patterns",
+    "numberOfItems": 10,
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Centralized Hub AI","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/centralized-hub"},
+      {"@type":"ListItem","position":2,"name":"Decentralized Spoke AI","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/decentralized-spoke"},
+      {"@type":"ListItem","position":3,"name":"Hybrid Central-Spoke","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/hybrid-spoke"},
+      {"@type":"ListItem","position":4,"name":"AI Factory / MLOps","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/ai-factory-mlops"},
+      {"@type":"ListItem","position":5,"name":"Serverless AI","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/serverless-ai"},
+      {"@type":"ListItem","position":6,"name":"Secure Private AI","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/secure-private-ai"},
+      {"@type":"ListItem","position":7,"name":"Data-Centric Lakehouse AI","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/data-lakehouse"},
+      {"@type":"ListItem","position":8,"name":"Lift & Shift Migration","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/lift-shift-migration"},
+      {"@type":"ListItem","position":9,"name":"SQL to Azure SQL Migration","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/sql-migration"},
+      {"@type":"ListItem","position":10,"name":"Greenfield Azure Deployment","url":"https://calm-ocean-0e8faaa10.4.azurestaticapps.net/patterns/greenfield-azure"}
+    ]
+  }
+  </script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
@@ -23,6 +84,13 @@
     .nav-link.active { font-weight: 600; }
     footer a { color: var(--accent); }
     .search-box { max-width: 460px; }
+    /* Share Toolbar */
+    .share-bar{position:fixed;left:1rem;top:50%;transform:translateY(-50%);z-index:1040;display:flex;flex-direction:column;gap:.5rem}
+    .share-bar .btn{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:transform .15s,box-shadow .15s}
+    .share-bar .btn:hover{transform:scale(1.15);box-shadow:0 4px 14px rgba(0,0,0,.25)}
+    .share-bar .like-count{font-size:.65rem;position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:#dc3545;color:#fff;display:flex;align-items:center;justify-content:center;line-height:1}
+    .share-bar .btn-copy-ok{background:#198754!important;color:#fff!important}
+    @media(max-width:767.98px){.share-bar{left:auto;right:auto;top:auto;bottom:0;transform:none;flex-direction:row;width:100%;justify-content:center;padding:.5rem;background:var(--bs-body-bg);border-top:1px solid var(--bs-border-color)}}
   </style>
 </head>
 <body>
@@ -38,26 +106,39 @@
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fw-semibold active" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+            <a class="nav-link dropdown-toggle fw-semibold active" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-cpu me-1 text-primary"></i>AI Architecture</a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#patterns"><i class="bi bi-collection me-2"></i>All 10 Patterns</a></li>
+              <li><h6 class="dropdown-header"><i class="bi bi-cpu me-1"></i>AI Architecture — Patterns 1-7</h6></li>
+              <li><a class="dropdown-item" href="/patterns/centralized-hub"><i class="bi bi-diagram-3-fill text-primary me-2"></i>1. Centralized Hub AI</a></li>
+              <li><a class="dropdown-item" href="/patterns/decentralized-spoke"><i class="bi bi-share-fill text-info me-2"></i>2. Decentralized Spoke</a></li>
+              <li><a class="dropdown-item" href="/patterns/hybrid-spoke"><i class="bi bi-intersect text-success me-2"></i>3. Hybrid Central-Spoke</a></li>
+              <li><a class="dropdown-item" href="/patterns/ai-factory-mlops"><i class="bi bi-gear-wide-connected text-warning me-2"></i>4. AI Factory / MLOps</a></li>
+              <li><a class="dropdown-item" href="/patterns/serverless-ai"><i class="bi bi-lightning-charge-fill text-danger me-2"></i>5. Serverless AI</a></li>
+              <li><a class="dropdown-item" href="/patterns/secure-private-ai"><i class="bi bi-shield-lock-fill me-2"></i>6. Secure Private AI</a></li>
+              <li><a class="dropdown-item" href="/patterns/data-lakehouse"><i class="bi bi-database-fill-gear text-secondary me-2"></i>7. Data-Centric Lakehouse</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#comparison"><i class="bi bi-table me-2"></i>Compare</a></li>
+              <li><h6 class="dropdown-header"><i class="bi bi-box-arrow-in-up-right me-1"></i>Migration — Patterns 8-9</h6></li>
+              <li><a class="dropdown-item" href="/patterns/lift-shift-migration"><i class="bi bi-box-arrow-in-up-right me-2" style="color:#e67e22"></i>8. Lift &amp; Shift</a></li>
+              <li><a class="dropdown-item" href="/patterns/sql-migration"><i class="bi bi-database-fill-up me-2" style="color:#0db7ed"></i>9. SQL Migration</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><h6 class="dropdown-header"><i class="bi bi-rocket-takeoff me-1"></i>Greenfield — Pattern 10</h6></li>
+              <li><a class="dropdown-item" href="/patterns/greenfield-azure"><i class="bi bi-rocket-takeoff-fill text-success me-2"></i>10. Greenfield Azure</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#comparison"><i class="bi bi-table me-2"></i>Compare All</a></li>
               <li><a class="dropdown-item" href="#costs"><i class="bi bi-currency-dollar me-2"></i>Costs</a></li>
-              <li><a class="dropdown-item" href="#sla"><i class="bi bi-shield-check me-2"></i>SLA &amp; WAF</a></li>
-              <li><a class="dropdown-item" href="#modules"><i class="bi bi-puzzle me-2"></i>Modules</a></li>
-              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#deploy"><i class="bi bi-rocket-takeoff me-2"></i>Deploy</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold" href="csi-education.html" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link fw-semibold text-warning" href="help.html"><i class="bi bi-question-circle-fill me-1"></i>Help</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-semibold text-success" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-book me-1"></i>Reference</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/landing-zone"><i class="bi bi-building-fill-gear text-success me-2"></i>Landing Zone Architecture</a></li>
+              <li><a class="dropdown-item" href="/education"><i class="bi bi-mortarboard-fill me-2" style="color:#6f42c1"></i>Education AI Platform</a></li>
+              <li><a class="dropdown-item" href="#modules"><i class="bi bi-puzzle me-2"></i>Azure Modules</a></li>
+              <li><a class="dropdown-item" href="#sla"><i class="bi bi-shield-check me-2"></i>SLA &amp; WAF</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="/help"><i class="bi bi-question-circle-fill text-warning me-2"></i>Help &amp; Guide</a></li>
+            </ul>
           </li>
         </ul>
         <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
@@ -200,6 +281,14 @@
         </div>
       </div>
       <div class="row g-4" id="patternGrid">
+
+        <!-- Category: AI Architecture Patterns -->
+        <div class="col-12 pattern-item" data-keywords="">
+          <div class="d-flex align-items-center mb-2 mt-2">
+            <span class="badge bg-primary rounded-pill me-2 px-3 py-2"><i class="bi bi-cpu me-1"></i>AI Architecture</span>
+            <small class="text-muted">Patterns 1–7 — Cloud-native AI workloads on Azure</small>
+          </div>
+        </div>
 
         <!-- Card 1 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="centralized hub shared services openai cognitive">
@@ -376,6 +465,14 @@
           </div>
         </div>
 
+        <!-- Category: Migration Patterns -->
+        <div class="col-12 pattern-item" data-keywords="">
+          <div class="d-flex align-items-center mb-2 mt-3">
+            <span class="badge rounded-pill me-2 px-3 py-2" style="background:#e67e22"><i class="bi bi-box-arrow-in-up-right me-1"></i>Migration</span>
+            <small class="text-muted">Patterns 8–9 — Migrate existing workloads to Azure</small>
+          </div>
+        </div>
+
         <!-- Card 8 -->
         <div class="col-md-6 col-lg-4 pattern-item" data-keywords="lift shift migration legacy vm rehost iaas azure migrate site recovery">
           <div class="card h-100 pattern-card border-0 shadow-sm" data-bs-toggle="modal" data-bs-target="#modal8">
@@ -423,6 +520,14 @@
               <a href="pattern9.html" class="btn btn-sm" style="color:#0db7ed;border-color:#0db7ed"><i class="bi bi-arrow-right-circle me-1"></i>Full Details</a>
               <small class="text-muted">SLA 99.97% &middot; Pattern 9</small>
             </div>
+          </div>
+        </div>
+
+        <!-- Category: Greenfield -->
+        <div class="col-12 pattern-item" data-keywords="">
+          <div class="d-flex align-items-center mb-2 mt-3">
+            <span class="badge bg-success rounded-pill me-2 px-3 py-2"><i class="bi bi-rocket-takeoff me-1"></i>Greenfield</span>
+            <small class="text-muted">Pattern 10 — Build a new Azure environment from scratch</small>
           </div>
         </div>
 
@@ -1251,6 +1356,26 @@
     </div>
   </div></div></div>
 
+  <!-- Share Toolbar -->
+  <div class="share-bar" id="shareBar">
+    <button class="btn btn-outline-primary" id="btnCopyUrl" title="Copy URL" aria-label="Copy URL">
+      <i class="bi bi-link-45deg"></i>
+    </button>
+    <button class="btn btn-outline-primary" id="btnShareLinkedIn" title="Share on LinkedIn" aria-label="Share on LinkedIn">
+      <i class="bi bi-linkedin"></i>
+    </button>
+    <button class="btn btn-outline-primary" id="btnShareX" title="Share on X" aria-label="Share on X">
+      <i class="bi bi-twitter-x"></i>
+    </button>
+    <button class="btn btn-outline-primary" id="btnShareEmail" title="Share via Email" aria-label="Share via Email">
+      <i class="bi bi-envelope-fill"></i>
+    </button>
+    <button class="btn btn-outline-danger position-relative" id="btnLike" title="Like this page" aria-label="Like">
+      <i class="bi bi-heart-fill"></i>
+      <span class="like-count" id="likeCount">0</span>
+    </button>
+  </div>
+
   <!-- Back to Top -->
   <button id="backToTop" class="btn btn-primary rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})">
     <i class="bi bi-arrow-up"></i>
@@ -1373,6 +1498,49 @@
     window.addEventListener('scroll', () => {
       document.getElementById('backToTop').style.display = window.scrollY > 400 ? 'block' : 'none';
     });
+
+    // ── Share Toolbar ──────────────────────────────────────────
+    (function(){
+      const pageUrl = window.location.href;
+      const pageTitle = document.title;
+
+      // Copy URL
+      document.getElementById('btnCopyUrl').addEventListener('click', function(){
+        const btn = this;
+        navigator.clipboard.writeText(pageUrl).then(()=>{
+          btn.classList.add('btn-copy-ok');
+          btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+          setTimeout(()=>{btn.classList.remove('btn-copy-ok');btn.innerHTML='<i class="bi bi-link-45deg"></i>';},1500);
+        });
+      });
+
+      // LinkedIn
+      document.getElementById('btnShareLinkedIn').addEventListener('click', function(){
+        window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(pageUrl),'_blank','width=600,height=500');
+      });
+
+      // X / Twitter
+      document.getElementById('btnShareX').addEventListener('click', function(){
+        window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(pageUrl)+'&text='+encodeURIComponent(pageTitle),'_blank','width=600,height=400');
+      });
+
+      // Email
+      document.getElementById('btnShareEmail').addEventListener('click', function(){
+        window.location.href='mailto:?subject='+encodeURIComponent(pageTitle)+'&body='+encodeURIComponent('Check out this resource: '+pageUrl);
+      });
+
+      // Like (localStorage)
+      var likeKey = 'ai_patterns_likes';
+      var likes = parseInt(localStorage.getItem(likeKey)||'0',10);
+      var liked = localStorage.getItem(likeKey+'_liked')==='1';
+      document.getElementById('likeCount').textContent = likes;
+      if(liked) document.getElementById('btnLike').classList.replace('btn-outline-danger','btn-danger');
+      document.getElementById('btnLike').addEventListener('click', function(){
+        if(!liked){likes++;liked=true;localStorage.setItem(likeKey,likes);localStorage.setItem(likeKey+'_liked','1');this.classList.replace('btn-outline-danger','btn-danger');}
+        else{likes=Math.max(0,likes-1);liked=false;localStorage.setItem(likeKey,likes);localStorage.setItem(likeKey+'_liked','0');this.classList.replace('btn-danger','btn-outline-danger');}
+        document.getElementById('likeCount').textContent=likes;
+      });
+    })();
 
     // ── Deploy Spec Generator ──────────────────────────────────
     const PATTERNS = {

@@ -1,6 +1,7 @@
 # Bicep build output
 *.json
 !**/bicepconfig.json
+!**/staticwebapp.config.json
 
 # IDE
 .vscode/

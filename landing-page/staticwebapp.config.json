@@ -1,0 +1,30 @@
+{
+  "routes": [
+    { "route": "/patterns/centralized-hub", "rewrite": "/pattern1.html" },
+    { "route": "/patterns/decentralized-spoke", "rewrite": "/pattern2.html" },
+    { "route": "/patterns/hybrid-spoke", "rewrite": "/pattern3.html" },
+    { "route": "/patterns/ai-factory-mlops", "rewrite": "/pattern4.html" },
+    { "route": "/patterns/serverless-ai", "rewrite": "/pattern5.html" },
+    { "route": "/patterns/secure-private-ai", "rewrite": "/pattern6.html" },
+    { "route": "/patterns/data-lakehouse", "rewrite": "/pattern7.html" },
+    { "route": "/patterns/lift-shift-migration", "rewrite": "/pattern8.html" },
+    { "route": "/patterns/sql-migration", "rewrite": "/pattern9.html" },
+    { "route": "/patterns/greenfield-azure", "rewrite": "/pattern10.html" },
+    { "route": "/landing-zone", "rewrite": "/landing-zone.html" },
+    { "route": "/education", "rewrite": "/csi-education.html" },
+    { "route": "/help", "rewrite": "/help.html" }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/img/*", "*.css", "*.js", "*.svg", "*.png", "*.jpg", "*.ico"]
+  },
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "SAMEORIGIN",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "mimeTypes": {
+    ".svg": "image/svg+xml"
+  }
+}
