@@ -153,10 +153,24 @@ az deployment group create \
 
 | Environment | Estimate | Key Cost Drivers |
 |-------------|----------|------------------|
-| **Dev** | $5,000 – $8,000 | Databricks DBUs ($0.40/DBU), AML compute, ACR Premium |
-| **Prod** | $25,000 – $50,000 | Databricks clusters ($3K–$8K/mo), 2× ADLS accounts, ACR geo-replication |
+| **Dev** | $5,000 – $8,000 | Databricks DBUs, AML compute, ACR Premium |
+| **Moderate Prod** | **~$6,120/mo** | ~500M tokens/mo, Databricks clusters, AML D4s v3 + GPU |
+| **Prod (scaled)** | $25,000 – $50,000 | Databricks clusters ($3K–$8K/mo), 2× ADLS accounts, ACR geo-replication |
 
-> Databricks is the dominant cost. Use autoscaling clusters + auto-terminate idle (15 min).
+### Component Breakdown (Moderate Production, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| Azure Databricks | Premium | ~$0.40/DBU |
+| Azure ML Compute | D4s v3 | $140.16/mo |
+| Azure ML Compute (GPU) | NC4as T4 v3 | $383.98/mo |
+| ADLS Gen2 | Standard | $0.0208/GB/mo (Hot LRS) |
+| Key Vault | Standard | $0.03/10K transactions |
+| Azure Monitor (Log Analytics) | Per-GB | $2.30/GB ingested |
+| Container Registry | Premium | ~$50/mo base |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). Databricks is the dominant cost. Use autoscaling clusters + auto-terminate idle (15 min).
 
 ---
 

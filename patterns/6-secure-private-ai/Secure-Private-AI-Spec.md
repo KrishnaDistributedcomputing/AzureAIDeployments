@@ -176,10 +176,25 @@ az deployment group create \
 
 | Environment | Estimate | Key Cost Drivers |
 |-------------|----------|------------------|
-| **Dev** | $8,000 – $12,000 | Azure Firewall Premium (~$1,750/mo), Private AKS, 7 PEs (~$51/mo) |
-| **Prod** | $35,000 – $65,000 | Firewall data processing, AKS scaling, 365-day log retention, Bastion ($263/mo) |
+| **Dev** | $8,000 – $12,000 | Azure Firewall Standard/Premium, Private AKS, 7+ PEs |
+| **Moderate Prod** | **~$10,240/mo** | ~500M tokens/mo, Firewall Standard, AI Search S2, private AKS |
+| **Prod (scaled)** | $35,000 – $65,000 | Firewall Premium data processing, AKS scaling, 365-day log retention, Bastion |
 
-> Azure Firewall Premium = ~$1.75/hr base + $0.016/GB data processing. This is the most expensive pattern.
+### Component Breakdown (Moderate Production, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| text-embedding-3-small | Standard | $0.022/1M tokens |
+| Azure Firewall | Standard | $912/mo ($1.25/hr) |
+| Azure Firewall | Premium | $1,278/mo ($1.75/hr) |
+| AI Search | S2 | $981.12/mo |
+| AKS (3× D4s v3 nodes) | Standard | ~$420/mo |
+| Key Vault | Standard | $0.03/10K transactions |
+| Azure Monitor (Log Analytics) | Per-GB | $2.30/GB; Basic Logs $0.50/GB |
+| Private Endpoints (×7+) | Per endpoint | ~$7.30/mo each |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). This is the most expensive pattern due to Firewall + full private networking.
 
 ---
 

@@ -141,12 +141,26 @@ az deployment group create \
 
 ## � Estimated Monthly Cost (USD, Canada Central)
 
-| Environment | Estimate (per spoke) | Key Cost Drivers |
-|-------------|---------------------|------------------|
-| **Dev** | $6,000 – $9,000 | Duplicated OpenAI + AI Search + AKS per workload |
-| **Prod** | $25,000 – $45,000 | AKS GPU nodes ($2,100+/mo), OpenAI dedicated quota, PE charges |
+| Environment | Estimate | Key Cost Drivers |
+|-------------|----------|------------------|
+| **Dev** | $6,000 – $9,000 /spoke | Duplicated OpenAI + AI Search + AKS per workload |
+| **Moderate Prod (3 spokes)** | **~$7,360/mo** | ~500M tokens/mo shared, AI Search S1 × 3, AKS per spoke |
+| **Prod (scaled)** | $25,000 – $45,000 /spoke | AKS GPU nodes, OpenAI dedicated quota, PE charges |
 
-> Cost scales linearly per workload. 5 spokes in prod = $125K–$225K/mo total.
+### Component Breakdown (Moderate Production, 3 spokes, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| text-embedding-3-small | Standard | $0.022/1M tokens |
+| AI Search (per spoke) | S1 | $245.28/mo |
+| AKS (3× D4s v3 nodes) | Standard | ~$420/mo per cluster |
+| ADLS Gen2 | Standard | $0.0208/GB/mo (Hot LRS) |
+| Key Vault (per spoke) | Standard | $0.03/10K transactions |
+| Azure Monitor (Log Analytics) | Per-GB | $2.30/GB ingested |
+| Private Endpoints | Per endpoint | ~$7.30/mo each |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). Cost scales linearly per workload.
 
 ---
 

@@ -184,9 +184,25 @@ az deployment group create \
 | Environment | Estimate | Key Cost Drivers |
 |-------------|----------|------------------|
 | **Dev** | $6,000 – $10,000 | 3× ADLS accounts, Databricks DBUs, AI Search S1, OpenAI |
-| **Prod** | $30,000 – $55,000 | Databricks clusters ($3K–$8K/mo), AI Search 2 replicas, App Service, 7 PEs |
+| **Moderate Prod** | **~$8,350/mo** | ~500M tokens/mo, Databricks clusters, AI Search S1, 3× ADLS |
+| **Prod (scaled)** | $30,000 – $55,000 | Databricks clusters ($3K–$8K/mo), AI Search 2 replicas, App Service, 7 PEs |
 
-> Data storage is cheap ($0.0208/GB/mo for Hot LRS); Databricks compute is the dominant cost.
+### Component Breakdown (Moderate Production, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| text-embedding-3-small | Standard | $0.022/1M tokens |
+| Azure Databricks | Premium | ~$0.40/DBU |
+| Synapse Spark | Memory Optimized | $0.138/vCore-hr |
+| ADLS Gen2 (×3 accounts) | Standard | $0.0208/GB/mo (Hot LRS) |
+| AI Search | S1 | $245.28/mo |
+| App Service | P1v3 | ~$115/mo |
+| Key Vault | Standard | $0.03/10K transactions |
+| Azure Monitor (Log Analytics) | Per-GB | $2.30/GB ingested |
+| Private Endpoints (×7) | Per endpoint | ~$7.30/mo each |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). Data storage is cheap ($0.0208/GB/mo Hot LRS); Databricks compute is the dominant cost.
 
 ---
 

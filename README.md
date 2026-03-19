@@ -58,23 +58,32 @@ Each pattern spec includes: architecture diagrams, full resource inventory, esti
 
 ## 💰 Estimated Monthly Costs (USD, Canada Central)
 
-| Pattern | Dev Estimate | Prod Estimate | Key Cost Drivers |
-|---------|-------------|---------------|------------------|
-| 1. Hub AI | $3,500 – $5,500 | $18,000 – $30,000 | Hub VNet, OpenAI tokens, AML compute |
-| 2. Spoke AI | $6,000 – $9,000 /spoke | $25,000 – $45,000 /spoke | Duplicated OpenAI/Search/AKS per workload |
-| 3. Hybrid | $4,000 – $6,500 | $20,000 – $35,000 | Shared OpenAI (hub) + per-spoke Search/compute |
-| 4. AI Factory | $5,000 – $8,000 | $25,000 – $50,000 | Databricks DBUs, AML compute, ACR |
-| 5. Serverless | $500 – $1,500 | $5,000 – $12,000 | OpenAI tokens, Functions consumption |
-| 6. Secure AI | $8,000 – $12,000 | $35,000 – $65,000 | Firewall Premium (~$1,750/mo), PEs, Bastion |
-| 7. Lakehouse | $6,000 – $10,000 | $30,000 – $55,000 | 3× ADLS, Databricks DBUs, AI Search |
+> Based on **Azure Live Prices (March 2026)**. Moderate production estimates assume ~500M tokens/month.
 
-### Key Pricing References
-- Azure Firewall Premium: ~$1.75/hr base + $0.016/GB data processing
-- AI Search: Basic $75/mo · S1 $250/mo · S2 $1,000/mo
-- AKS (3× D4s_v5): ~$525/mo · (6× D8s_v5): ~$2,100/mo
+| Pattern | Dev Estimate | Moderate Prod (~500M tokens/mo) | Prod Estimate (scaled) | Key Cost Drivers |
+|---------|-------------|-------------------------------|----------------------|------------------|
+| 1. Hub AI | $3,500 – $5,500 | **~$3,723** | $18,000 – $30,000 | Hub VNet, OpenAI tokens, AML compute |
+| 2. Spoke AI (3 spokes) | $6,000 – $9,000 /spoke | **~$7,360** | $25,000 – $45,000 /spoke | Duplicated OpenAI/Search/AKS per workload |
+| 3. Hybrid | $4,000 – $6,500 | **~$5,685** | $20,000 – $35,000 | Shared OpenAI (hub) + per-spoke Search/compute |
+| 4. AI Factory | $5,000 – $8,000 | **~$6,120** | $25,000 – $50,000 | Databricks DBUs, AML compute, ACR |
+| 5. Serverless | $500 – $1,500 | **~$890** | $5,000 – $12,000 | OpenAI tokens, Functions consumption |
+| 6. Secure AI | $8,000 – $12,000 | **~$10,240** | $35,000 – $65,000 | Firewall ($912–$1,278/mo), PEs, Bastion |
+| 7. Lakehouse | $6,000 – $10,000 | **~$8,350** | $30,000 – $55,000 | 3× ADLS, Databricks DBUs, AI Search |
+
+### Key Pricing References (Azure Live Prices, March 2026)
+- Azure OpenAI GPT-4o Global: $2.50/1M input tokens, $10/1M output tokens
+- text-embedding-3-small: $0.022/1M tokens
+- APIM v2: Basic $150.01/mo · Standard $700/mo · Premium $2,801/mo
+- AI Search: Basic $73.73/mo · S1 $245.28/mo · S2 $981.12/mo
+- Key Vault: $0.03/10K transactions
+- Azure Monitor: Analytics Logs $2.30/GB · Basic Logs $0.50/GB
+- Azure Functions Consumption: $0.20/1M exec + $0.000016/GB-s (first 1M free)
+- Azure Firewall: Standard $912/mo ($1.25/hr) · Premium $1,278/mo ($1.75/hr)
+- Azure ML: D4s v3 $140.16/mo · NC4as T4 v3 $383.98/mo (no ML surcharge)
 - Databricks Premium DBU: ~$0.40/DBU
-- OpenAI gpt-4o: ~$2.50/1M input tokens, $10/1M output tokens
 - Private Endpoints: ~$7.30/mo each + $0.01/GB processed
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026).
 
 ---
 

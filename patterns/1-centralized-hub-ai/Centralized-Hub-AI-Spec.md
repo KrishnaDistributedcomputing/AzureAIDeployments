@@ -138,9 +138,23 @@ az deployment group create \
 | Environment | Estimate | Key Cost Drivers |
 |-------------|----------|------------------|
 | **Dev** | $3,500 – $5,500 | Hub VNet infra, OpenAI token consumption, AML compute |
-| **Prod** | $18,000 – $30,000 | AI Search S1 ($250/mo), AKS clusters ($525+/mo per spoke), PE charges ($7.30/mo each) |
+| **Moderate Prod** | **~$3,723/mo** | ~500M tokens/mo, AI Search S1, APIM Basic, AML D4s v3 |
+| **Prod (scaled)** | $18,000 – $30,000 | AI Search S1, AKS clusters, multiple PEs, high token volume |
 
-> OpenAI pricing: gpt-4o ~$2.50/1M input tokens, $10/1M output tokens. VNet Peering: ~$0.01/GB transferred.
+### Component Breakdown (Moderate Production, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| text-embedding-3-small | Standard | $0.022/1M tokens |
+| AI Search | S1 | $245.28/mo |
+| APIM v2 | Basic | $150.01/mo |
+| Azure ML Compute | D4s v3 | $140.16/mo |
+| Key Vault | Standard | $0.03/10K transactions |
+| Azure Monitor (Log Analytics) | Per-GB | $2.30/GB ingested |
+| Private Endpoints | Per endpoint | ~$7.30/mo each |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). VNet Peering: ~$0.01/GB transferred.
 
 ---
 

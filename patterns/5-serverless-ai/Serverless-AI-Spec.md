@@ -147,10 +147,24 @@ az deployment group create \
 
 | Environment | Estimate | Key Cost Drivers |
 |-------------|----------|------------------|
-| **Dev** | $500 – $1,500 | OpenAI token usage, Functions consumption, AI Search Basic ($75/mo) |
-| **Prod** | $5,000 – $12,000 | OpenAI volume, APIM Consumption pay-per-call, Functions Premium (if upgraded) |
+| **Dev** | $500 – $1,500 | OpenAI token usage, Functions consumption, AI Search Basic |
+| **Moderate Prod** | **~$890/mo** | ~500M tokens/mo, Functions Consumption, AI Search Basic, APIM Basic |
+| **Prod (scaled)** | $5,000 – $12,000 | OpenAI volume, APIM Standard, Functions Premium (if upgraded) |
 
-> Lowest-cost pattern. Functions Consumption plan: first 1M executions free, then $0.20/1M.
+### Component Breakdown (Moderate Production, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| text-embedding-3-small | Standard | $0.022/1M tokens |
+| AI Search | Basic | $73.73/mo |
+| Azure Functions | Consumption | $0.20/1M exec + $0.000016/GB-s (first 1M free) |
+| APIM v2 | Basic | $150.01/mo |
+| Application Insights | Per-GB | $2.30/GB ingested |
+| Key Vault | Standard | $0.03/10K transactions |
+| Storage Account | Standard LRS | ~$0.0208/GB/mo |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). Lowest-cost pattern. Functions Consumption: first 1M executions free, then $0.20/1M.
 
 ---
 

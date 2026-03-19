@@ -151,9 +151,24 @@ az deployment group create \
 | Environment | Estimate | Key Cost Drivers |
 |-------------|----------|------------------|
 | **Dev** | $4,000 – $6,500 | Shared OpenAI (hub) + per-spoke App Service/Search |
-| **Prod** | $20,000 – $35,000 | Hub OpenAI quota, App Service P1v3 ($115/mo), AI Search S1 ($250/mo) |
+| **Moderate Prod** | **~$5,685/mo** | ~500M tokens/mo, shared hub OpenAI, AI Search S1, App Service |
+| **Prod (scaled)** | $20,000 – $35,000 | Hub OpenAI quota, App Service P1v3, AI Search S1 per spoke |
 
-> Most cost-efficient multi-workload pattern — hub absorbs expensive AI services.
+### Component Breakdown (Moderate Production, ~500M tokens/mo)
+
+| Service | SKU / Tier | Unit Price (March 2026) |
+|---------|-----------|------------------------|
+| Azure OpenAI GPT-4o (hub) | Global Standard | $2.50/1M input tokens, $10/1M output tokens |
+| text-embedding-3-small | Standard | $0.022/1M tokens |
+| AI Search | S1 | $245.28/mo |
+| APIM v2 | Basic | $150.01/mo |
+| App Service | P1v3 | ~$115/mo |
+| Azure ML Compute | D4s v3 | $140.16/mo |
+| Key Vault | Standard | $0.03/10K transactions |
+| Azure Monitor (Log Analytics) | Per-GB | $2.30/GB ingested |
+| Private Endpoints | Per endpoint | ~$7.30/mo each |
+
+> Prices sourced from [Azure Pricing Pages](https://azure.microsoft.com/pricing/) (March 2026). Most cost-efficient multi-workload pattern — hub absorbs expensive AI services.
 
 ---
 
