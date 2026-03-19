@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Landing Zone Architecture for AI Workloads — Azure AI Patterns</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <style>
+    :root{--accent:#0078d4;--accent-dark:#50e6ff}
+    [data-bs-theme="dark"]{--accent:#50e6ff}
+    .hero-lz{min-height:280px;background:linear-gradient(135deg,#0b5ed7 0%,#0dcaf0 50%,#198754 100%)}
+    [data-bs-theme="dark"] .hero-lz{background:linear-gradient(135deg,#031633 0%,#0b5ed7 50%,#0a3622 100%)}
+    .principle-card{border-left:4px solid var(--accent);transition:transform .2s}
+    .principle-card:hover{transform:translateY(-4px);box-shadow:0 8px 16px rgba(0,0,0,.12)}
+    .zone-card{transition:transform .2s;border-radius:1rem}
+    .zone-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,.1)}
+    .bom-table th{position:sticky;top:0;z-index:2}
+    .stat-card{border:none;border-radius:1rem}
+    .mermaid{background:transparent}
+    .layer-badge{font-size:.85rem;letter-spacing:.5px}
+    .decision-card{border-radius:1rem;overflow:hidden}
+    .decision-card .card-header{font-weight:600}
+    .subnet-row td:first-child{font-family:monospace;font-size:.9rem}
+    #backToTop{position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none}
+    .toc a{text-decoration:none;border-left:3px solid transparent;padding:.35rem .75rem;display:block;transition:all .15s}
+    .toc a:hover,.toc a.active{border-left-color:var(--accent);background:rgba(0,120,212,.06)}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html"><i class="bi bi-arrow-left me-2"></i>All Patterns</a>
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary"><i class="bi bi-building me-1"></i>Landing Zone Guide</span>
+        <button id="themeToggle" class="btn btn-outline-secondary btn-sm" title="Toggle dark mode"><i class="bi bi-moon-stars-fill"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-lz text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-building-fill-gear me-3"></i>Landing Zone Architecture<br class="d-none d-md-block"/>for AI Workloads</h1>
+          <p class="lead mb-0">A prescriptive guide to designing Azure Landing Zones that host AI services securely, at scale, and aligned with the Cloud Adoption Framework (CAF). Covers management groups, subscriptions, networking, identity, governance, and platform services for enterprise AI.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <span class="badge bg-light text-dark fs-6 px-3 py-2 d-block mb-2"><i class="bi bi-bookmarks me-1"></i>Based on Azure CAF</span>
+          <span class="badge bg-light text-dark fs-6 px-3 py-2 d-block"><i class="bi bi-patch-check me-1"></i>Enterprise-Ready</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="bg-body-secondary py-4">
+    <div class="container">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-layers-fill text-primary fs-3"></i>
+            <div class="fw-bold fs-5">5 Layers</div>
+            <small class="text-body-secondary">Architecture Depth</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-diagram-3-fill text-success fs-3"></i>
+            <div class="fw-bold fs-5">7 Patterns</div>
+            <small class="text-body-secondary">Supported Topologies</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-shield-fill-check text-warning fs-3"></i>
+            <div class="fw-bold fs-5">Zero Trust</div>
+            <small class="text-body-secondary">Security Model</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card stat-card h-100 shadow-sm p-3">
+            <i class="bi bi-globe text-danger fs-3"></i>
+            <div class="fw-bold fs-5">CAF Aligned</div>
+            <small class="text-body-secondary">Cloud Adoption Fwk</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <div class="row">
+      <!-- Sticky TOC -->
+      <div class="col-lg-3 d-none d-lg-block">
+        <div class="toc sticky-top" style="top:5rem">
+          <h6 class="text-uppercase text-body-secondary small fw-bold mb-3">On This Page</h6>
+          <a href="#what-is-lz">What is a Landing Zone?</a>
+          <a href="#why-ai">Why AI Needs Its Own LZ</a>
+          <a href="#caf-hierarchy">CAF Management Hierarchy</a>
+          <a href="#conceptual">Conceptual Architecture</a>
+          <a href="#network">Network Topology</a>
+          <a href="#subnet-design">Subnet Design</a>
+          <a href="#identity">Identity &amp; Access</a>
+          <a href="#governance">Governance &amp; Policy</a>
+          <a href="#data-platform">Data Platform Layer</a>
+          <a href="#ai-services">AI Services Layer</a>
+          <a href="#observability">Observability</a>
+          <a href="#pattern-mapping">Pattern Mapping</a>
+          <a href="#decision-tree">Decision Tree</a>
+          <a href="#checklist">Deployment Checklist</a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+
+        <!-- What is a Landing Zone -->
+        <section id="what-is-lz" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>What is an Azure Landing Zone?</h2>
+          <p>An Azure Landing Zone is a <strong>pre-provisioned, governed environment</strong> where workloads are deployed. It provides the foundational building blocks — networking, identity, governance, security, and management — so application teams can focus on building rather than plumbing.</p>
+          <p>For AI workloads, the landing zone must address unique requirements: <strong>high-bandwidth data pipelines</strong>, <strong>GPU compute isolation</strong>, <strong>model governance</strong>, <strong>Private Endpoint density</strong>, and <strong>OpenAI quota management</strong>.</p>
+          <div class="row g-3 mt-3">
+            <div class="col-md-4">
+              <div class="card principle-card h-100"><div class="card-body">
+                <h6><i class="bi bi-diagram-3 text-primary me-2"></i>Platform Landing Zone</h6>
+                <p class="small mb-0">Hosts shared services: networking, identity, DNS, monitoring, security tools. Managed by the platform team.</p>
+              </div></div>
+            </div>
+            <div class="col-md-4">
+              <div class="card principle-card h-100"><div class="card-body">
+                <h6><i class="bi bi-window-stack text-success me-2"></i>Application Landing Zone</h6>
+                <p class="small mb-0">Hosts workload-specific resources: AI services, compute, storage, app code. Owned by workload teams.</p>
+              </div></div>
+            </div>
+            <div class="col-md-4">
+              <div class="card principle-card h-100"><div class="card-body">
+                <h6><i class="bi bi-gear-wide text-warning me-2"></i>Sandbox</h6>
+                <p class="small mb-0">Unmanaged experimentation zone with no connectivity to production. For AI prototyping and hackathons.</p>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Why AI Needs Its Own LZ -->
+        <section id="why-ai" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-cpu me-2"></i>Why AI Workloads Need Specialized Landing Zones</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="table-primary"><tr><th>Requirement</th><th>Standard Workload</th><th>AI Workload</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Compute</strong></td><td>General-purpose VMs, App Service</td><td>GPU clusters (NC/ND series), Databricks VNet-injected, managed endpoints</td></tr>
+                <tr><td><strong>Network</strong></td><td>2-3 subnets, basic NSGs</td><td>5-8 subnets, /22 for Databricks, PE-dense /24 subnets, UDR for Firewall</td></tr>
+                <tr><td><strong>Private Endpoints</strong></td><td>2-3 PEs</td><td>6-12 PEs (OpenAI, Search, ML, Storage ×N, KV, ACR)</td></tr>
+                <tr><td><strong>DNS</strong></td><td>1-2 Private DNS Zones</td><td>5-8 zones (privatelink.openai, search, blob, dfs, vaultcore, ml, acr)</td></tr>
+                <tr><td><strong>Data</strong></td><td>Single storage account</td><td>Multi-account medallion (raw/curated/serving), feature stores, model registries</td></tr>
+                <tr><td><strong>Quota</strong></td><td>vCPU quotas</td><td>OpenAI TPM/RPM, GPU quotas, Databricks DBU, AI Search units</td></tr>
+                <tr><td><strong>Governance</strong></td><td>Cost tags, RBAC</td><td>Model lineage, responsible AI, content filtering, data classification</td></tr>
+                <tr><td><strong>Egress</strong></td><td>NAT Gateway</td><td>Azure Firewall with TLS inspection, threat intel, application rules</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- CAF Management Hierarchy -->
+        <section id="caf-hierarchy" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-diagram-2 me-2"></i>CAF Management Group Hierarchy</h2>
+          <div class="card shadow">
+            <div class="card-body text-center p-4">
+              <pre class="mermaid">
+graph TB
+    ROOT["Tenant Root Group"]
+    ROOT --> PLATFORM["Platform"]
+    ROOT --> LANDING["Landing Zones"]
+    ROOT --> SANDBOX["Sandbox"]
+    ROOT --> DECOM["Decommissioned"]
+    PLATFORM --> MGMT["Management&lt;br/&gt;Log Analytics, Automation&lt;br/&gt;Defender for Cloud"]
+    PLATFORM --> CONN["Connectivity&lt;br/&gt;Hub VNet, Firewall&lt;br/&gt;DNS, ExpressRoute"]
+    PLATFORM --> ID["Identity&lt;br/&gt;Entra ID, Domain Ctrlrs&lt;br/&gt;Conditional Access"]
+    LANDING --> CORP["Corp (Connected)&lt;br/&gt;VNet-peered workloads"]
+    LANDING --> ONLINE["Online (Internet)&lt;br/&gt;Public-facing apps"]
+    LANDING --> AI["AI &amp; ML&lt;br/&gt;AI Workloads"]
+    AI --> AIPROD["AI-Prod&lt;br/&gt;Production AI services"]
+    AI --> AIDEV["AI-NonProd&lt;br/&gt;Dev/Test AI services"]
+    CORP --> CORPSUB["App Subscriptions"]
+    SANDBOX --> SBX["Sandbox Subs&lt;br/&gt;No connectivity"]
+    style AI fill:#0d6efd,color:#fff,stroke:#0d6efd
+    style AIPROD fill:#198754,color:#fff
+    style AIDEV fill:#ffc107,color:#000
+    style PLATFORM fill:#6c757d,color:#fff
+    style CONN fill:#0dcaf0,color:#000
+              </pre>
+            </div>
+          </div>
+          <div class="mt-3">
+            <p>The <strong>AI &amp; ML</strong> management group sits under Landing Zones and contains dedicated subscriptions for AI workloads. This separation enables:</p>
+            <ul>
+              <li><strong>AI-specific Azure Policies</strong> — enforce private endpoints on cognitive services, require content filtering on OpenAI, mandate diagnostic settings</li>
+              <li><strong>Quota isolation</strong> — OpenAI TPM limits, GPU quotas, and Databricks DBU scoped to AI subscriptions</li>
+              <li><strong>Cost boundaries</strong> — AI compute costs (GPU, OpenAI tokens) tracked separately from general workloads</li>
+              <li><strong>Responsible AI guardrails</strong> — policies to enforce content safety, model evaluation, and data classification</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Conceptual Architecture -->
+        <section id="conceptual" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-bricks me-2"></i>Conceptual Architecture — AI Landing Zone</h2>
+          <div class="card shadow">
+            <div class="card-body text-center p-4">
+              <pre class="mermaid">
+graph TB
+    subgraph MGMT_SUB["Management Subscription"]
+        LAW["Log Analytics&lt;br/&gt;Workspace"]
+        AUTO["Automation&lt;br/&gt;Account"]
+        DEF["Defender for&lt;br/&gt;Cloud"]
+    end
+    subgraph CONN_SUB["Connectivity Subscription"]
+        subgraph HubVNet["Hub VNet 10.0.0.0/16"]
+            FW["Azure Firewall&lt;br/&gt;Premium"]
+            BASTION["Azure Bastion"]
+            GW["VPN / ER&lt;br/&gt;Gateway"]
+            DNS_RES["DNS Private&lt;br/&gt;Resolver"]
+        end
+        DNS_ZONES["Private DNS&lt;br/&gt;Zones (8+)"]
+    end
+    subgraph AI_SUB["AI Landing Zone Subscription"]
+        subgraph AIVNet["AI Spoke VNet 10.10.0.0/16"]
+            subgraph AI_SVC["AI Services Subnet /24"]
+                AOAI["Azure OpenAI"]
+                AIS["AI Search"]
+                AML["Azure ML"]
+            end
+            subgraph COMPUTE["Compute Subnet /20"]
+                AKS["AKS / App Svc"]
+                DBX["Databricks&lt;br/&gt;VNet-injected"]
+            end
+            subgraph DATA_SUB["Data Subnet /24"]
+                ADLS["ADLS Gen2&lt;br/&gt;(× multiple)"]
+                ACR["Container&lt;br/&gt;Registry"]
+            end
+            subgraph PE_SUB["PE Subnet /24"]
+                PE["Private&lt;br/&gt;Endpoints (6-12)"]
+            end
+        end
+        KV["Key Vault"]
+        AI_MON["App Insights"]
+    end
+    GW -->|"ExpressRoute /&lt;br/&gt;VPN"| OnPrem["On-Premises"]
+    HubVNet -->|"VNet Peering"| AIVNet
+    PE --> AOAI
+    PE --> AIS
+    PE --> AML
+    PE --> ADLS
+    AI_SVC --> FW
+    COMPUTE --> FW
+    AI_MON --> LAW
+    DEF --> AI_SUB
+    DNS_ZONES --> PE_SUB
+              </pre>
+            </div>
+          </div>
+          <p class="text-body-secondary small mt-2 text-center">Conceptual: Hub-Spoke topology with dedicated AI Landing Zone subscription peered to the Connectivity Hub</p>
+        </section>
+
+        <!-- Network Topology -->
+        <section id="network" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-hdd-network me-2"></i>Network Topology</h2>
+          <p>AI Landing Zones use a <strong>hub-spoke</strong> network model. The Connectivity subscription owns the Hub VNet (Firewall, DNS, Gateway). Each AI workload spoke peers into the Hub for controlled egress and DNS resolution.</p>
+
+          <div class="card shadow mb-4">
+            <div class="card-body text-center p-4">
+              <pre class="mermaid">
+graph LR
+    subgraph Hub["Hub VNet 10.0.0.0/16"]
+        FW["Firewall&lt;br/&gt;10.0.0.0/26"]
+        BASTION["Bastion&lt;br/&gt;10.0.1.0/26"]
+        GW["Gateway&lt;br/&gt;10.0.2.0/27"]
+        DNS["DNS Resolver&lt;br/&gt;10.0.3.0/28"]
+    end
+    subgraph Spoke1["AI Spoke 1 — 10.10.0.0/16"]
+        S1_AI["AI Services /24"]
+        S1_PE["Private Endpoints /24"]
+        S1_COMP["Compute /20"]
+        S1_DATA["Data /24"]
+    end
+    subgraph Spoke2["AI Spoke 2 — 10.20.0.0/16"]
+        S2_AI["AI Services /24"]
+        S2_PE["Private Endpoints /24"]
+        S2_COMP["Compute /20"]
+    end
+    Hub -->|"Peering"| Spoke1
+    Hub -->|"Peering"| Spoke2
+    S1_COMP -->|"UDR 0.0.0.0/0"| FW
+    S2_COMP -->|"UDR 0.0.0.0/0"| FW
+              </pre>
+            </div>
+          </div>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100 border-primary"><div class="card-body">
+                <h6><i class="bi bi-fire text-primary me-2"></i>Egress Control</h6>
+                <ul class="small mb-0">
+                  <li>All spoke traffic routed through <strong>Azure Firewall</strong> via UDR</li>
+                  <li>Application rules for OpenAI API, Docker Hub, PyPI</li>
+                  <li>Threat intelligence in <strong>Deny</strong> mode</li>
+                  <li>TLS inspection for data exfiltration prevention</li>
+                  <li>DNS Proxy enabled on Firewall for private zones</li>
+                </ul>
+              </div></div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 border-success"><div class="card-body">
+                <h6><i class="bi bi-globe2 text-success me-2"></i>DNS Architecture</h6>
+                <ul class="small mb-0">
+                  <li>Private DNS Zones hosted in <strong>Connectivity subscription</strong></li>
+                  <li>Zones linked to Hub VNet for resolution</li>
+                  <li>DNS Private Resolver for on-premises forwarding</li>
+                  <li>Auto-registration for spoke VNets disabled (PE-only)</li>
+                  <li><strong>8+ zones</strong> for AI: openai, search, blob, dfs, vaultcore, azureml, notebooks, acr</li>
+                </ul>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Subnet Design -->
+        <section id="subnet-design" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-grid-3x3-gap me-2"></i>Subnet Design for AI Spoke VNet</h2>
+          <p>A typical AI spoke VNet (<code>10.10.0.0/16</code> = 65,536 IPs) needs careful subnet planning. Databricks alone consumes 2× /22 subnets (2,048 IPs). Private Endpoints and AKS are the next largest consumers.</p>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered subnet-row">
+              <thead class="table-dark">
+                <tr><th>Subnet</th><th>CIDR</th><th>IPs</th><th>Purpose</th><th>Delegation / Notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>snet-ai-pe</td><td>10.10.0.0/24</td><td>251</td><td>Private Endpoints for AI services</td><td>No delegation; NSG: VNet-only inbound</td></tr>
+                <tr><td>snet-data-pe</td><td>10.10.1.0/24</td><td>251</td><td>Private Endpoints for data services</td><td>No delegation; NSG: VNet-only inbound</td></tr>
+                <tr><td>snet-aks</td><td>10.10.16.0/20</td><td>4,091</td><td>AKS node pool (system + user + GPU)</td><td>No delegation; Azure CNI overlay or kubenet</td></tr>
+                <tr><td>snet-dbx-public</td><td>10.10.32.0/22</td><td>1,019</td><td>Databricks public subnet</td><td>Microsoft.Databricks/workspaces delegation</td></tr>
+                <tr><td>snet-dbx-private</td><td>10.10.36.0/22</td><td>1,019</td><td>Databricks private subnet</td><td>Microsoft.Databricks/workspaces delegation</td></tr>
+                <tr><td>snet-app</td><td>10.10.40.0/24</td><td>251</td><td>App Service VNet Integration</td><td>Microsoft.Web/serverFarms delegation</td></tr>
+                <tr><td>snet-ml-compute</td><td>10.10.41.0/24</td><td>251</td><td>Azure ML compute instances/clusters</td><td>No delegation; NSG required</td></tr>
+                <tr><td>snet-mgmt</td><td>10.10.42.0/26</td><td>59</td><td>Management / jumpbox / Bastion</td><td>No delegation</td></tr>
+              </tbody>
+              <tfoot>
+                <tr class="table-primary"><td colspan="2"><strong>Total Allocated</strong></td><td><strong>~7,192</strong></td><td colspan="2">11% of /16 used — room for growth</td></tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle me-2"></i><strong>IP Planning Tip:</strong> Reserve at least a /16 per AI spoke. Databricks VNet injection alone requires 2× /22 (2,048 IPs). With AKS overlay networking, pods get IPs from a virtual CIDR, reducing node subnet pressure.
+          </div>
+        </section>
+
+        <!-- Identity & Access -->
+        <section id="identity" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-person-fill-gear me-2"></i>Identity &amp; Access Control</h2>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100"><div class="card-body">
+                <h5><i class="bi bi-person-badge text-primary me-2"></i>Managed Identities</h5>
+                <p>Every service uses <strong>System-Assigned Managed Identity</strong> for zero-credential authentication. No API keys stored in app settings.</p>
+                <table class="table table-sm">
+                  <thead><tr><th>Service</th><th>Identity Grants</th></tr></thead>
+                  <tbody>
+                    <tr><td>AKS / App Service</td><td>Cognitive Services OpenAI User, Search Index Data Reader</td></tr>
+                    <tr><td>Azure ML</td><td>Storage Blob Data Contributor, Key Vault Secrets User</td></tr>
+                    <tr><td>AI Search</td><td>Storage Blob Data Reader (indexer), Cognitive Services OpenAI User</td></tr>
+                    <tr><td>Databricks</td><td>Storage Blob Data Contributor (on ADLS accounts)</td></tr>
+                  </tbody>
+                </table>
+              </div></div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100"><div class="card-body">
+                <h5><i class="bi bi-shield-lock text-success me-2"></i>RBAC Model</h5>
+                <p>Follow <strong>least-privilege</strong> with custom roles where built-in roles are too broad.</p>
+                <table class="table table-sm">
+                  <thead><tr><th>Persona</th><th>Scope</th><th>Role</th></tr></thead>
+                  <tbody>
+                    <tr><td>Platform Team</td><td>AI MG</td><td>Owner / Contributor</td></tr>
+                    <tr><td>AI Team Lead</td><td>AI Subscription</td><td>Contributor</td></tr>
+                    <tr><td>Data Scientist</td><td>Resource Group</td><td>ML Operator + Blob Data Contributor</td></tr>
+                    <tr><td>App Developer</td><td>Resource Group</td><td>Cognitive Services OpenAI User</td></tr>
+                    <tr><td>SecOps</td><td>AI MG</td><td>Security Reader + Log Analytics Reader</td></tr>
+                  </tbody>
+                </table>
+              </div></div>
+            </div>
+          </div>
+          <div class="row g-4 mt-2">
+            <div class="col-md-6">
+              <div class="card h-100 border-warning"><div class="card-body">
+                <h6><i class="bi bi-key-fill text-warning me-2"></i>Key Vault Standards</h6>
+                <ul class="small mb-0">
+                  <li>RBAC authorization (no access policies)</li>
+                  <li>Purge protection <strong>enabled</strong></li>
+                  <li>Soft delete: 90-day retention</li>
+                  <li>Private endpoint access only</li>
+                  <li>Diagnostic settings → Log Analytics</li>
+                </ul>
+              </div></div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100 border-danger"><div class="card-body">
+                <h6><i class="bi bi-shield-fill-exclamation text-danger me-2"></i>Conditional Access</h6>
+                <ul class="small mb-0">
+                  <li>MFA required for all AI resource management</li>
+                  <li>Named locations: allow only corp IP ranges</li>
+                  <li>Block legacy authentication protocols</li>
+                  <li>Session controls on Azure portal for AI MG</li>
+                  <li>PIM for elevated roles (Just-in-Time)</li>
+                </ul>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Governance & Policy -->
+        <section id="governance" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-clipboard-check me-2"></i>Governance &amp; Azure Policy</h2>
+          <p>Azure Policies assigned at the <strong>AI &amp; ML management group</strong> enforce guardrails that prevent misconfigurations before they reach production.</p>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead class="table-dark"><tr><th>Policy</th><th>Effect</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr><td>Cognitive Services should use private link</td><td><span class="badge bg-danger">Deny</span></td><td>Prevent OpenAI / AI Search with public endpoints</td></tr>
+                <tr><td>Storage accounts should use private link</td><td><span class="badge bg-danger">Deny</span></td><td>Force ADLS Gen2 behind private endpoints</td></tr>
+                <tr><td>Key Vault should use RBAC authorization</td><td><span class="badge bg-danger">Deny</span></td><td>Prevent access-policy-based Key Vaults</td></tr>
+                <tr><td>Azure OpenAI should have content filtering</td><td><span class="badge bg-warning text-dark">Audit</span></td><td>Ensure responsible AI guardrails</td></tr>
+                <tr><td>Diagnostic settings should be enabled</td><td><span class="badge bg-info">DeployIfNotExists</span></td><td>Auto-configure diagnostics to Log Analytics</td></tr>
+                <tr><td>Deploy Defender for AI services</td><td><span class="badge bg-info">DeployIfNotExists</span></td><td>Enable threat detection on cognitive services</td></tr>
+                <tr><td>AKS clusters should use Azure RBAC</td><td><span class="badge bg-danger">Deny</span></td><td>Prevent local Kubernetes accounts</td></tr>
+                <tr><td>Allowed locations: Canada Central</td><td><span class="badge bg-danger">Deny</span></td><td>Data residency compliance</td></tr>
+                <tr><td>Require resource tags (CostCenter, Owner, Environment)</td><td><span class="badge bg-danger">Deny</span></td><td>Cost tracking and accountability</td></tr>
+                <tr><td>Storage TLS minimum version 1.2</td><td><span class="badge bg-danger">Deny</span></td><td>Encryption in transit</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card bg-body-tertiary mt-3">
+            <div class="card-body">
+              <h6><i class="bi bi-tags text-primary me-2"></i>Required Tags</h6>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge border text-body"><code>CostCenter</code></span>
+                <span class="badge border text-body"><code>Owner</code></span>
+                <span class="badge border text-body"><code>Environment</code></span>
+                <span class="badge border text-body"><code>DataClassification</code></span>
+                <span class="badge border text-body"><code>AIWorkload</code></span>
+                <span class="badge border text-body"><code>ModelName</code></span>
+                <span class="badge border text-body"><code>ResponsibleAIReview</code></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Data Platform Layer -->
+        <section id="data-platform" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-database-fill me-2"></i>Data Platform Layer</h2>
+          <p>AI workloads are data-intensive. The landing zone must accommodate multiple storage accounts, feature stores, model registries, and data pipelines — all with private access.</p>
+          <div class="card shadow mb-4">
+            <div class="card-body text-center p-4">
+              <pre class="mermaid">
+graph LR
+    subgraph Ingestion
+        EH["Event Hubs"]
+        ADF["Data Factory"]
+        STREAM["Stream&lt;br/&gt;Analytics"]
+    end
+    subgraph Storage["ADLS Gen2 Medallion"]
+        RAW["Raw Zone&lt;br/&gt;landing / raw / archive"]
+        CUR["Curated Zone&lt;br/&gt;silver / gold / delta"]
+        SRV["Serving Zone&lt;br/&gt;embeddings / vectors"]
+    end
+    subgraph Processing
+        DBX["Databricks&lt;br/&gt;ETL + Feature Eng"]
+        AML2["Azure ML&lt;br/&gt;Training Pipelines"]
+    end
+    subgraph AI_Layer["AI Ready"]
+        AIS2["AI Search&lt;br/&gt;Vector Index"]
+        AOAI2["Azure OpenAI&lt;br/&gt;Embeddings + LLM"]
+    end
+    EH --> RAW
+    ADF --> RAW
+    RAW --> DBX
+    DBX --> CUR
+    CUR --> DBX
+    DBX --> SRV
+    SRV --> AIS2
+    SRV --> AOAI2
+    AML2 --> CUR
+    STREAM --> RAW
+              </pre>
+            </div>
+          </div>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="card zone-card h-100 border-warning">
+                <div class="card-header bg-warning text-dark"><i class="bi bi-box-arrow-in-down me-2"></i>Raw Zone</div>
+                <div class="card-body">
+                  <p class="small">Immutable landing area. Data arrives here from Event Hubs, Data Factory, or direct upload.</p>
+                  <ul class="small mb-0">
+                    <li>ADLS Gen2, HNS enabled</li>
+                    <li>Write-once, append-only</li>
+                    <li>Lifecycle: archive after 90 days</li>
+                    <li>Containers: landing/, raw/, archive/</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card zone-card h-100 border-primary">
+                <div class="card-header bg-primary text-white"><i class="bi bi-funnel me-2"></i>Curated Zone</div>
+                <div class="card-body">
+                  <p class="small">Cleansed, transformed, business-ready data. Delta Lake provides ACID transactions.</p>
+                  <ul class="small mb-0">
+                    <li>ADLS Gen2, HNS enabled</li>
+                    <li>Delta Lake format</li>
+                    <li>Silver (cleaned) + Gold (aggregated)</li>
+                    <li>Feature store tables</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card zone-card h-100 border-success">
+                <div class="card-header bg-success text-white"><i class="bi bi-stars me-2"></i>Serving Zone</div>
+                <div class="card-body">
+                  <p class="small">AI-ready data: embeddings, vector indexes, model artifacts, and documents for RAG.</p>
+                  <ul class="small mb-0">
+                    <li>ADLS Gen2, HNS enabled</li>
+                    <li>Embeddings + vector indexes</li>
+                    <li>Model artifacts + packages</li>
+                    <li>Feeds AI Search and OpenAI</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI Services Layer -->
+        <section id="ai-services" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-stars me-2"></i>AI Services Layer</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="table-dark"><tr><th>Service</th><th>Role in LZ</th><th>Deployment Model</th><th>Key Limits</th><th>Private Endpoint Zone</th></tr></thead>
+              <tbody>
+                <tr><td><i class="bi bi-cpu text-primary me-1"></i>Azure OpenAI</td><td>LLM inference + embeddings</td><td>S0, GlobalStandard models</td><td>30 deployments, 240K TPM (GPT-4o)</td><td>privatelink.openai.azure.com</td></tr>
+                <tr><td><i class="bi bi-search text-primary me-1"></i>Azure AI Search</td><td>Vector + semantic search</td><td>Standard S1 (25GB), S2 (100GB)</td><td>50 indexes, 12 replicas max</td><td>privatelink.search.windows.net</td></tr>
+                <tr><td><i class="bi bi-hdd-rack text-primary me-1"></i>Azure Machine Learning</td><td>Model registry, training, endpoints</td><td>Workspace (Free) + compute</td><td>800 endpoints, 200 compute clusters</td><td>privatelink.api.azureml.ms</td></tr>
+                <tr><td><i class="bi bi-lightning text-primary me-1"></i>Azure Databricks</td><td>ETL, feature eng, training</td><td>Premium, VNet-injected</td><td>Workspace-level quotas</td><td>privatelink.databricks.azure.net</td></tr>
+                <tr><td><i class="bi bi-box-seam text-primary me-1"></i>Container Registry</td><td>ML model container images</td><td>Premium (geo-replicated)</td><td>500 repos, 500GB storage</td><td>privatelink.azurecr.io</td></tr>
+                <tr><td><i class="bi bi-signpost-2 text-primary me-1"></i>API Management</td><td>Gateway for AI APIs</td><td>Standard v2 / Consumption</td><td>4,000 req/sec (Std v2)</td><td>privatelink.azure-api.net</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Observability -->
+        <section id="observability" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-graph-up me-2"></i>Observability &amp; Monitoring</h2>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="card h-100 border-primary"><div class="card-body">
+                <h6><i class="bi bi-speedometer2 text-primary me-2"></i>Application Insights</h6>
+                <ul class="small mb-0">
+                  <li>Workspace-based (linked to Log Analytics)</li>
+                  <li>Request tracing on OpenAI calls</li>
+                  <li>Dependency tracking for AI Search</li>
+                  <li>Custom metrics: token usage, latency P95</li>
+                  <li>Smart detection for anomalies</li>
+                </ul>
+              </div></div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 border-success"><div class="card-body">
+                <h6><i class="bi bi-journal-text text-success me-2"></i>Log Analytics</h6>
+                <ul class="small mb-0">
+                  <li>Centralized in Management subscription</li>
+                  <li>90-day hot retention (365 for compliance)</li>
+                  <li>Diagnostic settings on all AI services</li>
+                  <li>KQL queries for OpenAI usage analysis</li>
+                  <li>Cost: ~$2.30/GB ingestion</li>
+                </ul>
+              </div></div>
+            </div>
+            <div class="col-md-4">
+              <div class="card h-100 border-danger"><div class="card-body">
+                <h6><i class="bi bi-bell text-danger me-2"></i>Alerting</h6>
+                <ul class="small mb-0">
+                  <li>OpenAI 429 rate-limiting alerts</li>
+                  <li>AI Search latency P95 > threshold</li>
+                  <li>AKS node CPU/memory pressure</li>
+                  <li>Firewall threat intel hits</li>
+                  <li>Key Vault access anomalies</li>
+                </ul>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pattern Mapping -->
+        <section id="pattern-mapping" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-signpost-split me-2"></i>Pattern-to-Landing-Zone Mapping</h2>
+          <p>Each of the 7 Azure AI Deployment Patterns maps to a specific landing zone topology. Use this table to choose the right foundation:</p>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead class="table-dark"><tr><th>Pattern</th><th>LZ Type</th><th>Subscriptions</th><th>VNet Model</th><th>Firewall</th><th>Best For</th><th></th></tr></thead>
+              <tbody>
+                <tr><td><strong>1. Centralized Hub</strong></td><td>Platform LZ (Hub)</td><td>1 shared AI sub</td><td>Hub VNet + spoke peering</td><td>Optional</td><td>Single-team, cost-efficient</td><td><a href="pattern1.html" class="btn btn-sm btn-outline-primary">Details</a></td></tr>
+                <tr><td><strong>2. Decentralized Spoke</strong></td><td>App LZ (per spoke)</td><td>N subs (1/team)</td><td>Isolated VNets</td><td>Standard</td><td>Data isolation, autonomy</td><td><a href="pattern2.html" class="btn btn-sm btn-outline-info">Details</a></td></tr>
+                <tr><td><strong>3. Hybrid Central-Spoke</strong></td><td>Platform + App LZ</td><td>1 hub + N spoke subs</td><td>Hub-spoke peering</td><td>Standard</td><td>Shared models + spoke RAG</td><td><a href="pattern3.html" class="btn btn-sm btn-outline-success">Details</a></td></tr>
+                <tr><td><strong>4. AI Factory / MLOps</strong></td><td>Dedicated AI LZ</td><td>1 AI Factory sub</td><td>Single VNet, 5+ subnets</td><td>Optional</td><td>Full ML lifecycle</td><td><a href="pattern4.html" class="btn btn-sm btn-outline-secondary">Details</a></td></tr>
+                <tr><td><strong>5. Serverless</strong></td><td>Online LZ / Sandbox</td><td>1 sub</td><td>No VNet (public PaaS)</td><td>None</td><td>PoC, hackathons, MVP</td><td><a href="pattern5.html" class="btn btn-sm btn-outline-warning">Details</a></td></tr>
+                <tr><td><strong>6. Secure Private</strong></td><td>Corp LZ (isolated)</td><td>1 dedicated sub</td><td>Fully private VNet</td><td>Premium</td><td>Regulated (HIPAA, PCI)</td><td><a href="pattern6.html" class="btn btn-sm btn-outline-danger">Details</a></td></tr>
+                <tr><td><strong>7. Data-Centric Lakehouse</strong></td><td>Dedicated AI LZ</td><td>1 AI + data sub</td><td>Single VNet, 6+ subnets</td><td>Optional</td><td>Data platform + AI</td><td><a href="pattern7.html" class="btn btn-sm btn-outline-dark">Details</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Decision Tree -->
+        <section id="decision-tree" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-signpost-2 me-2"></i>Landing Zone Decision Tree</h2>
+          <div class="card shadow">
+            <div class="card-body text-center p-4">
+              <pre class="mermaid">
+graph TD
+    START["Start: New AI Workload"] --> Q1{"Need private&lt;br/&gt;network isolation?"}
+    Q1 -->|"No"| Q2{"Production or&lt;br/&gt;PoC / internal?"}
+    Q2 -->|"PoC"| P5["Pattern 5&lt;br/&gt;Serverless AI&lt;br/&gt;Online LZ / Sandbox"]
+    Q2 -->|"Production"| Q3{"Multiple teams&lt;br/&gt;sharing AI?"}
+    Q1 -->|"Yes"| Q4{"Zero Trust /&lt;br/&gt;regulated data?"}
+    Q4 -->|"Yes"| P6["Pattern 6&lt;br/&gt;Secure Private AI&lt;br/&gt;Corp LZ"]
+    Q4 -->|"No"| Q5{"Data-intensive&lt;br/&gt;with Databricks?"}
+    Q5 -->|"Yes"| Q6{"Full ML lifecycle&lt;br/&gt;needed?"}
+    Q6 -->|"Yes"| P4["Pattern 4&lt;br/&gt;AI Factory / MLOps&lt;br/&gt;Dedicated AI LZ"]
+    Q6 -->|"No"| P7["Pattern 7&lt;br/&gt;Data-Centric Lakehouse&lt;br/&gt;Dedicated AI LZ"]
+    Q5 -->|"No"| Q3
+    Q3 -->|"Yes"| Q7{"Teams need&lt;br/&gt;full isolation?"}
+    Q7 -->|"Yes"| P2["Pattern 2&lt;br/&gt;Decentralized Spoke&lt;br/&gt;App LZ per team"]
+    Q7 -->|"No"| Q8{"Teams need own&lt;br/&gt;search / RAG?"}
+    Q8 -->|"Yes"| P3["Pattern 3&lt;br/&gt;Hybrid Central-Spoke&lt;br/&gt;Platform + App LZ"]
+    Q8 -->|"No"| P1["Pattern 1&lt;br/&gt;Centralized Hub&lt;br/&gt;Platform LZ"]
+    Q3 -->|"No"| P1
+    style P1 fill:#0d6efd,color:#fff
+    style P2 fill:#0dcaf0,color:#000
+    style P3 fill:#198754,color:#fff
+    style P4 fill:#6f42c1,color:#fff
+    style P5 fill:#fd7e14,color:#fff
+    style P6 fill:#dc3545,color:#fff
+    style P7 fill:#20c997,color:#fff
+              </pre>
+            </div>
+          </div>
+        </section>
+
+        <!-- Deployment Checklist -->
+        <section id="checklist" class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-check2-square me-2"></i>AI Landing Zone Deployment Checklist</h2>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card h-100"><div class="card-body">
+                <h6 class="fw-bold border-bottom pb-2"><i class="bi bi-1-circle-fill text-primary me-2"></i>Foundation</h6>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c1"><label class="form-check-label" for="c1">Management group hierarchy created</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c2"><label class="form-check-label" for="c2">AI subscriptions provisioned (Prod + NonProd)</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c3"><label class="form-check-label" for="c3">Azure Policies assigned at AI MG level</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c4"><label class="form-check-label" for="c4">Budget alerts configured</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c5"><label class="form-check-label" for="c5">Resource naming convention documented</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c6"><label class="form-check-label" for="c6">Required tags policy enforced</label></div>
+              </div></div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100"><div class="card-body">
+                <h6 class="fw-bold border-bottom pb-2"><i class="bi bi-2-circle-fill text-success me-2"></i>Networking</h6>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c7"><label class="form-check-label" for="c7">Hub VNet deployed with Firewall + Bastion</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c8"><label class="form-check-label" for="c8">AI Spoke VNet created with subnet plan</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c9"><label class="form-check-label" for="c9">VNet Peering established (bidirectional)</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c10"><label class="form-check-label" for="c10">UDR route table (0.0.0.0/0 → Firewall)</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c11"><label class="form-check-label" for="c11">Private DNS Zones created (8+ zones)</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c12"><label class="form-check-label" for="c12">NSGs applied on all subnets</label></div>
+              </div></div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100"><div class="card-body">
+                <h6 class="fw-bold border-bottom pb-2"><i class="bi bi-3-circle-fill text-warning me-2"></i>Security &amp; Identity</h6>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c13"><label class="form-check-label" for="c13">Entra ID groups for AI RBAC roles</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c14"><label class="form-check-label" for="c14">Managed Identities on all services</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c15"><label class="form-check-label" for="c15">Key Vault (RBAC, purge-protected, PE)</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c16"><label class="form-check-label" for="c16">Conditional Access policies for AI MG</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c17"><label class="form-check-label" for="c17">Defender for Cloud enabled</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c18"><label class="form-check-label" for="c18">PIM configured for elevated roles</label></div>
+              </div></div>
+            </div>
+            <div class="col-md-6">
+              <div class="card h-100"><div class="card-body">
+                <h6 class="fw-bold border-bottom pb-2"><i class="bi bi-4-circle-fill text-danger me-2"></i>AI Services &amp; Data</h6>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c19"><label class="form-check-label" for="c19">Azure OpenAI deployed with content filtering</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c20"><label class="form-check-label" for="c20">AI Search with semantic config</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c21"><label class="form-check-label" for="c21">ADLS Gen2 accounts (medallion zones)</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c22"><label class="form-check-label" for="c22">Private Endpoints for all PaaS services</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c23"><label class="form-check-label" for="c23">Diagnostic settings → Log Analytics</label></div>
+                <div class="form-check mb-1"><input class="form-check-input" type="checkbox" id="c24"><label class="form-check-label" for="c24">Quota requests submitted (OpenAI TPM, GPU)</label></div>
+              </div></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- References -->
+        <section class="mb-5">
+          <h2 class="fw-bold mb-4"><i class="bi bi-book me-2"></i>References</h2>
+          <div class="row g-3">
+            <div class="col-md-6"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/" target="_blank" class="card text-decoration-none h-100"><div class="card-body d-flex align-items-center">
+              <i class="bi bi-box-arrow-up-right text-primary me-3 fs-4"></i>
+              <div><strong>Azure Landing Zone Overview</strong><br><small class="text-body-secondary">Cloud Adoption Framework — Ready methodology</small></div>
+            </div></a></div>
+            <div class="col-md-6"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/scenarios/ai/" target="_blank" class="card text-decoration-none h-100"><div class="card-body d-flex align-items-center">
+              <i class="bi bi-box-arrow-up-right text-primary me-3 fs-4"></i>
+              <div><strong>AI in CAF</strong><br><small class="text-body-secondary">Cloud Adoption Framework — AI scenario</small></div>
+            </div></a></div>
+            <div class="col-md-6"><a href="https://learn.microsoft.com/azure/architecture/ai-ml/architecture/baseline-openai-e2e-chat" target="_blank" class="card text-decoration-none h-100"><div class="card-body d-flex align-items-center">
+              <i class="bi bi-box-arrow-up-right text-primary me-3 fs-4"></i>
+              <div><strong>Baseline OpenAI E2E Chat Architecture</strong><br><small class="text-body-secondary">Azure Architecture Center reference</small></div>
+            </div></a></div>
+            <div class="col-md-6"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/enterprise-scale/management-group-and-subscription-organization" target="_blank" class="card text-decoration-none h-100"><div class="card-body d-flex align-items-center">
+              <i class="bi bi-box-arrow-up-right text-primary me-3 fs-4"></i>
+              <div><strong>Management Group Organization</strong><br><small class="text-body-secondary">CAF enterprise-scale hierarchy</small></div>
+            </div></a></div>
+          </div>
+        </section>
+
+      </div><!-- /col-lg-9 -->
+    </div><!-- /row -->
+  </div><!-- /container -->
+
+  <!-- Nav to patterns -->
+  <section class="py-4 bg-primary text-white">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="index.html" class="btn btn-outline-light"><i class="bi bi-house me-2"></i>All Patterns</a>
+        <span class="fw-bold">Landing Zone Architecture Guide</span>
+        <a href="pattern1.html" class="btn btn-light"><i class="bi bi-arrow-right me-2"></i>Pattern 1: Centralized Hub</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2025</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-primary btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose'});
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      const html=document.documentElement;
+      const isDark=html.getAttribute('data-bs-theme')==='dark';
+      html.setAttribute('data-bs-theme',isDark?'light':'dark');
+      toggle.querySelector('i').className=isDark?'bi bi-moon-stars-fill':'bi bi-sun-fill';
+    });
+    window.addEventListener('scroll',()=>{
+      document.getElementById('backToTop').style.display=window.scrollY>300?'block':'none';
+      // Highlight active TOC link
+      const sections=document.querySelectorAll('section[id]');
+      let current='';
+      sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)current=s.id;});
+      document.querySelectorAll('.toc a').forEach(a=>{
+        a.classList.toggle('active',a.getAttribute('href')==='#'+current);
+      });
+    });
+  </script>
+</body>
+</html>
