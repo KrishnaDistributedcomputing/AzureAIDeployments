@@ -63,6 +63,41 @@
         <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
           <i class="bi bi-moon-stars-fill"></i>
         </button>
+        <div class="dropdown ms-lg-2">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="currencyBtn" data-bs-toggle="dropdown" title="Currency">
+            <i class="bi bi-currency-dollar me-1"></i><span id="currencyLabel">USD</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" id="currencyMenu" style="max-height:320px;overflow-y:auto">
+            <li><h6 class="dropdown-header">Americas</h6></li>
+            <li><a class="dropdown-item active" href="#" data-currency="USD" data-symbol="$" data-rate="1">🇺🇸 USD — US Dollar</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="CAD" data-symbol="CA$" data-rate="1.36">🇨🇦 CAD — Canadian Dollar</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="BRL" data-symbol="R$" data-rate="4.97">🇧🇷 BRL — Brazilian Real</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="MXN" data-symbol="MX$" data-rate="17.15">🇲🇽 MXN — Mexican Peso</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Europe / Middle East / Africa</h6></li>
+            <li><a class="dropdown-item" href="#" data-currency="EUR" data-symbol="€" data-rate="0.92">🇪🇺 EUR — Euro</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="GBP" data-symbol="£" data-rate="0.79">🇬🇧 GBP — British Pound</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="CHF" data-symbol="CHF" data-rate="0.88">🇨🇭 CHF — Swiss Franc</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="SEK" data-symbol="kr" data-rate="10.42">🇸🇪 SEK — Swedish Krona</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="NOK" data-symbol="kr" data-rate="10.55">🇳🇴 NOK — Norwegian Krone</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="DKK" data-symbol="kr" data-rate="6.87">🇩🇰 DKK — Danish Krone</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="ZAR" data-symbol="R" data-rate="18.63">🇿🇦 ZAR — South African Rand</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="AED" data-symbol="د.إ" data-rate="3.67">🇦🇪 AED — UAE Dirham</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="SAR" data-symbol="﷼" data-rate="3.75">🇸🇦 SAR — Saudi Riyal</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="ILS" data-symbol="₪" data-rate="3.63">🇮🇱 ILS — Israeli Shekel</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><h6 class="dropdown-header">Asia Pacific</h6></li>
+            <li><a class="dropdown-item" href="#" data-currency="INR" data-symbol="₹" data-rate="83.12">🇮🇳 INR — Indian Rupee</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="JPY" data-symbol="¥" data-rate="149.50">🇯🇵 JPY — Japanese Yen</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="AUD" data-symbol="A$" data-rate="1.53">🇦🇺 AUD — Australian Dollar</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="KRW" data-symbol="₩" data-rate="1320">🇰🇷 KRW — Korean Won</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="SGD" data-symbol="S$" data-rate="1.34">🇸🇬 SGD — Singapore Dollar</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="HKD" data-symbol="HK$" data-rate="7.82">🇭🇰 HKD — Hong Kong Dollar</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="CNY" data-symbol="¥" data-rate="7.24">🇨🇳 CNY — Chinese Yuan</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="IDR" data-symbol="Rp" data-rate="15650">🇮🇩 IDR — Indonesian Rupiah</a></li>
+            <li><a class="dropdown-item" href="#" data-currency="NZD" data-symbol="NZ$" data-rate="1.63">🇳🇿 NZD — New Zealand Dollar</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
@@ -462,6 +497,9 @@
             </div>
           </div>
           <p class="text-muted small mt-2 text-center"><i class="bi bi-info-circle me-1"></i>All prices in USD. Actual costs depend on usage, region, and reservations. See <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank">Azure Pricing Calculator</a> for precise estimates.</p>
+          <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Disclaimer:</strong> All pricing shown is for <strong>reference and estimation purposes only</strong>. Actual Azure costs vary by region, currency, reserved instance commitments, enterprise agreements, and real-time consumption. Currency conversions use approximate exchange rates and do not reflect Azure's official regional pricing. Always verify with the <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank" class="alert-link">Azure Pricing Calculator</a> or your Microsoft account team before budgeting.
+          </div>
         </div>
       </div>
     </div>
@@ -1059,6 +1097,97 @@
       html.setAttribute('data-bs-theme', dark ? 'light' : 'dark');
       icon.className = dark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
     });
+
+    // ── Currency Conversion Engine ──────────────────────────────
+    (function() {
+      let currentCurrency = 'USD';
+      let currentSymbol = '$';
+      let currentRate = 1;
+
+      // On page load, scan all price text and store original USD values
+      function initPrices() {
+        // Pattern: ~$1,234 or $1,234.56 or $0.022 etc.
+        const priceRegex = /~?\$[\d,]+(?:\.\d+)?/g;
+        const containers = document.querySelectorAll('.badge-cost, .list-group-item, .modal-body td, .modal-body p, #costs td, #costs small, .list-group-item small, .list-group-item .fw-bold');
+        containers.forEach(el => {
+          if (el.querySelector('.price-converted')) return; // already processed
+          const html = el.innerHTML;
+          if (!priceRegex.test(html)) return;
+          priceRegex.lastIndex = 0;
+          el.innerHTML = html.replace(priceRegex, match => {
+            const hasApprox = match.startsWith('~');
+            const numStr = match.replace(/[~$,]/g, '');
+            const usd = parseFloat(numStr);
+            if (isNaN(usd)) return match;
+            return `<span class="price-converted" data-usd="${usd}" data-approx="${hasApprox ? '1' : '0'}">${match}</span>`;
+          });
+        });
+      }
+
+      function convertPrices(rate, symbol, code) {
+        document.querySelectorAll('.price-converted').forEach(span => {
+          const usd = parseFloat(span.dataset.usd);
+          const approx = span.dataset.approx === '1';
+          const converted = usd * rate;
+          let formatted;
+          // For large numbers use locale formatting
+          if (converted >= 1) {
+            formatted = converted.toLocaleString('en-US', { minimumFractionDigits: converted < 10 ? 2 : 0, maximumFractionDigits: converted < 10 ? 2 : 0 });
+          } else {
+            // Very small numbers keep significant figures
+            formatted = converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 6 });
+          }
+          span.textContent = (approx ? '~' : '') + symbol + formatted;
+          if (code !== 'USD') {
+            span.textContent += '';
+          }
+        });
+        // Update the /mo suffix badges
+        document.querySelectorAll('.badge-cost .price-converted').forEach(span => {
+          const parent = span.closest('.badge-cost');
+          if (parent && !parent.textContent.includes('/mo')) {
+            // The /mo might be outside the span
+          }
+        });
+      }
+
+      // Currency menu click handler
+      document.getElementById('currencyMenu').addEventListener('click', function(e) {
+        const item = e.target.closest('[data-currency]');
+        if (!item) return;
+        e.preventDefault();
+        const code = item.dataset.currency;
+        const symbol = item.dataset.symbol;
+        const rate = parseFloat(item.dataset.rate);
+        // Update active state
+        this.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        // Update button label
+        document.getElementById('currencyLabel').textContent = code;
+        // Update icon based on currency symbol
+        const btnIcon = document.querySelector('#currencyBtn i');
+        const iconMap = { '$': 'bi-currency-dollar', '€': 'bi-currency-euro', '£': 'bi-currency-pound', '¥': 'bi-currency-yen', '₹': 'bi-currency-rupee', '₩': 'bi-currency-bitcoin' };
+        btnIcon.className = 'bi ' + (iconMap[symbol] || 'bi-cash-stack') + ' me-1';
+        currentCurrency = code;
+        currentSymbol = symbol;
+        currentRate = rate;
+        convertPrices(rate, symbol, code);
+      });
+
+      // Initialize after DOM is fully loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initPrices);
+      } else {
+        initPrices();
+      }
+      // Also re-init after modals are shown (lazy content)
+      document.addEventListener('shown.bs.modal', function() {
+        initPrices();
+        if (currentCurrency !== 'USD') {
+          convertPrices(currentRate, currentSymbol, currentCurrency);
+        }
+      });
+    })();
 
     // Pattern search filter
     document.getElementById('patternSearch').addEventListener('input', function () {
