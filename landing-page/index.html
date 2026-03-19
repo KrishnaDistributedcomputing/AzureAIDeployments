@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Azure AI Deployment Patterns — 10 Enterprise Architecture Blueprints</title>
-  <meta name="description" content="Ten battle-tested Azure AI deployment patterns: Centralized Hub, Decentralized Spoke, Hybrid, MLOps Factory, Serverless, Secure Private, Lakehouse, Lift &amp; Shift, SQL Migration, and Greenfield. Compare costs, SLAs, and deploy with Bicep." />
+  <title>Azure AI Deployment Patterns — 10 Reference Architectures with Costs, SLAs &amp; Bicep</title>
+  <meta name="description" content="10 Azure AI deployment patterns with service lists, cost estimates, composite SLA calculations, and Bicep IaC. Covers Centralized Hub, Decentralized Spoke, Hybrid, MLOps Factory, Serverless, Secure Private, Lakehouse, Lift &amp; Shift, SQL Migration, and Greenfield." />
   <meta name="keywords" content="Azure AI, deployment patterns, enterprise architecture, Azure OpenAI, MLOps, serverless AI, secure private AI, cloud migration, landing zone, CAF, Bicep, IaC" />
   <meta name="author" content="Krishna Distributedcomputing" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
@@ -12,15 +12,15 @@
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/" />
-  <meta property="og:title" content="Azure AI Deployment Patterns — 10 Enterprise Blueprints" />
-  <meta property="og:description" content="Compare 10 battle-tested Azure AI architecture patterns. Costs, SLAs, WAF alignment, Bicep IaC, and deploy spec generator included." />
+  <meta property="og:title" content="Azure AI Deployment Patterns — 10 Reference Architectures" />
+  <meta property="og:description" content="10 documented Azure AI architecture patterns. Each includes services, costs, SLA, WAF alignment, and Bicep deploy specs." />
   <meta property="og:image" content="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/img/hero-education.svg" />
   <meta property="og:site_name" content="Azure AI Deployment Patterns" />
   <meta property="og:locale" content="en_US" />
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Azure AI Deployment Patterns — 10 Enterprise Blueprints" />
-  <meta name="twitter:description" content="Compare 10 battle-tested Azure AI architecture patterns with costs, SLAs, and deploy specs." />
+  <meta name="twitter:title" content="Azure AI Deployment Patterns — 10 Reference Architectures" />
+  <meta name="twitter:description" content="10 documented Azure AI architecture patterns with costs, SLAs, and Bicep deploy specs." />
   <meta name="twitter:image" content="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/img/hero-education.svg" />
   <!-- Geo targeting -->
   <meta name="geo.region" content="US" />
@@ -32,7 +32,7 @@
     "@type": "WebSite",
     "name": "Azure AI Deployment Patterns",
     "url": "https://calm-ocean-0e8faaa10.4.azurestaticapps.net/",
-    "description": "Ten battle-tested Azure AI deployment patterns for enterprise architecture.",
+    "description": "10 documented Azure AI deployment patterns with service lists, cost estimates, and Bicep IaC.",
     "publisher": {
       "@type": "Organization",
       "name": "Azure AI Patterns",
@@ -228,9 +228,9 @@
     <div class="container py-5">
       <div class="row align-items-center gy-4">
         <div class="col-lg-7">
-          <span class="badge bg-white bg-opacity-25 text-white mb-3 px-3 py-2 rounded-pill" style="backdrop-filter:blur(6px)"><i class="bi bi-stars me-1"></i>10 Enterprise-grade AI Blueprints</span>
-          <h1 class="hero-title mb-3">Enterprise Azure AI<br/>Deployment Patterns</h1>
-          <p class="hero-subtitle mb-4">Battle-tested architectural blueprints for deploying AI workloads on Azure — from centralized hubs to greenfield deployments, migrations, and beyond.</p>
+          <span class="badge bg-white bg-opacity-25 text-white mb-3 px-3 py-2 rounded-pill" style="backdrop-filter:blur(6px)"><i class="bi bi-stars me-1"></i>10 Reference Architectures &middot; Open Source</span>
+          <h1 class="hero-title mb-3">Azure AI<br/>Deployment Patterns</h1>
+          <p class="hero-subtitle mb-4">10 documented architecture patterns for deploying AI on Azure. Each includes a service list, cost estimate, composite SLA calculation, Bicep IaC, and a deploy spec generator. Covers hub-spoke, serverless, private AI, lakehouse, migration, and greenfield scenarios.</p>
           <div class="d-flex flex-wrap gap-3 mb-4">
             <a href="#patterns" class="btn btn-light hero-btn"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Explore Patterns</a>
             <a href="#comparison" class="btn btn-outline-light hero-btn"><i class="bi bi-table me-2"></i>Compare All</a>
@@ -245,8 +245,8 @@
                   <img src="img/icon-patterns.svg" alt="Patterns" />
                 </div>
                 <div class="flex-grow-1">
-                  <h6 class="fw-bold mb-1">10 AI Patterns</h6>
-                  <small class="opacity-75">Comparison, costs, SLA, BOM &amp; deploy specs</small>
+                  <h6 class="fw-bold mb-1">10 Architecture Patterns</h6>
+                  <small class="opacity-75">Side-by-side costs, SLAs, services &amp; Bicep specs</small>
                 </div>
                 <i class="bi bi-arrow-right fs-4 opacity-50"></i>
               </div>
@@ -257,8 +257,8 @@
                   <img src="img/icon-landingzone.svg" alt="Landing Zone" />
                 </div>
                 <div class="flex-grow-1">
-                  <h6 class="fw-bold mb-1">Landing Zone Architecture</h6>
-                  <small class="opacity-75">CAF hierarchy, hub-spoke, subnet design</small>
+                  <h6 class="fw-bold mb-1">Landing Zone Reference</h6>
+                  <small class="opacity-75">CAF management groups, hub-spoke VNet, subnets</small>
                 </div>
                 <i class="bi bi-arrow-right fs-4 opacity-50"></i>
               </div>
@@ -270,7 +270,7 @@
                 </div>
                 <div class="flex-grow-1">
                   <h6 class="fw-bold mb-1">Education AI Platform</h6>
-                  <small class="opacity-75">Work IQ, Foundry IQ, Fabric IQ engines</small>
+                  <small class="opacity-75">Work IQ, Foundry IQ, Fabric IQ — sample vertical</small>
                 </div>
                 <i class="bi bi-arrow-right fs-4 opacity-50"></i>
               </div>
