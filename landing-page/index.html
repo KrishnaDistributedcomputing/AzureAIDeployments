@@ -70,8 +70,25 @@
   <style>
     :root { --accent: #0078d4; --accent-dark: #50e6ff; }
     [data-bs-theme="dark"] { --accent: #50e6ff; }
-    .hero { background: linear-gradient(135deg, #0078d4 0%, #50e6ff 100%); min-height: 420px; }
-    [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #003566 0%, #0078d4 100%); }
+    /* Hero with SVG background */
+    .hero { position:relative; min-height:520px; background:linear-gradient(135deg,#0050a0 0%,#0078d4 40%,#00a2e8 70%,#50e6ff 100%); overflow:hidden; }
+    [data-bs-theme="dark"] .hero { background:linear-gradient(135deg,#001830 0%,#003566 40%,#0050a0 100%); }
+    .hero-bg-svg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.35; pointer-events:none; }
+    [data-bs-theme="dark"] .hero-bg-svg { opacity:0.5; }
+    .hero .container { position:relative; z-index:2; }
+    .hero-card { background:rgba(255,255,255,0.1); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.18); border-radius:16px; padding:1.2rem; transition:transform .2s,box-shadow .2s,background .2s; }
+    .hero-card:hover { transform:translateY(-4px) scale(1.02); background:rgba(255,255,255,0.18); box-shadow:0 8px 32px rgba(0,0,0,.2); }
+    .hero-card-icon { width:56px; height:56px; border-radius:14px; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .hero-card-icon img { width:100%; height:100%; }
+    .hero-title { font-size:3.2rem; font-weight:800; line-height:1.12; letter-spacing:-0.02em; }
+    @media(max-width:991.98px){ .hero-title{font-size:2.2rem;} }
+    .hero-subtitle { font-size:1.15rem; opacity:0.9; max-width:540px; }
+    .hero-btn { border-radius:12px; padding:.75rem 1.5rem; font-weight:600; font-size:1rem; transition:transform .15s,box-shadow .15s; }
+    .hero-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.2); }
+    /* Stats counter animation */
+    .stat-card { border-radius:16px; padding:1.5rem 1rem; transition:transform .2s; }
+    .stat-card:hover { transform:translateY(-3px); }
+    .stat-number { font-size:2.4rem; font-weight:800; background:linear-gradient(135deg,#0078d4,#50e6ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
     .pattern-card { transition: transform .2s, box-shadow .2s; cursor: pointer; }
     .pattern-card:hover { transform: translateY(-6px); box-shadow: 0 12px 24px rgba(0,0,0,.15); }
     .badge-cost { font-size: .75rem; }
@@ -185,60 +202,57 @@
 
   <!-- Hero -->
   <section class="hero d-flex align-items-center text-white">
+    <img src="img/hero-azure-network.svg" alt="" class="hero-bg-svg" aria-hidden="true" />
     <div class="container py-5">
-      <div class="row align-items-center">
+      <div class="row align-items-center gy-4">
         <div class="col-lg-7">
-          <h1 class="display-4 fw-bold mb-3">Enterprise Azure AI<br/>Deployment Patterns</h1>
-          <p class="lead mb-4">Ten battle-tested architectural blueprints for deploying AI workloads on Azure — from centralized hubs to greenfield deployments and cloud migrations.</p>
-          <div class="d-flex flex-wrap gap-2 mb-4">
-            <a href="#patterns" class="btn btn-light btn-lg"><i class="bi bi-grid-3x3-gap-fill me-1"></i>Explore Patterns</a>
-            <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="btn btn-outline-light btn-lg"><i class="bi bi-github me-1"></i>GitHub</a>
+          <span class="badge bg-white bg-opacity-25 text-white mb-3 px-3 py-2 rounded-pill" style="backdrop-filter:blur(6px)"><i class="bi bi-stars me-1"></i>10 Enterprise-grade AI Blueprints</span>
+          <h1 class="hero-title mb-3">Enterprise Azure AI<br/>Deployment Patterns</h1>
+          <p class="hero-subtitle mb-4">Battle-tested architectural blueprints for deploying AI workloads on Azure — from centralized hubs to greenfield deployments, migrations, and beyond.</p>
+          <div class="d-flex flex-wrap gap-3 mb-4">
+            <a href="#patterns" class="btn btn-light hero-btn"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Explore Patterns</a>
+            <a href="#comparison" class="btn btn-outline-light hero-btn"><i class="bi bi-table me-2"></i>Compare All</a>
+            <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="btn btn-outline-light hero-btn"><i class="bi bi-github me-2"></i>GitHub</a>
           </div>
         </div>
-        <div class="col-lg-5 d-none d-lg-block">
-          <div class="row g-3">
-            <div class="col-12">
-              <a href="#patterns" class="text-decoration-none">
-                <div class="card bg-white bg-opacity-10 border-0 text-white p-3" style="backdrop-filter:blur(8px)">
-                  <div class="d-flex align-items-center">
-                    <div class="icon-circle bg-primary text-white me-3"><i class="bi bi-diagram-3-fill"></i></div>
-                    <div>
-                      <h6 class="fw-bold mb-0">10 AI Patterns</h6>
-                      <small class="opacity-75">Comparison, costs, SLA, BOM &amp; deploy specs</small>
-                    </div>
-                    <i class="bi bi-arrow-right ms-auto fs-5"></i>
-                  </div>
+        <div class="col-lg-5">
+          <div class="d-flex flex-column gap-3">
+            <a href="#patterns" class="text-decoration-none text-white">
+              <div class="hero-card d-flex align-items-center gap-3">
+                <div class="hero-card-icon" style="background:linear-gradient(135deg,#0078d4,#50e6ff)">
+                  <img src="img/icon-patterns.svg" alt="Patterns" />
                 </div>
-              </a>
-            </div>
-            <div class="col-12">
-              <a href="landing-zone.html" class="text-decoration-none">
-                <div class="card bg-white bg-opacity-10 border-0 text-white p-3" style="backdrop-filter:blur(8px)">
-                  <div class="d-flex align-items-center">
-                    <div class="icon-circle text-white me-3" style="background:linear-gradient(135deg,#0b5ed7,#198754)"><i class="bi bi-building-fill-gear"></i></div>
-                    <div>
-                      <h6 class="fw-bold mb-0">Landing Zone Architecture</h6>
-                      <small class="opacity-75">CAF hierarchy, hub-spoke, subnet design</small>
-                    </div>
-                    <i class="bi bi-arrow-right ms-auto fs-5"></i>
-                  </div>
+                <div class="flex-grow-1">
+                  <h6 class="fw-bold mb-1">10 AI Patterns</h6>
+                  <small class="opacity-75">Comparison, costs, SLA, BOM &amp; deploy specs</small>
                 </div>
-              </a>
-            </div>
-            <div class="col-12">
-              <a href="csi-education.html" class="text-decoration-none">
-                <div class="card bg-white bg-opacity-10 border-0 text-white p-3" style="backdrop-filter:blur(8px)">
-                  <div class="d-flex align-items-center">
-                    <div class="icon-circle text-white me-3" style="background:linear-gradient(135deg,#6f42c1,#0d6efd)"><i class="bi bi-mortarboard-fill"></i></div>
-                    <div>
-                      <h6 class="fw-bold mb-0">Education Platform</h6>
-                      <small class="opacity-75">Work IQ, Foundry IQ, Fabric IQ engines</small>
-                    </div>
-                    <i class="bi bi-arrow-right ms-auto fs-5"></i>
-                  </div>
+                <i class="bi bi-arrow-right fs-4 opacity-50"></i>
+              </div>
+            </a>
+            <a href="/landing-zone" class="text-decoration-none text-white">
+              <div class="hero-card d-flex align-items-center gap-3">
+                <div class="hero-card-icon" style="background:linear-gradient(135deg,#0b5ed7,#198754)">
+                  <img src="img/icon-landingzone.svg" alt="Landing Zone" />
                 </div>
-              </a>
-            </div>
+                <div class="flex-grow-1">
+                  <h6 class="fw-bold mb-1">Landing Zone Architecture</h6>
+                  <small class="opacity-75">CAF hierarchy, hub-spoke, subnet design</small>
+                </div>
+                <i class="bi bi-arrow-right fs-4 opacity-50"></i>
+              </div>
+            </a>
+            <a href="/education" class="text-decoration-none text-white">
+              <div class="hero-card d-flex align-items-center gap-3">
+                <div class="hero-card-icon" style="background:linear-gradient(135deg,#6f42c1,#0d6efd)">
+                  <img src="img/icon-education.svg" alt="Education" />
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="fw-bold mb-1">Education AI Platform</h6>
+                  <small class="opacity-75">Work IQ, Foundry IQ, Fabric IQ engines</small>
+                </div>
+                <i class="bi bi-arrow-right fs-4 opacity-50"></i>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -246,24 +260,32 @@
   </section>
 
   <!-- Quick Stats -->
-  <section class="py-4 bg-body-secondary">
+  <section class="py-5 bg-body-secondary">
     <div class="container">
-      <div class="row text-center g-3">
+      <div class="row text-center g-4">
         <div class="col-6 col-md-3">
-          <div class="fs-2 fw-bold text-primary">10</div>
-          <div class="text-muted small">Patterns</div>
+          <div class="stat-card bg-body shadow-sm">
+            <div class="stat-number" data-count="10">10</div>
+            <div class="text-muted small fw-semibold">Patterns</div>
+          </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="fs-2 fw-bold text-primary">17+</div>
-          <div class="text-muted small">Azure Services</div>
+          <div class="stat-card bg-body shadow-sm">
+            <div class="stat-number" data-count="17">17+</div>
+            <div class="text-muted small fw-semibold">Azure Services</div>
+          </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="fs-2 fw-bold text-primary">99.9%</div>
-          <div class="text-muted small">Composite SLA</div>
+          <div class="stat-card bg-body shadow-sm">
+            <div class="stat-number">99.9%</div>
+            <div class="text-muted small fw-semibold">Composite SLA</div>
+          </div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="fs-2 fw-bold text-primary">IaC</div>
-          <div class="text-muted small">Bicep Ready</div>
+          <div class="stat-card bg-body shadow-sm">
+            <div class="stat-number">IaC</div>
+            <div class="text-muted small fw-semibold">Bicep Ready</div>
+          </div>
         </div>
       </div>
     </div>

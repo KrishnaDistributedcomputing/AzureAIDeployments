@@ -1,0 +1,290 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 600" fill="none">
+  <defs>
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feComposite in="SourceGraphic" in2="b" operator="over"/>
+    </filter>
+    <!-- Gradient for data streams -->
+    <linearGradient id="stream1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#50e6ff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#50e6ff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#50e6ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="stream2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0078d4" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#0078d4" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#0078d4" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#50e6ff" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#50e6ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="centralGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background grid dots -->
+  <g opacity="0.12">
+    <circle cx="50" cy="50" r="1.5" fill="#fff"/><circle cx="150" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="250" cy="50" r="1.5" fill="#fff"/><circle cx="350" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="450" cy="50" r="1.5" fill="#fff"/><circle cx="550" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="650" cy="50" r="1.5" fill="#fff"/><circle cx="750" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="850" cy="50" r="1.5" fill="#fff"/><circle cx="950" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="1050" cy="50" r="1.5" fill="#fff"/><circle cx="1150" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="1250" cy="50" r="1.5" fill="#fff"/><circle cx="1350" cy="50" r="1.5" fill="#fff"/>
+    <circle cx="50" cy="150" r="1.5" fill="#fff"/><circle cx="150" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="250" cy="150" r="1.5" fill="#fff"/><circle cx="350" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="450" cy="150" r="1.5" fill="#fff"/><circle cx="550" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="650" cy="150" r="1.5" fill="#fff"/><circle cx="750" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="850" cy="150" r="1.5" fill="#fff"/><circle cx="950" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="1050" cy="150" r="1.5" fill="#fff"/><circle cx="1150" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="1250" cy="150" r="1.5" fill="#fff"/><circle cx="1350" cy="150" r="1.5" fill="#fff"/>
+    <circle cx="50" cy="250" r="1.5" fill="#fff"/><circle cx="150" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="250" cy="250" r="1.5" fill="#fff"/><circle cx="350" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="450" cy="250" r="1.5" fill="#fff"/><circle cx="550" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="650" cy="250" r="1.5" fill="#fff"/><circle cx="750" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="850" cy="250" r="1.5" fill="#fff"/><circle cx="950" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="1050" cy="250" r="1.5" fill="#fff"/><circle cx="1150" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="1250" cy="250" r="1.5" fill="#fff"/><circle cx="1350" cy="250" r="1.5" fill="#fff"/>
+    <circle cx="50" cy="350" r="1.5" fill="#fff"/><circle cx="150" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="250" cy="350" r="1.5" fill="#fff"/><circle cx="350" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="450" cy="350" r="1.5" fill="#fff"/><circle cx="550" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="650" cy="350" r="1.5" fill="#fff"/><circle cx="750" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="850" cy="350" r="1.5" fill="#fff"/><circle cx="950" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="1050" cy="350" r="1.5" fill="#fff"/><circle cx="1150" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="1250" cy="350" r="1.5" fill="#fff"/><circle cx="1350" cy="350" r="1.5" fill="#fff"/>
+    <circle cx="50" cy="450" r="1.5" fill="#fff"/><circle cx="150" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="250" cy="450" r="1.5" fill="#fff"/><circle cx="350" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="450" cy="450" r="1.5" fill="#fff"/><circle cx="550" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="650" cy="450" r="1.5" fill="#fff"/><circle cx="750" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="850" cy="450" r="1.5" fill="#fff"/><circle cx="950" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="1050" cy="450" r="1.5" fill="#fff"/><circle cx="1150" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="1250" cy="450" r="1.5" fill="#fff"/><circle cx="1350" cy="450" r="1.5" fill="#fff"/>
+    <circle cx="50" cy="550" r="1.5" fill="#fff"/><circle cx="150" cy="550" r="1.5" fill="#fff"/>
+    <circle cx="250" cy="550" r="1.5" fill="#fff"/><circle cx="350" cy="550" r="1.5" fill="#fff"/>
+    <circle cx="450" cy="550" r="1.5" fill="#fff"/><circle cx="550" cy="550" r="1.5" fill="#fff"/>
+    <circle cx="650" cy="550" r="1.5" fill="#fff"/><circle cx="750" cy="550" r="1.5" fill="#fff"/>
+    <circle cx="850" cy="550" r="1.5" fill="#fff"/><circle cx="950" cy="550" r="1.5" fill="#fff"/>
+    <circle cx="1050" cy="550" r="1.5" fill="#fff"/><circle cx="1150" cy="550" r="1.5" fill="#fff"/>
+    <circle cx="1250" cy="550" r="1.5" fill="#fff"/><circle cx="1350" cy="550" r="1.5" fill="#fff"/>
+  </g>
+
+  <!-- Connection lines between architecture nodes -->
+  <g opacity="0.25" stroke="#50e6ff" stroke-width="1.5">
+    <!-- Central hub to spokes -->
+    <line x1="700" y1="300" x2="420" y2="140"/>
+    <line x1="700" y1="300" x2="980" y2="140"/>
+    <line x1="700" y1="300" x2="420" y2="460"/>
+    <line x1="700" y1="300" x2="980" y2="460"/>
+    <line x1="700" y1="300" x2="1200" y2="300"/>
+    <line x1="700" y1="300" x2="200" y2="300"/>
+    <line x1="700" y1="300" x2="550" y2="100"/>
+    <line x1="700" y1="300" x2="850" y2="100"/>
+    <line x1="700" y1="300" x2="550" y2="500"/>
+    <line x1="700" y1="300" x2="850" y2="500"/>
+    <!-- Outer ring connections -->
+    <line x1="420" y1="140" x2="550" y2="100"/>
+    <line x1="550" y1="100" x2="850" y2="100"/>
+    <line x1="850" y1="100" x2="980" y2="140"/>
+    <line x1="980" y1="140" x2="1200" y2="300"/>
+    <line x1="1200" y1="300" x2="980" y2="460"/>
+    <line x1="980" y1="460" x2="850" y2="500"/>
+    <line x1="850" y1="500" x2="550" y2="500"/>
+    <line x1="550" y1="500" x2="420" y2="460"/>
+    <line x1="420" y1="460" x2="200" y2="300"/>
+    <line x1="200" y1="300" x2="420" y2="140"/>
+  </g>
+
+  <!-- Animated data pulses along connections -->
+  <g filter="url(#softGlow)">
+    <circle r="4" fill="#50e6ff">
+      <animateMotion dur="3s" repeatCount="indefinite" path="M700,300 L420,140"/>
+    </circle>
+    <circle r="4" fill="#50e6ff">
+      <animateMotion dur="2.5s" repeatCount="indefinite" path="M700,300 L980,140"/>
+    </circle>
+    <circle r="3.5" fill="#80eaff">
+      <animateMotion dur="4s" repeatCount="indefinite" path="M700,300 L1200,300"/>
+    </circle>
+    <circle r="3.5" fill="#80eaff">
+      <animateMotion dur="3.5s" repeatCount="indefinite" path="M700,300 L200,300"/>
+    </circle>
+    <circle r="3" fill="#50e6ff">
+      <animateMotion dur="2.8s" repeatCount="indefinite" path="M700,300 L420,460"/>
+    </circle>
+    <circle r="3" fill="#50e6ff">
+      <animateMotion dur="3.2s" repeatCount="indefinite" path="M700,300 L980,460"/>
+    </circle>
+    <circle r="3" fill="#a0f0ff">
+      <animateMotion dur="4.5s" repeatCount="indefinite" path="M700,300 L550,100"/>
+    </circle>
+    <circle r="3" fill="#a0f0ff">
+      <animateMotion dur="3.8s" repeatCount="indefinite" path="M700,300 L850,500"/>
+    </circle>
+  </g>
+
+  <!-- Central AI Brain Hub -->
+  <g filter="url(#glow)">
+    <circle cx="700" cy="300" r="65" fill="url(#centralGlow)" stroke="#50e6ff" stroke-width="2"/>
+    <circle cx="700" cy="300" r="45" fill="rgba(0,120,212,0.3)" stroke="#fff" stroke-width="1.5"/>
+    <!-- Brain icon -->
+    <g transform="translate(700,300)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+      <path d="M-12,-20 C-20,-20 -25,-12 -25,-4 C-25,0 -23,4 -20,6 C-23,10 -22,16 -18,19 C-14,22 -8,22 -4,20 C-2,24 4,26 8,24 C12,22 14,18 14,14 C18,12 22,8 22,2 C22,-4 18,-10 14,-12 C16,-18 12,-24 6,-24 C0,-24 -6,-22 -12,-20Z"/>
+      <line x1="0" y1="-20" x2="0" y2="20"/>
+      <path d="M0,-12 C6,-8 10,-2 10,4"/>
+      <path d="M0,-4 C-6,0 -10,6 -10,12"/>
+    </g>
+    <!-- Pulsing ring -->
+    <circle cx="700" cy="300" r="55" fill="none" stroke="#50e6ff" stroke-width="1" opacity="0.6">
+      <animate attributeName="r" values="55;75;55" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Node: Azure OpenAI (top-left) -->
+  <g transform="translate(420,140)" filter="url(#softGlow)">
+    <circle r="30" fill="rgba(0,120,212,0.25)" stroke="#50e6ff" stroke-width="1.5"/>
+    <circle r="40" fill="url(#nodeGlow)"/>
+    <!-- OpenAI chip icon -->
+    <rect x="-12" y="-12" width="24" height="24" rx="4" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="0" cy="0" r="5" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <line x1="0" y1="-12" x2="0" y2="-18" stroke="#fff" stroke-width="1.5"/>
+    <line x1="0" y1="12" x2="0" y2="18" stroke="#fff" stroke-width="1.5"/>
+    <line x1="-12" y1="0" x2="-18" y2="0" stroke="#fff" stroke-width="1.5"/>
+    <line x1="12" y1="0" x2="18" y2="0" stroke="#fff" stroke-width="1.5"/>
+    <text y="48" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Azure OpenAI</text>
+  </g>
+
+  <!-- Node: Security (top-right) -->
+  <g transform="translate(980,140)" filter="url(#softGlow)">
+    <circle r="28" fill="rgba(25,135,84,0.25)" stroke="#20c997" stroke-width="1.5"/>
+    <circle r="38" fill="url(#nodeGlow)"/>
+    <!-- Shield -->
+    <path d="M0,-15 L12,-8 L12,4 C12,12 6,18 0,20 C-6,18 -12,12 -12,4 L-12,-8Z" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <path d="M-4,2 L-1,6 L6,-2" fill="none" stroke="#20c997" stroke-width="2" stroke-linecap="round"/>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Private AI</text>
+  </g>
+
+  <!-- Node: Database (left) -->
+  <g transform="translate(200,300)" filter="url(#softGlow)">
+    <circle r="28" fill="rgba(13,110,253,0.25)" stroke="#6ea8fe" stroke-width="1.5"/>
+    <circle r="38" fill="url(#nodeGlow)"/>
+    <!-- Database -->
+    <ellipse cx="0" cy="-10" rx="12" ry="5" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <path d="M-12,-10 L-12,10 C-12,13 -6,15 0,15 C6,15 12,13 12,10 L12,-10" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <ellipse cx="0" cy="0" rx="12" ry="5" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.5"/>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Lakehouse</text>
+  </g>
+
+  <!-- Node: Serverless (right) -->
+  <g transform="translate(1200,300)" filter="url(#softGlow)">
+    <circle r="28" fill="rgba(255,193,7,0.2)" stroke="#ffc107" stroke-width="1.5"/>
+    <circle r="38" fill="url(#nodeGlow)"/>
+    <!-- Lightning bolt -->
+    <path d="M4,-16 L-6,2 L2,2 L-4,16 L10,-2 L2,-2Z" fill="#ffc107" opacity="0.9"/>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Serverless</text>
+  </g>
+
+  <!-- Node: MLOps Factory (bottom-left) -->
+  <g transform="translate(420,460)" filter="url(#softGlow)">
+    <circle r="28" fill="rgba(111,66,193,0.25)" stroke="#a78bfa" stroke-width="1.5"/>
+    <circle r="38" fill="url(#nodeGlow)"/>
+    <!-- Gear -->
+    <circle cx="0" cy="0" r="6" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <g fill="none" stroke="#fff" stroke-width="1.5">
+      <line x1="0" y1="-14" x2="0" y2="-9"/>
+      <line x1="0" y1="9" x2="0" y2="14"/>
+      <line x1="-14" y1="0" x2="-9" y2="0"/>
+      <line x1="9" y1="0" x2="14" y2="0"/>
+      <line x1="-10" y1="-10" x2="-6" y2="-6"/>
+      <line x1="6" y1="6" x2="10" y2="10"/>
+      <line x1="10" y1="-10" x2="6" y2="-6"/>
+      <line x1="-6" y1="6" x2="-10" y2="10"/>
+    </g>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">MLOps</text>
+  </g>
+
+  <!-- Node: Migration (bottom-right) -->
+  <g transform="translate(980,460)" filter="url(#softGlow)">
+    <circle r="28" fill="rgba(230,126,34,0.25)" stroke="#e67e22" stroke-width="1.5"/>
+    <circle r="38" fill="url(#nodeGlow)"/>
+    <!-- Arrow box (migration) -->
+    <rect x="-12" y="-10" width="24" height="20" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/>
+    <path d="M-6,0 L6,0 M2,-4 L6,0 L2,4" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+    <text y="46" text-anchor="middle" fill="#fff" font-size="11" font-family="Segoe UI,sans-serif" opacity="0.8">Migration</text>
+  </g>
+
+  <!-- Node: Hub-Spoke (top-center-left) -->
+  <g transform="translate(550,100)" filter="url(#softGlow)">
+    <circle r="22" fill="rgba(13,202,240,0.2)" stroke="#0dcaf0" stroke-width="1.5"/>
+    <!-- Hub spoke mini icon -->
+    <circle cx="0" cy="0" r="4" fill="#0dcaf0" opacity="0.8"/>
+    <circle cx="0" cy="-10" r="2.5" fill="#fff" opacity="0.6"/>
+    <circle cx="9" cy="5" r="2.5" fill="#fff" opacity="0.6"/>
+    <circle cx="-9" cy="5" r="2.5" fill="#fff" opacity="0.6"/>
+    <line x1="0" y1="0" x2="0" y2="-10" stroke="#fff" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="0" x2="9" y2="5" stroke="#fff" stroke-width="1" opacity="0.5"/>
+    <line x1="0" y1="0" x2="-9" y2="5" stroke="#fff" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Node: Greenfield (top-center-right) -->
+  <g transform="translate(850,100)" filter="url(#softGlow)">
+    <circle r="22" fill="rgba(25,135,84,0.2)" stroke="#198754" stroke-width="1.5"/>
+    <!-- Rocket -->
+    <path d="M0,-12 C4,-8 6,-2 6,4 L2,8 L0,6 L-2,8 L-6,4 C-6,-2 -4,-8 0,-12Z" fill="none" stroke="#fff" stroke-width="1.2"/>
+    <circle cx="0" cy="-2" r="2" fill="#198754"/>
+  </g>
+
+  <!-- Node: Hybrid (bottom-center-left) -->
+  <g transform="translate(550,500)" filter="url(#softGlow)">
+    <circle r="22" fill="rgba(13,110,253,0.2)" stroke="#6ea8fe" stroke-width="1.5"/>
+    <!-- Intersecting circles -->
+    <circle cx="-5" cy="0" r="8" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="5" cy="0" r="8" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.7"/>
+  </g>
+
+  <!-- Node: Analytics (bottom-center-right) -->
+  <g transform="translate(850,500)" filter="url(#softGlow)">
+    <circle r="22" fill="rgba(220,53,69,0.2)" stroke="#dc3545" stroke-width="1.5"/>
+    <!-- Bar chart -->
+    <rect x="-9" y="2" width="4" height="8" rx="1" fill="#fff" opacity="0.7"/>
+    <rect x="-3" y="-4" width="4" height="14" rx="1" fill="#fff" opacity="0.8"/>
+    <rect x="3" y="-8" width="4" height="18" rx="1" fill="#fff" opacity="0.9"/>
+  </g>
+
+  <!-- Floating particles -->
+  <g opacity="0.5">
+    <circle cx="100" cy="80" r="2" fill="#50e6ff">
+      <animate attributeName="cy" values="80;60;80" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="520" r="1.5" fill="#80eaff">
+      <animate attributeName="cy" values="520;500;520" dur="3.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1100" cy="120" r="2" fill="#a78bfa">
+      <animate attributeName="cy" values="120;100;120" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1300" cy="480" r="1.5" fill="#50e6ff">
+      <animate attributeName="cy" values="480;460;480" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="680" cy="40" r="1.5" fill="#fff">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="750" cy="560" r="1.5" fill="#fff">
+      <animate attributeName="opacity" values="0.2;0.7;0.2" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1050" cy="80" r="1" fill="#ffc107">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="350" cy="400" r="1" fill="#20c997">
+      <animate attributeName="opacity" values="0.3;0.9;0.3" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>

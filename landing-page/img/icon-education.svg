@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none">
+  <defs>
+    <linearGradient id="edu" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6f42c1"/>
+      <stop offset="100%" stop-color="#0d6efd"/>
+    </linearGradient>
+  </defs>
+  <circle cx="40" cy="40" r="36" fill="url(#edu)" opacity="0.12"/>
+  <!-- Graduation cap -->
+  <g transform="translate(40,36)" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round">
+    <!-- Cap top -->
+    <polygon points="0,-14 22,-4 0,6 -22,-4" fill="url(#edu)" opacity="0.5" stroke="#fff"/>
+    <!-- Tassel -->
+    <line x1="22" y1="-4" x2="22" y2="8"/>
+    <circle cx="22" cy="10" r="2" fill="#ffc107"/>
+    <!-- Board -->
+    <line x1="-14" y1="0" x2="-14" y2="10"/>
+    <line x1="14" y1="0" x2="14" y2="10"/>
+    <path d="M-14,10 C-14,16 14,16 14,10" stroke-width="1.2"/>
+  </g>
+  <!-- IQ sparkles -->
+  <g fill="#a78bfa" opacity="0.7">
+    <circle cx="18" cy="18" r="2">
+      <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="62" cy="20" r="1.5">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="58" cy="60" r="2">
+      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <!-- Brain dots -->
+  <g opacity="0.4">
+    <circle cx="28" cy="56" r="1" fill="#50e6ff"/>
+    <circle cx="52" cy="56" r="1" fill="#50e6ff"/>
+    <circle cx="40" cy="62" r="1" fill="#50e6ff"/>
+    <line x1="28" y1="56" x2="40" y2="62" stroke="#50e6ff" stroke-width="0.5"/>
+    <line x1="52" y1="56" x2="40" y2="62" stroke="#50e6ff" stroke-width="0.5"/>
+    <line x1="28" y1="56" x2="52" y2="56" stroke="#50e6ff" stroke-width="0.5"/>
+  </g>
+</svg>
