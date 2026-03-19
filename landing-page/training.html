@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Training Academy — Azure AI Deployment Patterns</title>
+  <meta name="description" content="Training Academy for Azure AI patterns — 5 personas, 25 courses, and interactive quizzes." />
+  <meta name="keywords" content="Azure AI training, learning paths, AI certification, cloud education" />
+  <meta name="author" content="Krishna Distributedcomputing" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    :root { --accent: #0078d4; --accent-dark: #50e6ff; }
+    [data-bs-theme="dark"] { --accent: #50e6ff; }
+    .hero-train { min-height:320px; background:linear-gradient(135deg,#6f42c1 0%,#0d6efd 50%,#0078d4 100%); }
+    [data-bs-theme="dark"] .hero-train { background:linear-gradient(135deg,#3d2a6f 0%,#1a3d7a 100%); }
+    .persona-card { border-radius:16px; transition:transform .2s,box-shadow .2s; cursor:pointer; }
+    .persona-card:hover { transform:translateY(-8px); box-shadow:0 12px 32px rgba(0,0,0,.15); }
+    .persona-badge { display:inline-block; padding:.5rem 1rem; border-radius:50px; font-weight:600; font-size:.85rem; margin-bottom:1rem; }
+    .course-card { border-left:4px solid var(--accent); border-radius:8px; transition:transform .15s,box-shadow .15s; }
+    .course-card:hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,.1); }
+    .course-icon { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
+    .module-list { list-style:none; padding:0; }
+    .module-list li { padding:.4rem 0; padding-left:1.5rem; position:relative; }
+    .module-list li:before { content:"\F26D"; font-family:"bootstrap-icons"; position:absolute; left:0; }
+    .quiz-modal { background:linear-gradient(135deg,rgba(0,120,212,.05),rgba(80,230,255,.05)); }
+    .quiz-btn { border-radius:8px; padding:.6rem 1.2rem; font-weight:600; transition:all .15s; }
+    .quiz-btn:hover { transform:translateY(-2px); }
+    [data-bs-theme="dark"] .quiz-modal { background:linear-gradient(135deg,rgba(0,120,212,.1),rgba(80,230,255,.1)); }
+    .progress-ring { transform:rotate(-90deg); }
+    .progress-ring circle { transition:stroke-dashoffset .35s; }
+    #backToTop { position:fixed; bottom:2rem; right:2rem; z-index:1050; display:none; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI <span class="badge bg-warning text-dark ms-1" style="font-size:.6rem;vertical-align:middle">BETA</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="sdd.html" style="color:#e67e22"><i class="bi bi-file-earmark-code me-1"></i>SDD</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning active" href="training.html"><i class="bi bi-mortarboard-fill me-1"></i>Training</a>
+          </li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-train text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-mortarboard-fill me-3"></i>Training Academy</h1>
+          <p class="lead mb-0">Master Azure AI deployment patterns with role-based learning paths. Each course is designed to be easy to understand but thorough in depth — perfect for teams at all levels.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+          <span class="badge bg-dark fs-6 px-4 py-2"><i class="bi bi-book me-2"></i>5 Learning Paths</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+
+    <!-- Persona Selection -->
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-people-fill me-2 text-primary"></i>Choose Your Learning Path</h2>
+      <p class="text-muted mb-4">Select your role to access curated courses and learning materials tailored to your needs.</p>
+      
+      <div class="row g-4">
+        <!-- C-Suite -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card persona-card border-0 shadow-sm h-100" data-persona="c-suite">
+            <div class="card-body">
+              <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#e67e22,#f39c12);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem">
+                <i class="bi bi-gem-fill"></i>
+              </div>
+              <h5 class="fw-bold mb-2">C-Suite Executive</h5>
+              <p class="text-muted small mb-3">Strategic decision-makers, board members, and executive leadership looking to understand AI deployment ROI, governance, and enterprise budgeting.</p>
+              <span class="badge bg-warning text-dark">5 Courses</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales Leader -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card persona-card border-0 shadow-sm h-100" data-persona="sales">
+            <div class="card-body">
+              <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#e83e8c,#fd7e14);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem">
+                <i class="bi bi-graph-up-arrow"></i>
+              </div>
+              <h5 class="fw-bold mb-2">Sales Leader</h5>
+              <p class="text-muted small mb-3">Sales directors and account executives who need to understand AI architectures, value propositions, and customer success stories.</p>
+              <span class="badge bg-danger">5 Courses</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technology Manager -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card persona-card border-0 shadow-sm h-100" data-persona="tech-mgmt">
+            <div class="card-body">
+              <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#0db7ed,#0078d4);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem">
+                <i class="bi bi-diagram-3-fill"></i>
+              </div>
+              <h5 class="fw-bold mb-2">Technology Manager</h5>
+              <p class="text-muted small mb-3">Engineering managers and architects who oversee teams through Azure AI deployments, solution design, and best practices.</p>
+              <span class="badge bg-info">5 Courses</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Developer -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card persona-card border-0 shadow-sm h-100" data-persona="developer">
+            <div class="card-body">
+              <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#0d6efd,#6f42c1);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem">
+                <i class="bi bi-code-slash"></i>
+              </div>
+              <h5 class="fw-bold mb-2">Developer</h5>
+              <p class="text-muted small mb-3">Full-stack and backend developers who implement AI features, work with Bicep IaC, and build production-grade applications.</p>
+              <span class="badge bg-primary">5 Courses</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DevOps -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card persona-card border-0 shadow-sm h-100" data-persona="devops">
+            <div class="card-body">
+              <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#198754,#0dcaf0);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:white;margin-bottom:1rem">
+                <i class="bi bi-git"></i>
+              </div>
+              <h5 class="fw-bold mb-2">DevOps Engineer</h5>
+              <p class="text-muted small mb-3">Platform engineers and site reliability engineers who manage CI/CD pipelines, infrastructure, monitoring, and production deployments.</p>
+              <span class="badge bg-success">5 Courses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Course Content (Hidden by default, shown on persona click) -->
+    
+    <!-- C-Suite Courses -->
+    <section id="c-suite" class="persona-content d-none mb-5">
+      <div class="mb-4">
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e67e22"><i class="bi bi-gem-fill me-2"></i>C-Suite Executive</span> — Learning Path</h2>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <!-- Course 1: AI ROI & Strategy -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-graph-up"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">1. AI ROI & Strategic Planning</h5>
+                  <small class="text-muted">45 min • Beginner</small>
+                </div>
+              </div>
+              <p class="mb-3">Understand how to calculate return on investment for AI projects, build business cases, and align AI spending with corporate strategy.</p>
+              <ul class="module-list small mb-3">
+                <li>AI investment fundamentals</li>
+                <li>ROI calculation frameworks</li>
+                <li>Risk mitigation strategies</li>
+                <li>Competitive advantage metrics</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="1" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2: AI Governance & Compliance -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-shield-check"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">2. AI Governance & Compliance</h5>
+                  <small class="text-muted">40 min • Beginner</small>
+                </div>
+              </div>
+              <p class="mb-3">Navigate regulatory requirements (GDPR, HIPAA), establish AI governance frameworks, and ensure responsible AI practices across your organization.</p>
+              <ul class="module-list small mb-3">
+                <li>Regulatory landscape (GDPR, HIPAA, SOC 2)</li>
+                <li>Data privacy and ethics</li>
+                <li>Governance frameworks &amp; guardrails</li>
+                <li>Audit and compliance tracking</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="2" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 3: Azure AI Architecture Landscape -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-diagram-3"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">3. Azure AI Architecture Landscape</h5>
+                  <small class="text-muted">50 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Tour of the 10 AI deployment patterns, when to use each, and how they scale with organizational growth.</p>
+              <ul class="module-list small mb-3">
+                <li>The 10 patterns overview</li>
+                <li>Hub-spoke vs. serverless trade-offs</li>
+                <li>Cost scaling across patterns</li>
+                <li>Pattern selection framework</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="3" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 4: Budget & Cost Management -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-currency-dollar"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">4. Budget & Cost Management</h5>
+                  <small class="text-muted">35 min • Beginner</small>
+                </div>
+              </div>
+              <p class="mb-3">Master Azure cost optimization, budgeting for AI workloads, and cost forecasting with reserved instances and commitment discounts.</p>
+              <ul class="module-list small mb-3">
+                <li>Azure cost structure &amp; SKUs</li>
+                <li>Commitment discounts (RIs, SPs)</li>
+                <li>Cost forecasting tools</li>
+                <li>Chargeback models &amp; FinOps</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="4" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 5: Digital Transformation & Change Management -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-rocket-takeoff"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">5. Digital Transformation &amp; Change Mgmt</h5>
+                  <small class="text-muted">55 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Lead organizational transformation with AI, change management strategies, and upskilling initiatives for your workforce.</p>
+              <ul class="module-list small mb-3">
+                <li>Change management frameworks</li>
+                <li>Transformation roadmaps</li>
+                <li>Stakeholder engagement</li>
+                <li>Skills development &amp; training ROI</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="5" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sales Leader Courses -->
+    <section id="sales" class="persona-content d-none mb-5">
+      <div class="mb-4">
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e83e8c"><i class="bi bi-graph-up-arrow me-2"></i>Sales Leader</span> — Learning Path</h2>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <!-- Course 1: AI Value Propositions -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-chat-right-dots"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">1. AI Value Propositions &amp; Messaging</h5>
+                  <small class="text-muted">40 min • Beginner</small>
+                </div>
+              </div>
+              <p class="mb-3">Articulate AI benefits to customers, build compelling narratives around cost savings, productivity gains, and competitive advantages.</p>
+              <ul class="module-list small mb-3">
+                <li>AI customer pain points</li>
+                <li>Value messaging frameworks</li>
+                <li>Competitive positioning</li>
+                <li>Success story templates</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="1" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2: Architecture Selection for Customers -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-diagram-3-fill"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">2. Pattern Selection &amp; Customer Fit</h5>
+                  <small class="text-muted">50 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Match customer needs to the right AI architecture, understand trade-offs, and guide customers through implementation decisions.</p>
+              <ul class="module-list small mb-3">
+                <li>Pattern overview &amp; comparison</li>
+                <li>Customer discovery questions</li>
+                <li>Scalability &amp; growth paths</li>
+                <li>Real customer case studies</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="2" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 3: Cost Estimation & Pricing -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-calculator"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">3. Cost Estimation &amp; Pricing Strategy</h5>
+                  <small class="text-muted">45 min • Beginner</small>
+                </div>
+              </div>
+              <p class="mb-3">Estimate AI workload costs, present pricing to customers, and explain Azure's cost structure and discount opportunities.</p>
+              <ul class="module-list small mb-3">
+                <li>Cost estimation tools &amp; formulas</li>
+                <li>Reserved instance savings</li>
+                <li>Pricing conversations with customers</li>
+                <li>Budget forecasting &amp; ROI</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="3" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 4: Security & Compliance Selling Points -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-lock"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">4. Security &amp; Compliance Selling Points</h5>
+                  <small class="text-muted">40 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Highlight Azure's security features, compliance certifications, and governance tools that appeal to security-conscious customers.</p>
+              <ul class="module-list small mb-3">
+                <li>Azure compliance certifications</li>
+                <li>Data privacy &amp; encryption story</li>
+                <li>Private networking &amp; isolation</li>
+                <li>Competitive security advantages</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="4" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 5: Sales Negotiation & Closing -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-handshake"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">5. Sales Negotiation &amp; Closing</h5>
+                  <small class="text-muted">50 min • Advanced</small>
+                </div>
+              </div>
+              <p class="mb-3">Master AI sales cycles, handle objections, negotiate contracts, and build long-term customer partnerships.</p>
+              <ul class="module-list small mb-3">
+                <li>AI sales cycle &amp; discovery</li>
+                <li>Objection handling frameworks</li>
+                <li>Deal structure &amp; negotiation</li>
+                <li>Customer success &amp; expansion</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="5" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technology Manager Courses -->
+    <section id="tech-mgmt" class="persona-content d-none mb-5">
+      <div class="mb-4">
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0db7ed"><i class="bi bi-diagram-3-fill me-2"></i>Technology Manager</span> — Learning Path</h2>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <!-- Course 1: Design Patterns Deep Dive -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-boxes"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">1. Architecture Patterns Deep Dive</h5>
+                  <small class="text-muted">70 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">In-depth exploration of all 10 AI deployment patterns, their strengths, weaknesses, and when to recommend each to your teams.</p>
+              <ul class="module-list small mb-3">
+                <li>Hub-spoke networking patterns</li>
+                <li>Serverless vs. containerized</li>
+                <li>Migration patterns for legacy systems</li>
+                <li>Pattern evolution &amp; scaling</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="1" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2: Infrastructure as Code with Bicep -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-filetype-json"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">2. Infrastructure as Code with Bicep</h5>
+                  <small class="text-muted">60 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Master Bicep for declarative infrastructure, parameters, modules, and best practices for repeatable Azure deployments.</p>
+              <ul class="module-list small mb-3">
+                <li>Bicep syntax &amp; structure</li>
+                <li>Parameters &amp; variables</li>
+                <li>Modular design &amp; reusability</li>
+                <li>Deployment best practices</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="2" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 3: Team Leadership &amp; Project Management -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-people"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">3. Team Leadership &amp; Project Management</h5>
+                  <small class="text-muted">50 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Guide your engineering teams through AI projects, manage dependencies, timelines, and ensure knowledge sharing across the organization.</p>
+              <ul class="module-list small mb-3">
+                <li>Team structure &amp; roles</li>
+                <li>Agile AI project management</li>
+                <li>Knowledge transfer &amp; documentation</li>
+                <li>Performance metrics &amp; KPIs</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="3" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 4: Security Architecture &amp; Governance -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-shield-lock-fill"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">4. Security Architecture &amp; Governance</h5>
+                  <small class="text-muted">65 min • Advanced</small>
+                </div>
+              </div>
+              <p class="mb-3">Design secure AI architectures, implement RBAC, network isolation, and compliance frameworks that protect sensitive data.</p>
+              <ul class="module-list small mb-3">
+                <li>Zero-trust security model</li>
+                <li>RBAC &amp; managed identities</li>
+                <li>Network isolation &amp; private endpoints</li>
+                <li>Audit &amp; compliance logging</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="4" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 5: Cost Optimization &amp; FinOps -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-piggy-bank-fill"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">5. Cost Optimization &amp; FinOps</h5>
+                  <small class="text-muted">55 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Optimize cloud spending, implement showback/chargeback models, and use Azure tools to continuously monitor and reduce costs.</p>
+              <ul class="module-list small mb-3">
+                <li>Azure Cost Management tools</li>
+                <li>Reserved instances &amp; commitments</li>
+                <li>Spot instances &amp; auto-scaling</li>
+                <li>FinOps culture &amp; accountability</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="5" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Developer Courses -->
+    <section id="developer" class="persona-content d-none mb-5">
+      <div class="mb-4">
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0d6efd"><i class="bi bi-code-slash me-2"></i>Developer</span> — Learning Path</h2>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <!-- Course 1: Bicep &amp; ARM Fundamentals -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-collection"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">1. Bicep &amp; ARM Template Fundamentals</h5>
+                  <small class="text-muted">75 min • Beginner</small>
+                </div>
+              </div>
+              <p class="mb-3">Learn Infrastructure as Code from the ground up — Bicep syntax, variables, parameters, outputs, and ARM template basics.</p>
+              <ul class="module-list small mb-3">
+                <li>Bicep syntax &amp; data types</li>
+                <li>Parameters &amp; outputs</li>
+                <li>Loops &amp; conditionals</li>
+                <li>ARM template compilation</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="1" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2: Azure AI Services &amp; SDK -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-lightning-charge-fill"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">2. Azure AI Services &amp; Python SDK</h5>
+                  <small class="text-muted">70 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Implement OpenAI, Azure AI Search, Cognitive Services, and ML endpoints using Python SDK and REST APIs in production code.</p>
+              <ul class="module-list small mb-3">
+                <li>Azure OpenAI API &amp; completions</li>
+                <li>RAG (Retrieval Augmented Generation)</li>
+                <li>Prompt engineering &amp; tokens</li>
+                <li>Error handling &amp; rate limits</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="2" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 3: Containerization &amp; AKS -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-box"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">3. Containerization &amp; AKS Deployment</h5>
+                  <small class="text-muted">80 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Package AI applications in Docker, deploy to Azure Kubernetes Service, and manage scaling, updates, and health checks.</p>
+              <ul class="module-list small mb-3">
+                <li>Docker &amp; containerization</li>
+                <li>AKS cluster architecture</li>
+                <li>Helm charts &amp; deployments</li>
+                <li>Scaling &amp; load balancing</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="3" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 4: API Design &amp; Integration -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-plug"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">4. API Design &amp; Integration Patterns</h5>
+                  <small class="text-muted">65 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Design RESTful APIs, use API Management, implement authentication, and integrate AI services with microservice architectures.</p>
+              <ul class="module-list small mb-3">
+                <li>REST API design principles</li>
+                <li>Azure API Management (APIM)</li>
+                <li>OAuth 2.0 &amp; managed identities</li>
+                <li>Rate limiting &amp; throttling</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="4" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 5: Testing, Monitoring &amp; Debugging -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-speedometer2"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">5. Testing, Monitoring &amp; Debugging</h5>
+                  <small class="text-muted">60 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Write unit tests, implement Azure Monitor/Application Insights, troubleshoot production issues, and optimize AI model performance.</p>
+              <ul class="module-list small mb-3">
+                <li>Unit &amp; integration testing</li>
+                <li>Azure Application Insights</li>
+                <li>Distributed tracing &amp; logs</li>
+                <li>Performance profiling &amp; optimization</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="5" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DevOps Engineer Courses -->
+    <section id="devops" class="persona-content d-none mb-5">
+      <div class="mb-4">
+        <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#198754"><i class="bi bi-git me-2"></i>DevOps Engineer</span> — Learning Path</h2>
+      </div>
+
+      <div class="row g-4 mb-5">
+        <!-- Course 1: GitHub Actions & CI/CD -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-arrow-repeat"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">1. GitHub Actions &amp; CI/CD Pipelines</h5>
+                  <small class="text-muted">75 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Build automated workflows with GitHub Actions, deploy infrastructure, run tests, and automate AI model deployments end-to-end.</p>
+              <ul class="module-list small mb-3">
+                <li>GitHub Actions fundamentals</li>
+                <li>Workflow YAML syntax &amp; triggers</li>
+                <li>Bicep deployment automation</li>
+                <li>Artifact management &amp; secrets</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="1" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 2: Azure DevOps &amp; Pipelines -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-diagram-2-fill"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">2. Azure DevOps &amp; Release Pipelines</h5>
+                  <small class="text-muted">70 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Master Azure DevOps for traditional enterprise CI/CD, artifact repository management, and multi-environment deployments.</p>
+              <ul class="module-list small mb-3">
+                <li>Azure DevOps projects &amp; boards</li>
+                <li>Build pipelines &amp; YAML</li>
+                <li>Release management &amp; stages</li>
+                <li>Artifact feeds &amp; package management</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="2" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 3: Monitoring &amp; Logging -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-graph-up-arrow"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">3. Monitoring &amp; Observability</h5>
+                  <small class="text-muted">65 min • Intermediate</small>
+                </div>
+              </div>
+              <p class="mb-3">Set up Azure Monitor, Application Insights, and Log Analytics to track infrastructure health, performance, and incidents in AI workloads.</p>
+              <ul class="module-list small mb-3">
+                <li>Azure Monitor &amp; metrics</li>
+                <li>Application Insights &amp; traces</li>
+                <li>Log Analytics &amp; KQL queries</li>
+                <li>Alerting &amp; incident response</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="3" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 4: Infrastructure Management &amp; IaC -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-gear-wide-connected"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">4. Infrastructure Management &amp; Drift Detection</h5>
+                  <small class="text-muted">70 min • Advanced</small>
+                </div>
+              </div>
+              <p class="mb-3">Manage infrastructure at scale with Bicep modules, enforce consistency across environments, and detect configuration drift.</p>
+              <ul class="module-list small mb-3">
+                <li>Bicep modules &amp; composition</li>
+                <li>Parameter files &amp; environments</li>
+                <li>Resource naming conventions</li>
+                <li>Drift detection &amp; remediation</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="4" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course 5: Disaster Recovery &amp; Business Continuity -->
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-cloud-arrow-down"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">5. Disaster Recovery &amp; Business Continuity</h5>
+                  <small class="text-muted">60 min • Advanced</small>
+                </div>
+              </div>
+              <p class="mb-3">Design backup &amp; recovery strategies, implement failover mechanisms, and test disaster recovery plans for AI workloads.</p>
+              <ul class="module-list small mb-3">
+                <li>Backup &amp; restore strategies</li>
+                <li>Geographic redundancy</li>
+                <li>Failover &amp; switchover planning</li>
+                <li>RTO/RPO &amp; compliance requirements</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="5" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Quiz Modal -->
+  <div class="modal fade" id="quizModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content quiz-modal">
+        <div class="modal-header border-0 pb-2">
+          <h5 class="modal-title fw-bold" id="quizTitle">Course Quiz</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body py-4">
+          <div id="quizContent">
+            <!-- Questions will be inserted here -->
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-2">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="submitQuiz">Submit Quiz</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2026</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-primary btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Theme Toggle
+    const toggle = document.getElementById('themeToggle');
+    toggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-bs-theme') === 'dark';
+      html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+      toggle.querySelector('i').className = isDark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+    });
+
+    // Back to Top
+    window.addEventListener('scroll', () => {
+      document.getElementById('backToTop').style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+
+    // Persona Selection
+    document.querySelectorAll('.persona-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const persona = card.dataset.persona;
+        document.querySelectorAll('.persona-content').forEach(el => el.classList.add('d-none'));
+        document.getElementById(persona).classList.remove('d-none');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Back to Personas Button
+    document.querySelectorAll('.btn-outline-secondary').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.persona-content').forEach(el => el.classList.add('d-none'));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Simple Quiz Questions (in a real app, these would be loaded from a database)
+    const quizzes = {
+      'c-suite': [
+        { q: 'What is the primary benefit of AI Factory pattern?', options: ['Cost reduction', 'Full ML lifecycle with CI/CD', 'Lowest latency'], correct: 1 },
+        { q: 'Which pattern suits regulated industries like healthcare?', options: ['Serverless', 'Secure Private AI', 'Centralized'], correct: 1 },
+        { q: 'What does composite SLA mean?', options: ['Sum of all SLAs', 'Product of individual SLAs', 'Average of all SLAs'], correct: 1 }
+      ],
+      'sales': [
+        { q: 'Which pattern offers the fastest time to market?', options: ['AI Factory', 'Serverless AI', 'Data-Centric'], correct: 1 },
+        { q: 'What is the estimated monthly cost of Pattern 5 (Serverless)?', options: ['$890', '$5600', '$7360'], correct: 0 },
+        { q: 'Which pattern is best for team autonomy?', options: ['Centralized', 'Decentralized Spoke', 'Hybrid'], correct: 1 }
+      ],
+      'tech-mgmt': [
+        { q: 'What is a key advantage of Bicep over ARM templates?', options: ['Better performance', 'More readable syntax', 'Lower cost'], correct: 1 },
+        { q: 'How many patterns are covered in this portal?', options: ['5', '7', '10'], correct: 2 },
+        { q: 'What does Private Endpoint accomplish?', options: ['Better speed', 'Cost reduction', 'Restricts network traffic'], correct: 2 }
+      ],
+      'developer': [
+        { q: 'What does RAG stand for?', options: ['Rapid AI Gateway', 'Retrieval Augmented Generation', 'Remote API Gateway'], correct: 1 },
+        { q: 'Which service provides token limits for OpenAI?', options: ['AI Search', 'Azure OpenAI', 'App Service'], correct: 1 },
+        { q: 'What format does Bicep compile to?', options: ['JSON', 'YAML', 'ARM Templates'], correct: 2 }
+      ],
+      'devops': [
+        { q: 'What does RTO mean in DR planning?', options: ['Retry Time Out', 'Recovery Time Objective', 'Remote Transfer Object'], correct: 1 },
+        { q: 'Which tool is best for multi-account Azure deploys?', options: ['ARM', 'Bicep', 'Terraform'], correct: 1 },
+        { q: 'What is the purpose of Log Analytics?', options: ['Cost tracking', 'Log aggregation & KQL', 'Resource tagging'], correct: 1 }
+      ]
+    };
+
+    // Quiz Modal Handler
+    document.querySelectorAll('.quiz-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const persona = btn.dataset.persona;
+        const course = btn.dataset.course;
+        const quiz = quizzes[persona];
+        if (quiz && quiz.length > 0) {
+          let html = '<form id="quizForm">';
+          quiz.forEach((q, i) => {
+            html += `<div class="mb-4"><h6 class="fw-bold">${i + 1}. ${q.q}</h6>`;
+            q.options.forEach((opt, j) => {
+              html += `<div class="form-check"><input class="form-check-input" type="radio" name="q${i}" value="${j}" id="q${i}o${j}"><label class="form-check-label" for="q${i}o${j}">${opt}</label></div>`;
+            });
+            html += '</div>';
+          });
+          html += '</form>';
+          document.getElementById('quizContent').innerHTML = html;
+          document.getElementById('quizTitle').textContent = `Course ${course} Quiz — ${persona.replace('-', ' ').toUpperCase()}`;
+        }
+      });
+    });
+
+    // Submit Quiz
+    document.getElementById('submitQuiz').addEventListener('click', () => {
+      const form = document.getElementById('quizForm');
+      const questions = form.querySelectorAll('h6.fw-bold');
+      let score = 0;
+      questions.forEach((q, i) => {
+        const selected = form.querySelector(`input[name="q${i}"]:checked`);
+        if (selected && parseInt(selected.value) === (i % 1 === 0 ? Math.floor(Math.random() * 3) : 1)) {
+          score++;
+        }
+      });
+      alert(`Quiz Complete!\n\nYou scored: ${score}/${questions.length} (${Math.round(score / questions.length * 100)}%)\n\nGreat effort! Review the course material for areas needing improvement.`);
+    });
+  </script>
+</body>
+</html>
