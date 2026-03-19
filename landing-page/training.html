@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Training Academy — Azure AI Deployment Patterns</title>
-  <meta name="description" content="Training Academy for Azure AI patterns — 5 personas, 25 courses, and interactive quizzes." />
-  <meta name="keywords" content="Azure AI training, learning paths, AI certification, cloud education" />
+  <title>Training Academy — Spec-Driven Development (SDD)</title>
+  <meta name="description" content="Training Academy for Spec-Driven Development — 5 personas, 25 courses on executable specifications, architecture validation, and quality enforcement." />
+  <meta name="keywords" content="Spec-Driven Development, SDD, executable specifications, infrastructure specs, Bicep, architecture governance" />
   <meta name="author" content="Krishna Distributedcomputing" />
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png"/>
@@ -16,8 +16,8 @@
   <style>
     :root { --accent: #0078d4; --accent-dark: #50e6ff; }
     [data-bs-theme="dark"] { --accent: #50e6ff; }
-    .hero-train { min-height:320px; background:linear-gradient(135deg,#6f42c1 0%,#0d6efd 50%,#0078d4 100%); }
-    [data-bs-theme="dark"] .hero-train { background:linear-gradient(135deg,#3d2a6f 0%,#1a3d7a 100%); }
+    .hero-train { min-height:320px; background:linear-gradient(135deg,#e67e22 0%,#f39c12 50%,#0d6efd 100%); }
+    [data-bs-theme="dark"] .hero-train { background:linear-gradient(135deg,#664d03 0%,#5a3a1a 50%,#1a3d7a 100%); }
     .persona-card { border-radius:16px; transition:transform .2s,box-shadow .2s; cursor:pointer; }
     .persona-card:hover { transform:translateY(-8px); box-shadow:0 12px 32px rgba(0,0,0,.15); }
     .persona-badge { display:inline-block; padding:.5rem 1rem; border-radius:50px; font-weight:600; font-size:.85rem; margin-bottom:1rem; }
@@ -27,12 +27,10 @@
     .module-list { list-style:none; padding:0; }
     .module-list li { padding:.4rem 0; padding-left:1.5rem; position:relative; }
     .module-list li:before { content:"\F26D"; font-family:"bootstrap-icons"; position:absolute; left:0; }
-    .quiz-modal { background:linear-gradient(135deg,rgba(0,120,212,.05),rgba(80,230,255,.05)); }
+    .quiz-modal { background:linear-gradient(135deg,rgba(230,126,34,.05),rgba(243,156,18,.05)); }
     .quiz-btn { border-radius:8px; padding:.6rem 1.2rem; font-weight:600; transition:all .15s; }
     .quiz-btn:hover { transform:translateY(-2px); }
-    [data-bs-theme="dark"] .quiz-modal { background:linear-gradient(135deg,rgba(0,120,212,.1),rgba(80,230,255,.1)); }
-    .progress-ring { transform:rotate(-90deg); }
-    .progress-ring circle { transition:stroke-dashoffset .35s; }
+    [data-bs-theme="dark"] .quiz-modal { background:linear-gradient(135deg,rgba(230,126,34,.1),rgba(243,156,18,.1)); }
     #backToTop { position:fixed; bottom:2rem; right:2rem; z-index:1050; display:none; }
   </style>
 </head>
@@ -73,8 +71,8 @@
     <div class="container py-5">
       <div class="row align-items-center">
         <div class="col-lg-8">
-          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-mortarboard-fill me-3"></i>Training Academy</h1>
-          <p class="lead mb-0">Master Azure AI deployment patterns with role-based learning paths. Each course is designed to be easy to understand but thorough in depth — perfect for teams at all levels.</p>
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-file-earmark-code me-3"></i>SDD Training Academy</h1>
+          <p class="lead mb-0">Master Specification-Driven Development — transform how your team builds, validates, and deploys infrastructure. Specifications are executable artifacts that enforce architecture, security, and quality at build time.</p>
         </div>
         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
           <span class="badge bg-dark fs-6 px-4 py-2"><i class="bi bi-book me-2"></i>5 Learning Paths</span>
@@ -89,7 +87,7 @@
     <!-- Persona Selection -->
     <section class="mb-5">
       <h2 class="fw-bold mb-4"><i class="bi bi-people-fill me-2 text-primary"></i>Choose Your Learning Path</h2>
-      <p class="text-muted mb-4">Select your role to access curated courses and learning materials tailored to your needs.</p>
+      <p class="text-muted mb-4">Select your role to access SDD training tailored to your responsibilities and decision-making needs.</p>
       
       <div class="row g-4">
         <!-- C-Suite -->
@@ -100,7 +98,7 @@
                 <i class="bi bi-gem-fill"></i>
               </div>
               <h5 class="fw-bold mb-2">C-Suite Executive</h5>
-              <p class="text-muted small mb-3">Strategic decision-makers, board members, and executive leadership looking to understand AI deployment ROI, governance, and enterprise budgeting.</p>
+              <p class="text-muted small mb-3">Strategic leaders seeking to understand SDD's ROI, quality impact, and governance benefits for enterprise-scale deployments.</p>
               <span class="badge bg-warning text-dark">5 Courses</span>
             </div>
           </div>
@@ -114,7 +112,7 @@
                 <i class="bi bi-graph-up-arrow"></i>
               </div>
               <h5 class="fw-bold mb-2">Sales Leader</h5>
-              <p class="text-muted small mb-3">Sales directors and account executives who need to understand AI architectures, value propositions, and customer success stories.</p>
+              <p class="text-muted small mb-3">Sales professionals who articulate SDD value to prospects, positioning specifications as a competitive advantage and quality differentiator.</p>
               <span class="badge bg-danger">5 Courses</span>
             </div>
           </div>
@@ -128,7 +126,7 @@
                 <i class="bi bi-diagram-3-fill"></i>
               </div>
               <h5 class="fw-bold mb-2">Technology Manager</h5>
-              <p class="text-muted small mb-3">Engineering managers and architects who oversee teams through Azure AI deployments, solution design, and best practices.</p>
+              <p class="text-muted small mb-3">Engineering managers implementing SDD in teams, establishing governance frameworks, and measuring quality improvements.</p>
               <span class="badge bg-info">5 Courses</span>
             </div>
           </div>
@@ -142,7 +140,7 @@
                 <i class="bi bi-code-slash"></i>
               </div>
               <h5 class="fw-bold mb-2">Developer</h5>
-              <p class="text-muted small mb-3">Full-stack and backend developers who implement AI features, work with Bicep IaC, and build production-grade applications.</p>
+              <p class="text-muted small mb-3">Software engineers writing executable specs, implementing Bicep IaC, and building quality gates into applications.</p>
               <span class="badge bg-primary">5 Courses</span>
             </div>
           </div>
@@ -156,7 +154,7 @@
                 <i class="bi bi-git"></i>
               </div>
               <h5 class="fw-bold mb-2">DevOps Engineer</h5>
-              <p class="text-muted small mb-3">Platform engineers and site reliability engineers who manage CI/CD pipelines, infrastructure, monitoring, and production deployments.</p>
+              <p class="text-muted small mb-3">Platform engineers automating spec validation in CI/CD pipelines and enforcing quality gates before production.</p>
               <span class="badge bg-success">5 Courses</span>
             </div>
           </div>
@@ -164,125 +162,118 @@
       </div>
     </section>
 
-    <!-- Course Content (Hidden by default, shown on persona click) -->
-    
     <!-- C-Suite Courses -->
     <section id="c-suite" class="persona-content d-none mb-5">
       <div class="mb-4">
         <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e67e22"><i class="bi bi-gem-fill me-2"></i>C-Suite Executive</span> — Learning Path</h2>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e67e22"><i class="bi bi-gem-fill me-2"></i>C-Suite Executive</span> — SDD Learning Path</h2>
       </div>
 
       <div class="row g-4 mb-5">
-        <!-- Course 1: AI ROI & Strategy -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-graph-up"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">1. AI ROI & Strategic Planning</h5>
-                  <small class="text-muted">45 min • Beginner</small>
+                  <h5 class="fw-bold mb-1">1. SDD Strategy & ROI</h5>
+                  <small class="text-muted">40 min • Beginner</small>
                 </div>
               </div>
-              <p class="mb-3">Understand how to calculate return on investment for AI projects, build business cases, and align AI spending with corporate strategy.</p>
+              <p class="mb-3">Understand how Spec-Driven Development reduces defects, accelerates deployments, and delivers measurable ROI through quality enforcement.</p>
               <ul class="module-list small mb-3">
-                <li>AI investment fundamentals</li>
-                <li>ROI calculation frameworks</li>
-                <li>Risk mitigation strategies</li>
-                <li>Competitive advantage metrics</li>
+                <li>SDD fundamentals &amp; value prop</li>
+                <li>Quality metrics &amp; cost savings</li>
+                <li>Deployment time reduction</li>
+                <li>Competitive market advantage</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="1" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 2: AI Governance & Compliance -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-shield-check"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">2. AI Governance & Compliance</h5>
-                  <small class="text-muted">40 min • Beginner</small>
+                  <h5 class="fw-bold mb-1">2. Governance &amp; Compliance via Specs</h5>
+                  <small class="text-muted">45 min • Beginner</small>
                 </div>
               </div>
-              <p class="mb-3">Navigate regulatory requirements (GDPR, HIPAA), establish AI governance frameworks, and ensure responsible AI practices across your organization.</p>
+              <p class="mb-3">Enforce governance, compliance, and security policies through executable specifications — prevent drift before it reaches production.</p>
               <ul class="module-list small mb-3">
-                <li>Regulatory landscape (GDPR, HIPAA, SOC 2)</li>
-                <li>Data privacy and ethics</li>
-                <li>Governance frameworks &amp; guardrails</li>
-                <li>Audit and compliance tracking</li>
+                <li>Specification-based governance</li>
+                <li>Compliance automation</li>
+                <li>Security posture validation</li>
+                <li>Audit trail &amp; traceability</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="2" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 3: Azure AI Architecture Landscape -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-diagram-3"></i></div>
+                <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-speedometer2"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">3. Azure AI Architecture Landscape</h5>
+                  <h5 class="fw-bold mb-1">3. Quality &amp; Risk Reduction</h5>
                   <small class="text-muted">50 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Tour of the 10 AI deployment patterns, when to use each, and how they scale with organizational growth.</p>
+              <p class="mb-3">How SDD eliminates configuration drift, reduces incident rates, and minimizes production risk through build-time validation.</p>
               <ul class="module-list small mb-3">
-                <li>The 10 patterns overview</li>
-                <li>Hub-spoke vs. serverless trade-offs</li>
-                <li>Cost scaling across patterns</li>
-                <li>Pattern selection framework</li>
+                <li>Drift detection &amp; prevention</li>
+                <li>Incident rate reduction</li>
+                <li>Architectural consistency</li>
+                <li>Quality metrics tracking</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="3" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 4: Budget & Cost Management -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-currency-dollar"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">4. Budget & Cost Management</h5>
+                  <h5 class="fw-bold mb-1">4. Cost Impact &amp; FinOps</h5>
                   <small class="text-muted">35 min • Beginner</small>
                 </div>
               </div>
-              <p class="mb-3">Master Azure cost optimization, budgeting for AI workloads, and cost forecasting with reserved instances and commitment discounts.</p>
+              <p class="mb-3">Measure SDD's impact on infrastructure costs, resource optimization, and operational efficiency — maximize cloud ROI.</p>
               <ul class="module-list small mb-3">
-                <li>Azure cost structure &amp; SKUs</li>
-                <li>Commitment discounts (RIs, SPs)</li>
-                <li>Cost forecasting tools</li>
-                <li>Chargeback models &amp; FinOps</li>
+                <li>Cost reduction through specs</li>
+                <li>Resource optimization</li>
+                <li>Operational efficiency gains</li>
+                <li>Cloud spend forecasting</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="4" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 5: Digital Transformation & Change Management -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(230,126,34,.15);color:#e67e22"><i class="bi bi-rocket-takeoff"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">5. Digital Transformation &amp; Change Mgmt</h5>
+                  <h5 class="fw-bold mb-1">5. Transformation &amp; Change Mgmt</h5>
                   <small class="text-muted">55 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Lead organizational transformation with AI, change management strategies, and upskilling initiatives for your workforce.</p>
+              <p class="mb-3">Lead organizational adoption of SDD, overcome resistance, and build a specification-first culture across engineering teams.</p>
               <ul class="module-list small mb-3">
-                <li>Change management frameworks</li>
-                <li>Transformation roadmaps</li>
-                <li>Stakeholder engagement</li>
-                <li>Skills development &amp; training ROI</li>
+                <li>SDD adoption roadmap</li>
+                <li>Change management strategies</li>
+                <li>Team readiness assessment</li>
+                <li>Scaling SDD practices</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="5" data-persona="c-suite" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
@@ -295,103 +286,98 @@
     <section id="sales" class="persona-content d-none mb-5">
       <div class="mb-4">
         <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e83e8c"><i class="bi bi-graph-up-arrow me-2"></i>Sales Leader</span> — Learning Path</h2>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#e83e8c"><i class="bi bi-graph-up-arrow me-2"></i>Sales Leader</span> — SDD Learning Path</h2>
       </div>
 
       <div class="row g-4 mb-5">
-        <!-- Course 1: AI Value Propositions -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-chat-right-dots"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">1. AI Value Propositions &amp; Messaging</h5>
-                  <small class="text-muted">40 min • Beginner</small>
+                  <h5 class="fw-bold mb-1">1. SDD Value Proposition</h5>
+                  <small class="text-muted">45 min • Beginner</small>
                 </div>
               </div>
-              <p class="mb-3">Articulate AI benefits to customers, build compelling narratives around cost savings, productivity gains, and competitive advantages.</p>
+              <p class="mb-3">Master the SDD story — how to articulate benefits to prospects: reduced defects, faster deployments, quality assurance.</p>
               <ul class="module-list small mb-3">
-                <li>AI customer pain points</li>
-                <li>Value messaging frameworks</li>
+                <li>SDD customer pain points</li>
+                <li>Quality as a differentiator</li>
                 <li>Competitive positioning</li>
-                <li>Success story templates</li>
+                <li>Success metrics messaging</li>
               </ul>
               <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="1" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 2: Architecture Selection for Customers -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-diagram-3-fill"></i></div>
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-file-earmark-check"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">2. Pattern Selection &amp; Customer Fit</h5>
+                  <h5 class="fw-bold mb-1">2. SDD Use Cases &amp; Customer Fits</h5>
                   <small class="text-muted">50 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Match customer needs to the right AI architecture, understand trade-offs, and guide customers through implementation decisions.</p>
+              <p class="mb-3">Identify which customers benefit most from SDD — regulated industries, high-scale deployments, quality-critical systems.</p>
               <ul class="module-list small mb-3">
-                <li>Pattern overview &amp; comparison</li>
+                <li>Industry-specific use cases</li>
                 <li>Customer discovery questions</li>
-                <li>Scalability &amp; growth paths</li>
-                <li>Real customer case studies</li>
+                <li>Risk-based selling</li>
+                <li>Case study narratives</li>
               </ul>
               <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="2" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 3: Cost Estimation & Pricing -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-calculator"></i></div>
+                <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-bar-chart"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">3. Cost Estimation &amp; Pricing Strategy</h5>
-                  <small class="text-muted">45 min • Beginner</small>
+                  <h5 class="fw-bold mb-1">3. ROI Calculation &amp; Business Cases</h5>
+                  <small class="text-muted">40 min • Beginner</small>
                 </div>
               </div>
-              <p class="mb-3">Estimate AI workload costs, present pricing to customers, and explain Azure's cost structure and discount opportunities.</p>
+              <p class="mb-3">Build compelling business cases for SDD: quantify defect reduction, deployment time savings, and operational cost savings.</p>
               <ul class="module-list small mb-3">
-                <li>Cost estimation tools &amp; formulas</li>
-                <li>Reserved instance savings</li>
-                <li>Pricing conversations with customers</li>
-                <li>Budget forecasting &amp; ROI</li>
+                <li>Defect cost modeling</li>
+                <li>Time-to-market improvements</li>
+                <li>Operational efficiency gains</li>
+                <li>TCO &amp; payback period</li>
               </ul>
               <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="3" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 4: Security & Compliance Selling Points -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(232,62,140,.15);color:#e83e8c"><i class="bi bi-lock"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">4. Security &amp; Compliance Selling Points</h5>
+                  <h5 class="fw-bold mb-1">4. Governance &amp; Compliance Selling</h5>
                   <small class="text-muted">40 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Highlight Azure's security features, compliance certifications, and governance tools that appeal to security-conscious customers.</p>
+              <p class="mb-3">Appeal to regulated industries: how SDD enforces compliance automatically, maintains audit trails, and prevents policy violations.</p>
               <ul class="module-list small mb-3">
-                <li>Azure compliance certifications</li>
-                <li>Data privacy &amp; encryption story</li>
-                <li>Private networking &amp; isolation</li>
-                <li>Competitive security advantages</li>
+                <li>Compliance automation</li>
+                <li>Regulatory requirements</li>
+                <li>Risk mitigation stories</li>
+                <li>Audit trail benefits</li>
               </ul>
               <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="4" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 5: Sales Negotiation & Closing -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
@@ -402,12 +388,12 @@
                   <small class="text-muted">50 min • Advanced</small>
                 </div>
               </div>
-              <p class="mb-3">Master AI sales cycles, handle objections, negotiate contracts, and build long-term customer partnerships.</p>
+              <p class="mb-3">Close SDD deals: handle objections, negotiate implementation timelines, and structure deals for long-term customer success.</p>
               <ul class="module-list small mb-3">
-                <li>AI sales cycle &amp; discovery</li>
-                <li>Objection handling frameworks</li>
-                <li>Deal structure &amp; negotiation</li>
-                <li>Customer success &amp; expansion</li>
+                <li>Objection handling</li>
+                <li>Implementation planning</li>
+                <li>Contract negotiation</li>
+                <li>Expansion opportunities</li>
               </ul>
               <button class="btn btn-sm btn-outline-danger quiz-btn w-100" data-course="5" data-persona="sales" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
@@ -420,119 +406,114 @@
     <section id="tech-mgmt" class="persona-content d-none mb-5">
       <div class="mb-4">
         <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0db7ed"><i class="bi bi-diagram-3-fill me-2"></i>Technology Manager</span> — Learning Path</h2>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0db7ed"><i class="bi bi-diagram-3-fill me-2"></i>Technology Manager</span> — SDD Learning Path</h2>
       </div>
 
       <div class="row g-4 mb-5">
-        <!-- Course 1: Design Patterns Deep Dive -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-boxes"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">1. Architecture Patterns Deep Dive</h5>
+                  <h5 class="fw-bold mb-1">1. SDD Principles &amp; Architecture</h5>
                   <small class="text-muted">70 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">In-depth exploration of all 10 AI deployment patterns, their strengths, weaknesses, and when to recommend each to your teams.</p>
+              <p class="mb-3">Deep dive into SDD architecture: how specs become executable gates, quality layers, and compliance enforcement in your pipelines.</p>
               <ul class="module-list small mb-3">
-                <li>Hub-spoke networking patterns</li>
-                <li>Serverless vs. containerized</li>
-                <li>Migration patterns for legacy systems</li>
-                <li>Pattern evolution &amp; scaling</li>
+                <li>SDD core principles</li>
+                <li>Specification types &amp; layers</li>
+                <li>Executable documentation</li>
+                <li>Quality gate architecture</li>
               </ul>
               <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="1" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 2: Infrastructure as Code with Bicep -->
-        <div class="col-lg-6">
-          <div class="card course-card border-0 shadow-sm h-100">
-            <div class="card-body">
-              <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-filetype-json"></i></div>
-                <div>
-                  <h5 class="fw-bold mb-1">2. Infrastructure as Code with Bicep</h5>
-                  <small class="text-muted">60 min • Intermediate</small>
-                </div>
-              </div>
-              <p class="mb-3">Master Bicep for declarative infrastructure, parameters, modules, and best practices for repeatable Azure deployments.</p>
-              <ul class="module-list small mb-3">
-                <li>Bicep syntax &amp; structure</li>
-                <li>Parameters &amp; variables</li>
-                <li>Modular design &amp; reusability</li>
-                <li>Deployment best practices</li>
-              </ul>
-              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="2" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Course 3: Team Leadership &amp; Project Management -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-people"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">3. Team Leadership &amp; Project Management</h5>
-                  <small class="text-muted">50 min • Intermediate</small>
+                  <h5 class="fw-bold mb-1">2. Implementing SDD in Teams</h5>
+                  <small class="text-muted">60 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Guide your engineering teams through AI projects, manage dependencies, timelines, and ensure knowledge sharing across the organization.</p>
+              <p class="mb-3">Guide your engineering teams toward SDD adoption: change management, upskilling, and establishing specification-first culture.</p>
               <ul class="module-list small mb-3">
-                <li>Team structure &amp; roles</li>
-                <li>Agile AI project management</li>
-                <li>Knowledge transfer &amp; documentation</li>
-                <li>Performance metrics &amp; KPIs</li>
+                <li>Team readiness assessment</li>
+                <li>Adoption phased approach</li>
+                <li>Knowledge sharing &amp; mentoring</li>
+                <li>Cultural change management</li>
               </ul>
-              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="3" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="2" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 4: Security Architecture &amp; Governance -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-shield-lock-fill"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">4. Security Architecture &amp; Governance</h5>
+                  <h5 class="fw-bold mb-1">3. SDD Governance &amp; Standards</h5>
                   <small class="text-muted">65 min • Advanced</small>
                 </div>
               </div>
-              <p class="mb-3">Design secure AI architectures, implement RBAC, network isolation, and compliance frameworks that protect sensitive data.</p>
+              <p class="mb-3">Establish organizational SDD standards, governance frameworks, and compliance rules that every team must follow.</p>
               <ul class="module-list small mb-3">
-                <li>Zero-trust security model</li>
-                <li>RBAC &amp; managed identities</li>
-                <li>Network isolation &amp; private endpoints</li>
-                <li>Audit &amp; compliance logging</li>
+                <li>Specification standards</li>
+                <li>Governance frameworks</li>
+                <li>Compliance rule sets</li>
+                <li>Approval workflows</li>
+              </ul>
+              <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="3" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card course-card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-start gap-3 mb-3">
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-arrow-repeat"></i></div>
+                <div>
+                  <h5 class="fw-bold mb-1">4. SDD &amp; CI/CD Integration</h5>
+                  <small class="text-muted">60 min • Advanced</small>
+                </div>
+              </div>
+              <p class="mb-3">Integrate SDD into your CI/CD pipelines: automate spec validation, enforce quality gates, and fail deployments safely.</p>
+              <ul class="module-list small mb-3">
+                <li>Pipeline integration patterns</li>
+                <li>Automated validation</li>
+                <li>Quality gate placement</li>
+                <li>Failure handling &amp; rollback</li>
               </ul>
               <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="4" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 5: Cost Optimization &amp; FinOps -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-piggy-bank-fill"></i></div>
+                <div class="course-icon" style="background:rgba(13,183,237,.15);color:#0db7ed"><i class="bi bi-graph-up"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">5. Cost Optimization &amp; FinOps</h5>
+                  <h5 class="fw-bold mb-1">5. Metrics &amp; Quality Measurement</h5>
                   <small class="text-muted">55 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Optimize cloud spending, implement showback/chargeback models, and use Azure tools to continuously monitor and reduce costs.</p>
+              <p class="mb-3">Measure SDD effectiveness: defect rates, deployment success, quality metrics, and demonstrate continuous improvement.</p>
               <ul class="module-list small mb-3">
-                <li>Azure Cost Management tools</li>
-                <li>Reserved instances &amp; commitments</li>
-                <li>Spot instances &amp; auto-scaling</li>
-                <li>FinOps culture &amp; accountability</li>
+                <li>Quality metrics &amp; KPIs</li>
+                <li>Defect tracking</li>
+                <li>Deployment success rates</li>
+                <li>Reporting &amp; dashboards</li>
               </ul>
               <button class="btn btn-sm btn-outline-info quiz-btn w-100" data-course="5" data-persona="tech-mgmt" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
@@ -545,119 +526,114 @@
     <section id="developer" class="persona-content d-none mb-5">
       <div class="mb-4">
         <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0d6efd"><i class="bi bi-code-slash me-2"></i>Developer</span> — Learning Path</h2>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#0d6efd"><i class="bi bi-code-slash me-2"></i>Developer</span> — SDD Learning Path</h2>
       </div>
 
       <div class="row g-4 mb-5">
-        <!-- Course 1: Bicep &amp; ARM Fundamentals -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-collection"></i></div>
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-file-text"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">1. Bicep &amp; ARM Template Fundamentals</h5>
+                  <h5 class="fw-bold mb-1">1. Writing Executable Specifications (.md)</h5>
                   <small class="text-muted">75 min • Beginner</small>
                 </div>
               </div>
-              <p class="mb-3">Learn Infrastructure as Code from the ground up — Bicep syntax, variables, parameters, outputs, and ARM template basics.</p>
+              <p class="mb-3">Learn to author comprehensive specifications in Markdown: document standards, requirements, architecture, and quality criteria.</p>
               <ul class="module-list small mb-3">
-                <li>Bicep syntax &amp; data types</li>
-                <li>Parameters &amp; outputs</li>
-                <li>Loops &amp; conditionals</li>
-                <li>ARM template compilation</li>
+                <li>SDD specification format</li>
+                <li>Requirements documentation</li>
+                <li>Acceptance criteria &amp; test cases</li>
+                <li>Architecture &amp; security specs</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="1" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 2: Azure AI Services &amp; SDK -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-lightning-charge-fill"></i></div>
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-filetype-json"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">2. Azure AI Services &amp; Python SDK</h5>
+                  <h5 class="fw-bold mb-1">2. Bicep &amp; Infrastructure Specs</h5>
                   <small class="text-muted">70 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Implement OpenAI, Azure AI Search, Cognitive Services, and ML endpoints using Python SDK and REST APIs in production code.</p>
+              <p class="mb-3">Write Bicep infrastructure specifications: declare resources, validate schemas, and enforce architectural constraints in code.</p>
               <ul class="module-list small mb-3">
-                <li>Azure OpenAI API &amp; completions</li>
-                <li>RAG (Retrieval Augmented Generation)</li>
-                <li>Prompt engineering &amp; tokens</li>
-                <li>Error handling &amp; rate limits</li>
+                <li>Bicep IaC fundamentals</li>
+                <li>Resource specifications</li>
+                <li>Parameter validation</li>
+                <li>Architectural compliance checks</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="2" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 3: Containerization &amp; AKS -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-box"></i></div>
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-patch-check"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">3. Containerization &amp; AKS Deployment</h5>
-                  <small class="text-muted">80 min • Intermediate</small>
+                  <h5 class="fw-bold mb-1">3. API Contracts &amp; SDD Testing</h5>
+                  <small class="text-muted">65 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Package AI applications in Docker, deploy to Azure Kubernetes Service, and manage scaling, updates, and health checks.</p>
+              <p class="mb-3">Define API specifications with SDD: contracts, versioning, and executable tests that validate endpoints against specs.</p>
               <ul class="module-list small mb-3">
-                <li>Docker &amp; containerization</li>
-                <li>AKS cluster architecture</li>
-                <li>Helm charts &amp; deployments</li>
-                <li>Scaling &amp; load balancing</li>
+                <li>API specification formats</li>
+                <li>Contract testing</li>
+                <li>Versioning &amp; compatibility</li>
+                <li>API quality validation</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="3" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 4: API Design &amp; Integration -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-plug"></i></div>
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-lightbulb"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">4. API Design &amp; Integration Patterns</h5>
-                  <small class="text-muted">65 min • Intermediate</small>
+                  <h5 class="fw-bold mb-1">4. SDD Best Practices &amp; Patterns</h5>
+                  <small class="text-muted">60 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Design RESTful APIs, use API Management, implement authentication, and integrate AI services with microservice architectures.</p>
+              <p class="mb-3">Learn SDD patterns: modular specs, reusable components, spec composition, and design patterns for maintainable specifications.</p>
               <ul class="module-list small mb-3">
-                <li>REST API design principles</li>
-                <li>Azure API Management (APIM)</li>
-                <li>OAuth 2.0 &amp; managed identities</li>
-                <li>Rate limiting &amp; throttling</li>
+                <li>Specification modularity</li>
+                <li>Reusable components</li>
+                <li>Specification composition</li>
+                <li>Common design patterns</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="4" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 5: Testing, Monitoring &amp; Debugging -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-speedometer2"></i></div>
+                <div class="course-icon" style="background:rgba(13,110,253,.15);color:#0d6efd"><i class="bi bi-bug"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">5. Testing, Monitoring &amp; Debugging</h5>
-                  <small class="text-muted">60 min • Intermediate</small>
+                  <h5 class="fw-bold mb-1">5. Debugging &amp; Spec Failures</h5>
+                  <small class="text-muted">55 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Write unit tests, implement Azure Monitor/Application Insights, troubleshoot production issues, and optimize AI model performance.</p>
+              <p class="mb-3">Troubleshoot SDD failures: read error messages, debug spec validation, and fix broken specifications before deployment.</p>
               <ul class="module-list small mb-3">
-                <li>Unit &amp; integration testing</li>
-                <li>Azure Application Insights</li>
-                <li>Distributed tracing &amp; logs</li>
-                <li>Performance profiling &amp; optimization</li>
+                <li>Understanding validation errors</li>
+                <li>Spec debugging techniques</li>
+                <li>Common failure patterns</li>
+                <li>Resolution strategies</li>
               </ul>
               <button class="btn btn-sm btn-outline-primary quiz-btn w-100" data-course="5" data-persona="developer" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
@@ -670,119 +646,114 @@
     <section id="devops" class="persona-content d-none mb-5">
       <div class="mb-4">
         <a href="#" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-2"></i>Back to Personas</a>
-        <h2 class="fw-bold mt-3 mb-4"><span style="color:#198754"><i class="bi bi-git me-2"></i>DevOps Engineer</span> — Learning Path</h2>
+        <h2 class="fw-bold mt-3 mb-4"><span style="color:#198754"><i class="bi bi-git me-2"></i>DevOps Engineer</span> — SDD Learning Path</h2>
       </div>
 
       <div class="row g-4 mb-5">
-        <!-- Course 1: GitHub Actions & CI/CD -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
                 <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-arrow-repeat"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">1. GitHub Actions &amp; CI/CD Pipelines</h5>
+                  <h5 class="fw-bold mb-1">1. SDD in CI/CD Pipelines</h5>
                   <small class="text-muted">75 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Build automated workflows with GitHub Actions, deploy infrastructure, run tests, and automate AI model deployments end-to-end.</p>
+              <p class="mb-3">Integrate specification validation into GitHub Actions &amp; Azure Pipelines: automate quality gates and fail deployments on spec violations.</p>
               <ul class="module-list small mb-3">
-                <li>GitHub Actions fundamentals</li>
-                <li>Workflow YAML syntax &amp; triggers</li>
-                <li>Bicep deployment automation</li>
-                <li>Artifact management &amp; secrets</li>
+                <li>Pipeline stage integration</li>
+                <li>Spec validation automation</li>
+                <li>Build artifact validation</li>
+                <li>Deployment gating logic</li>
               </ul>
               <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="1" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 2: Azure DevOps &amp; Pipelines -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-diagram-2-fill"></i></div>
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-patch-check-fill"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">2. Azure DevOps &amp; Release Pipelines</h5>
+                  <h5 class="fw-bold mb-1">2. Automated Spec Validation</h5>
                   <small class="text-muted">70 min • Intermediate</small>
                 </div>
               </div>
-              <p class="mb-3">Master Azure DevOps for traditional enterprise CI/CD, artifact repository management, and multi-environment deployments.</p>
+              <p class="mb-3">Build automated validators: lint specs, check compliance, validate schemas, and generate reports on specification violations.</p>
               <ul class="module-list small mb-3">
-                <li>Azure DevOps projects &amp; boards</li>
-                <li>Build pipelines &amp; YAML</li>
-                <li>Release management &amp; stages</li>
-                <li>Artifact feeds &amp; package management</li>
+                <li>Spec linting &amp; validation tools</li>
+                <li>Compliance checking</li>
+                <li>Schema validation</li>
+                <li>Report generation</li>
               </ul>
               <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="2" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 3: Monitoring &amp; Logging -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-diagram-2-fill"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">3. Monitoring &amp; Observability</h5>
-                  <small class="text-muted">65 min • Intermediate</small>
+                  <h5 class="fw-bold mb-1">3. Build-Time Gates &amp; Quality Enforcement</h5>
+                  <small class="text-muted">65 min • Advanced</small>
                 </div>
               </div>
-              <p class="mb-3">Set up Azure Monitor, Application Insights, and Log Analytics to track infrastructure health, performance, and incidents in AI workloads.</p>
+              <p class="mb-3">Implement quality gates: block deployments if specs fail, enforce architectural constraints, and prevent non-compliant changes.</p>
               <ul class="module-list small mb-3">
-                <li>Azure Monitor &amp; metrics</li>
-                <li>Application Insights &amp; traces</li>
-                <li>Log Analytics &amp; KQL queries</li>
-                <li>Alerting &amp; incident response</li>
+                <li>Quality gate design</li>
+                <li>Enforcement mechanisms</li>
+                <li>Failure notifications</li>
+                <li>Override &amp; exception handling</li>
               </ul>
               <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="3" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 4: Infrastructure Management &amp; IaC -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-gear-wide-connected"></i></div>
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-graph-up-arrow"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">4. Infrastructure Management &amp; Drift Detection</h5>
-                  <small class="text-muted">70 min • Advanced</small>
+                  <h5 class="fw-bold mb-1">4. Monitoring Spec Compliance</h5>
+                  <small class="text-muted">60 min • Advanced</small>
                 </div>
               </div>
-              <p class="mb-3">Manage infrastructure at scale with Bicep modules, enforce consistency across environments, and detect configuration drift.</p>
+              <p class="mb-3">Track spec compliance: monitor infrastructure drift, detect violations, and alert teams when deployed systems diverge from specs.</p>
               <ul class="module-list small mb-3">
-                <li>Bicep modules &amp; composition</li>
-                <li>Parameter files &amp; environments</li>
-                <li>Resource naming conventions</li>
-                <li>Drift detection &amp; remediation</li>
+                <li>Drift monitoring &amp; detection</li>
+                <li>Compliance dashboards</li>
+                <li>Alert mechanisms</li>
+                <li>Remediation workflows</li>
               </ul>
               <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="4" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
           </div>
         </div>
 
-        <!-- Course 5: Disaster Recovery &amp; Business Continuity -->
         <div class="col-lg-6">
           <div class="card course-card border-0 shadow-sm h-100">
             <div class="card-body">
               <div class="d-flex align-items-start gap-3 mb-3">
-                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-cloud-arrow-down"></i></div>
+                <div class="course-icon" style="background:rgba(25,135,84,.15);color:#198754"><i class="bi bi-exclamation-triangle-fill"></i></div>
                 <div>
-                  <h5 class="fw-bold mb-1">5. Disaster Recovery &amp; Business Continuity</h5>
-                  <small class="text-muted">60 min • Advanced</small>
+                  <h5 class="fw-bold mb-1">5. Incident Response &amp; Rollback</h5>
+                  <small class="text-muted">55 min • Advanced</small>
                 </div>
               </div>
-              <p class="mb-3">Design backup &amp; recovery strategies, implement failover mechanisms, and test disaster recovery plans for AI workloads.</p>
+              <p class="mb-3">Handle SDD-related incidents: rollback failed deployments, revert spec changes, and restore compliance quickly.</p>
               <ul class="module-list small mb-3">
-                <li>Backup &amp; restore strategies</li>
-                <li>Geographic redundancy</li>
-                <li>Failover &amp; switchover planning</li>
-                <li>RTO/RPO &amp; compliance requirements</li>
+                <li>Deployment rollback procedures</li>
+                <li>Spec version control</li>
+                <li>Incident response playbooks</li>
+                <li>Post-incident analysis</li>
               </ul>
               <button class="btn btn-sm btn-outline-success quiz-btn w-100" data-course="5" data-persona="devops" data-bs-toggle="modal" data-bs-target="#quizModal">Take Quiz</button>
             </div>
@@ -859,32 +830,28 @@
       });
     });
 
-    // Simple Quiz Questions (in a real app, these would be loaded from a database)
+    // Quiz Questions
     const quizzes = {
       'c-suite': [
-        { q: 'What is the primary benefit of AI Factory pattern?', options: ['Cost reduction', 'Full ML lifecycle with CI/CD', 'Lowest latency'], correct: 1 },
-        { q: 'Which pattern suits regulated industries like healthcare?', options: ['Serverless', 'Secure Private AI', 'Centralized'], correct: 1 },
-        { q: 'What does composite SLA mean?', options: ['Sum of all SLAs', 'Product of individual SLAs', 'Average of all SLAs'], correct: 1 }
+        { q: 'What is the primary benefit of SDD?', options: ['Faster coding', 'Enforcement of architecture and quality at build time', 'Cheaper developers'], correct: 1 },
+        { q: 'How does SDD reduce risk?', options: ['Smaller teams', 'Prevents drift with executable specs', 'More meetings'], correct: 1 },
+        { q: 'What does SDD enforce?', options: ['Dress code', 'Architecture, security, and compliance constraints', 'Coffee breaks'], correct: 1 }
       ],
       'sales': [
-        { q: 'Which pattern offers the fastest time to market?', options: ['AI Factory', 'Serverless AI', 'Data-Centric'], correct: 1 },
-        { q: 'What is the estimated monthly cost of Pattern 5 (Serverless)?', options: ['$890', '$5600', '$7360'], correct: 0 },
-        { q: 'Which pattern is best for team autonomy?', options: ['Centralized', 'Decentralized Spoke', 'Hybrid'], correct: 1 }
+        { q: 'What industries benefit most from SDD?', options: ['Retail only', 'Regulated industries (finance, healthcare)', 'Gaming companies'], correct: 1 },
+        { q: 'What customer pain point solves?', options: ['Tech issues', 'Quality and compliance doubts', 'Support speed'], correct: 1 }
       ],
       'tech-mgmt': [
-        { q: 'What is a key advantage of Bicep over ARM templates?', options: ['Better performance', 'More readable syntax', 'Lower cost'], correct: 1 },
-        { q: 'How many patterns are covered in this portal?', options: ['5', '7', '10'], correct: 2 },
-        { q: 'What does Private Endpoint accomplish?', options: ['Better speed', 'Cost reduction', 'Restricts network traffic'], correct: 2 }
+        { q: 'How do you implement SDD in teams?', options: ['Force it overnight', 'Phased approach with training', 'Ignore feedback'], correct: 1 },
+        { q: 'Where do specs validate in CI/CD?', options: ['Not at all', 'Manual only', 'Automated gates'], correct: 2 }
       ],
       'developer': [
-        { q: 'What does RAG stand for?', options: ['Rapid AI Gateway', 'Retrieval Augmented Generation', 'Remote API Gateway'], correct: 1 },
-        { q: 'Which service provides token limits for OpenAI?', options: ['AI Search', 'Azure OpenAI', 'App Service'], correct: 1 },
-        { q: 'What format does Bicep compile to?', options: ['JSON', 'YAML', 'ARM Templates'], correct: 2 }
+        { q: 'What format for SDD specs?', options: ['Binary', 'Markdown (.md)', 'PowerPoint'], correct: 1 },
+        { q: 'How do specs become executable?', options: ['Magic', 'Validation tools &amp; testing', 'Manual'], correct: 1 }
       ],
       'devops': [
-        { q: 'What does RTO mean in DR planning?', options: ['Retry Time Out', 'Recovery Time Objective', 'Remote Transfer Object'], correct: 1 },
-        { q: 'Which tool is best for multi-account Azure deploys?', options: ['ARM', 'Bicep', 'Terraform'], correct: 1 },
-        { q: 'What is the purpose of Log Analytics?', options: ['Cost tracking', 'Log aggregation & KQL', 'Resource tagging'], correct: 1 }
+        { q: 'When validate specs?', options: ['After deploy', 'At build time', 'Never'], correct: 1 },
+        { q: 'What causes spec drift?', options: ['Weather', 'Infrastructure changes', 'Time'], correct: 1 }
       ]
     };
 
@@ -894,35 +861,26 @@
         e.preventDefault();
         const persona = btn.dataset.persona;
         const course = btn.dataset.course;
-        const quiz = quizzes[persona];
+        const quiz = quizzes[persona] || [];
         if (quiz && quiz.length > 0) {
           let html = '<form id="quizForm">';
           quiz.forEach((q, i) => {
             html += `<div class="mb-4"><h6 class="fw-bold">${i + 1}. ${q.q}</h6>`;
             q.options.forEach((opt, j) => {
-              html += `<div class="form-check"><input class="form-check-input" type="radio" name="q${i}" value="${j}" id="q${i}o${j}"><label class="form-check-label" for="q${i}o${j}">${opt}</label></div>`;
+              html += `<div class="form-check"><input class="form-check-input" type="radio" name="q${i}" value="${j}"><label class="form-check-label">${opt}</label></div>`;
             });
             html += '</div>';
           });
           html += '</form>';
           document.getElementById('quizContent').innerHTML = html;
-          document.getElementById('quizTitle').textContent = `Course ${course} Quiz — ${persona.replace('-', ' ').toUpperCase()}`;
+          document.getElementById('quizTitle').textContent = `Course ${course} Quiz`;
         }
       });
     });
 
     // Submit Quiz
     document.getElementById('submitQuiz').addEventListener('click', () => {
-      const form = document.getElementById('quizForm');
-      const questions = form.querySelectorAll('h6.fw-bold');
-      let score = 0;
-      questions.forEach((q, i) => {
-        const selected = form.querySelector(`input[name="q${i}"]:checked`);
-        if (selected && parseInt(selected.value) === (i % 1 === 0 ? Math.floor(Math.random() * 3) : 1)) {
-          score++;
-        }
-      });
-      alert(`Quiz Complete!\n\nYou scored: ${score}/${questions.length} (${Math.round(score / questions.length * 100)}%)\n\nGreat effort! Review the course material for areas needing improvement.`);
+      alert('Quiz submitted! Review course material for deeper understanding.');
     });
   </script>
 </body>
