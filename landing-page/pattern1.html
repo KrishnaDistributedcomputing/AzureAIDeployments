@@ -16,12 +16,16 @@
     .bom-table th{position:sticky;top:0;z-index:2}
     .stat-card{border:none;border-radius:1rem}
     .mermaid{background:transparent}
-    .mermaid svg{min-height:300px}
-    .diagram-wrapper{position:relative;overflow-x:auto;overflow-y:hidden;padding:1rem}
-    .diagram-wrapper .mermaid svg{font-size:16px !important}
-    .diagram-wrapper .mermaid .nodeLabel{font-size:14px !important;font-weight:500 !important}
-    .diagram-wrapper .mermaid .edgeLabel{font-size:13px !important;font-weight:500 !important;background-color:rgba(255,255,255,.85) !important;padding:2px 6px !important;border-radius:4px !important}
-    [data-bs-theme="dark"] .diagram-wrapper .mermaid .edgeLabel{background-color:rgba(33,37,41,.85) !important;color:#dee2e6 !important}
+    .mermaid svg{min-height:350px;shape-rendering:crispEdges}
+    .mermaid svg text{text-rendering:optimizeLegibility !important}
+    .mermaid .node rect,.mermaid .node circle,.mermaid .node polygon{stroke-width:2px !important}
+    .mermaid .edgePath path{stroke-width:2px !important}
+    .diagram-wrapper{position:relative;overflow-x:auto;overflow-y:hidden;padding:1.5rem;background:var(--bs-body-bg);border-radius:12px}
+    .diagram-wrapper .mermaid svg{font-size:18px !important}
+    .diagram-wrapper .mermaid .nodeLabel{font-size:16px !important;font-weight:600 !important;letter-spacing:0.01em}
+    .diagram-wrapper .mermaid .edgeLabel{font-size:14px !important;font-weight:600 !important;background-color:rgba(255,255,255,.92) !important;padding:4px 10px !important;border-radius:6px !important;border:1px solid rgba(0,0,0,.1) !important}
+    .diagram-wrapper .mermaid .cluster-label .nodeLabel{font-size:17px !important;font-weight:700 !important}
+    [data-bs-theme="dark"] .diagram-wrapper .mermaid .edgeLabel{background-color:rgba(33,37,41,.92) !important;color:#dee2e6 !important;border-color:rgba(255,255,255,.15) !important}
     .btn-enlarge{position:absolute;top:.75rem;right:.75rem;z-index:10;opacity:.7;transition:opacity .2s}
     .btn-enlarge:hover{opacity:1}
     .diagram-fullscreen{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out}
@@ -508,7 +512,7 @@ graph TB
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <script>
-    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'basis',nodeSpacing:30,rankSpacing:40,padding:15,useMaxWidth:true},themeVariables:{fontSize:'16px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif'}});
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
     function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
     const toggle=document.getElementById('themeToggle');
     toggle.addEventListener('click',()=>{
