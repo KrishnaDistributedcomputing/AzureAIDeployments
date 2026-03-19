@@ -620,35 +620,72 @@
           <p class="text-muted mb-4">Real-world examples of Azure components defined as executable <code>.md</code> specifications. Each spec is self-contained — an AI agent or engineer can build the entire component from the spec alone.</p>
 
           <!-- Sample 1: APIM GenAI Gateway -->
-          <div class="card shadow-sm border-0 mb-4">
+          <div class="card shadow-sm border-0 mb-4" id="spec-sample-1">
             <div class="card-header bg-primary text-white fw-bold d-flex align-items-center">
               <i class="bi bi-cloud-arrow-up me-2"></i>Sample 1 — APIM GenAI Gateway
-              <span class="badge bg-white text-primary ms-auto">spec-apim-genai.md</span>
+              <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light" onclick="copySpecSample(1)" title="Copy to clipboard"><i class="bi bi-clipboard me-1"></i>Copy</button>
+                <button class="btn btn-sm btn-light" onclick="downloadSpecSample(1,'spec-apim-genai.md')" title="Download .md"><i class="bi bi-download me-1"></i>Download</button>
+              </div>
             </div>
             <div class="card-body p-0">
-              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+              <pre class="mb-0 p-3 spec-pre" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">**Document ID:**</span>   DS-APIM-001
+<span style="color:#569cd6">**Version:**</span>       1.0
+<span style="color:#569cd6">**Status:**</span>        Approved
+<span style="color:#569cd6">**Type:**</span>          Deployment
+<span style="color:#569cd6">**Owner:**</span>         &lt;platform-team&gt;
+<span style="color:#569cd6">**Date:**</span>          2026-03-19
+<span style="color:#569cd6">**Applies to:**</span>    API Management GenAI Gateway
+
+---
+
+<span style="color:#569cd6">## 1. Overview</span>
 API Management v2 (Standard) acting as a GenAI gateway for Azure OpenAI.
 Routes, rate-limits, caches, and circuit-breaks all LLM traffic.
 
-<span style="color:#569cd6">## Requirements</span>
-- SKU: Standard v2 (supports GenAI policies)
-- Region: East US 2
-- Token rate limit: 80K TPM per subscription key
-- Semantic caching: enabled (Azure AI Search backend)
-- Circuit breaker: 5 failures in 60s → open for 30s
+<span style="color:#569cd6">## 2. Scope</span>
+APIM instance, GenAI policies, backend pool, semantic caching, and circuit-breaker.
+Out of scope: Azure OpenAI provisioning (see DS-AOAI-001), VNet hub (see DS-NET-001).
 
-<span style="color:#569cd6">## Architecture</span>
+<span style="color:#569cd6">## 3. Requirements</span>
+<span style="color:#6a9955">**FR-01**</span> — APIM must use Standard v2 SKU (supports GenAI policies).
+<span style="color:#6a9955">**FR-02**</span> — APIM must enforce token rate limit of 80K TPM per subscription key.
+<span style="color:#6a9955">**FR-03**</span> — APIM must enable semantic caching (Azure AI Search backend).
+<span style="color:#6a9955">**FR-04**</span> — APIM must implement circuit breaker: 5 failures in 60s → open for 30s.
+<span style="color:#6a9955">**NFR-01**</span> — Region: East US 2.
+<span style="color:#6a9955">**NFR-02**</span> — P99 latency for cache-hit requests must be &lt;50ms.
+
+<span style="color:#569cd6">## 4. Architecture</span>
 - Backend pool: 2× Azure OpenAI endpoints (East US 2 + West US 3)
 - Load balancing: round-robin with priority failover
 - Private Endpoint in hub VNet, PE subnet /27
+- Data flow: Client → APIM (PE) → semantic cache check → AOAI backend
 
-<span style="color:#569cd6">## Security</span>
-- Managed Identity → Azure OpenAI (Cognitive Services OpenAI User)
-- Managed Identity → Key Vault (Key Vault Secrets User)
-- mTLS for backend connections
-- Subscription key required for all consumers
+<span style="color:#569cd6">## 5. Security</span>
+- <span style="color:#6a9955">Authentication:</span> Subscription key required for all consumers
+- <span style="color:#6a9955">Authorization:</span> Managed Identity → Azure OpenAI (Cognitive Services OpenAI User)
+- <span style="color:#6a9955">Secrets:</span> Managed Identity → Key Vault (Key Vault Secrets User) — no stored secrets
+- <span style="color:#6a9955">Encryption in transit:</span> TLS 1.2 minimum, mTLS for backend connections
+- <span style="color:#6a9955">Encryption at rest:</span> Platform-managed keys (PMK)
+- <span style="color:#6a9955">Data classification:</span> Confidential (LLM prompts and completions)
+- <span style="color:#6a9955">Compliance:</span> SOC 2, ISO 27001
 
-<span style="color:#569cd6">## IaC (Bicep)</span>
+<span style="color:#569cd6">## 6. Network</span>
+- Private Endpoint in hub VNet PE subnet (/27)
+- No public endpoint — private access only
+- DNS: privatelink.azure-api.net zone linked to hub VNet
+
+<span style="color:#569cd6">## 7. Cost</span>
+
+| Service           | SKU / Config    | Unit Price  | Est. Usage | Monthly Cost |
+|-------------------|-----------------|-------------|------------|--------------|
+| APIM Standard v2  | 1 unit          | $700/unit   | 1          | $700.00      |
+| <strong>Total</strong>             |                 |             |            | <strong>$700.00</strong>      |
+| <strong>+ 20% buffer</strong>      |                 |             |            | <strong>$840.00</strong>      |
+
+Budget ceiling: $840/mo. Alert at 80% ($672) and 100% ($840).
+
+<span style="color:#569cd6">## 8. IaC (Bicep)</span>
 ```bicep
 resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   name: 'apim-genai-${env}'
@@ -662,49 +699,96 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
 }
 ```
 
-<span style="color:#569cd6">## Validation Gates</span>
-- [ ] APIM responds on private endpoint only (no public access)
-- [ ] Token rate limit enforced (test with 100K TPM burst)
-- [ ] Semantic cache hit ratio > 0% after warm-up
-- [ ] Circuit breaker triggers on backend failure simulation
-- [ ] Managed Identity has no Key Vault secret list permission
+<span style="color:#569cd6">## 9. Rollback</span>
+- Infrastructure: re-deploy previous Git tag via CI/CD
+- Configuration: APIM config export → re-import previous revision
+- Data: N/A (stateless gateway)
 
-<span style="color:#569cd6">## Cost</span>
-~$700/mo (Standard v2, 1 unit)</code></pre>
+<span style="color:#569cd6">## 10. Acceptance Criteria</span>
+- [ ] <span style="color:#6a9955">AC-01</span> — APIM responds on private endpoint only (no public access)
+- [ ] <span style="color:#6a9955">AC-02</span> — Token rate limit enforced (test with 100K TPM burst → HTTP 429)
+- [ ] <span style="color:#6a9955">AC-03</span> — Semantic cache hit ratio > 0% after warm-up
+- [ ] <span style="color:#6a9955">AC-04</span> — Circuit breaker triggers on backend failure simulation
+- [ ] <span style="color:#6a9955">AC-05</span> — Managed Identity has no Key Vault secret list permission
+
+<span style="color:#569cd6">## 11. Glossary</span>
+- <strong>APIM:</strong> Azure API Management
+- <strong>AOAI:</strong> Azure OpenAI Service
+- <strong>TPM:</strong> Tokens Per Minute
+- <strong>PE:</strong> Private Endpoint
+- <strong>GenAI:</strong> Generative Artificial Intelligence</code></pre>
             </div>
           </div>
 
           <!-- Sample 2: AI Foundry Hub -->
-          <div class="card shadow-sm border-0 mb-4">
+          <div class="card shadow-sm border-0 mb-4" id="spec-sample-2">
             <div class="card-header text-white fw-bold d-flex align-items-center" style="background:#6f42c1">
               <i class="bi bi-stars me-2"></i>Sample 2 — Azure AI Foundry Hub + Project
-              <span class="badge bg-white ms-auto" style="color:#6f42c1">spec-ai-foundry.md</span>
+              <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light" onclick="copySpecSample(2)" title="Copy to clipboard"><i class="bi bi-clipboard me-1"></i>Copy</button>
+                <button class="btn btn-sm btn-light" onclick="downloadSpecSample(2,'spec-ai-foundry.md')" title="Download .md"><i class="bi bi-download me-1"></i>Download</button>
+              </div>
             </div>
             <div class="card-body p-0">
-              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+              <pre class="mb-0 p-3 spec-pre" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">**Document ID:**</span>   DS-AIF-001
+<span style="color:#569cd6">**Version:**</span>       1.0
+<span style="color:#569cd6">**Status:**</span>        Approved
+<span style="color:#569cd6">**Type:**</span>          Deployment
+<span style="color:#569cd6">**Owner:**</span>         &lt;ml-platform-team&gt;
+<span style="color:#569cd6">**Date:**</span>          2026-03-19
+<span style="color:#569cd6">**Applies to:**</span>    Azure AI Foundry Hub + Project
+
+---
+
+<span style="color:#569cd6">## 1. Overview</span>
 Central AI Foundry workspace (Hub) with one Project for the ML team.
 Includes Prompt flow, AI Evaluation, and model catalog access.
 
-<span style="color:#569cd6">## Requirements</span>
-- Hub workspace: managed VNet (AllowInternetOutbound)
-- Project workspace: inherits Hub networking
-- Connected services: Azure OpenAI, AI Search, Storage, Key Vault
-- Compute: 1× Standard_DS3_v2 (dev), NC A100 v4 (training)
+<span style="color:#569cd6">## 2. Scope</span>
+Hub workspace, Project workspace, connected services, and compute.
+Out of scope: Azure OpenAI provisioning (see DS-AOAI-001), network hub (see DS-NET-001).
 
-<span style="color:#569cd6">## Architecture</span>
+<span style="color:#569cd6">## 3. Requirements</span>
+<span style="color:#6a9955">**FR-01**</span> — Hub workspace must use managed VNet (AllowInternetOutbound).
+<span style="color:#6a9955">**FR-02**</span> — Project workspace must inherit Hub networking.
+<span style="color:#6a9955">**FR-03**</span> — Hub must connect to: Azure OpenAI, AI Search, Storage, Key Vault.
+<span style="color:#6a9955">**NFR-01**</span> — Compute: 1× Standard_DS3_v2 (dev), NC A100 v4 (training).
+
+<span style="color:#569cd6">## 4. Architecture</span>
 - Hub → Storage Account (ADLS Gen2) for artifacts
 - Hub → Key Vault for secrets &amp; connection strings
 - Hub → Container Registry for model images
 - Hub → Azure OpenAI (gpt-4o, gpt-4o-mini, text-embedding-3-large)
 - Project inherits all Hub connections
+- Data flow: User → Prompt flow → AOAI → evaluation pipeline
 
-<span style="color:#569cd6">## Security</span>
+<span style="color:#569cd6">## 5. Security</span>
+- <span style="color:#6a9955">Authentication:</span> Entra ID (Managed VNet isolation — no public endpoint)
+- <span style="color:#6a9955">Authorization:</span> AzureML Data Scientist → Project scope only; Workspace Contributor → Hub admins
+- <span style="color:#6a9955">Secrets:</span> System MI on Hub → Storage, KV, ACR, AOAI — no stored credentials
+- <span style="color:#6a9955">Encryption in transit:</span> TLS 1.2 minimum
+- <span style="color:#6a9955">Encryption at rest:</span> CMK recommended for workspace; model artifacts encrypted in Storage
+- <span style="color:#6a9955">Data classification:</span> Confidential (training data and model weights)
+- <span style="color:#6a9955">Compliance:</span> SOC 2, ISO 27001, EU AI Act transparency logging
+
+<span style="color:#569cd6">## 6. Network</span>
 - Managed VNet isolation (no public endpoint on Hub)
-- RBAC: AzureML Data Scientist → Project scope only
-- RBAC: AzureML Workspace Contributor → Hub admins only
-- System MI on Hub → Storage, KV, ACR, AOAI
+- All connected services via Private Endpoints within managed VNet
+- DNS: privatelink.api.azureml.ms, privatelink.notebooks.azure.net
 
-<span style="color:#569cd6">## IaC (Bicep)</span>
+<span style="color:#569cd6">## 7. Cost</span>
+
+| Service            | SKU / Config        | Unit Price   | Est. Usage | Monthly Cost |
+|--------------------|---------------------|------------- |------------|--------------|
+| AI Foundry Hub     | Free tier           | $0           | 1          | $0.00        |
+| DS3v2 Compute      | dev instance        | $0.27/hr     | 160 hrs    | $43.20       |
+| NC A100 v4         | training            | $3.67/hr     | 480 hrs    | $1,761.60    |
+| <strong>Total</strong>              |                     |              |            | <strong>$1,804.80</strong>    |
+| <strong>+ 20% buffer</strong>       |                     |              |            | <strong>$2,165.76</strong>    |
+
+Budget ceiling: $2,200/mo. Alert at 80% ($1,760). GPU compute has separate auto-shutdown policy.
+
+<span style="color:#569cd6">## 8. IaC (Bicep)</span>
 ```bicep
 resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
   name: 'aih-${env}'
@@ -721,53 +805,111 @@ resource aiHub 'Microsoft.MachineLearningServices/workspaces@2024-10-01' = {
 }
 ```
 
-<span style="color:#569cd6">## Validation Gates</span>
-- [ ] Hub has no public endpoint (private access only)
-- [ ] Project workspace created under Hub
-- [ ] Prompt flow deployment responds via managed endpoint
-- [ ] AI Evaluation runs on sample dataset with groundedness score
-- [ ] Only Data Scientist role can access Project (no Contributor)
+<span style="color:#569cd6">## 9. Rollback</span>
+- Infrastructure: re-deploy previous Git tag; cancel in-flight compute
+- Application: model registry rollback to previous version in ACR
+- Data: Storage Account point-in-time restore
 
-<span style="color:#569cd6">## Cost</span>
-Hub: free tier (pay for compute). NC A100 v4: ~$1,802/mo when running.</code></pre>
+<span style="color:#569cd6">## 10. Acceptance Criteria</span>
+- [ ] <span style="color:#6a9955">AC-01</span> — Hub has no public endpoint (private access only)
+- [ ] <span style="color:#6a9955">AC-02</span> — Project workspace created under Hub
+- [ ] <span style="color:#6a9955">AC-03</span> — Prompt flow deployment responds via managed endpoint
+- [ ] <span style="color:#6a9955">AC-04</span> — AI Evaluation runs on sample dataset with groundedness score
+- [ ] <span style="color:#6a9955">AC-05</span> — Only Data Scientist role can access Project (no Contributor)
+
+<span style="color:#569cd6">## 11. Glossary</span>
+- <strong>Hub:</strong> Central AI Foundry workspace that manages connections and networking
+- <strong>Project:</strong> Team-scoped workspace inheriting Hub configuration
+- <strong>ACR:</strong> Azure Container Registry
+- <strong>MI:</strong> Managed Identity
+- <strong>ADLS Gen2:</strong> Azure Data Lake Storage Gen2</code></pre>
             </div>
           </div>
 
           <!-- Sample 3: Hub-Spoke Network -->
-          <div class="card shadow-sm border-0 mb-4">
+          <div class="card shadow-sm border-0 mb-4" id="spec-sample-3">
             <div class="card-header bg-success text-white fw-bold d-flex align-items-center">
               <i class="bi bi-diagram-2 me-2"></i>Sample 3 — Hub-Spoke Network + Firewall
-              <span class="badge bg-white text-success ms-auto">spec-network-hub.md</span>
+              <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light" onclick="copySpecSample(3)" title="Copy to clipboard"><i class="bi bi-clipboard me-1"></i>Copy</button>
+                <button class="btn btn-sm btn-light" onclick="downloadSpecSample(3,'spec-network-hub.md')" title="Download .md"><i class="bi bi-download me-1"></i>Download</button>
+              </div>
             </div>
             <div class="card-body p-0">
-              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+              <pre class="mb-0 p-3 spec-pre" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">**Document ID:**</span>   DS-NET-001
+<span style="color:#569cd6">**Version:**</span>       1.0
+<span style="color:#569cd6">**Status:**</span>        Approved
+<span style="color:#569cd6">**Type:**</span>          Deployment
+<span style="color:#569cd6">**Owner:**</span>         &lt;network-team&gt;
+<span style="color:#569cd6">**Date:**</span>          2026-03-19
+<span style="color:#569cd6">**Applies to:**</span>    Hub-Spoke Network with Azure Firewall
+
+---
+
+<span style="color:#569cd6">## 1. Overview</span>
 Hub VNet with Azure Firewall, Bastion, and VPN Gateway.
 All spoke traffic routes through the hub via UDR 0.0.0.0/0.
 
-<span style="color:#569cd6">## Requirements</span>
-- Hub VNet: 10.0.0.0/16
-  - AzureFirewallSubnet: 10.0.1.0/26
-  - AzureBastionSubnet: 10.0.2.0/26
-  - GatewaySubnet: 10.0.3.0/27
-  - PrivateEndpointSubnet: 10.0.4.0/24
-  - ManagementSubnet: 10.0.5.0/24
-- Firewall: Standard SKU, DNS proxy enabled
-- Bastion: Standard SKU (file transfer, native client)
-- VPN Gateway: VpnGw1 (P2S for admin access)
+<span style="color:#569cd6">## 2. Scope</span>
+Hub VNet, subnets, Azure Firewall, Bastion, VPN Gateway, NSGs, UDRs, and DNS.
+Out of scope: spoke VNet provisioning (see DS-SPOKE-001), AI workloads.
 
-<span style="color:#569cd6">## Architecture</span>
+<span style="color:#569cd6">## 3. Requirements</span>
+<span style="color:#6a9955">**FR-01**</span> — Hub VNet must use address space 10.0.0.0/16.
+<span style="color:#6a9955">**FR-02**</span> — Azure Firewall must be Standard SKU with DNS proxy enabled.
+<span style="color:#6a9955">**FR-03**</span> — Bastion must be Standard SKU (file transfer, native client).
+<span style="color:#6a9955">**FR-04**</span> — VPN Gateway must be VpnGw1 (P2S for admin access).
+<span style="color:#6a9955">**NFR-01**</span> — All spoke-to-internet traffic must traverse Azure Firewall.
+
+<span style="color:#569cd6">## 4. Network</span>
+Network option: <strong>Private (VNet + Private Endpoints)</strong>
+
+| Subnet Name            | CIDR           | Purpose               | Min Size | NSG           |
+|------------------------|----------------|-----------------------|----------|---------------|
+| AzureFirewallSubnet    | 10.0.1.0/26    | Azure Firewall        | /26      | N/A (managed) |
+| AzureBastionSubnet     | 10.0.2.0/26    | Azure Bastion         | /26      | N/A (managed) |
+| GatewaySubnet          | 10.0.3.0/27    | VPN Gateway           | /27      | N/A (managed) |
+| PrivateEndpointSubnet  | 10.0.4.0/24    | Private Endpoints     | /24      | nsg-pe        |
+| ManagementSubnet       | 10.0.5.0/24    | Jump boxes / mgmt     | /24      | nsg-mgmt      |
+
+CIDRs are non-overlapping, sized with 30%+ headroom.
+
+<span style="color:#569cd6">## 5. Architecture</span>
 - Spoke VNets peer to Hub (allow forwarded traffic)
 - UDR on every spoke subnet: 0.0.0.0/0 → Firewall private IP
 - Firewall rules: allow HTTPS, deny all else by default
 - Firewall application rules: allow *.openai.azure.com, *.cognitiveservices.azure.com
-
-<span style="color:#569cd6">## Security</span>
-- NSG on every subnet (deny inbound by default)
-- Firewall threat intelligence: Alert &amp; Deny
-- Bastion: no public IP on any VM
 - DNS: Azure Firewall as DNS proxy → Azure DNS
 
-<span style="color:#569cd6">## IaC (Bicep)</span>
+<span style="color:#569cd6">## 6. Security</span>
+- <span style="color:#6a9955">Authentication:</span> Entra ID for VPN P2S; Bastion for VM access
+- <span style="color:#6a9955">Authorization:</span> Network Contributor for hub ops; Reader for spoke teams
+- <span style="color:#6a9955">Secrets:</span> VPN root cert in Key Vault; no shared passwords
+- <span style="color:#6a9955">Encryption in transit:</span> TLS 1.2+ on all management plane; IPsec for VPN
+- <span style="color:#6a9955">Encryption at rest:</span> NSG flow logs encrypted in Storage (PMK)
+- <span style="color:#6a9955">Data classification:</span> Internal (network metadata)
+- <span style="color:#6a9955">Compliance:</span> SOC 2, ISO 27001, CIS Azure Benchmark
+
+NSG rules (nsg-pe example):
+| Priority | Name         | Direction | Protocol | Source      | Destination | Port  | Action |
+|----------|------------- |-----------|----------|-------------|-------------|-------|--------|
+| 100      | AllowVnet    | Inbound   | *        | VirtualNet  | VirtualNet  | *     | Allow  |
+| 4096     | DenyAllIn    | Inbound   | *        | *           | *           | *     | Deny   |
+
+<span style="color:#569cd6">## 7. Cost</span>
+
+| Service           | SKU / Config    | Unit Price  | Est. Usage | Monthly Cost |
+|-------------------|-----------------|-------------|------------|--------------|
+| Azure Firewall    | Standard        | $912/mo     | 1          | $912.00      |
+| Azure Bastion     | Standard        | $329/mo     | 1          | $329.00      |
+| VPN Gateway       | VpnGw1          | $140/mo     | 1          | $140.00      |
+| <strong>Total</strong>             |                 |             |            | <strong>$1,381.00</strong>    |
+| <strong>+ 20% buffer</strong>      |                 |             |            | <strong>$1,657.20</strong>    |
+
+Budget ceiling: $1,700/mo. Alert at 80% ($1,360) and 100% ($1,700).
+Top cost drivers: Firewall ($912, 66%), Bastion ($329, 24%), VPN ($140, 10%).
+
+<span style="color:#569cd6">## 8. IaC (Bicep)</span>
 ```bicep
 resource hubVnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
   name: 'vnet-hub-${env}'
@@ -783,50 +925,101 @@ resource hubVnet 'Microsoft.Network/virtualNetworks@2024-05-01' = {
 }
 ```
 
-<span style="color:#569cd6">## Validation Gates</span>
-- [ ] No VM has a public IP (Bastion-only access)
-- [ ] Spoke-to-internet traffic routes through Firewall (traceroute)
-- [ ] Firewall denies non-HTTPS outbound by default
-- [ ] DNS resolution works via Firewall DNS proxy
-- [ ] VPN P2S connection established from dev machine
+<span style="color:#569cd6">## 9. Rollback</span>
+- Infrastructure: re-deploy previous Git tag (VNet is idempotent)
+- Configuration: Firewall Policy export → re-import previous version
+- Data: N/A (networking layer)
 
-<span style="color:#569cd6">## Cost</span>
-Firewall: ~$912/mo + data. Bastion: ~$329/mo. VPN GW1: ~$140/mo.</code></pre>
+<span style="color:#569cd6">## 10. Acceptance Criteria</span>
+- [ ] <span style="color:#6a9955">AC-01</span> — No VM has a public IP (Bastion-only access)
+- [ ] <span style="color:#6a9955">AC-02</span> — Spoke-to-internet traffic routes through Firewall (traceroute)
+- [ ] <span style="color:#6a9955">AC-03</span> — Firewall denies non-HTTPS outbound by default
+- [ ] <span style="color:#6a9955">AC-04</span> — DNS resolution works via Firewall DNS proxy
+- [ ] <span style="color:#6a9955">AC-05</span> — VPN P2S connection established from dev machine
+
+<span style="color:#569cd6">## 11. Glossary</span>
+- <strong>UDR:</strong> User-Defined Route
+- <strong>NSG:</strong> Network Security Group
+- <strong>PE:</strong> Private Endpoint
+- <strong>P2S:</strong> Point-to-Site VPN
+- <strong>CIDR:</strong> Classless Inter-Domain Routing</code></pre>
             </div>
           </div>
 
           <!-- Sample 4: Azure SQL MI -->
-          <div class="card shadow-sm border-0 mb-4">
+          <div class="card shadow-sm border-0 mb-4" id="spec-sample-4">
             <div class="card-header text-white fw-bold d-flex align-items-center" style="background:#0db7ed">
               <i class="bi bi-database-fill-up me-2"></i>Sample 4 — Azure SQL Managed Instance
-              <span class="badge bg-white ms-auto" style="color:#0db7ed">spec-sql-mi.md</span>
+              <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light" onclick="copySpecSample(4)" title="Copy to clipboard"><i class="bi bi-clipboard me-1"></i>Copy</button>
+                <button class="btn btn-sm btn-light" onclick="downloadSpecSample(4,'spec-sql-mi.md')" title="Download .md"><i class="bi bi-download me-1"></i>Download</button>
+              </div>
             </div>
             <div class="card-body p-0">
-              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+              <pre class="mb-0 p-3 spec-pre" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">**Document ID:**</span>   DS-SQL-001
+<span style="color:#569cd6">**Version:**</span>       1.0
+<span style="color:#569cd6">**Status:**</span>        Approved
+<span style="color:#569cd6">**Type:**</span>          Deployment
+<span style="color:#569cd6">**Owner:**</span>         &lt;data-platform-team&gt;
+<span style="color:#569cd6">**Date:**</span>          2026-03-19
+<span style="color:#569cd6">**Applies to:**</span>    Azure SQL Managed Instance
+
+---
+
+<span style="color:#569cd6">## 1. Overview</span>
 Azure SQL Managed Instance (Next-gen General Purpose) for migrated
 on-premises SQL Server databases. MI Link for near-zero cutover.
 
-<span style="color:#569cd6">## Requirements</span>
-- SKU: Next-gen GP, 4 vCores, 256 GB storage
-- Zone-redundant: enabled
-- Dedicated subnet: /27 minimum (delegated)
-- TDE: enabled (service-managed key, CMK optional)
-- Ledger tables: enabled for audit trail
+<span style="color:#569cd6">## 2. Scope</span>
+SQL MI provisioning, networking, security, migration path, and DR.
+Out of scope: application connection strings, DMS migration execution.
 
-<span style="color:#569cd6">## Architecture</span>
-- VNet-native: SQL MI deployed in dedicated /27 subnet
+<span style="color:#569cd6">## 3. Requirements</span>
+<span style="color:#6a9955">**FR-01**</span> — SQL MI must use Next-gen GP SKU, 4 vCores, 256 GB storage.
+<span style="color:#6a9955">**FR-02**</span> — SQL MI must be zone-redundant.
+<span style="color:#6a9955">**FR-03**</span> — TDE must be enabled (service-managed key; CMK optional).
+<span style="color:#6a9955">**FR-04**</span> — Ledger tables must be enabled for audit trail.
+<span style="color:#6a9955">**NFR-01**</span> — Auto-failover group to paired region with RPO &lt;5 seconds.
+
+<span style="color:#569cd6">## 4. Network</span>
+Network option: <strong>Private (VNet-native)</strong>
+
+| Subnet Name     | CIDR           | Purpose          | Min Size | NSG        |
+|-----------------|----------------|------------------|----------|------------|
+| snet-sqlmi      | 10.1.0.0/27    | SQL MI (delegated) | /27    | nsg-sqlmi  |
+
 - Private DNS zone: privatelink.database.windows.net
+- No public endpoint — private access only
+
+<span style="color:#569cd6">## 5. Architecture</span>
+- VNet-native: SQL MI deployed in dedicated /27 subnet (delegated)
 - MI Link: real-time replication from on-prem SQL Server
 - Auto-failover group to paired region (RPO &lt;5s)
+- Data flow: App (MI auth) → SQL MI (private) → Log Analytics
 
-<span style="color:#569cd6">## Security</span>
-- Entra ID authentication (primary), SQL auth disabled
-- No public endpoint → private access only
-- Advanced Threat Protection: enabled
-- Auditing → Log Analytics workspace
-- Vulnerability Assessment: weekly scans
+<span style="color:#569cd6">## 6. Security</span>
+- <span style="color:#6a9955">Authentication:</span> Entra ID authentication (primary); SQL auth disabled
+- <span style="color:#6a9955">Authorization:</span> db_datareader / db_datawriter per app identity; DBA via Entra group
+- <span style="color:#6a9955">Secrets:</span> No connection string secrets — Managed Identity auth only
+- <span style="color:#6a9955">Encryption in transit:</span> TLS 1.2 minimum enforced
+- <span style="color:#6a9955">Encryption at rest:</span> TDE (service-managed key); Always Encrypted for sensitive columns
+- <span style="color:#6a9955">Data classification:</span> Confidential (PII in customer tables)
+- <span style="color:#6a9955">Compliance:</span> SOC 2, ISO 27001, HIPAA, PCI-DSS
 
-<span style="color:#569cd6">## IaC (Bicep)</span>
+<span style="color:#569cd6">## 7. Cost</span>
+
+| Service           | SKU / Config              | Unit Price  | Est. Usage | Monthly Cost |
+|-------------------|---------------------------|-------------|------------|--------------|
+| SQL MI            | Next-gen GP, 4 vCores     | $1,100/mo   | 1          | $1,100.00    |
+| Storage           | 256 GB                    | $0.115/GB   | 256 GB     | $29.44       |
+| Backup            | PITR (7-day retention)    | included    | —          | $0.00        |
+| <strong>Total</strong>             |                           |             |            | <strong>$1,129.44</strong>    |
+| <strong>+ 20% buffer</strong>      |                           |             |            | <strong>$1,355.33</strong>    |
+
+Budget ceiling: $1,400/mo. Alert at 80% ($1,120) and 100% ($1,400).
+Cost optimization: Reserved capacity 1yr = 33% savings, 3yr = 55%. Azure Hybrid Benefit: up to 55% off.
+
+<span style="color:#569cd6">## 8. IaC (Bicep)</span>
 ```bicep
 resource sqlMI 'Microsoft.Sql/managedInstances@2024-05-01-preview' = {
   name: 'sqlmi-${env}'
@@ -842,61 +1035,139 @@ resource sqlMI 'Microsoft.Sql/managedInstances@2024-05-01-preview' = {
 }
 ```
 
-<span style="color:#569cd6">## Validation Gates</span>
-- [ ] No public endpoint accessible
-- [ ] Entra ID login succeeds, SQL auth rejected
-- [ ] TDE status = enabled on all databases
-- [ ] Ledger table insert produces verifiable hash
-- [ ] Auto-failover group failover completes in &lt;30s
+<span style="color:#569cd6">## 9. Rollback</span>
+- Infrastructure: re-deploy previous Git tag (SQL MI is idempotent)
+- Application: SQL MI point-in-time restore (PITR) within retention window
+- Data: Ledger table history is immutable; restore from backup if needed
 
-<span style="color:#569cd6">## Cost</span>
-~$1,200/mo (Next-gen GP, 4 vCores, zone-redundant)</code></pre>
+<span style="color:#569cd6">## 10. Acceptance Criteria</span>
+- [ ] <span style="color:#6a9955">AC-01</span> — No public endpoint accessible
+- [ ] <span style="color:#6a9955">AC-02</span> — Entra ID login succeeds; SQL auth rejected
+- [ ] <span style="color:#6a9955">AC-03</span> — TDE status = enabled on all databases
+- [ ] <span style="color:#6a9955">AC-04</span> — Ledger table insert produces verifiable hash
+- [ ] <span style="color:#6a9955">AC-05</span> — Auto-failover group failover completes in &lt;30 seconds
+
+<span style="color:#569cd6">## 11. Glossary</span>
+- <strong>MI:</strong> Managed Instance
+- <strong>TDE:</strong> Transparent Data Encryption
+- <strong>PITR:</strong> Point-in-Time Restore
+- <strong>RPO:</strong> Recovery Point Objective
+- <strong>MI Link:</strong> SQL MI real-time replication from on-premises SQL Server</code></pre>
             </div>
           </div>
 
           <!-- Sample 5: Zero Trust Private AI -->
-          <div class="card shadow-sm border-0 mb-4">
+          <div class="card shadow-sm border-0 mb-4" id="spec-sample-5">
             <div class="card-header bg-dark text-white fw-bold d-flex align-items-center">
               <i class="bi bi-shield-lock me-2"></i>Sample 5 — Confidential AI (Zero Trust)
-              <span class="badge bg-white text-dark ms-auto">spec-confidential-ai.md</span>
+              <div class="ms-auto d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-light" onclick="copySpecSample(5)" title="Copy to clipboard"><i class="bi bi-clipboard me-1"></i>Copy</button>
+                <button class="btn btn-sm btn-light" onclick="downloadSpecSample(5,'spec-confidential-ai.md')" title="Download .md"><i class="bi bi-download me-1"></i>Download</button>
+              </div>
             </div>
             <div class="card-body p-0">
-              <pre class="mb-0 p-3" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">## Overview</span>
+              <pre class="mb-0 p-3 spec-pre" style="background:#1e1e1e;color:#d4d4d4;border-radius:0 0 .5rem .5rem;font-size:.82rem;overflow-x:auto;white-space:pre"><code><span style="color:#569cd6">**Document ID:**</span>   SEC-CAI-001
+<span style="color:#569cd6">**Version:**</span>       1.0
+<span style="color:#569cd6">**Status:**</span>        Approved
+<span style="color:#569cd6">**Type:**</span>          Architecture
+<span style="color:#569cd6">**Owner:**</span>         &lt;security-team&gt;
+<span style="color:#569cd6">**Date:**</span>          2026-03-19
+<span style="color:#569cd6">**Applies to:**</span>    Confidential AI (Zero Trust) Environment
+
+---
+
+<span style="color:#569cd6">## 1. Overview</span>
 Confidential computing environment for regulated AI workloads.
 All data encrypted in use (memory), at rest, and in transit.
 
-<span style="color:#569cd6">## Requirements</span>
-- VMs: DCesv5 (AMD SEV-SNP) for confidential compute
-- Managed HSM: FIPS 140-2 Level 3 for key management
-- DDoS Network Protection: Standard
-- Azure Firewall: Premium (IDPS + TLS inspection)
-- Confidential Ledger: immutable audit trail
+<span style="color:#569cd6">## 2. Scope</span>
+Confidential VMs, Managed HSM, Firewall Premium, DDoS Protection, Confidential Ledger.
+Out of scope: AI model training logic, application code, data ingestion pipelines.
 
-<span style="color:#569cd6">## Architecture</span>
+<span style="color:#569cd6">## 3. Requirements</span>
+<span style="color:#6a9955">**FR-01**</span> — All compute must use DCesv5 (AMD SEV-SNP) for confidential processing.
+<span style="color:#6a9955">**FR-02**</span> — Key management must use Managed HSM (FIPS 140-2 Level 3).
+<span style="color:#6a9955">**FR-03**</span> — Azure Firewall must be Premium SKU (IDPS + TLS inspection).
+<span style="color:#6a9955">**FR-04**</span> — Confidential Ledger must record all sensitive operations (immutable).
+<span style="color:#6a9955">**NFR-01**</span> — No service may have a public endpoint.
+<span style="color:#6a9955">**NFR-02**</span> — TLS 1.3 must be enforced end-to-end.
+
+<span style="color:#569cd6">## 4. Network</span>
+Network option: <strong>Private (Fully isolated VNet)</strong>
+
+| Subnet Name            | CIDR           | Purpose               | Min Size | NSG               |
+|------------------------|----------------|-----------------------|----------|--------------------|
+| AzureFirewallSubnet    | 10.2.0.0/26    | Firewall Premium      | /26      | N/A (managed)      |
+| snet-confidential      | 10.2.1.0/24    | DCesv5 VMs            | /24      | nsg-deny-all       |
+| snet-pe                | 10.2.2.0/24    | Private Endpoints     | /24      | nsg-pe             |
+| AzureBastionSubnet     | 10.2.3.0/26    | Bastion               | /26      | N/A (managed)      |
+
+8+ Private DNS zones for PE resolution. DNS: Private DNS Zones linked to VNet.
+
+<span style="color:#569cd6">## 5. Architecture</span>
 - Isolated VNet: all PaaS behind Private Endpoints
-- 8+ Private DNS zones for PE resolution
-- Azure Firewall Premium at the perimeter
+- Azure Firewall Premium at the perimeter (IDPS + TLS inspection)
 - AI Foundry Hub: managed VNet isolation mode
 - Confidential Ledger for tamper-proof operation logs
+- Data flow: User → Bastion → CVM → PE → AOAI (all private, all encrypted)
 
-<span style="color:#569cd6">## Security</span>
-- Zero Trust: no implicit trust, verify explicitly
-- Entra Workload ID: secretless authentication everywhere
-- CMK mandatory: Managed HSM for all key operations
-- TLS 1.3 enforced end-to-end
-- NSG: DenyAllInbound on every subnet
-- DCesv5: AMD SEV-SNP memory encryption (data in use)
+<span style="color:#569cd6">## 6. Security</span>
+- <span style="color:#6a9955">Authentication:</span> Entra Workload ID — secretless authentication everywhere
+- <span style="color:#6a9955">Authorization:</span> Least-privilege RBAC per component; HSM Crypto Officer for key ops
+- <span style="color:#6a9955">Secrets:</span> No secrets in Key Vault for service auth — Workload ID only; HSM for keys
+- <span style="color:#6a9955">Encryption in transit:</span> TLS 1.3 enforced end-to-end
+- <span style="color:#6a9955">Encryption at rest:</span> CMK mandatory via Managed HSM; Storage: CMK + infrastructure double encryption
+- <span style="color:#6a9955">Encryption in use:</span> AMD SEV-SNP memory encryption on DCesv5
+- <span style="color:#6a9955">Data classification:</span> Restricted (regulated AI workloads, PII, PHI)
+- <span style="color:#6a9955">Compliance:</span> SOC 2, ISO 27001, HIPAA, FedRAMP, PCI-DSS, NIST 800-53
 
-<span style="color:#569cd6">## Validation Gates</span>
-- [ ] No service has a public endpoint (scan all resources)
-- [ ] HSM key rotation succeeds without downtime
-- [ ] DCesv5 attestation report validates SEV-SNP
-- [ ] Confidential Ledger entry is immutable (tamper test)
-- [ ] Firewall IDPS blocks known malicious payload
-- [ ] Entra Workload ID — no secrets in Key Vault for service auth
+Zero Trust checklist:
+- [ ] All service-to-service calls use Managed Identity — no shared secrets
+- [ ] Least-privilege RBAC roles documented per component
+- [ ] Network access restricted to required flows only (DenyAllInbound)
+- [ ] All data classified and handling rules documented
+- [ ] Audit logging enabled on all sensitive operations (Confidential Ledger)
+- [ ] MFA enforced for human access to production systems
 
-<span style="color:#569cd6">## Cost</span>
-~$11,038/mo (Firewall Premium + DDoS + HSM + DCesv5 + Ledger)</code></pre>
+<span style="color:#569cd6">## 7. Cost</span>
+
+| Service              | SKU / Config       | Unit Price  | Est. Usage | Monthly Cost |
+|----------------------|--------------------|-------------|------------|--------------|
+| Firewall Premium     | IDPS + TLS insp.   | $1,460/mo   | 1          | $1,460.00    |
+| DDoS Protection      | Standard           | $2,944/mo   | 1          | $2,944.00    |
+| Managed HSM          | Standard_B1        | $3,288/mo   | 1          | $3,288.00    |
+| DCesv5 (×2)          | 4 vCPU, 32 GB      | $584/mo     | 2          | $1,168.00    |
+| Confidential Ledger  | Standard           | $460/mo     | 1          | $460.00      |
+| Bastion              | Standard           | $329/mo     | 1          | $329.00      |
+| Other (Storage, PE)  | Various            | —           | —          | $389.00      |
+| <strong>Total</strong>                |                    |             |            | <strong>$10,038.00</strong>   |
+| <strong>+ 20% buffer</strong>         |                    |             |            | <strong>$12,045.60</strong>   |
+
+Budget ceiling: $13,000/mo. Alert at 80% ($10,400) and 100% ($13,000).
+Top cost drivers: HSM ($3,288, 33%), DDoS ($2,944, 29%), Firewall ($1,460, 15%).
+Security spend is non-negotiable — do not reduce.
+
+<span style="color:#569cd6">## 8. Rollback</span>
+- Infrastructure: re-deploy previous Git tag; mirror VNet + PE + DNS in DR site
+- Application: model rollback via ACR image tag
+- Data: HSM backup to secondary region with secure transport; Ledger is append-only
+- Configuration: DDoS Plan is global; Firewall Policy is portable
+
+<span style="color:#569cd6">## 9. Acceptance Criteria</span>
+- [ ] <span style="color:#6a9955">AC-01</span> — No service has a public endpoint (scan all resources)
+- [ ] <span style="color:#6a9955">AC-02</span> — HSM key rotation succeeds without downtime
+- [ ] <span style="color:#6a9955">AC-03</span> — DCesv5 attestation report validates SEV-SNP
+- [ ] <span style="color:#6a9955">AC-04</span> — Confidential Ledger entry is immutable (tamper test fails)
+- [ ] <span style="color:#6a9955">AC-05</span> — Firewall IDPS blocks known malicious payload
+- [ ] <span style="color:#6a9955">AC-06</span> — Entra Workload ID — no secrets in Key Vault for service auth
+
+<span style="color:#569cd6">## 10. Glossary</span>
+- <strong>CVM:</strong> Confidential Virtual Machine
+- <strong>HSM:</strong> Hardware Security Module
+- <strong>SEV-SNP:</strong> AMD Secure Encrypted Virtualization — Secure Nested Paging
+- <strong>IDPS:</strong> Intrusion Detection and Prevention System
+- <strong>CMK:</strong> Customer-Managed Key
+- <strong>PHI:</strong> Protected Health Information</code></pre>
             </div>
           </div>
 
@@ -1490,6 +1761,37 @@ Rationale: User-facing requests exceeding 200ms measurably increase abandonment 
       sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id});
       tocLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
     });
+
+    // Spec sample copy & download
+    function getSpecText(n){
+      const el=document.querySelector('#spec-sample-'+n+' pre code');
+      if(!el) return '';
+      // Strip HTML tags to get plain markdown
+      const tmp=document.createElement('div');
+      tmp.innerHTML=el.innerHTML;
+      return tmp.textContent||tmp.innerText||'';
+    }
+    function copySpecSample(n){
+      const text=getSpecText(n);
+      navigator.clipboard.writeText(text).then(()=>{
+        const btn=document.querySelector('#spec-sample-'+n+' .btn-outline-light');
+        if(!btn)return;
+        const orig=btn.innerHTML;
+        btn.innerHTML='<i class="bi bi-check-lg me-1"></i>Copied!';
+        setTimeout(()=>{btn.innerHTML=orig},2000);
+      });
+    }
+    function downloadSpecSample(n,filename){
+      const text=getSpecText(n);
+      const blob=new Blob([text],{type:'text/markdown;charset=utf-8'});
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(blob);
+      a.download=filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    }
   </script>
 </body>
 </html>
