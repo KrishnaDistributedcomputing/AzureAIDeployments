@@ -174,76 +174,70 @@
         <div class="card-body text-center p-4 bg-white">
           <div class="diagram-wrapper" style="min-height:600px;display:flex;align-items:center;justify-content:center">
             <pre class="mermaid">
-graph TB
-    subgraph Shared["🔧 Shared Services & Management"]
-        FW["🔥 Azure Firewall<br/>Standard Tier<br/>10.0.0.0/24"]
-        MON["📊 Log Analytics<br/>Centralized Monitoring"]
-        KV0["🔐 Key Vault<br/>Management Secrets"]
+graph LR
+    subgraph Shared["🔧 Shared Services"]
+        FW["🔥 Azure<br/>Firewall"]
+        MON["📊 Log<br/>Analytics"]
     end
     
-    subgraph Spoke1["🟢 Spoke 1 VNet<br/>10.10.0.0/16"]
-        direction TB
-        AKS1["☸️ AKS Cluster<br/>D4s_v5 x3 Nodes"]
-        AOAI1["🤖 Azure OpenAI<br/>S0 Tier"]
-        AIS1["🔍 AI Search<br/>Basic Tier"]
-        ADLS1["💾 ADLS Gen2<br/>LRS Storage"]
-        KV1["🔐 Key Vault"]
+    subgraph Spoke1["🟢 Spoke 1<br/>10.10.0.0/16"]
+        subgraph S1["Spoke 1 Resources"]
+            AKS1["☸️ AKS<br/>D4s_v5 x3"]
+            AOAI1["🤖 OpenAI<br/>S0"]
+            AIS1["🔍 Search<br/>Basic"]
+            ADLS1["💾 ADLS Gen2"]
+            KV1["🔐 Key Vault"]
+        end
     end
     
-    subgraph Spoke2["🟠 Spoke 2 VNet<br/>10.20.0.0/16"]
-        direction TB
-        AKS2["☸️ AKS Cluster<br/>D4s_v5 x3 Nodes"]
-        AOAI2["🤖 Azure OpenAI<br/>S0 Tier"]
-        AIS2["🔍 AI Search<br/>Basic Tier"]
-        ADLS2["💾 ADLS Gen2<br/>LRS Storage"]
-        KV2["🔐 Key Vault"]
+    subgraph Spoke2["🟠 Spoke 2<br/>10.20.0.0/16"]
+        subgraph S2["Spoke 2 Resources"]
+            AKS2["☸️ AKS<br/>D4s_v5 x3"]
+            AOAI2["🤖 OpenAI<br/>S0"]
+            AIS2["🔍 Search<br/>Basic"]
+            ADLS2["💾 ADLS Gen2"]
+            KV2["🔐 Key Vault"]
+        end
     end
     
-    subgraph Spoke3["🟣 Spoke 3 VNet<br/>10.30.0.0/16"]
-        direction TB
-        AKS3["☸️ AKS Cluster<br/>D4s_v5 x3 Nodes"]
-        AOAI3["🤖 Azure OpenAI<br/>S0 Tier"]
-        AIS3["🔍 AI Search<br/>Basic Tier"]
-        ADLS3["💾 ADLS Gen2<br/>LRS Storage"]
-        KV3["🔐 Key Vault"]
+    subgraph Spoke3["🟣 Spoke 3<br/>10.30.0.0/16"]
+        subgraph S3["Spoke 3 Resources"]
+            AKS3["☸️ AKS<br/>D4s_v5 x3"]
+            AOAI3["🤖 OpenAI<br/>S0"]
+            AIS3["🔍 Search<br/>Basic"]
+            ADLS3["💾 ADLS Gen2"]
+            KV3["🔐 Key Vault"]
+        end
     end
     
-    %% Firewall routing to spokes
-    FW -->|"Egress Control"| AKS1
-    FW -->|"Egress Control"| AKS2
-    FW -->|"Egress Control"| AKS3
+    FW -->|Egress| AKS1
+    FW -->|Egress| AKS2
+    FW -->|Egress| AKS3
     
-    %% Within Spoke 1
-    AKS1 -->|"Call LLM APIs"| AOAI1
-    AKS1 -->|"Vector Search"| AIS1
-    AKS1 -->|"Data Access"| ADLS1
-    AIS1 -->|"Index Data"| ADLS1
-    AKS1 -->|"Secrets"| KV1
-    AOAI1 -->|"Auth"| KV1
+    AKS1 -->|LLM Call| AOAI1
+    AKS1 -->|Vector Search| AIS1
+    AKS1 -->|Data Access| ADLS1
+    AIS1 -->|Index| ADLS1
+    AKS1 -->|Secrets| KV1
     
-    %% Within Spoke 2
-    AKS2 -->|"Call LLM APIs"| AOAI2
-    AKS2 -->|"Vector Search"| AIS2
-    AKS2 -->|"Data Access"| ADLS2
-    AIS2 -->|"Index Data"| ADLS2
-    AKS2 -->|"Secrets"| KV2
-    AOAI2 -->|"Auth"| KV2
+    AKS2 -->|LLM Call| AOAI2
+    AKS2 -->|Vector Search| AIS2
+    AKS2 -->|Data Access| ADLS2
+    AIS2 -->|Index| ADLS2
+    AKS2 -->|Secrets| KV2
     
-    %% Within Spoke 3
-    AKS3 -->|"Call LLM APIs"| AOAI3
-    AKS3 -->|"Vector Search"| AIS3
-    AKS3 -->|"Data Access"| ADLS3
-    AIS3 -->|"Index Data"| ADLS3
-    AKS3 -->|"Secrets"| KV3
-    AOAI3 -->|"Auth"| KV3
+    AKS3 -->|LLM Call| AOAI3
+    AKS3 -->|Vector Search| AIS3
+    AKS3 -->|Data Access| ADLS3
+    AIS3 -->|Index| ADLS3
+    AKS3 -->|Secrets| KV3
     
-    %% Monitoring connections (dotted)
-    AKS1 -.->|"Metrics & Logs"| MON
-    AOAI1 -.->|"Performance"| MON
-    AKS2 -.->|"Metrics & Logs"| MON
-    AOAI2 -.->|"Performance"| MON
-    AKS3 -.->|"Metrics & Logs"| MON
-    AOAI3 -.->|"Performance"| MON
+    AKS1 -.->|Metrics| MON
+    AOAI1 -.->|Perf| MON
+    AKS2 -.->|Metrics| MON
+    AOAI2 -.->|Perf| MON
+    AKS3 -.->|Metrics| MON
+    AOAI3 -.->|Perf| MON
             </pre>
           </div>
         </div>
