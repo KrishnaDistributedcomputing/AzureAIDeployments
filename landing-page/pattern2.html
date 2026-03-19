@@ -170,43 +170,61 @@
                 <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
           <pre class="mermaid">
 graph TB
+    subgraph Shared["Shared Services & Management"]
+        FW["Azure Firewall<br/>Standard<br/>10.0.0.0/24"]
+        MON["Log Analytics<br/>Workspace"]
+        KV0["Key Vault<br/>Management"]
+    end
+    
     subgraph Spoke1["Spoke 1 VNet 10.10.0.0/16"]
+        AKS1["AKS Cluster<br/>D4s_v5 x3"]
         AOAI1["Azure OpenAI"]
-        AIS1["AI Search"]
-        AKS1["AKS Cluster&lt;br/&gt;D4s_v5 x3"]
-        ADLS1["ADLS Gen2"]
+        AIS1["AI Search<br/>S1 Instance"]
+        ADLS1["ADLS Gen2<br/>Storage"]
         KV1["Key Vault"]
     end
+    
     subgraph Spoke2["Spoke 2 VNet 10.20.0.0/16"]
+        AKS2["AKS Cluster<br/>D4s_v5 x3"]
         AOAI2["Azure OpenAI"]
-        AIS2["AI Search"]
-        AKS2["AKS Cluster&lt;br/&gt;D4s_v5 x3"]
-        ADLS2["ADLS Gen2"]
+        AIS2["AI Search<br/>S1 Instance"]
+        ADLS2["ADLS Gen2<br/>Storage"]
         KV2["Key Vault"]
     end
+    
     subgraph Spoke3["Spoke 3 VNet 10.30.0.0/16"]
+        AKS3["AKS Cluster<br/>D4s_v5 x3"]
         AOAI3["Azure OpenAI"]
-        AIS3["AI Search"]
-        AKS3["AKS Cluster&lt;br/&gt;D4s_v5 x3"]
-        ADLS3["ADLS Gen2"]
+        AIS3["AI Search<br/>S1 Instance"]
+        ADLS3["ADLS Gen2<br/>Storage"]
         KV3["Key Vault"]
     end
-    subgraph Shared["Shared Services"]
-        MON["Log Analytics&lt;br/&gt;Centralized"]
-        FW["Azure Firewall&lt;br/&gt;Standard"]
-    end
+    
+    FW --> AKS1
+    FW --> AKS2
+    FW --> AKS3
+    
     AKS1 --> AOAI1
     AKS1 --> AIS1
+    AKS1 --> ADLS1
+    AIS1 --> ADLS1
+    
     AKS2 --> AOAI2
     AKS2 --> AIS2
+    AKS2 --> ADLS2
+    AIS2 --> ADLS2
+    
     AKS3 --> AOAI3
     AKS3 --> AIS3
-    Spoke1 --> FW
-    Spoke2 --> FW
-    Spoke3 --> FW
-    Spoke1 --> MON
-    Spoke2 --> MON
-    Spoke3 --> MON
+    AKS3 --> ADLS3
+    AIS3 --> ADLS3
+    
+    AKS1 -.-> MON
+    AKS2 -.-> MON
+    AKS3 -.-> MON
+    AOAI1 -.-> MON
+    AOAI2 -.-> MON
+    AOAI3 -.-> MON
           </pre>
           </div>
         </div>
