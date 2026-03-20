@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Module Spec Writing Guide — Azure AI Templates</title>
+  <meta name="description" content="Complete guide to writing specifications for all 18 Azure core modules." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    :root { --accent: #0078d4; --accent-dark: #50e6ff; }
+    [data-bs-theme="dark"] { --accent: #50e6ff; }
+    
+    .hero { position: relative; min-height: 280px; background: linear-gradient(135deg, #0050a0 0%, #0078d4 40%, #00a2e8 70%, #50e6ff 100%); overflow: hidden; }
+    [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #001830 0%, #003566 40%, #0050a0 100%); }
+    .hero svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; pointer-events: none; }
+    .hero .container { position: relative; z-index: 2; }
+    
+    .spec-template { background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; font-family: 'Courier New', monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.6; }
+    [data-bs-theme="dark"] .spec-template { background: #2d2d2d; border-color: #444; color: #e0e0e0; }
+    
+    .module-section { border-left: 4px solid var(--accent); padding: 1.5rem; background: rgba(0, 120, 212, 0.03); border-radius: 8px; margin-bottom: 2rem; }
+    [data-bs-theme="dark"] .module-section { background: rgba(0, 120, 212, 0.1); }
+    
+    .guide-box { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 1rem; border-radius: 4px; margin: 1rem 0; }
+    [data-bs-theme="dark"] .guide-box { background: rgba(25, 118, 210, 0.2); border-left-color: #64b5f6; }
+    
+    .best-practice { background: #f1f8e9; border-left: 4px solid #558b2f; padding: 1rem; border-radius: 4px; margin: 1rem 0; }
+    [data-bs-theme="dark"] .best-practice { background: rgba(85, 139, 47, 0.2); border-left-color: #9ccc65; }
+    
+    .toc-nav { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
+    
+    h3 { color: var(--accent); font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; }
+    h4 { color: #0056b3; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    
+    code { background: #f5f5f5; padding: 0.2rem 0.4rem; border-radius: 3px; color: #d73a49; }
+    [data-bs-theme="dark"] code { background: #3d3d3d; color: #ff7b72; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI <span class="badge bg-warning text-dark ms-1" style="font-size:.6rem;vertical-align:middle">BETA</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link fw-semibold" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="modules.html"><i class="bi bi-puzzle me-1"></i>Modules</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold active" href="#"><i class="bi bi-file-earmark-text me-1"></i>Spec Guide</a></li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" onclick="toggleTheme()" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero text-white d-flex align-items-center">
+    <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#fff" stroke-width="0.5"/></pattern></defs><rect width="1200" height="400" fill="url(#grid)"/></svg>
+    <div class="container py-5">
+      <h1 class="display-4 fw-bold mb-3">Module Specification Writing Guide</h1>
+      <p class="lead">Complete templates and best practices for documenting all 18 Azure core modules.</p>
+      <p class="text-white-50">Write consistent, production-ready specifications with architecture diagrams, resource inventory, costs, and Bicep templates.</p>
+    </div>
+  </section>
+
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div class="row">
+        <!-- Table of Contents -->
+        <div class="col-lg-3 mb-4">
+          <div class="toc-nav card shadow-sm">
+            <div class="card-header bg-light fw-bold">
+              <i class="bi bi-list-ul me-2"></i>Modules
+            </div>
+            <div class="list-group list-group-flush">
+              <a href="#overview" class="list-group-item list-group-item-action"><small>Overview</small></a>
+              <a href="#openai" class="list-group-item list-group-item-action"><small>1. Azure OpenAI</small></a>
+              <a href="#aisearch" class="list-group-item list-group-item-action"><small>2. AI Search</small></a>
+              <a href="#foundry" class="list-group-item list-group-item-action"><small>3. AI Foundry</small></a>
+              <a href="#apigm" class="list-group-item list-group-item-action"><small>4. API Management</small></a>
+              <a href="#keyvault" class="list-group-item list-group-item-action"><small>5. Key Vault</small></a>
+              <a href="#cosmos" class="list-group-item list-group-item-action"><small>6. Cosmos DB</small></a>
+              <a href="#fabric" class="list-group-item list-group-item-action"><small>7. Fabric</small></a>
+              <a href="#acr" class="list-group-item list-group-item-action"><small>8. Container Registry</small></a>
+              <a href="#vnet" class="list-group-item list-group-item-action"><small>9. Virtual Network</small></a>
+              <a href="#privatelink" class="list-group-item list-group-item-action"><small>10. Private Link</small></a>
+              <a href="#firewall" class="list-group-item list-group-item-action"><small>11. Firewall</small></a>
+              <a href="#entraid" class="list-group-item list-group-item-action"><small>12. Entra ID</small></a>
+              <a href="#containerapps" class="list-group-item list-group-item-action"><small>13. Container Apps</small></a>
+              <a href="#functions" class="list-group-item list-group-item-action"><small>14. Functions</small></a>
+              <a href="#monitor" class="list-group-item list-group-item-action"><small>15. Azure Monitor</small></a>
+              <a href="#eventgrid" class="list-group-item list-group-item-action"><small>16. Event Grid</small></a>
+              <a href="#sqlmi" class="list-group-item list-group-item-action"><small>17. SQL MI</small></a>
+              <a href="#bastion" class="list-group-item list-group-item-action"><small>18. Bastion</small></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+          <section id="overview" class="mb-5">
+            <h2><i class="bi bi-info-circle me-2"></i>Spec Writing Overview</h2>
+            
+            <div class="guide-box">
+              <strong>What is a Module Specification?</strong>
+              <p class="mt-2 mb-0">A comprehensive document that describes an Azure service, its components, configuration, best practices, cost modeling, and deployment guidance. Each spec should be 150-300 lines and include all critical information for architects and engineers.</p>
+            </div>
+
+            <h4>Standard Spec Sections</h4>
+            <ul class="list-unstyled">
+              <li class="mb-2"><strong>1. Overview</strong> — Service description, primary use cases, key features (2-3 paragraphs)</li>
+              <li class="mb-2"><strong>2. Architecture</strong> — ASCII diagram or description of component layout</li>
+              <li class="mb-2"><strong>3. Key Capabilities</strong> — Feature list with brief explanations (5-10 items)</li>
+              <li class="mb-2"><strong>4. Resource Inventory</strong> — Full list of Azure resources required (table format)</li>
+              <li class="mb-2"><strong>5. Configuration</strong> — Key settings, SKUs, scaling parameters</li>
+              <li class="mb-2"><strong>6. Cost Estimation</strong> — Monthly cost breakdown, pricing model explanation</li>
+              <li class="mb-2"><strong>7. SLAs & Limits</strong> — Service availability, throughput limits, quotas</li>
+              <li class="mb-2"><strong>8. Bicep Template</strong> — IaC code snippet (50-100 lines)</li>
+              <li class="mb-2"><strong>9. Well-Architected Framework</strong> — Alignment with 5 pillars</li>
+              <li class="mb-2"><strong>10. Best Practices</strong> — Production deployment recommendations</li>
+            </ul>
+
+            <div class="best-practice mt-3">
+              <strong>📌 Pro Tip:</strong> Use consistent formatting, include pricing units, and always link to official Azure docs. Readers should be able to copy-paste Bicep code directly into their IaC projects.
+            </div>
+          </section>
+
+          <!-- AI Services -->
+          <section id="openai" class="module-section">
+            <h3><i class="bi bi-robot me-2"></i>1. Azure OpenAI</h3>
+            <p><strong>Category:</strong> AI Services | <strong>SKU Variants:</strong> Standard, Provisioned</p>
+
+            <h4>Spec Outline & Template</h4>
+            <div class="guide-box">
+              <strong>Focus Areas for OpenAI Spec:</strong>
+              <ul class="mt-2 mb-0">
+                <li>Model deployment strategies (gpt-4, gpt-35-turbo, embeddings)</li>
+                <li>Quota management and token calculations</li>
+                <li>Prompt flow integration points</li>
+                <li>Cost per 1K tokens (varies by model)</li>
+                <li>Rate limiting and throughput (tokens/min)</li>
+              </ul>
+            </div>
+
+            <div class="spec-template">
+# Azure OpenAI Module Specification
+
+## Overview
+Azure OpenAI provides enterprise access to GPT-4, GPT-3.5-turbo, and embedding models. 
+Key use cases: GenAI apps, RAG systems, code generation, semantic search.
+
+## Architecture
+```
+User Application
+    ↓
+API Management (optional gateway)
+    ↓
+Azure OpenAI (Cognitive Services)
+    ├─ Deployments (gpt-4, embeddings)
+    ├─ Model versions
+    └─ Rate limits per deployment
+```
+
+## Key Capabilities
+- Multiple model deployments in single resource
+- Quota management (tokens/min, requests/min)
+- Virtual network integration
+- Customer-managed keys (CMK)
+- Content filtering and abuse monitoring
+
+## Resource Inventory
+| Resource | Type | Notes |
+|----------|------|-------|
+| Cognitive Service Account | Microsoft.CognitiveServices/accounts | OpenAI account |
+| Model Deployment | N/A | Created in portal/Bicep |
+| Private Endpoint | Private Link | Network isolation |
+
+## Configuration
+- **SKU**: Standard (pay-as-you-go) or Provisioned (reserved)
+- **Deployments**: Min 1, typical 3-5 (gpt-4, gpt-35-turbo, embedding-ada)
+- **Quota**: Set per deployment (50K-300K tokens/min recommended)
+- **Version Pinning**: Pin to specific model version (e.g., 0125-preview)
+
+## Cost Estimation
+- **GPT-4 (Vision)**: $0.01-0.03 per 1K input tokens, $0.03-0.06 per 1K output
+- **GPT-3.5-turbo**: $0.0005-0.0015 per 1K input tokens
+- **Ada Embeddings**: $0.0001 per 1K tokens
+- **Estimate**: $2,000-5,000/month for 1M daily tokens
+
+## SLAs & Limits
+- Availability: 99.9% SLA
+- Rate limits: 90K requests/min (Standard quota)
+- Model availability: Check regional availability
+- Context window: 4K-128K tokens (model-dependent)
+
+## Bicep Template
+```bicep
+resource cognitiveAccount 'Microsoft.CognitiveServices/accounts@2023-10-01-preview' = {
+  name: 'openai-${uniqueSuffix}'
+  location: location
+  kind: 'OpenAI'
+  sku: { name: 'S0' }
+  properties: {
+    customSubdomainName: 'openai-${uniqueSuffix}'
+    apiProperties: { statisticsEnabled: true }
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
+resource gpt4Deployment 'Microsoft.CognitiveServices/accounts/deployments@2023-10-01-preview' = {
+  parent: cognitiveAccount
+  name: 'gpt-4'
+  properties: {
+    model: { format: 'OpenAI', name: 'gpt-4', version: '0125-preview' }
+    scaleSettings: { scaleType: 'Standard', capacity: 10 }
+  }
+}
+```
+
+## Well-Architected Framework
+- **Reliability**: Multi-region strategy, quota monitoring, retry logic
+- **Security**: Private endpoints, managed identities, input validation
+- **Cost**: Right-size quotas, monitor token usage, use cheaper models where possible
+- **Performance**: Batch API for non-realtime, caching embeddings, prompt optimization
+- **Operational Excellence**: Log all requests, set up alerts on quota exhaustion
+
+## Best Practices
+1. **Never hardcode API keys** — use Azure AD with managed identities
+2. **Implement batching** — use Batch API for cost savings (50% cheaper)
+3. **Cache embeddings** — reuse vector embeddings to reduce token cost
+4. **Monitor token usage** — set up alerts when approaching quota limits
+5. **Version models explicitly** — pin to specific version, test updates separately
+6. **Implement retry logic** — handle rate limiting gracefully with exponential backoff
+7. **Use embeddings cache** — store embeddings in cache (Redis/Cosmos) to avoid recomputation
+            </div>
+
+            <div class="best-practice">
+              <strong>Common Mistakes:</strong> Not implementing token monitoring (leads to budget overruns), hardcoding API keys, forgetting to set quota limits, not batching requests for cost optimization.
+            </div>
+          </section>
+
+          <!-- AI Search -->
+          <section id="aisearch" class="module-section">
+            <h3><i class="bi bi-search me-2"></i>2. Azure AI Search</h3>
+            <p><strong>Category:</strong> AI Services | <strong>SKU Variants:</strong> Free, Basic, S1-S3, L1-L2</p>
+
+            <div class="guide-box">
+              <strong>Focus Areas for AI Search Spec:</strong>
+              <ul class="mt-2 mb-0">
+                <li>Vector search configuration (HNSW/IVF algorithms)</li>
+                <li>Index partitioning and replica scaling</li>
+                <li>Semantic ranking and re-ranking</li>
+                <li>Hybrid search (BM25 + vector) combining strategies</li>
+                <li>Indexing pipelines and enrichment (skills)</li>
+              </ul>
+            </div>
+
+            <div class="spec-template">
+# AI Search Module Specification
+
+## Overview
+Azure AI Search (formerly Cognitive Search) provides full-text, vector, and hybrid 
+search with semantic ranking. Use cases: RAG backends, product catalogs, doc search.
+
+## Architecture
+```
+Data Source (Blob, SQL, etc.)
+    ↓
+Indexer with Enrichment Skills
+    ↓
+Search Index (Vector + BM25)
+    ↓
+Semantic Reranker
+    ↓
+Search Results
+```
+
+## Key Capabilities
+- Vector search with HNSW (Hierarchical Navigable Small World)
+- Hybrid search (full-text + vectors in single query)
+- Semantic ranking and re-ranking
+- Integrated vectorizers (Text-Embedding-3-small/large)
+- 100+ built-in enrichment skills
+- Security: Private endpoints, RBAC, customer-managed keys
+
+## Resource Inventory
+| Resource | Type | Notes |
+|----------|------|-------|
+| Search Service | Microsoft.Search/searchServices | Main service |
+| Index | Search Index | Stores documents & vectors |
+| Indexer | Indexer | Data ingestion pipeline |
+| Data Source Connector | Data Source | Points to blob/SQL/etc |
+| Skill Set | Skill Set | OCR, entity extraction, etc |
+
+## Configuration
+- **SKU**: Choose based on throughput (Basic: 3, S1: 36, S3: unlimited partitions)
+- **Partitions**: 1-12 (each adds ~25GB storage)
+- **Replicas**: 1-12 (scale for query throughput)
+- **Vector Config**: embeddings field (float type, searchable)
+- **Semantic Config**: custom fields for re-ranking
+
+## Cost Estimation
+- **Basic SKU**: $189/month + $12/partition
+- **S1 SKU**: $403/month + $12/partition
+- **S3 SKU**: $3,660/month + $12/partition (for massive indexes)
+- **Typical**: Basic + 2 partitions = ~$213/month for small RAG
+
+## SLAs & Limits
+- Availability: 99.9% SLA (Standard SKUs)
+- Max documents per index: 2 billion
+- Max index size: Limited by partition count (~25GB per partition)
+- Max vector dimensions: 2048
+- Query timeout: 30 seconds
+- Indexing throughput: Limited by SKU (Basic: ~10K docs/sec)
+
+## Bicep Template
+```bicep
+resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
+  name: 'search-${uniqueSuffix}'
+  location: location
+  sku: { name: 'basic' }
+  properties: {
+    partitionCount: 2
+    replicaCount: 2
+    publicNetworkAccess: 'Disabled'
+    networkRuleBypassOptions: 'AzureServices'
+    encryptionWithCmk: { enforcement: 'Enforced' }
+  }
+}
+
+resource searchIndex 'Microsoft.Search/searchServices/indexes@2023-11-01' = {
+  parent: searchService
+  name: 'products-index'
+  properties: {
+    fields: [
+      { name: 'id', type: 'Edm.String', key: true }
+      { name: 'title', type: 'Edm.String', searchable: true }
+      { name: 'embedding', type: 'Collection(Edm.Single)', 
+        searchable: true, vectorSearchConfiguration: 'vectorConfig' }
+    ]
+    vectorSearch: {
+      algorithmConfigurations: [
+        { name: 'vectorConfig', algorithm: 'hnsw' }
+      ]
+    }
+    semanticConfiguration: [
+      { name: 'default', fields: [{ fieldName: 'title', weight: 2 }] }
+    ]
+  }
+}
+```
+
+## Well-Architected Framework
+- **Reliability**: Multi-replica for HA, backup indexes, test failover
+- **Security**: Private endpoints, managed identities, data encryption
+- **Cost**: Right-size SKU (basic sufficient for RAG), use integrated vectorizer
+- **Performance**: Partition for scale, use vector search over full-text when possible
+- **Operational Excellence**: Monitor query latency, track indexing failures, alert on quota
+
+## Best Practices
+1. **Use hybrid search** — Combine full-text (BM25) + vector for accuracy
+2. **Enable semantic ranking** — Cheap relative benefit for ranking quality
+3. **Batch indexing** — Use batch API for bulk updates (not single-doc updates)
+4. **Disable queryLanguage if not needed** — Reduces index size by 5-10%
+5. **Use integrated vectorizer** — No need to manage embedding pipeline separately
+6. **Monitor indexing lag** — Set up alerts when indexer falls behind
+7. **Test vector dimensions** — 384D (Small) often sufficient; don't default to 3072D
+            </div>
+          </section>
+
+          <!-- AI Foundry -->
+          <section id="foundry" class="module-section">
+            <h3><i class="bi bi-gear-fill me-2"></i>3. Azure AI Foundry</h3>
+            <p><strong>Category:</strong> AI Platform | <strong>SKU Variants:</strong> Free, Standard</p>
+
+            <div class="guide-box">
+              <strong>Focus Areas for AI Foundry Spec:</strong>
+              <ul class="mt-2 mb-0">
+                <li>Hub and project creation / structure</li>
+                <li>Prompt flow development and deployment</li>
+                <li>Evaluation and benchmarking frameworks</li>
+                <li>Content filters and safety policies</li>
+                <li>Integration with OpenAI and other models</li>
+              </ul>
+            </div>
+
+            <div class="spec-template">
+# Azure AI Foundry Module Specification
+
+## Overview
+Azure AI Foundry is a unified platform for building, evaluating, and deploying AI 
+applications. It provides Prompt flow, Evaluations, and built-in safety governance.
+
+## Key Components
+1. **Hub** — Organization-level resource (single per org)
+2. **Projects** — Team workspaces (multiple per hub)
+3. **Prompt Flow** — Visual workflow for chaining models/APIs
+4. **Evaluations** — Quality/safety metrics and benchmarking
+5. **Content Filters** — Safety policies (hate, violence, sexual, self-harm)
+
+## Resource Inventory
+| Component | Type | Purpose |
+|-----------|------|---------|
+| AI Hub | Hub | Organization-level |
+| AI Project | Project | Team workspace |
+| Prompt Flow | Flow | Orchestration |
+| Runtime | Compute | Execution environment |
+| Content Filter | Policy | Safety guardrails |
+
+## Configuration
+- **Hub Location**: Choose AIML-ready region
+- **Storage Account**: For artifacts and flows
+- **Key Vault**: For secrets management
+- **Hub Runtime**: For flow execution (or serverless)
+- **Safety Settings**: Enable content filters (default: all enabled)
+
+## Cost Estimation
+- **Foundry Service**: $4/hour for compute (or pay-as-you-go)
+- **OpenAI Integration**: Billed separately per API calls
+- **Evaluations**: $0.01-0.10 per evaluation run
+- **Typical**: $200-500/month for active development team
+
+## Bicep Template
+```bicep
+resource aiHub 'Microsoft.MachineLearningServices/workspaces@2023-08-01' = {
+  name: 'hub-${uniqueSuffix}'
+  location: location
+  kind: 'Hub'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    description: 'AI Foundry Hub'
+    storageAccount: storageId
+    keyVault: kvId
+    containerRegistry: acrId
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
+resource aiProject 'Microsoft.MachineLearningServices/workspaces@2023-08-01' = {
+  name: 'project-${uniqueSuffix}'
+  location: location
+  kind: 'Project'
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    description: 'AI Project under Hub'
+    hubResourceId: aiHub.id
+    storageAccount: storageId
+  }
+}
+```
+
+## Best Practices
+1. **Organize by team** — One project per AI application/team
+2. **Use Prompt Flow for orchestration** — Chain models, APIs, tools
+3. **Evaluate before deployment** — Run evaluation suite on flow outputs
+4. **Implement content filters** — Enable all safety filters in production
+5. **Version control flows** — Commit flow YAML to Git
+6. **Monitor safety metrics** — Track content filter triggers and adjust thresholds
+7. **Document flow inputs/outputs** — Include examples in flow descriptions
+            </div>
+          </section>
+
+          <!-- API Management -->
+          <section id="apigm" class="module-section">
+            <h3><i class="bi bi-globe me-2"></i>4. API Management</h3>
+            <p><strong>Category:</strong> Integration | <strong>SKU Variants:</strong> Consumption, Developer, Standard, Premium</p>
+
+            <div class="guide-box">
+              <strong>Focus Areas for APIM Spec:</strong>
+              <ul class="mt-2 mb-0">
+                <li>GenAI-specific policies (token counting, rate limiting)</li>
+                <li>Backend integration (OpenAI, Azure AI Search, custom APIs)</li>
+                <li>Request/response transformation and enrichment</li>
+                <li>Caching strategies for LLM responses (semantic equivalence)</li>
+                <li>Scaling, self-hosted gateways for private networks</li>
+              </ul>
+            </div>
+
+            <div class="spec-template">
+# API Management Module Specification
+
+## Overview
+API Management is an enterprise API gateway. For GenAI workloads: OpenAI gateway,
+token-aware rate limiting, request transformation, caching.
+
+## Key Capabilities
+- Reverse proxy for OpenAI/AI Search/custom backends
+- Token-aware rate limiting policies
+- Request/response transformation (headers, body)
+- Caching (TTL-based for non-semantic requests)
+- API versioning and multiple backends
+- Developer portal and analytics
+
+## Resource Inventory
+| Resource | Type | Purpose |
+|----------|------|---------|
+| APIM Instance | Microsoft.ApiManagement/service | API gateway |
+| Backends | Backend | OpenAI, AI Search, custom |
+| APIs | API | REST endpoints |
+| Policies | Policy | Transformation, rate limit |
+| Named Values | Secret | Connection strings, keys |
+
+## Configuration Examples
+**For OpenAI Gateway:**
+- Backend: https://{{ openai-instance }}.openai.azure.com
+- Rate limit policy: X tokens/minute (not requests/minute)
+- Caching: Disable for LLM calls (non-deterministic)
+- Routing: /v1/chat/completions → Azure OpenAI deployment
+
+## Cost Estimation
+- **Consumption**: $0.035 per unit (1M units = ~$35)
+- **Developer**: $40/month (development only)
+- **Standard**: $306/month
+- **Premium**: $1224/month + $200/unit (for HA/multiple regions)
+
+## Bicep Template
+```bicep
+resource apimService 'Microsoft.ApiManagement/service@2023-05-01-preview' = {
+  name: 'apim-${uniqueSuffix}'
+  location: location
+  sku: { name: 'Standard', capacity: 1 }
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    publisherName: 'Your Company'
+    publisherEmail: 'admin@yourcompany.com'
+    virtualNetworkType: 'Internal'
+    customProperties: {
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10': 'False'
+    }
+  }
+}
+
+resource openaiBackend 'Microsoft.ApiManagement/service/backends@2023-05-01-preview' = {
+  parent: apimService
+  name: 'openai-backend'
+  properties: {
+    title: 'Azure OpenAI'
+    type: 'http'
+    url: 'https://${openaiName}.openai.azure.com'
+  }
+}
+```
+
+## Well-Architected Framework
+- **Reliability**: Multiple backends, circuit breaker policies for failures
+- **Security**: Managed identities, key rotation via Key Vault
+- **Cost**: Rate limiting prevents runaway costs, caching reduces backend calls
+- **Performance**: Reverse proxy, response compression, caching non-LLM calls
+- **Operational Excellence**: Analytics on token usage, API health monitoring
+
+## Best Practices
+1. **Token-aware rate limiting** — Use policies to count tokens, not just requests
+2. **Cache non-semantic requests** — Cache embeddings lookups, not completions
+3. **Circuit breaker pattern** — Return cached/fallback response on timeout
+4. **Monitor token spend** — Track token consumption via analytics blade
+5. **Use managed identities** — Authenticate to OpenAI with service principal
+6. **Implement retry logic in policy** — Handle transient failures gracefully
+7. **Version APIs explicitly** — v1, v2, etc. for safe rollouts
+            </div>
+          </section>
+
+          <!-- Key Vault -->
+          <section id="keyvault" class="module-section">
+            <h3><i class="bi bi-shield-lock-fill me-2"></i>5. Key Vault</h3>
+            <p><strong>Category:</strong> Security | <strong>SKU Variants:</strong> Standard, Premium</p>
+
+            <div class="guide-box">
+              <strong>Focus Areas for Key Vault Spec:</strong>
+              <ul class="mt-2 mb-0">
+                <li>Secret rotation policies and automation</li>
+                <li>Access policies vs Azure RBAC (hybrid strategies)</li>
+                <li>Soft delete and purge protection</li>
+                <li>Network isolation with private endpoints</li>
+                <li>Audit logging and compliance (SOC2, HIPAA)</li>
+              </ul>
+            </div>
+
+            <div class="spec-template">
+# Key Vault Module Specification
+
+## Overview
+Azure Key Vault securely stores secrets (API keys, connection strings, passwords),
+certificates, and encryption keys. Essential for zero-trust security.
+
+## Key Capabilities
+- Secret storage and rotation
+- Certificate lifecycle management
+- Encryption key management (customer-managed encryption)
+- Access audit logging
+- Soft delete (90-day recovery)
+- Private endpoint support
+- Managed HSM (FIPS 140-3)
+
+## Resource Inventory
+| Resource | Type | Purpose |
+|----------|------|-------|
+| Key Vault | Microsoft.KeyVault/vaults | Secret store |
+| Secrets | Secret | API keys, passwords |
+| Keys | Key | Customer-managed encryption keys |
+| Certificates | Certificate | TLS certs, code signing |
+| Access Policy | Policy | Granular secret permissions |
+
+## Configuration
+- **SKU**: Standard (software) or Premium (HSM-backed)
+- **Network**: Public or Private Endpoint (VNet-isolated) 
+- **Purge Protection**: Enable (prevents accidental deletion)
+- **Soft Delete**: 90 days (default, recommended)
+- **Access Model**: Azure RBAC (preferred) or legacy Access Policies
+
+## Cost Estimation
+- **Standard SKU**: $0.03 per operation (secret read/write)
+- **Premium SKU**: $200/month base + operations
+- **Typical usage**: 1000 reads/day = ~$1/month standard
+- **Estimate**: $20-50/month for moderate use
+
+## Bicep Template
+```bicep
+resource keyVault 'Microsoft.KeyVault/vaults@2023-07-01' = {
+  name: 'kv${uniqueSuffix}'
+  location: location
+  properties: {
+    tenantId: subscription().tenantId
+    sku: { family: 'A', name: 'standard' }
+    accessPolicies: []
+    softDeleteRetentionInDays: 90
+    enablePurgeProtection: true
+    enableRbacAuthorization: true
+    publicNetworkAccess: 'Disabled'
+  }
+}
+
+resource openaiSecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  parent: keyVault
+  name: 'openai-api-key'
+  properties: {
+    value: openaiKey
+    attributes: { enabled: true, exp: expirationDate }
+  }
+}
+
+resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: keyVault
+  name: guid(keyVault.id, principalId, 'Key Vault Secrets User')
+  properties: {
+    principalId: principalId
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')
+  }
+}
+```
+
+## Well-Architected Framework
+- **Reliability**: Soft delete enables recovery, geo-redundant storage
+- **Security**: RBAC access control, enable purge protection, audit all access
+- **Cost**: Operations-based pricing (optimize read patterns)
+- **Performance**: Cache secrets locally, avoid frequent lookups
+- **Operational Excellence**: Enable audit logging, set up alerts on suspicious access
+
+## Best Practices
+1. **Use RBAC over Access Policies** — Simpler, more granular
+2. **Enable purge protection** — Prevents accidental permanent deletion
+3. **Rotate secrets regularly** — Implement automation (Logic Apps, Functions)
+4. **Set expiration dates** — Secrets should have TTL
+5. **Audit all access** — Enable diagnostic logging, review monthly
+6. **Use managed identities for access** — Never hardcode credentials
+7. **Private endpoints only** — No public network access for Key Vault
+            </div>
+          </section>
+
+          <!-- Additional sections for remaining 13 modules -->
+          <section id="cosmos" class="module-section">
+            <h3><i class="bi bi-cloud-circle-fill me-2"></i>6. Cosmos DB</h3>
+            <p><strong>Focus:</strong> Distributed database, flexible schema, global replication, vector search support</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Consistency models (strong/bounded/eventual), partition key strategy, vector indexing (new feature), pricing tiers (provisioned vs serverless), backup/PITR
+            </div>
+          </section>
+
+          <section id="fabric" class="module-section">
+            <h3><i class="bi bi-graph-up-arrow me-2"></i>7. Microsoft Fabric</h3>
+            <p><strong>Focus:</strong> Unified analytics, OneLake, Real-Time Intelligence, Copilot in analytics</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Workspace structure, capacity units, data warehouse vs lakehouse, semantic models, direct lake, ingestion patterns
+            </div>
+          </section>
+
+          <section id="acr" class="module-section">
+            <h3><i class="bi bi-box me-2"></i>8. Container Registry</h3>
+            <p><strong>Focus:</strong> Docker image repository, artifact management, vulnerability scanning, image signing</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> SKU tiers (Basic, Standard, Premium), webhook triggers, replication across regions, content trust, image retention policies
+            </div>
+          </section>
+
+          <section id="vnet" class="module-section">
+            <h3><i class="bi bi-diagram-3 me-2"></i>9. Virtual Network</h3>
+            <p><strong>Focus:</strong> Network isolation, subnets, NSGs, route tables, hub-spoke topology</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Address space planning (RFC1918), subnet CIDR sizing, network security groups, service endpoints vs private endpoints, UDRs
+            </div>
+          </section>
+
+          <section id="privatelink" class="module-section">
+            <h3><i class="bi bi-lock-fill me-2"></i>10. Private Link</h3>
+            <p><strong>Focus:</strong> Network isolation for PaaS services, private endpoints, DNS integration</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Endpoint creation, DNS zones, traffic routing, regional availability, cost per endpoint
+            </div>
+          </section>
+
+          <section id="firewall" class="module-section">
+            <h3><i class="bi bi-shield-fill me-2"></i>11. Azure Firewall</h3>
+            <p><strong>Focus:</strong> Network security, FQDN/application filtering, intrusion detection, logging</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> SKU tiers (Standard, Premium), threat intelligence, forced tunneling, high availability setup, rule collection groups
+            </div>
+          </section>
+
+          <section id="entraid" class="module-section">
+            <h3><i class="bi bi-person-key-fill me-2"></i>12. Entra ID</h3>
+            <p><strong>Focus:</strong> Identity, authentication, RBAC, multi-tenant scenarios, B2B/B2C</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> App registration vs managed identity, RBAC built-in roles, conditional access, MFA policies, licensing tiers
+            </div>
+          </section>
+
+          <section id="containerapps" class="module-section">
+            <h3><i class="bi bi-cloud-arrow-up me-2"></i>13. Container Apps</h3>
+            <p><strong>Focus:</strong> Managed container hosting, autoscaling, environment isolation, secrets integration</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Container environment setup, KEDA autoscaling, ingress configuration, dapr sidecars, revision management
+            </div>
+          </section>
+
+          <section id="functions" class="module-section">
+            <h3><i class="bi bi-lightning-charge-fill me-2"></i>14. Azure Functions</h3>
+            <p><strong>Focus:</strong> Serverless compute, triggers, bindings, scaling, cold start optimization</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Hosting plans (Consumption, Premium, Dedicated), runtime versions, bindings architecture, durable functions, monitoring
+            </div>
+          </section>
+
+          <section id="monitor" class="module-section">
+            <h3><i class="bi bi-graph-up me-2"></i>15. Azure Monitor</h3>
+            <p><strong>Focus:</strong> Observability, metrics, logs, alerts, dashboards, Application Insights</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Log Analytics workspace, data ingestion costs, KQL queries, alert rules, action groups, SIEM integration
+            </div>
+          </section>
+
+          <section id="eventgrid" class="module-section">
+            <h3><i class="bi bi-broadcast me-2"></i>16. Event Grid</h3>
+            <p><strong>Focus:</strong> Event routing, publish-subscribe, event schemas, retry policies</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Event sources, topics, subscriptions, filters, dead-lettering, domain topics for multi-tenant
+            </div>
+          </section>
+
+          <section id="sqlmi" class="module-section">
+            <h3><i class="bi bi-database-fill me-2"></i>17. SQL Managed Instance</h3>
+            <p><strong>Focus:</strong> Managed SQL Server, high availability, always-on, maintenance automation</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> vCore sizing, storage options, backup retention (PITR), failover groups for DR, managed backups
+            </div>
+          </section>
+
+          <section id="bastion" class="module-section">
+            <h3><i class="bi bi-shield-check me-2"></i>18. Azure Bastion</h3>
+            <p><strong>Focus:</strong> Browser-based RDP/SSH, no public IPs needed, network isolation</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> SKU variants (Basic, Standard, Developer), session recording, graphical access from browser, JIT access integration
+            </div>
+          </section>
+
+          <!-- Summary Section -->
+          <section class="mt-5 pt-5 border-top">
+            <h3>Next Steps</h3>
+            <ol>
+              <li>Choose a module from the list above</li>
+              <li>Follow the spec template structure</li>
+              <li>Fill in your specific requirements (regions, SKUs, scaling patterns)</li>
+              <li>Include Bicep code snippets for IaC</li>
+              <li>Add cost estimations based on your workload</li>
+              <li>Document integration points with other modules</li>
+              <li>Publish to your internal wiki or documentation site</li>
+            </ol>
+
+            <div class="best-practice mt-4">
+              <strong>📋 Template Checklist:</strong>
+              <ul class="mt-2 mb-0">
+                <li>✅ Overview (2-3 paragraphs)</li>
+                <li>✅ Architecture diagram (ASCII or Mermaid)</li>
+                <li>✅ Key capabilities list (5-10 items)</li>
+                <li>✅ Resource inventory table</li>
+                <li>✅ Configuration guide</li>
+                <li>✅ Cost breakdown (monthly estimate)</li>
+                <li>✅ SLAs and limits table</li>
+                <li>✅ Bicep template (50-100 LOC)</li>
+                <li>✅ WAF alignment (5 pillars)</li>
+                <li>✅ Best practices (5-10 items)</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-body-tertiary py-5 mt-5 border-top">
+    <div class="container text-center text-muted small">
+      <p>&copy; 2026 Azure AI Deployment Patterns. All rights reserved.</p>
+      <p><a href="index.html" class="text-decoration-none">Home</a> | 
+         <a href="modules.html" class="text-decoration-none">Modules</a> | 
+         <a href="landing-zone.html" class="text-decoration-none">Landing Zone</a> | 
+         <a href="sdd.html" class="text-decoration-none">SDD Training</a></p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const theme = html.getAttribute('data-bs-theme');
+      html.setAttribute('data-bs-theme', theme === 'dark' ? 'light' : 'dark');
+      localStorage.setItem('theme', theme === 'dark' ? 'light' : 'dark');
+    }
+
+    // Load theme preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+  </script>
+</body>
+</html>

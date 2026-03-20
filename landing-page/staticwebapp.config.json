@@ -14,6 +14,7 @@
     { "route": "/sdd", "rewrite": "/sdd.html" },
     { "route": "/education", "rewrite": "/csi-education.html" },
     { "route": "/modules", "rewrite": "/modules.html" },
+    { "route": "/module-specs", "rewrite": "/module-spec-guide.html" },
     { "route": "/monitoring", "rewrite": "/monitoring.html" },
     { "route": "/help", "rewrite": "/help.html" }
   ],
