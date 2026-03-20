@@ -1,0 +1,30 @@
+{
+  "rewrites": [
+    { "source": "/patterns/centralized-hub", "destination": "/pattern1.html" },
+    { "source": "/patterns/decentralized-spoke", "destination": "/pattern2.html" },
+    { "source": "/patterns/hybrid-spoke", "destination": "/pattern3.html" },
+    { "source": "/patterns/ai-factory-mlops", "destination": "/pattern4.html" },
+    { "source": "/patterns/serverless-ai", "destination": "/pattern5.html" },
+    { "source": "/patterns/secure-private-ai", "destination": "/pattern6.html" },
+    { "source": "/patterns/data-lakehouse", "destination": "/pattern7.html" },
+    { "source": "/patterns/lift-shift-migration", "destination": "/pattern8.html" },
+    { "source": "/patterns/sql-migration", "destination": "/pattern9.html" },
+    { "source": "/patterns/greenfield-azure", "destination": "/pattern10.html" },
+    { "source": "/landing-zone", "destination": "/landing-zone.html" },
+    { "source": "/sdd", "destination": "/sdd.html" },
+    { "source": "/education", "destination": "/csi-education.html" },
+    { "source": "/modules", "destination": "/modules.html" },
+    { "source": "/help", "destination": "/help.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    }
+  ]
+}
