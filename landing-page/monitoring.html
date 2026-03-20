@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Cost and Performance Monitoring Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0078d4;
+            --primary-light: #50e6ff;
+            --dark-bg: #0a0e27;
+            --card-bg: #1a1f3a;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, rgba(0, 120, 212, 0.1) 0%, rgba(10, 14, 39, 0.95) 100%);
+            border-bottom: 1px solid rgba(80, 230, 255, 0.2);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-light) !important;
+            font-size: 1.4rem;
+        }
+        
+        .nav-link {
+            color: #b0b0b0 !important;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-light) !important;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #001f3f 0%, #0a0e27 50%, #1a1f3a 100%);
+            padding: 100px 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(80, 230, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 120, 212, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary-light);
+            display: inline-block;
+            padding: 20px;
+            background: rgba(80, 230, 255, 0.1);
+            border-radius: 12px;
+            border: 2px solid rgba(80, 230, 255, 0.3);
+        }
+        
+        .hero h1 {
+            color: white;
+            font-weight: 700;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero h1 .highlight {
+            color: var(--primary-light);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #b0b0b0;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .btn-primary-custom {
+            background: var(--primary);
+            border: none;
+            padding: 12px 32px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary-custom:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 120, 212, 0.3);
+            color: #000;
+        }
+        
+        .btn-secondary-custom {
+            background: transparent;
+            border: 2px solid rgba(80, 230, 255, 0.5);
+            padding: 10px 30px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            color: var(--primary-light);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-secondary-custom:hover {
+            border-color: var(--primary-light);
+            background: rgba(80, 230, 255, 0.1);
+            color: white;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, rgba(0, 120, 212, 0.05) 0%, rgba(80, 230, 255, 0.05) 100%);
+            padding: 60px 20px;
+            border-bottom: 1px solid rgba(80, 230, 255, 0.2);
+            margin-top: 60px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid rgba(80, 230, 255, 0.2);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary-light);
+            margin-bottom: 12px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-light);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section-title {
+            color: white;
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-top: 60px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(80, 230, 255, 0.3);
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(80, 230, 255, 0.2);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            border-color: var(--primary-light);
+            background: rgba(0, 120, 212, 0.1);
+            box-shadow: 0 8px 24px rgba(80, 230, 255, 0.15);
+            transform: translateY(-4px);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-light);
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h4 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .dashboard-preview {
+            background: var(--card-bg);
+            border: 1px solid rgba(80, 230, 255, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .dashboard-preview img {
+            max-width: 100%;
+            border-radius: 6px;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, rgba(0, 120, 212, 0.05) 0%, transparent 100%);
+            border-top: 1px solid rgba(80, 230, 255, 0.2);
+            padding: 40px 0;
+            margin-top: 80px;
+            color: #b0b0b0;
+            text-align: center;
+        }
+        
+        footer a {
+            color: var(--primary-light);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .capability-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        
+        .capability-list li {
+            padding: 12px 0;
+            padding-left: 30px;
+            color: #b0b0b0;
+            position: relative;
+        }
+        
+        .capability-list li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary-light);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">📊 Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="landing-zone.html">Landing Zone</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">📊</div>
+            <h1>Azure Cost and Performance <span class="highlight">Monitoring Platform</span></h1>
+            <p class="hero-subtitle">Single pane of glass to monitor cost and performance across Azure resources — with drill-down analysis, cost simulation, live pricing, and comprehensive documentation.</p>
+            <div class="button-group">
+                <a href="#" class="btn-primary-custom">
+                    <span>📈</span> Open Monitor
+                </a>
+                <a href="#" class="btn-secondary-custom">
+                    <span>📊</span> View Metrics
+                </a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" class="btn-secondary-custom" target="_blank" rel="noopener noreferrer">
+                    <span>🔗</span> GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-number">18</div>
+                <div class="stat-label">Dashboard Pages</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💻</div>
+                <div class="stat-number">5+</div>
+                <div class="stat-label">Resource Types</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-number">42</div>
+                <div class="stat-label">Performance Metrics</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-number">Real-Time</div>
+                <div class="stat-label">Cost Analysis</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-number">29</div>
+                <div class="stat-label">Alert Rules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-number">17</div>
+                <div class="stat-label">KQL Queries</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-main">
+        
+        <!-- Overview Section -->
+        <section>
+            <h2 class="section-title">Platform Overview</h2>
+            <div class="feature-card">
+                <h4>🎯 Unified Visibility</h4>
+                <p>Monitor costs and performance across your entire Azure infrastructure in one centralized dashboard. Track procurement costs, operational expenses, and resource utilization in real-time.</p>
+            </div>
+        </section>
+
+        <!-- Key Features -->
+        <section>
+            <h2 class="section-title">Key Capabilities</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h4>Cost Analysis & Optimization</h4>
+                    <p>Real-time cost tracking, cost forecasting, resource tagging analysis, and optimization recommendations across subscriptions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Performance Monitoring</h4>
+                    <p>Track CPU, memory, network, and disk metrics with customizable thresholds and automated alerts for performance anomalies.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h4>Drill-Down Analysis</h4>
+                    <p>Navigate from subscription to resource-level details with historical trends, comparisons, and anomaly detection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Custom Dashboards</h4>
+                    <p>18 pre-built dashboards for different personas including finance, operations, engineering, and executive leadership.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h4>Intelligent Alerts</h4>
+                    <p>Threshold-based and anomaly detection alerts with multiple delivery channels and customizable escalation policies.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Forecasting & Simulation</h4>
+                    <p>Predict future costs based on trends, simulate scaling scenarios, and compare potential architectural changes.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Overview -->
+        <section>
+            <h2 class="section-title">Dashboard Categories</h2>
+            <div class="feature-card">
+                <h4>Executive Dashboards</h4>
+                <ul class="capability-list">
+                    <li>Monthly cost trends and budget variance</li>
+                    <li>Cost allocation by department/project</li>
+                    <li>Resource utilization efficiency metrics</li>
+                    <li>Top cost drivers and optimization opportunities</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>Finance & Cost Management</h4>
+                <ul class="capability-list">
+                    <li>Detailed cost breakdowns by service, region, and resource group</li>
+                    <li>Chargeback analysis and billing reconciliation</li>
+                    <li>Reserved Instance (RI) and Savings Plan utilization</li>
+                    <li>Cost forecasting and budget planning</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>Operations & Performance</h4>
+                <ul class="capability-list">
+                    <li>Real-time performance metrics by resource type</li>
+                    <li>Service health and availability tracking</li>
+                    <li>Capacity utilization and scaling recommendations</li>
+                    <li>Performance baseline comparisons</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>Engineering & DevOps</h4>
+                <ul class="capability-list">
+                    <li>Application performance monitoring integration</li>
+                    <li>Resource consumption by application/environment</li>
+                    <li>Cost per transaction and efficiency metrics</li>
+                    <li>Performance optimization recommendations</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Data Sources -->
+        <section>
+            <h2 class="section-title">Data Sources & Integration</h2>
+            <div class="feature-card">
+                <h4>Native Azure Integration</h4>
+                <ul class="capability-list">
+                    <li>Azure Cost Management and Billing APIs</li>
+                    <li>Azure Monitor metrics and logs</li>
+                    <li>Azure Service Health</li>
+                    <li>Azure Resource Graph queries</li>
+                    <li>Azure Advisor recommendations</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>Analysis Capabilities</h4>
+                <ul class="capability-list">
+                    <li>KQL (Kusto Query Language) for advanced analytics</li>
+                    <li>Time-series analysis and trend detection</li>
+                    <li>Anomaly detection using machine learning</li>
+                    <li>Custom metric calculations and formulas</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Use Cases -->
+        <section>
+            <h2 class="section-title">Common Use Cases</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h4>Cost Optimization</h4>
+                    <p>Identify and eliminate idle resources, optimize SKU selection, and negotiate better pricing based on usage patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h4>Capacity Planning</h4>
+                    <p>Right-size resources, plan scaling needs, and forecast infrastructure costs for budget approval.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <h4>Performance Alerting</h4>
+                    <p>Proactively detect performance degradation and receive early warnings before service impact.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h4>Chargeback & Showback</h4>
+                    <p>Allocate costs accurately to departments and charge-back cloud usage based on resource consumption.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h4>Governance & Compliance</h4>
+                    <p>Enforce cost policies, track compliance with budgets, and maintain audit trails for cost decisions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h4>Business Analytics</h4>
+                    <p>Analyze cost trends by business unit, track ROI on cloud investments, and benchmark against industry standards.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Queries & Metrics -->
+        <section>
+            <h2 class="section-title">Query & Metric Library</h2>
+            <div class="feature-card">
+                <h4>Pre-built KQL Queries (17 Total)</h4>
+                <p>Ready-to-use Kusto Query Language queries for:</p>
+                <ul class="capability-list">
+                    <li>Cost trends and comparisons</li>
+                    <li>Resource utilization analysis</li>
+                    <li>Performance anomaly detection</li>
+                    <li>Cost forecast modeling</li>
+                    <li>Service health correlation</li>
+                </ul>
+            </div>
+            <div class="feature-card">
+                <h4>Performance Metrics (42 Total)</h4>
+                <p>Comprehensive metrics coverage including:</p>
+                <ul class="capability-list">
+                    <li>CPU usage, memory consumption, disk I/O</li>
+                    <li>Network throughput and latency</li>
+                    <li>Database performance (DTU, CPU, connection count)</li>
+                    <li>Application gateway metrics</li>
+                    <li>Storage performance and capacity</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section>
+            <h2 class="section-title">Getting Started</h2>
+            <div class="feature-card">
+                <h4>📋 Quick Setup Checklist</h4>
+                <ol style="color: #b0b0b0; padding-left: 20px;">
+                    <li style="margin-bottom: 12px;">Connect your Azure subscriptions to the monitoring platform</li>
+                    <li style="margin-bottom: 12px;">Configure cost and performance tags for accurate categorization</li>
+                    <li style="margin-bottom: 12px;">Set up notifications and alert rules for your thresholds</li>
+                    <li style="margin-bottom: 12px;">Customize dashboards for your team roles</li>
+                    <li style="margin-bottom: 12px;">Enable automated recommendations and insights</li>
+                    <li>Review and act on cost optimization suggestions</li>
+                </ol>
+            </div>
+            <div class="feature-card">
+                <h4>🔗 Resources</h4>
+                <ul class="capability-list">
+                    <li><a href="#">View Platform Documentation</a></li>
+                    <li><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
+                    <li><a href="#">Download Sample Dashboards</a></li>
+                    <li><a href="#">Request Features</a></li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container-main">
+            <h5 style="color: var(--primary-light); margin-bottom: 15px; font-weight: 700;">Azure Cost and Performance Monitoring</h5>
+            <p>&copy; 2026 Azure Platform. All rights reserved.</p>
+            <p>Enterprise-grade monitoring for cost optimization and performance visibility.</p>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(80, 230, 255, 0.2);">
+                <small>Last Updated: March 2026 | <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></small>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
