@@ -13,6 +13,8 @@
     { "route": "/landing-zone", "rewrite": "/landing-zone.html" },
     { "route": "/sdd", "rewrite": "/sdd.html" },
     { "route": "/education", "rewrite": "/csi-education.html" },
+    { "route": "/modules", "rewrite": "/modules.html" },
+    { "route": "/monitoring", "rewrite": "/monitoring.html" },
     { "route": "/help", "rewrite": "/help.html" }
   ],
   "navigationFallback": {
