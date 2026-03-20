@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure OpenAI Service | Core Azure Modules</title>
+  <meta name="description" content="Azure OpenAI Service - managed access to GPT-4, GPT-4 Turbo, embeddings, and DALL-E models with enterprise security." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root { --accent: #0078d4; --accent-dark: #50e6ff; }
+    body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, #0078d4 0%, #50e6ff 100%); color: white; padding: 60px 20px; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; }
+    .module-icon { font-size: 3.5rem; margin: 20px 0; }
+    .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+    .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.05) 0%, rgba(80,230,255,.05) 100%); }
+    .btn-deploy { background: var(--accent); color: white; border: none; }
+    .btn-deploy:hover { background: #0062a3; color: white; }
+    .code-block { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 15px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; margin: 15px 0; }
+    .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/modules">
+        <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="module-icon">🤖</div>
+          <h1 class="mb-3">Azure OpenAI Service</h1>
+          <p class="lead mb-4">Managed access to OpenAI's GPT-4, GPT-4 Turbo, embeddings, and DALL-E models with enterprise security and compliance.</p>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-rocket-takeoff me-2"></i>Deploy Now</a>
+          <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div style="font-size: 10rem; opacity: 0.3;">🤖</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container py-5">
+    <!-- Overview -->
+    <section class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+          <p class="fs-5">Azure OpenAI Service provides REST API access to OpenAI's powerful language models, as well as image generation capabilities through DALL-E 3. It offers enterprise-grade security, regional availability, and integration with Azure authentication and monitoring.</p>
+          
+          <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+          <ul class="fs-5">
+            <li><strong>Large Language Models:</strong> GPT-4, GPT-4 Turbo, GPT-3.5-turbo with custom fine-tuning</li>
+            <li><strong>Embeddings:</strong> text-embedding-3-large and text-embedding-3-small for semantic search</li>
+            <li><strong>Image Generation:</strong> DALL-E 3 for image creation and variation</li>
+            <li><strong>Enterprise Security:</strong> Network isolation, managed identity, role-based access control</li>
+            <li><strong>Global Deployment:</strong> Available across 10+ Azure regions with SLA guarantees</li>
+            <li><strong>Token Rate Limiting:</strong> Flexible quota management and consumption tracking</li>
+          </ul>
+
+          <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🔍 RAG Systems</h5>
+                  <p class="card-text">Build retrieval-augmented generation pipelines with vector embeddings and semantic search.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">💬 Chat Applications</h5>
+                  <p class="card-text">Create conversational AI experiences with multi-turn chat and context management.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">📝 Content Generation</h5>
+                  <p class="card-text">Automate content creation for documentation, emails, and marketing materials.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🖼️ Image Generation</h5>
+                  <p class="card-text">Generate, edit, and create variations of images using DALL-E 3.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+          <!-- Quick Stats -->
+          <div class="spec-box">
+            <h5 class="fw-bold">📊 Quick Stats</h5>
+            <ul class="list-unstyled">
+              <li><strong>Pricing (GPT-4):</strong> $0.03-0.06/1K tokens</li>
+              <li><strong>Typical Monthly:</strong> $1,100 - $3,000</li>
+              <li><strong>SLA Availability:</strong> 99.9%</li>
+              <li><strong>Global Regions:</strong> 10+</li>
+              <li><strong>Rate Limit:</strong> Up to 3M TPM</li>
+            </ul>
+          </div>
+
+          <!-- Deployment Info -->
+          <div class="spec-box">
+            <h5 class="fw-bold">🚀 Deployment</h5>
+            <p><small><strong>Resource Provider:</strong> Microsoft.CognitiveServices</small></p>
+            <p><small><strong>SKU:</strong> S0, S1 (Standard/Premium)</small></p>
+            <p><small><strong>Regions:</strong> East US, UK South, France Central, Sweden Central</small></p>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Bicep Spec</a>
+          </div>
+
+          <!-- Dependencies -->
+          <div class="spec-box">
+            <h5 class="fw-bold">🔗 Dependencies</h5>
+            <ul class="list-unstyled small">
+              <li>✓ Key Vault (for API key storage)</li>
+              <li>✓ Azure Monitor (for logging)</li>
+              <li>✓ Entra ID (for auth)</li>
+              <li>✓ Private Link (optional VNet isolation)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5 class="fw-bold">GPT-4</h5>
+            <p class="text-muted small">Recommended for production</p>
+            <div class="fs-5 fw-bold text-primary my-3">Input: $0.03/1K | Output: $0.06/1K</div>
+            <ul class="list-unstyled small">
+              <li>✓ 128K token context</li>
+              <li>✓ Vision capabilities</li>
+              <li>✓ Best accuracy</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5 class="fw-bold">GPT-4 Turbo</h5>
+            <p class="text-muted small">Balanced performance</p>
+            <div class="fs-5 fw-bold text-primary my-3">Input: $0.01/1K | Output: $0.03/1K</div>
+            <ul class="list-unstyled small">
+              <li>✓ 128K token context</li>
+              <li>✓ Faster response</li>
+              <li>✓ Lower cost</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5 class="fw-bold">GPT-3.5-turbo</h5>
+            <p class="text-muted small">Cost-effective option</p>
+            <div class="fs-5 fw-bold text-primary my-3">Input: $0.0005/1K | Output: $0.0015/1K</div>
+            <ul class="list-unstyled small">
+              <li>✓ 4K token context</li>
+              <li>✓ Fastest response</li>
+              <li>✓ Lowest cost</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deployment -->
+    <section id="deployment" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-code-square me-2"></i>Deployment Spec (Bicep)</h2>
+      <p class="text-muted">Complete Infrastructure as Code template for Azure OpenAI Service deployment.</p>
+      
+      <div class="spec-box">
+        <h5 class="fw-bold">Sample Bicep - openai.bicep</h5>
+        <div class="code-block">param location string = resourceGroup().location
+param environment string = 'prod'
+param apiVersion string = '2024-10-01-preview'
+
+var resourceName = 'openai-${environment}-${uniqueString(resourceGroup().id)}'
+
+resource openaiAccount 'Microsoft.CognitiveServices/accounts@${apiVersion}' = {
+  name: resourceName
+  location: location
+  kind: 'OpenAI'
+  sku: {
+    name: 'S0'
+  }
+  properties: {
+    apiProperties: {
+      statisticsEnabled: false
+    }
+    customSubdomainName: resourceName
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+resource gpt4Deployment 'Microsoft.CognitiveServices/accounts/deployments@${apiVersion}' = {
+  parent: openaiAccount
+  name: 'gpt-4-deployment'
+  properties: {
+    model: {
+      format: 'OpenAI'
+      name: 'gpt-4'
+      version: '1106'
+    }
+    scaleSettings: {
+      scaleType: 'Standard'
+      capacity: 20
+    }
+  }
+}
+
+output openaiEndpoint string = openaiAccount.properties.endpoint
+output deploymentId string = gpt4Deployment.id
