@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Core Azure Modules — AI Deployment Essentials</title>
+  <meta name="description" content="Core Azure modules for AI deployments: OpenAI, AI Search, Foundry, networking, monitoring, and more." />
+  <meta name="keywords" content="Azure modules, OpenAI, AI Search, Cosmos DB, Fabric, networking, security" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    :root { --accent: #0078d4; --accent-dark: #50e6ff; }
+    [data-bs-theme="dark"] { --accent: #50e6ff; }
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .module-card { border-left: 4px solid var(--accent); border-radius: 8px; transition: transform .2s, box-shadow .2s; cursor: pointer; }
+    .module-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .module-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .hero { position: relative; min-height: 280px; background: linear-gradient(135deg, #0050a0 0%, #0078d4 40%, #00a2e8 70%, #50e6ff 100%); overflow: hidden; }
+    [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #001830 0%, #003566 40%, #0050a0 100%); }
+    .hero svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; pointer-events: none; }
+    .hero .container { position: relative; z-index: 2; }
+    .module-detail { border-left: 4px solid var(--accent); padding: 1.5rem; background: rgba(0, 120, 212, 0.03); border-radius: 8px; margin-bottom: 1.5rem; }
+    [data-bs-theme="dark"] .module-detail { background: rgba(0, 120, 212, 0.1); }
+    .spec-box { background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto; }
+    [data-bs-theme="dark"] .spec-box { background: #2d2d2d; border-color: #444; color: #e0e0e0; }
+    #backToTop { position: fixed; bottom: 2rem; right: 2rem; z-index: 1050; display: none; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI <span class="badge bg-warning text-dark ms-1" style="font-size:.6rem;vertical-align:middle">BETA</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link fw-semibold" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="sdd.html" style="color:#e67e22"><i class="bi bi-file-earmark-code me-1"></i>SDD</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold active" href="modules.html"><i class="bi bi-puzzle me-1"></i>Modules</a></li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero text-white d-flex align-items-center">
+    <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#fff" stroke-width="0.5"/></pattern></defs><rect width="1200" height="400" fill="url(#grid)"/></svg>
+    <div class="container py-5">
+      <h1 class="display-4 fw-bold mb-3">Core Azure Modules</h1>
+      <p class="lead">Essential building blocks for enterprise AI deployments: compute, data, networking, security, and monitoring.</p>
+      <p class="text-white-50">16 production-ready modules with specifications, best practices, and sample Bicep deployment scripts.</p>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <!-- Overview -->
+    <section class="mb-5 pb-4 border-bottom">
+      <h2 class="fw-bold mb-3"><i class="bi bi-info-circle me-2 text-info"></i>Module Categories</h2>
+      <div class="row g-3">
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-primary">🤖 AI Services</h6>
+              <small class="text-muted">Language models, search, and foundry platforms</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-info">💾 Data & Storage</h6>
+              <small class="text-muted">Databases, data lakes, and NoSQL solutions</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-success">🔐 Security & Access</h6>
+              <small class="text-muted">Identity, secrets, and network isolation</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-warning">📊 Operations</h6>
+              <small class="text-muted">Monitoring, logging, and networking</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module Cards -->
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>16 Core Modules</h2>
+      <div class="module-grid">
+        <!-- AI Services -->
+        <div class="card module-card shadow-sm" data-module="openai">
+          <div class="card-body">
+            <div class="module-icon">🤖</div>
+            <h6 class="fw-bold">Azure OpenAI</h6>
+            <small class="text-muted">GPT-4, embeddings, DALL-E</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="aisearch">
+          <div class="card-body">
+            <div class="module-icon">🔍</div>
+            <h6 class="fw-bold">AI Search</h6>
+            <small class="text-muted">Vector + semantic search</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="foundry">
+          <div class="card-body">
+            <div class="module-icon">⚙️</div>
+            <h6 class="fw-bold">Azure AI Foundry</h6>
+            <small class="text-muted">Hub, Prompt flow, Evaluations</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="apigm">
+          <div class="card-body">
+            <div class="module-icon">🌐</div>
+            <h6 class="fw-bold">API Management</h6>
+            <small class="text-muted">GenAI gateway, caching, policies</small>
+          </div>
+        </div>
+
+        <!-- Storage & Data -->
+        <div class="card module-card shadow-sm" data-module="keyvault">
+          <div class="card-body">
+            <div class="module-icon">🔐</div>
+            <h6 class="fw-bold">Key Vault</h6>
+            <small class="text-muted">Secrets & certificates</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="cosmosdb">
+          <div class="card-body">
+            <div class="module-icon">🌍</div>
+            <h6 class="fw-bold">Cosmos DB</h6>
+            <small class="text-muted">Multi-model database</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="fabric">
+          <div class="card-body">
+            <div class="module-icon">📊</div>
+            <h6 class="fw-bold">Microsoft Fabric</h6>
+            <small class="text-muted">OneLake, Real-Time Intelligence</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="containerreg">
+          <div class="card-body">
+            <div class="module-icon">📦</div>
+            <h6 class="fw-bold">Container Registry</h6>
+            <small class="text-muted">Docker image store</small>
+          </div>
+        </div>
+
+        <!-- Networking & Security -->
+        <div class="card module-card shadow-sm" data-module="vnet">
+          <div class="card-body">
+            <div class="module-icon">🌐</div>
+            <h6 class="fw-bold">Virtual Network</h6>
+            <small class="text-muted">Hub-spoke topology</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="privatelink">
+          <div class="card-body">
+            <div class="module-icon">🔒</div>
+            <h6 class="fw-bold">Private Link</h6>
+            <small class="text-muted">Network isolation</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="firewall">
+          <div class="card-body">
+            <div class="module-icon">🛡️</div>
+            <h6 class="fw-bold">Azure Firewall</h6>
+            <small class="text-muted">Network security</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="entraid">
+          <div class="card-body">
+            <div class="module-icon">👤</div>
+            <h6 class="fw-bold">Entra ID</h6>
+            <small class="text-muted">Identity & RBAC</small>
+          </div>
+        </div>
+
+        <!-- Compute & Monitoring -->
+        <div class="card module-card shadow-sm" data-module="containerapps">
+          <div class="card-body">
+            <div class="module-icon">☁️</div>
+            <h6 class="fw-bold">Container Apps</h6>
+            <small class="text-muted">Managed containers</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="functions">
+          <div class="card-body">
+            <div class="module-icon">⚡</div>
+            <h6 class="fw-bold">Functions</h6>
+            <small class="text-muted">Serverless compute</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="monitor">
+          <div class="card-body">
+            <div class="module-icon">📈</div>
+            <h6 class="fw-bold">Azure Monitor</h6>
+            <small class="text-muted">Logs, metrics, alerts</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="eventgrid">
+          <div class="card-body">
+            <div class="module-icon">📬</div>
+            <h6 class="fw-bold">Event Grid</h6>
+            <small class="text-muted">Event routing</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Module Details -->
+    <section id="modules-detail" class="mb-5">
+      <!-- Azure OpenAI -->
+      <div class="module-detail" id="openai-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🤖 Azure OpenAI Service</h4>
+        <p><strong>Purpose:</strong> Managed access to OpenAI's GPT-4, GPT-4 Turbo, embeddings, and DALL-E models with enterprise security and compliance.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Large language models (GPT-4, GPT-3.5-turbo)</li>
+          <li>Text embeddings for semantic search</li>
+          <li>Image generation with DALL-E 3</li>
+          <li>Enterprise networking and authentication</li>
+          <li>Quota management and billing controls</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> RAG systems, content generation, code completion, semantic search, chat applications</p>
+        <p><strong>Typical Monthly Cost (S0):</strong> $1,100 - $3,000 depending on token usage</p>
+      </div>
+
+      <!-- AI Search -->
+      <div class="module-detail" id="aisearch-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🔍 Azure AI Search</h4>
+        <p><strong>Purpose:</strong> Full-text and vector search engine for enterprise content. Supports hybrid search combining semantic and keyword matching.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Vector search with approximate nearest neighbor (ANN) indexing</li>
+          <li>Full-text search with advanced tokenization</li>
+          <li>Hybrid search combining vector + text matching</li>
+          <li>Built-in integrations with Azure OpenAI for embeddings</li>
+          <li>Semantic ranking using proprietary ranking model</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> RAG document retrieval, product catalogs, knowledge bases, enterprise search</p>
+        <p><strong>Typical Monthly Cost (Basic):</strong> $73 - $250 depending on index size</p>
+      </div>
+
+      <!-- Azure AI Foundry -->
+      <div class="module-detail" id="foundry-detail" style="display:none">
+        <h4 class="fw-bold mb-2">⚙️ Azure AI Foundry</h4>
+        <p><strong>Purpose:</strong> Central hub for building, evaluating, and deploying AI applications with prompt engineering and quality measurement.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>AI project workspace and team collaboration</li>
+          <li>Prompt flow for visual workflow design</li>
+          <li>Evaluation metrics for model quality</li>
+          <li>Model catalog and asset management</li>
+          <li>Integration with Azure OpenAI, Phi models, and custom models</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Prompt engineering, RAG pipeline development, model evaluation, team-based AI development</p>
+        <p><strong>Typical Monthly Cost:</strong> Included with resource usage (compute, storage, API calls)</p>
+      </div>
+
+      <!-- API Management -->
+      <div class="module-detail" id="apigm-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🌐 API Management</h4>
+        <p><strong>Purpose:</strong> API gateway for routing, authentication, rate limiting, and caching of AI service calls with governance controls.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>API versioning and routing policies</li>
+          <li>Token-based rate limiting and quotas</li>
+          <li>Response caching to reduce backend calls</li>
+          <li>OAuth, API key, and certificate authentication</li>
+          <li>Analytics and usage monitoring</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> GenAI API gateway, multi-tenant routing, backend rate limiting, cost control</p>
+        <p><strong>Typical Monthly Cost:</strong> $150 - $500 depending on tier and API calls</p>
+      </div>
+
+      <!-- Key Vault -->
+      <div class="module-detail" id="keyvault-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🔐 Azure Key Vault</h4>
+        <p><strong>Purpose:</strong> Centralized secrets management for API keys, connection strings, certificates, and encryption keys with audit logging.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Secret storage with access control</li>
+          <li>Certificate management and rotation</li>
+          <li>Hardware security module (HSM) backing</li>
+          <li>Managed identity integration</li>
+          <li>Audit logging and compliance tracking</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> API credential storage, database connection strings, encryption keys, certificate management</p>
+        <p><strong>Typical Monthly Cost (Standard):</strong> $0.60 per secret + API call charges (~$15-50/mo)</p>
+      </div>
+
+      <!-- Cosmos DB -->
+      <div class="module-detail" id="cosmosdb-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🌍 Azure Cosmos DB</h4>
+        <p><strong>Purpose:</strong> Globally distributed, multi-model NoSQL database with 99.99% SLA and automatic scaling.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Multi-model: documents (SQL), key-value, graph, time-series</li>
+          <li>Global distribution with multi-region replication</li>
+          <li>Automatic and manual scaling</li>
+          <li>Built-in change feed for real-time processing</li>
+          <li>Transactional consistency with configurable levels</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> User profiles, chat history, session storage, time-series data, graph relationships</p>
+        <p><strong>Typical Monthly Cost:</strong> $50 - $500+ depending on RU throughput and storage</p>
+      </div>
+
+      <!-- Microsoft Fabric -->
+      <div class="module-detail" id="fabric-detail" style="display:none">
+        <h4 class="fw-bold mb-2">📊 Microsoft Fabric</h4>
+        <p><strong>Purpose:</strong> Unified analytics and data integration platform with OneLake lakehouse, Real-Time Intelligence, and AI/BI capabilities.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>OneLake unified data lake with zero-copy sharing</li>
+          <li>Real-Time Intelligence for streaming analytics</li>
+          <li>Data warehouses with SQL querying</li>
+          <li>Direct Lake mode for BI/analytics</li>
+          <li>AI Skill integration for natural language queries</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Enterprise data warehouse, real-time dashboards, data integration, AI-powered BI</p>
+        <p><strong>Typical Monthly Cost:</strong> $0.40 per CU/hour + capacity pricing (~$500-5000/mo)</p>
+      </div>
+
+      <!-- Container Registry -->
+      <div class="module-detail" id="containerreg-detail" style="display:none">
+        <h4 class="fw-bold mb-2">📦 Azure Container Registry</h4>
+        <p><strong>Purpose:</strong> Private Docker registry for storing and managing container images with security scanning and replication.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Private container image storage</li>
+          <li>Geo-replication across regions</li>
+          <li>Vulnerability scanning for images</li>
+          <li>Webhook integration for CI/CD</li>
+          <li>Artifact caching and pull-through proxy</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Container image repository, CI/CD image storage, container security scanning</p>
+        <p><strong>Typical Monthly Cost (Basic):</strong> $5 + storage costs (~$10-50/mo)</p>
+      </div>
+
+      <!-- Virtual Network -->
+      <div class="module-detail" id="vnet-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🌐 Azure Virtual Network</h4>
+        <p><strong>Purpose:</strong> Isolated network environment with hub-spoke topology, subnets, and network segmentation for security.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Custom IP address space (RFC 1918)</li>
+          <li>Subnets for workload segmentation</li>
+          <li>Network security groups for traffic rules</li>
+          <li>Virtual network peering and hub-spoke design</li>
+          <li>Service endpoints and private endpoints</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Foundational network infrastructure, multi-tier application isolation, compliance segmentation</p>
+        <p><strong>Typical Monthly Cost:</strong> ~$0.05 per VNet + peering charges (minimal)</p>
+      </div>
+
+      <!-- Private Link -->
+      <div class="module-detail" id="privatelink-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🔒 Azure Private Link</h4>
+        <p><strong>Purpose:</strong> Private connectivity to Azure PaaS services without exposing to the public internet.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Private endpoints for service access</li>
+          <li>Private DNS zones for name resolution</li>
+          <li>No data traversal through internet</li>
+          <li>Compatible with major Azure services</li>
+          <li>Firewall and DDoS protection not required for private access</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Secure database access, private OpenAI connections, compliance-required isolation</p>
+        <p><strong>Typical Monthly Cost:</strong> ~$0.01 per private endpoint hour (~$7/month per endpoint)</p>
+      </div>
+
+      <!-- Azure Firewall -->
+      <div class="module-detail" id="firewall-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🛡️ Azure Firewall</h4>
+        <p><strong>Purpose:</strong> Centralized network firewall for hub-spoke architectures with application and network-layer filtering.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Application layer (L7) filtering with URL/FQDN rules</li>
+          <li>Network layer (L4) rules for IP/port control</li>
+          <li>Threat intelligence for malware detection</li>
+          <li>Integrated with Azure Monitor and Log Analytics</li>
+          <li>Forced tunneling for all traffic inspection</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Centralized egress control, compliance-driven traffic inspection, hub-spoke architecture</p>
+        <p><strong>Typical Monthly Cost (Standard):</strong> ~$1.25/hour + rule processing + logging (~$450-800/mo)</p>
+      </div>
+
+      <!-- Entra ID -->
+      <div class="module-detail" id="entraid-detail" style="display:none">
+        <h4 class="fw-bold mb-2">👤 Microsoft Entra ID</h4>
+        <p><strong>Purpose:</strong> Identity and access management for Azure resources, applications, and on-premises integration.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>User and group management</li>
+          <li>Multifactor authentication (MFA)</li>
+          <li>Azure role-based access control (RBAC)</li>
+          <li>Conditional access policies</li>
+          <li>Hybrid identity with on-premises sync</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> User authentication, resource access control, team-based RBAC, managed identities for apps</p>
+        <p><strong>Typical Monthly Cost (Premium P1):</strong> $4 per user (~$200+ for team)</p>
+      </div>
+
+      <!-- Container Apps -->
+      <div class="module-detail" id="containerapps-detail" style="display:none">
+        <h4 class="fw-bold mb-2">☁️ Azure Container Apps</h4>
+        <p><strong>Purpose:</strong> Serverless container hosting with automatic scaling and built-in networking without Kubernetes complexity.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Managed container orchestration</li>
+          <li>Automatic scaling based on HTTP traffic or message queues</li>
+          <li>Built-in networking with ingress rules</li>
+          <li>Secrets management integration</li>
+          <li>Dapr integration for distributed patterns</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Microservices, API backends, background jobs, lightweight AI apps</p>
+        <p><strong>Typical Monthly Cost:</strong> ~$0.005 per vCPU-hour + memory (~$50-300/mo)</p>
+      </div>
+
+      <!-- Functions -->
+      <div class="module-detail" id="functions-detail" style="display:none">
+        <h4 class="fw-bold mb-2">⚡ Azure Functions</h4>
+        <p><strong>Purpose:</strong> Serverless event-driven computing for lightweight workloads with automatic scaling and pay-per-execution pricing.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Event-driven execution (timers, HTTP, queues, storage events)</li>
+          <li>Multiple language support (C#, Python, JavaScript, Java)</li>
+          <li>Consumption plan with true serverless pricing</li>
+          <li>Premium plan with VNet integration</li>
+          <li>Durable Functions for orchestration</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> API endpoints, scheduled jobs, message processing, webhooks, event handlers</p>
+        <p><strong>Typical Monthly Cost (Consumption):</strong> ~$0.20 per 1M executions + storage (~$10-100/mo)</p>
+      </div>
+
+      <!-- Azure Monitor -->
+      <div class="module-detail" id="monitor-detail" style="display:none">
+        <h4 class="fw-bold mb-2">📈 Azure Monitor</h4>
+        <p><strong>Purpose:</strong> Comprehensive monitoring and logging platform for metrics, logs, and alerting across all Azure resources.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Metrics collection and analytics</li>
+          <li>Log Analytics with KQL query language</li>
+          <li>Application Insights for app performance monitoring</li>
+          <li>Alert rules with webhooks and action groups</li>
+          <li>Log retention and workbook visualization</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Performance monitoring, troubleshooting, audit logging, compliance tracking, alerting</p>
+        <p><strong>Typical Monthly Cost:</strong> ~$2.00 per GB ingested + queries (~$100-500/mo)</p>
+      </div>
+
+      <!-- Event Grid -->
+      <div class="module-detail" id="eventgrid-detail" style="display:none">
+        <h4 class="fw-bold mb-2">📬 Azure Event Grid</h4>
+        <p><strong>Purpose:</strong> Serverless event routing service for asynchronous communication between applications and services.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Event publishing and subscription</li>
+          <li>Multiple endpoint types (webhooks, Functions, Service Bus, Event Hubs)</li>
+          <li>Custom topic support for application events</li>
+          <li>Event filtering and routing rules</li>
+          <li>Dead-lettering for failed deliveries</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> File upload processing, workflow triggers, notification distribution, event-driven architectures</p>
+        <p><strong>Typical Monthly Cost:</strong> ~$0.50 per million operations (~$20-100/mo)</p>
+      </div>
+    </section>
+
+    <!-- Sample Spec Kit -->
+    <section class="mb-5 pb-4 border-bottom">
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Sample Spec Kit — Bicep Deployment</h2>
+      <p class="text-muted mb-3">Infrastructure as Code example deploying a complete AI workload with the core modules.</p>
+      <div class="spec-box">
+<pre>@description('Deploy core AI workload')
+param location string = resourceGroup().location
+param projectName string = 'ai-app'
+param environment string = 'prod'
+
+// Key Vault for secrets
+resource keyVault 'Microsoft.KeyVault/vaults@2024-04-01-preview' = {
+  name: 'kv-${projectName}-${environment}'
+  location: location
+  properties: {
+    tenantId: subscription().tenantId
+    sku: { family: 'A', name: 'standard' }
+    accessPolicies: []
+    enablePurgeProtection: true
+    enableSoftDelete: true
+  }
+}
+
+// Virtual Network
+resource vnet 'Microsoft.Network/virtualNetworks@2023-11-01' = {
+  name: 'vnet-${projectName}'
+  location: location
+  properties: {
+    addressSpace: { addressPrefixes: ['10.0.0.0/16'] }
+    subnets: [
+      {
+        name: 'subnet-apps'
+        properties: { addressPrefix: '10.0.1.0/24' }
+      }
+      {
+        name: 'subnet-pe'
+        properties: { addressPrefix: '10.0.2.0/24' }
+      }
+    ]
+  }
+}
+
+// Container Registry
+resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
+  name: 'acr${projectName}${environment}'
+  location: location
+  sku: { name: 'Basic' }
+  properties: {
+    adminUserEnabled: false
+    publicNetworkAccess: 'Enabled'
+  }
+}
+
+// Cosmos DB for chat history
+resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
+  name: 'cosmos-${projectName}-${environment}'
+  location: location
+  kind: 'GlobalDocumentDB'
+  properties: {
+    databaseAccountOfferType: 'Standard'
+    consistencyPolicy: {
+      defaultConsistencyLevel: 'Session'
+      maxIntervalInSeconds: 10
+      maxStalenessPrefix: 200
+    }
+    locations: [{ locationName: location, failoverPriority: 0 }]
+  }
+}
+
+// Log Analytics Workspace
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: 'laws-${projectName}'
+  location: location
+  properties: {
+    sku: { name: 'PerGB2018' }
+    retentionInDays: 30
+  }
+}
+
+// Azure Monitor Alert
+resource alertRule 'Microsoft.Insights/metricAlerts@2018-03-01' = {
+  name: 'alert-cpu-${projectName}'
+  location: 'global'
+  properties: {
+    description: 'Alert when CPU exceeds 80%'
+    severity: 2
+    enabled: true
+    scopes: []
+    evaluationFrequency: 'PT5M'
+    windowSize: 'PT15M'
+    criteria: {
+      'odata.type': 'Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria'
+      allOf: [
+        {
+          name: 'CPU'
+          metricName: 'Percentage CPU'
+          operator: 'GreaterThan'
+          threshold: 80
+          timeAggregation: 'Average'
+        }
+      ]
+    }
+  }
+}
+
+// Container Apps Environment
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-11-02-preview' = {
+  name: 'cae-${projectName}'
+  location: location
+  properties: {
+    vnetConfiguration: {
+      infrastructureSubnetId: '${vnet.id}/subnets/subnet-apps'
+    }
+    appLogsConfiguration: {
+      destination: 'log-analytics'
+      logAnalyticsConfiguration: {
+        customerId: reference(logAnalytics.id).customerId
+        sharedKey: listKeys(logAnalytics.id, '2023-09-01').primarySharedKey
+      }
+    }
+  }
+}
+
+// Container App
+resource containerApp 'Microsoft.App/containerApps@2023-11-02-preview' = {
+  name: 'app-${projectName}'
+  location: location
+  properties: {
+    managedEnvironmentId: containerAppEnv.id
+    configuration: {
+      ingress: {
+        external: true
+        targetPort: 8000
+        transport: 'http'
+      }
+      registries: [
+        {
+          server: acr.properties.loginServer
+          username: 'managed-identity'
+          passwordSecretRef: 'acr-password'
+        }
+      ]
+    }
+    template: {
+      containers: [
+        {
+          name: 'api'
+          image: '${acr.properties.loginServer}/ai-api:latest'
+          resources: {
+            cpu: json('0.5')
+            memory: '1Gi'
+          }
+          env: [
+            {
+              name: 'KEY_VAULT_URL'
+              value: keyVault.properties.vaultUri
+            }
+            {
+              name: 'COSMOSDB_ENDPOINT'
+              value: cosmosDb.properties.documentEndpoint
+            }
+          ]
+        }
+      ]
+      scale: {
+        minReplicas: 2
+        maxReplicas: 10
+        rules: [
+          {
+            name: 'http-rule'
+            http: {
+              metadata: { concurrentRequests: '100' }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
+
+output keyVaultId string = keyVault.id
+output containerAppFqdn string = containerApp.properties.configuration.ingress.fqdn
+output cosmosDbEndpoint string = cosmosDb.properties.documentEndpoint
+</pre>
+      </div>
+      <p class="text-muted small mt-3"><em>This Bicep template demonstrates core module deployment using Spec-Driven Development principles. Each resource definition is the "specification" for its infrastructure.</em></p>
+    </section>
+
+    <!-- Next Steps -->
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-arrow-right-circle me-2"></i>Next Steps</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="card border-info h-100">
+            <div class="card-body">
+              <h6 class="fw-bold card-title text-info"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Explore Patterns</h6>
+              <p class="card-text small">See how these modules combine into 10 complete AI architecture patterns.</p>
+              <a href="index.html" class="btn btn-sm btn-info">View Patterns</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-success h-100">
+            <div class="card-body">
+              <h6 class="fw-bold card-title text-success"><i class="bi bi-file-earmark-code me-2"></i>Spec-Driven Development</h6>
+              <p class="card-text small">Learn how to write executable specifications for your architecture.</p>
+              <a href="sdd.html" class="btn btn-sm btn-success">Learn SDD</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns © 2026</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-info btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Module detail display
+    document.querySelectorAll('.module-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const moduleId = card.dataset.module;
+        const detailId = moduleId + '-detail';
+        
+        // Hide all details
+        document.querySelectorAll('[id$="-detail"]').forEach(el => {
+          el.style.display = 'none';
+        });
+        
+        // Remove active class
+        document.querySelectorAll('.module-card').forEach(c => {
+          c.classList.remove('border-info');
+        });
+        
+        // Show selected detail
+        const detail = document.getElementById(detailId);
+        if (detail) {
+          detail.style.display = 'block';
+          detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          card.classList.add('border-info');
+        }
+      });
+    });
+
+    // Theme toggle
+    const toggle = document.getElementById('themeToggle');
+    toggle.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.getAttribute('data-bs-theme') === 'dark';
+      html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+      toggle.querySelector('i').className = isDark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+    });
+
+    // Back to top
+    window.addEventListener('scroll', () => {
+      document.getElementById('backToTop').style.display = window.scrollY > 300 ? 'block' : 'none';
+    });
+  </script>
+</body>
+</html>
