@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Entra ID - Identity & Access</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
+        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
+        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
+        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
+        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
+        .nav-link:hover {color: var(--orange) !important;}
+        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
+        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
+        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
+        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
+        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
+        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
+        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
+        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
+        .card-body {color: #e0e0e0;}
+        .capability-list {list-style: none; padding: 0;}
+        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
+        .capability-list li:before {content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px;}
+        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
+        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
+        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
+        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
+        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
+        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
+        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
+        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
+        .sidebar-item:last-child {border-bottom: none;}
+        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
+        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
+        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container-main">
+            <span class="hero-icon">👤</span>
+            <h1>Azure Entra ID</h1>
+            <p class="subtitle">Enterprise-grade identity and access management platform</p>
+        </div>
+    </div>
+
+    <div class="container-main">
+        <div class="row">
+            <div class="col-lg-8">
+                <section class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Azure Entra ID (formerly Azure AD) is Microsoft's cloud-based identity and access management service. It enables organizations to manage user identities and access to both cloud and on-premises applications.</p>
+                            <p>Entra ID provides single sign-on, multi-factor authentication, and comprehensive identity security.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Key Capabilities</h2>
+                    <ul class="capability-list">
+                        <li><strong>Single Sign-On (SSO):</strong> One credential for all applications</li>
+                        <li><strong>Multi-Factor Authentication:</strong> Passwordless sign-in and MFA</li>
+                        <li><strong>Managed Identities:</strong> Service principals without managing credentials</li>
+                        <li><strong>Conditional Access:</strong> Risk-based access control policies</li>
+                        <li><strong>Identity Protection:</strong> Detect and respond to identity risks</li>
+                        <li><strong>Role-Based Access Control:</strong> Fine-grained permissions management</li>
+                        <li><strong>Hybrid Identity:</strong> Sync on-premises AD with cloud</li>
+                        <li><strong>B2B & B2C:</strong> External user collaboration and consumer identity</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Use Cases</h2>
+                    
+                    <div class="use-case-card">
+                        <h5>🔐 Secure Access</h5>
+                        <p>Implement zero-trust access with conditional policies and MFA.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🌐 Hybrid Cloud</h5>
+                        <p>Sync identity between on-premises Active Directory and cloud.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🤝 External Collaboration</h5>
+                        <p>Manage access for partners, vendors, and customers securely.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>📱 Passwordless Authentication</h5>
+                        <p>Use Windows Hello, FIDO2 security keys, or Authenticator app.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🛡️ Identity Risk Management</h5>
+                        <p>Detect anomalous sign-ins and remediate threats automatically.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Pricing Model</h2>
+                    <div class="pricing-tier">
+                        <h5>Free Tier</h5>
+                        <p><strong>Cost:</strong> Free</p>
+                        <p>Basic user and group management, limited features.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Premium P1</h5>
+                        <p><strong>Cost:</strong> ~$6 per user/month</p>
+                        <p>Conditional Access, MFA, self-service password reset.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Premium P2</h5>
+                        <p><strong>Cost:</strong> ~$9 per user/month</p>
+                        <p>Identity Protection, Privileged Identity Management (PIM).</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Bicep Deployment</h2>
+                    <div class="card">
+                        <div class="card-header">Azure Entra ID Spec</div>
+                        <div class="card-body">
+                            <p><strong>Specification File:</strong> <code>azure-entraid.bicep</code></p>
+                            <div class="code-block">
+az bicep build --file azure-entraid.bicep
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file azure-entraid.json
+                            </div>
+                            <p><strong>Outputs:</strong></p>
+                            <ul class="capability-list">
+                                <li>App registration ID</li>
+                                <li>Service principal ID</li>
+                                <li>Tenant ID</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">FAQ</h2>
+                    
+                    <div class="faq-item">
+                        <h5>What's the difference between Entra ID and Active Directory?</h5>
+                        <p>AD is on-premises directory service, Entra ID is cloud-based identity platform with additional security features.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>Can I use passwordless authentication?</h5>
+                        <p>Yes. Multiple options: Windows Hello, FIDO2 keys, Microsoft Authenticator app.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>How do I manage B2B access?</h5>
+                        <p>Use Entra ID B2B collaboration to invite external users and grant selective access.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>What's Conditional Access?</h5>
+                        <p>Policy engine that evaluates conditions (location, device, risk) and enforces access decisions.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5> Quick Stats</h5>
+                    <div class="sidebar-item"><strong>Service Type:</strong> Identity</div>
+                    <div class="sidebar-item"><strong>Users Supported:</strong> Unlimited</div>
+                    <div class="sidebar-item"><strong>SLA:</strong> 99.99%</div>
+                    <div class="sidebar-item"><strong>Authentication Methods:</strong> 10+</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Core Components</h5>
+                    <div class="sidebar-item">• Users & Groups</div>
+                    <div class="sidebar-item">• Applications & Assignments</div>
+                    <div class="sidebar-item">• Conditional Access</div>
+                    <div class="sidebar-item">• Multi-Factor Authentication</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Security Features</h5>
+                    <div class="sidebar-item">✓ Multi-factor authentication</div>
+                    <div class="sidebar-item">✓ Conditional access policies</div>
+                    <div class="sidebar-item">✓ Identity protection</div>
+                    <div class="sidebar-item">✓ Privileged identity management</div>
+                    <div class="sidebar-item">✓ Passwordless options</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Best Practices</h5>
+                    <div class="sidebar-item">→ Enable MFA for all users</div>
+                    <div class="sidebar-item">→ Use Conditional Access</div>
+                    <div class="sidebar-item">→ Monitor sign-in logs</div>
+                    <div class="sidebar-item">→ Implement PIM</div>
+                    <div class="sidebar-item">→ Regular access reviews</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-main">
+            <p>&copy; 2024 Azure Platform. Azure Entra ID Documentation</p>
+            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/entra/fundamentals/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

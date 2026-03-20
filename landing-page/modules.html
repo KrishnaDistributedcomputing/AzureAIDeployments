@@ -57,7 +57,7 @@
     <div class="container py-5">
       <h1 class="display-4 fw-bold mb-3">Core Azure Modules</h1>
       <p class="lead">Essential building blocks for enterprise AI deployments: compute, data, networking, security, and monitoring.</p>
-      <p class="text-white-50">16 production-ready modules with specifications, best practices, and sample Bicep deployment scripts.</p>
+      <p class="text-white-50">18 production-ready modules with specifications, best practices, and sample Bicep deployment scripts.</p>
     </div>
   </section>
 
@@ -103,7 +103,7 @@
 
     <!-- Module Cards -->
     <section class="mb-5">
-      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>16 Core Modules</h2>
+      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>18 Core Modules</h2>
       <div class="module-grid">
         <!-- AI Services -->
         <div class="card module-card shadow-sm" data-module="openai">
@@ -234,6 +234,22 @@
             <div class="module-icon">📬</div>
             <h6 class="fw-bold">Event Grid</h6>
             <small class="text-muted">Event routing</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="sqlmi">
+          <div class="card-body">
+            <div class="module-icon">🗄️</div>
+            <h6 class="fw-bold">SQL Managed Instance</h6>
+            <small class="text-muted">Managed SQL Server</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="bastion">
+          <div class="card-body">
+            <div class="module-icon">🔐</div>
+            <h6 class="fw-bold">Azure Bastion</h6>
+            <small class="text-muted">Secure remote access</small>
           </div>
         </div>
       </div>
@@ -495,6 +511,43 @@
         </ul>
         <p><strong>Common Use Cases:</strong> File upload processing, workflow triggers, notification distribution, event-driven architectures</p>
         <p><strong>Typical Monthly Cost:</strong> ~$0.50 per million operations (~$20-100/mo)</p>
+      </div>
+
+      <!-- SQL Managed Instance -->
+      <div class="module-detail" id="sqlmi-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🗄️ Azure SQL Managed Instance</h4>
+        <p><strong>Purpose:</strong> Fully managed SQL Server instance with 99%+ compatibility, minimal migration effort, and enterprise features.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>SQL Server 2019/2022 compatibility (99%+)</li>
+          <li>Built-in high availability and failover</li>
+          <li>Advanced Data Security and encryption features</li>
+          <li>Instance pools for cost optimization</li>
+          <li>Private VNet deployment with no public IP required</li>
+          <li>Automated backups with long-term retention</li>
+          <li>Polybase, Machine Learning Services, Graph Database</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> SQL Server migration, enterprise applications, data warehouse, regulated workloads</p>
+        <p><strong>Typical Monthly Cost (General Purpose):</strong> $700 - $2,400 depending on vCores</p>
+      </div>
+
+      <!-- Azure Bastion -->
+      <div class="module-detail" id="bastion-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🔐 Azure Bastion</h4>
+        <p><strong>Purpose:</strong> Secure remote access to VMs via RDP/SSH through HTML5 browser without exposing public IPs.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Browser-based secure access to VMs</li>
+          <li>No public IP required on VMs</li>
+          <li>RDP/SSH support for Windows and Linux</li>
+          <li>SSL/TLS encrypted connections</li>
+          <li>Azure RBAC integration for access control</li>
+          <li>Session recording and audit logging</li>
+          <li>Zone-redundant deployment for high availability</li>
+          <li>Multiple concurrent sessions support</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Secure VM management, compliance-required access, enterprise administration, remote troubleshooting</p>
+        <p><strong>Typical Monthly Cost (Standard):</strong> $10/day + $0.25/hour when in use (~$300-500/mo)</p>
       </div>
     </section>
 

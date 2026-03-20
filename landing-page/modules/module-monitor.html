@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Monitor - Monitoring & Observability</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #e67e22;
+            --dark-bg: #1a1a1a;
+        }
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        .navbar {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            border-bottom: 3px solid var(--orange);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--orange) !important;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: #b0b0b0 !important;
+            margin: 0 8px;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--orange) !important;
+        }
+        .hero {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--orange);
+            margin-bottom: 40px;
+        }
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .hero h1 {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #ecf0f1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .section-title {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 2rem;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--orange);
+        }
+        .card {
+            background-color: #2c2c2c;
+            border: 1px solid #e67e22;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
+        }
+        .card-header {
+            background-color: var(--orange);
+            color: white;
+            font-weight: bold;
+            border-radius: 0;
+        }
+        .card-body {
+            color: #e0e0e0;
+        }
+        .capability-list {
+            list-style: none;
+            padding: 0;
+        }
+        .capability-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #444;
+            color: #b0b0b0;
+        }
+        .capability-list li:before {
+            content: "✓ ";
+            color: var(--orange);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .pricing-tier {
+            background-color: #2c2c2c;
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .pricing-tier h5 {
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+        .use-case-card {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            border-left: 4px solid var(--orange);
+        }
+        .use-case-card h5 {
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+        .faq-item {
+            background-color: #2c2c2c;
+            border-left: 4px solid var(--orange);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .faq-item h5 {
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+        .sidebar {
+            background-color: #2c2c2c;
+            border: 1px solid #e67e22;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .sidebar h5 {
+            color: var(--orange);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sidebar-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        .sidebar-item:last-child {
+            border-bottom: none;
+        }
+        .code-block {
+            background-color: #1a1a1a;
+            border-left: 4px solid var(--orange);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            color: #7ec699;
+            font-size: 0.9rem;
+        }
+        footer {
+            background-color: #2c2c2c;
+            border-top: 2px solid var(--orange);
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #b0b0b0;
+            text-align: center;
+        }
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container-main">
+            <span class="hero-icon">📊</span>
+            <h1>Azure Monitor</h1>
+            <p class="subtitle">Comprehensive monitoring, diagnostics, and analytics for applications and infrastructure</p>
+        </div>
+    </div>
+
+    <div class="container-main">
+        <div class="row">
+            <div class="col-lg-8">
+                
+                <section class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Azure Monitor is Azure's comprehensive solution for collecting, analyzing, and acting on telemetry from cloud and on-premises environments. It helps you maximize availability and performance of your applications and services.</p>
+                            <p>Azure Monitor collects metrics, logs, and traces (observability triad) for complete visibility into your systems.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Key Capabilities</h2>
+                    <ul class="capability-list">
+                        <li><strong>Metrics:</strong> Numerical values on a time series for performance monitoring</li>
+                        <li><strong>Logs:</strong> Event data for diagnostics and troubleshooting with KQL queries</li>
+                        <li><strong>Application Insights:</strong> End-to-end monitoring for web applications and services</li>
+                        <li><strong>Alerts:</strong> Proactive notifications based on condition thresholds</li>
+                        <li><strong>Dashboards:</strong> Customizable visualizations of key metrics</li>
+                        <li><strong>Workbooks:</strong> Interactive reports combining metrics, logs, and visualizations</li>
+                        <li><strong>Log Analytics:</strong> Kusto Query Language (KQL) for deep analysis</li>
+                        <li><strong>VM Insights:</strong> Performance and health monitoring for virtual machines</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Use Cases</h2>
+                    
+                    <div class="use-case-card">
+                        <h5>🔍 Application Performance Monitoring</h5>
+                        <p>Monitor application performance, dependencies, and user experiences with Application Insights.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🚨 Alert Management</h5>
+                        <p>Set up proactive alerts for anomalies and critical conditions with intelligent alerting.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>📈 Infrastructure Monitoring</h5>
+                        <p>Monitor VMs, containers, and on-premises infrastructure from a single pane of glass.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🔧 Troubleshooting & Diagnostics</h5>
+                        <p>Deep-dive into logs and traces to troubleshoot issues quickly and efficiently.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>📊 Capacity Planning</h5>
+                        <p>Analyze trends and usage patterns to plan for future capacity requirements.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Pricing Structure</h2>
+                    
+                    <div class="pricing-tier">
+                        <h5>Log Analytics (Per GB)</h5>
+                        <p><strong>Cost:</strong> ~$2.99/GB ingested, $0.10/GB retained</p>
+                        <p>Pay for data ingestion and retention.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Application Insights</h5>
+                        <p><strong>Cost:</strong> First 5GB free, then $2.99/GB</p>
+                        <p>Included in Log Analytics pricing.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Metrics & Alerts</h5>
+                        <p><strong>Cost:</strong> First 10,000 time series free, $0.30 per additional 1,000</p>
+                        <p>Based on number of metric time series.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Bicep Deployment</h2>
+                    <div class="card">
+                        <div class="card-header">Azure Monitor Spec</div>
+                        <div class="card-body">
+                            <p><strong>Specification File:</strong> <code>azure-monitor.bicep</code></p>
+                            
+                            <div class="code-block">
+az bicep build --file azure-monitor.bicep
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file azure-monitor.json
+                            </div>
+
+                            <p><strong>Outputs:</strong></p>
+                            <ul class="capability-list">
+                                <li>Workspace ID</li>
+                                <li>Workspace resource ID</li>
+                                <li>App Insights instrumentation key</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">FAQ</h2>
+                    
+                    <div class="faq-item">
+                        <h5>What's KQL and why should I use it?</h5>
+                        <p>Kusto Query Language (KQL) is a powerful query language for analyzing logs. It enables complex queries for troubleshooting and analytics.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>How long is data retained?</h5>
+                        <p>Default retention is 30 days for Log Analytics, up to 730 days available. Retention cost is lower than ingestion.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>Can I monitor on-premises resources?</h5>
+                        <p>Yes. Use Log Analytics agent or Azure Monitor agents on on-premises machines to send data to Azure.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>How do I set up alerting?</h5>
+                        <p>Create metric alerts, log alerts, or smart detection rules. Configure action groups for notifications.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
+                    <div class="sidebar-item"><strong>Service Type:</strong> Observability</div>
+                    <div class="sidebar-item"><strong>Primary Components:</strong> 3 pillars</div>
+                    <div class="sidebar-item"><strong>Query Language:</strong> KQL</div>
+                    <div class="sidebar-item"><strong>Integration:</strong> All Azure services</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5><i class="bi bi-diagram-3"></i> Core Components</h5>
+                    <div class="sidebar-item">• Log Analytics workspace</div>
+                    <div class="sidebar-item">• Application Insights</div>
+                    <div class="sidebar-item">• Metrics</div>
+                    <div class="sidebar-item">• Alerts & Action Groups</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5><i class="bi bi-shield-check"></i> Security Tips</h5>
+                    <div class="sidebar-item">✓ Use Private Link for logs</div>
+                    <div class="sidebar-item">✓ Enable customer-managed keys</div>
+                    <div class="sidebar-item">✓ Control access with RBAC</div>
+                    <div class="sidebar-item">✓ Audit sensitive data</div>
+                    <div class="sidebar-item">✓ Mask PII in logs</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5><i class="bi bi-speedometer2"></i> Best Practices</h5>
+                    <div class="sidebar-item">→ Use sampling for high-volume apps</div>
+                    <div class="sidebar-item">→ Set up cost alerts</div>
+                    <div class="sidebar-item">→ Use workbooks for dashboards</div>
+                    <div class="sidebar-item">→ Automate remediation</div>
+                    <div class="sidebar-item">→ Archive to storage for cost</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-main">
+            <p>&copy; 2024 Azure Platform. Azure Monitor Documentation</p>
+            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/azure-monitor/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

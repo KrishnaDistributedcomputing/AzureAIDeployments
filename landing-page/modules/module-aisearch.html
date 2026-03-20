@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure AI Search - Intelligent Search Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --orange: #e67e22;
+            --dark-bg: #1a1a1a;
+            --light-bg: #f8f9fa;
+            --accent: #3498db;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+            border-bottom: 3px solid var(--orange);
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--orange) !important;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            color: #b0b0b0 !important;
+            margin: 0 8px;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--orange) !important;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--orange);
+            margin-bottom: 40px;
+        }
+        
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .hero h1 {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #ecf0f1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            color: var(--orange);
+            font-weight: bold;
+            font-size: 2rem;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--orange);
+        }
+        
+        .card {
+            background-color: #2c2c2c;
+            border: 1px solid #e67e22;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
+        }
+        
+        .card-header {
+            background-color: var(--orange);
+            color: white;
+            font-weight: bold;
+            border-radius: 0;
+        }
+        
+        .card-body {
+            color: #e0e0e0;
+        }
+        
+        .capability-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .capability-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #444;
+            color: #b0b0b0;
+        }
+        
+        .capability-list li:before {
+            content: "✓ ";
+            color: var(--orange);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .pricing-tier {
+            background-color: #2c2c2c;
+            border-left: 4px solid var(--orange);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .pricing-tier h5 {
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+        
+        .btn-orange {
+            background-color: var(--orange);
+            border: none;
+            color: white;
+        }
+        
+        .btn-orange:hover {
+            background-color: #d45a1a;
+            color: white;
+        }
+        
+        .highlight {
+            color: var(--orange);
+            font-weight: bold;
+        }
+        
+        .use-case-card {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+            border-left: 4px solid var(--orange);
+        }
+        
+        .use-case-card h5 {
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+        
+        .faq-item {
+            background-color: #2c2c2c;
+            border-left: 4px solid var(--orange);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .faq-item h5 {
+            color: var(--orange);
+            margin-bottom: 10px;
+        }
+        
+        .sidebar {
+            background-color: #2c2c2c;
+            border: 1px solid #e67e22;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .sidebar h5 {
+            color: var(--orange);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            color: #b0b0b0;
+            font-size: 0.95rem;
+        }
+        
+        .sidebar-item:last-child {
+            border-bottom: none;
+        }
+        
+        .code-block {
+            background-color: #1a1a1a;
+            border-left: 4px solid var(--orange);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            color: #7ec699;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            background-color: #2c2c2c;
+            border-top: 2px solid var(--orange);
+            padding: 30px 0;
+            margin-top: 50px;
+            color: #b0b0b0;
+            text-align: center;
+        }
+        
+        .container-main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container-main">
+            <span class="hero-icon">🔍</span>
+            <h1>Azure AI Search</h1>
+            <p class="subtitle">Enterprise-scale AI-powered search platform with semantic understanding and hybrid search capabilities</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-main">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                
+                <!-- Overview -->
+                <section class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Azure AI Search (formerly Cognitive Search) provides AI-powered search capabilities for your applications. It combines traditional full-text search with AI-powered understanding, semantic ranking, and vector search for semantic similarity matching.</p>
+                            <p>Built on Apache Lucene, Azure AI Search enables you to build intelligent search experiences that go beyond keyword matching, incorporating natural language understanding and machine learning.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Key Capabilities -->
+                <section class="mb-5">
+                    <h2 class="section-title">Key Capabilities</h2>
+                    <ul class="capability-list">
+                        <li><strong>Hybrid Search:</strong> Full-text search combined with semantic ranking for better relevance</li>
+                        <li><strong>Vector Search:</strong> Semantic similarity search using embeddings from Azure OpenAI</li>
+                        <li><strong>AI Enrichment:</strong> Built-in skills for NLP, OCR, and entity recognition</li>
+                        <li><strong>Semantic Ranking:</strong> AI-powered ranking using transformer models</li>
+                        <li><strong>Faceted Navigation:</strong> Filter and drill-down capabilities for complex queries</li>
+                        <li><strong>Multi-language Support:</strong> Search across 50+ languages</li>
+                        <li><strong>Custom Analyzers:</strong> Full control over tokenization and text processing</li>
+                        <li><strong>Scalability:</strong> Handle massive indexes and concurrent queries</li>
+                    </ul>
+                </section>
+
+                <!-- Use Cases -->
+                <section class="mb-5">
+                    <h2 class="section-title">Use Cases</h2>
+                    
+                    <div class="use-case-card">
+                        <h5>📚 Knowledge Base Retrieval</h5>
+                        <p>Build intelligent knowledge bases and FAQ systems with semantic understanding to find relevant answers even when exact keywords don't match.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🛒 E-commerce Search</h5>
+                        <p>Enhance product discovery with semantic search, understanding customer intent beyond keywords and improving conversion rates.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>📄 Enterprise Document Search</h5>
+                        <p>Search across documents, PDFs, and scanned images with OCR and entity recognition for comprehensive content discovery.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🏥 Medical Records Retrieval</h5>
+                        <p>Search clinical documents and medical records using semantic understanding for better patient outcomes and research.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🔍 Legal Document Discovery</h5>
+                        <p>Search through contracts and legal documents with semantic understanding for faster e-discovery and compliance.</p>
+                    </div>
+                </section>
+
+                <!-- Pricing -->
+                <section class="mb-5">
+                    <h2 class="section-title">Pricing Tiers</h2>
+                    
+                    <div class="pricing-tier">
+                        <h5>Free Tier</h5>
+                        <p><strong>Cost:</strong> Free | <strong>Limit:</strong> 3 indexes, 10 MB storage, 1M requests/month</p>
+                        <p>Good for development and testing with size and capacity limitations.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Basic Tier</h5>
+                        <p><strong>Cost:</strong> ~$0.23/hour (billed daily) | <strong>Limit:</strong> 15 indexes, 2 GB storage</p>
+                        <p>Suitable for production workloads with moderate scale and performance requirements.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Standard Tier</h5>
+                        <p><strong>Cost:</strong> ~$0.69/hour (billed daily) | Multiple units available</p>
+                        <p>Recommended for most production scenarios with high availability and scalability.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Storage Optimized Tier</h5>
+                        <p><strong>Cost:</strong> ~$1.04/hour | Optimized for large indexes and searchability</p>
+                        <p>For scenarios requiring massive indexes with lower query throughput.</p>
+                    </div>
+                </section>
+
+                <!-- Deployment Spec -->
+                <section class="mb-5">
+                    <h2 class="section-title">Bicep Deployment</h2>
+                    <div class="card">
+                        <div class="card-header">Azure AI Search Spec</div>
+                        <div class="card-body">
+                            <p><strong>Specification File:</strong> <code>azure-aisearch.bicep</code></p>
+                            <p>Deploy Azure AI Search with semantic configuration and hybrid search setup:</p>
+                            
+                            <div class="code-block">
+# Deploy using:
+az bicep build --file azure-aisearch.bicep
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file azure-aisearch.json \
+  --parameters location=eastus environment=prod
+                            </div>
+
+                            <p><strong>Outputs:</strong></p>
+                            <ul class="capability-list">
+                                <li>Service ID</li>
+                                <li>Search endpoint URL</li>
+                                <li>Service name</li>
+                                <li>API keys</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section class="mb-5">
+                    <h2 class="section-title">FAQ</h2>
+                    
+                    <div class="faq-item">
+                        <h5>What's the difference between full-text and semantic search?</h5>
+                        <p>Full-text search matches keywords, while semantic search understands meaning and intent. Semantic ranking uses AI to reorder results based on relevance to the actual meaning of the query.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>How do vector searches work?</h5>
+                        <p>Vector search uses embeddings (numerical representations) created from text using models like OpenAI's embeddings. Documents with similar meanings have similar vectors, enabling semantic similarity search.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>What's the maximum index size?</h5>
+                        <p>The limit depends on your tier. Standard tier supports up to 50 GB per service. You can scale up with multiple replicas and partitions for larger deployments.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>Can I use it with custom embeddings?</h5>
+                        <p>Yes. You can use embeddings from Azure OpenAI, Hugging Face, or your own model and index them directly in Azure AI Search.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
+                    <div class="sidebar-item"><strong>Service Type:</strong> Managed search</div>
+                    <div class="sidebar-item"><strong>SLA:</strong> 99.9% uptime</div>
+                    <div class="sidebar-item"><strong>Regions:</strong> 30+ worldwide</div>
+                    <div class="sidebar-item"><strong>Based On:</strong> Apache Lucene</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5><i class="bi bi-diagram-3"></i> Dependencies</h5>
+                    <div class="sidebar-item">• Azure OpenAI (for embeddings)</div>
+                    <div class="sidebar-item">• Azure Storage (optional indexing)</div>
+                    <div class="sidebar-item">• Azure Monitor (logging)</div>
+                    <div class="sidebar-item">• Private Link (network isolation)</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5><i class="bi bi-shield-check"></i> Security Best Practices</h5>
+                    <div class="sidebar-item">✓ Use API keys or Azure AD authentication</div>
+                    <div class="sidebar-item">✓ Enable Private Link for network isolation</div>
+                    <div class="sidebar-item">✓ Use encryption at rest</div>
+                    <div class="sidebar-item">✓ Monitor with Azure Monitor</div>
+                    <div class="sidebar-item">✓ Implement role-based access control</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5><i class="bi bi-speedometer2"></i> Performance Tips</h5>
+                    <div class="sidebar-item">→ Use replicas for read scaling</div>
+                    <div class="sidebar-item">→ Use partitions for write scaling</div>
+                    <div class="sidebar-item">→ Optimize tokenization</div>
+                    <div class="sidebar-item">→ Monitor query latency</div>
+                    <div class="sidebar-item">→ Cache popular queries</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container-main">
+            <p>&copy; 2024 Azure Platform. Azure AI Search Documentation</p>
+            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

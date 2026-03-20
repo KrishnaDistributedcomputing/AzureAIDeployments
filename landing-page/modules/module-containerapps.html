@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Container Apps - Serverless Container Orchestration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
+        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
+        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
+        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
+        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
+        .nav-link:hover {color: var(--orange) !important;}
+        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
+        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
+        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
+        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
+        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
+        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
+        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
+        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
+        .card-body {color: #e0e0e0;}
+        .capability-list {list-style: none; padding: 0;}
+        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
+        .capability-list li:before {content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px;}
+        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
+        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
+        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
+        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
+        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
+        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
+        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
+        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
+        .sidebar-item:last-child {border-bottom: none;}
+        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
+        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
+        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container-main">
+            <span class="hero-icon">☁️</span>
+            <h1>Azure Container Apps</h1>
+            <p class="subtitle">Serverless container platform for running containerized applications at scale</p>
+        </div>
+    </div>
+
+    <div class="container-main">
+        <div class="row">
+            <div class="col-lg-8">
+                
+                <section class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Azure Container Apps is a serverless container platform that makes it easy to build and deploy containerized applications. It abstracts away the infrastructure complexity while providing the power of containers.</p>
+                            <p>Built on Kubernetes but without the operational overhead, Container Apps provides auto-scaling, event-driven execution, and seamless integration with Azure services.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Key Capabilities</h2>
+                    <ul class="capability-list">
+                        <li><strong>Serverless Containers:</strong> Run containers without managing Kubernetes</li>
+                        <li><strong>Auto-scaling:</strong> Scale based on HTTP traffic, message queues, or custom metrics</li>
+                        <li><strong>Microservices:</strong> Built-in service discovery and inter-container networking</li>
+                        <li><strong>Event-driven:</strong> Trigger containers from Azure services (Storage, Service Bus, etc.)</li>
+                        <li><strong>Managed Certificates:</strong> HTTPS automatically with free certificates</li>
+                        <li><strong>Blue/Green Deployments:</strong> Zero-downtime updates with traffic splitting</li>
+                        <li><strong>Dapr Integration:</strong> Distributed application runtime for state and pub/sub</li>
+                        <li><strong>Revision Management:</strong> Multiple versions running simultaneously</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Use Cases</h2>
+                    
+                    <div class="use-case-card">
+                        <h5>🚀 Microservices</h5>
+                        <p>Deploy microservices with automatic discovery and load balancing, ideal for polyglot architectures.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🔄 Event-Driven Apps</h5>
+                        <p>Trigger container execution from Azure services without servers or always-on workloads.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>💼 API Backends</h5>
+                        <p>Deploy REST/gRPC APIs with auto-scaling and managed HTTPS.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🛠️ Background Jobs</h5>
+                        <p>Run batch jobs triggered by queues or schedules without managing infrastructure.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🌐 Web Applications</h5>
+                        <p>Host web applications with automatic scaling and zero-downtime deployments.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Pricing Model</h2>
+                    
+                    <div class="pricing-tier">
+                        <h5>Consumption Pricing</h5>
+                        <p><strong>Cost:</strong> $0.000278/vCore-second + $0.000139/GB-second</p>
+                        <p>Pay only for resources used when containers are running.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Example Calculation</h5>
+                        <p>1 vCore, 2GB RAM running 24/7 = ~$20/month CPU + $10/month memory</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Managed Environment</h5>
+                        <p><strong>Cost:</strong> Free (included with Container Apps)</p>
+                        <p>No additional charge for the Kubernetes infrastructure.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Bicep Deployment</h2>
+                    <div class="card">
+                        <div class="card-header">Azure Container Apps Spec</div>
+                        <div class="card-body">
+                            <p><strong>Specification File:</strong> <code>azure-containerapps.bicep</code></p>
+                            <div class="code-block">
+az bicep build --file azure-containerapps.bicep
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file azure-containerapps.json
+                            </div>
+                            <p><strong>Outputs:</strong></p>
+                            <ul class="capability-list">
+                                <li>Container App ID</li>
+                                <li>Application FQDN</li>
+                                <li>Environment ID</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">FAQ</h2>
+                    
+                    <div class="faq-item">
+                        <h5>How is Container Apps different from AKS?</h5>
+                        <p>Container Apps abstracts Kubernetes away. AKS gives you full Kubernetes control. Container Apps is simpler and cost-effective for microservices.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>Can I run stateful applications?</h5>
+                        <p>Yes, with Dapr state management. Container Apps also supports persistent volumes for data.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>What image registries are supported?</h5>
+                        <p>Docker Hub, ACR, and any private registry with provided credentials.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>How do I get logs from my containers?</h5>
+                        <p>Logs stream to Azure Monitor Log Analytics automatically. Query with KQL.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5> Quick Stats</h5>
+                    <div class="sidebar-item"><strong>Service Type:</strong> Serverless Containers</div>
+                    <div class="sidebar-item"><strong>Scaling:</strong> 0 to 100s of replicas</div>
+                    <div class="sidebar-item"><strong>SLA:</strong> 99.95% availability</div>
+                    <div class="sidebar-item"><strong>Max Memory:</strong> 4 GB per container</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Key Integrations</h5>
+                    <div class="sidebar-item">• Azure Container Registry</div>
+                    <div class="sidebar-item">• Service Bus / Event Grid</div>
+                    <div class="sidebar-item">• Azure Monitor</div>
+                    <div class="sidebar-item">• Dapr runtime</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Security Features</h5>
+                    <div class="sidebar-item">✓ HTTPS by default</div>
+                    <div class="sidebar-item">✓ Free managed certificates</div>
+                    <div class="sidebar-item">✓ RBAC integration</div>
+                    <div class="sidebar-item">✓ Secrets management</div>
+                    <div class="sidebar-item">✓ Network isolation</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Best Practices</h5>
+                    <div class="sidebar-item">→ Use health probes</div>
+                    <div class="sidebar-item">→ Configure resource limits</div>
+                    <div class="sidebar-item">→ Enable scaling policies</div>
+                    <div class="sidebar-item">→ Monitor with Application Insights</div>
+                    <div class="sidebar-item">→ Use managed identities</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-main">
+            <p>&copy; 2024 Azure Platform. Azure Container Apps Documentation</p>
+            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/container-apps/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

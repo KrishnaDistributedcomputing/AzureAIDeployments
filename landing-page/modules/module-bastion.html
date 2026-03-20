@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Bastion - Secure Remote Access</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
+        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
+        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
+        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
+        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
+        .nav-link:hover {color: var(--orange) !important;}
+        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
+        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
+        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
+        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
+        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
+        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
+        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
+        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
+        .card-body {color: #e0e0e0;}
+        .capability-list {list-style: none; padding: 0;}
+        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
+        .capability-list li:before {content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px;}
+        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
+        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
+        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
+        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
+        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
+        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
+        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
+        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
+        .sidebar-item:last-child {border-bottom: none;}
+        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
+        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
+        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container-main">
+            <span class="hero-icon">🔐</span>
+            <h1>Azure Bastion</h1>
+            <p class="subtitle">Secure remote access to virtual machines without exposing RDP/SSH ports</p>
+        </div>
+    </div>
+
+    <div class="container-main">
+        <div class="row">
+            <div class="col-lg-8">
+                <section class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Azure Bastion provides secure and seamless RDP/SSH access to your virtual machines through SSL/TLS without exposing public IP addresses. It's a fully managed PaaS service that harddens access and reduces exposure to brute force attacks.</p>
+                            <p>Connect directly from the Azure Portal using HTML5, eliminating the need for VPN clients or public IPs on VMs.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Key Capabilities</h2>
+                    <ul class="capability-list">
+                        <li><strong>No Public IP Required:</strong> VMs don't need public IP addresses</li>
+                        <li><strong>HTML5 Browser Access:</strong> Connect via Azure Portal without additional clients</li>
+                        <li><strong>RDP/SSH Support:</strong> Connect to both Windows and Linux VMs</li>
+                        <li><strong>SSL/TLS Encryption:</strong> All connections encrypted over HTTPS</li>
+                        <li><strong>Multiple VM Support:</strong> Connect to multiple VMs simultaneously</li>
+                        <li><strong>Session Recording:</strong> Optional NSG rule logging for auditing</li>
+                        <li><strong>Automatic Patching:</strong> Service maintained by Microsoft</li>
+                        <li><strong>RBAC Support:</strong> Fine-grained access control via Azure RBAC</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Use Cases</h2>
+                    
+                    <div class="use-case-card">
+                        <h5>🔒 Enhanced Security</h5>
+                        <p>Eliminate public IP exposure and reduce attack surface for VM management.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>💼 Enterprise Management</h5>
+                        <p>Secure remote access for administrators across the organization.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🚀 Cloud-Native Ops</h5>
+                        <p>Native Azure Portal integration for seamless operations.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🌐 Remote Work</h5>
+                        <p>Secure access from anywhere without VPN client setup.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>📊 Compliance</h5>
+                        <p>Meet compliance requirements with encrypted connections and audit trails.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🔧 Multi-OS Support</h5>
+                        <p>Manage both Windows and Linux VMs from single interface.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Pricing Tiers</h2>
+                    <div class="pricing-tier">
+                        <h5>Standard SKU</h5>
+                        <p><strong>Cost:</strong> ~$10/day + $0.25/hour when in use</p>
+                        <p>For standard deployments with standard features.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Premium SKU</h5>
+                        <p><strong>Cost:</strong> ~$20/day + advanced features</p>
+                        <p>For advanced scenarios with kerberos/tunneling support.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Zone Redundant</h5>
+                        <p><strong>Cost:</strong> Premium pricing + redundancy</p>
+                        <p>Deploy across availability zones for high availability.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Bicep Deployment</h2>
+                    <div class="card">
+                        <div class="card-header">Azure Bastion Spec</div>
+                        <div class="card-body">
+                            <p><strong>Specification File:</strong> <code>azure-bastion.bicep</code></p>
+                            <div class="code-block">
+az bicep build --file azure-bastion.bicep
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file azure-bastion.json
+                            </div>
+                            <p><strong>Outputs:</strong></p>
+                            <ul class="capability-list">
+                                <li>Bastion public IP</li>
+                                <li>Bastion resource ID</li>
+                                <li>VNet integration status</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">FAQ</h2>
+                    
+                    <div class="faq-item">
+                        <h5>Do I need to disable NSG for Bastion?</h5>
+                        <p>No. Bastion works alongside NSG rules. You can restrict RDP/SSH without Bastion access.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>Can Bastion access VMs in peered VNets?</h5>
+                        <p>Yes, with VNet peering. You can access VMs in peered networks from Bastion.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>What are the bandwidth limits?</h5>
+                        <p>Standard: 100 Mbps, Premium: 200 Mbps. Sufficient for typical remote access.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>How to audit Bastion connections?</h5>
+                        <p>Enable NSG flow logs and resource diagnostics for audit trails.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5> Quick Stats</h5>
+                    <div class="sidebar-item"><strong>Service Type:</strong> Remote Access</div>
+                    <div class="sidebar-item"><strong>Pricing Model:</strong> Daily + hourly</div>
+                    <div class="sidebar-item"><strong>Max Concurrent Sessions:</strong> 5-10</div>
+                    <div class="sidebar-item"><strong>Bandwidth:</strong> 100-200 Mbps</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Connection Methods</h5>
+                    <div class="sidebar-item">• Browser-based HTML5</div>
+                    <div class="sidebar-item">• RDP (Windows)</div>
+                    <div class="sidebar-item">• SSH (Linux)</div>
+                    <div class="sidebar-item">• Kerberos (Advanced)</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Security Features</h5>
+                    <div class="sidebar-item">✓ No public IP required</div>
+                    <div class="sidebar-item">✓ SSL/TLS encryption</div>
+                    <div class="sidebar-item">✓ Azure RBAC integration</div>
+                    <div class="sidebar-item">✓ Session logging</div>
+                    <div class="sidebar-item">✓ VNet integration</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Best Practices</h5>
+                    <div class="sidebar-item">→ Use dedicated subnet</div>
+                    <div class="sidebar-item">→ Enable NSG logging</div>
+                    <div class="sidebar-item">→ Configure RBAC roles</div>
+                    <div class="sidebar-item">→ Monitor connections</div>
+                    <div class="sidebar-item">→ Use zone-redundant for HA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-main">
+            <p>&copy; 2024 Azure Platform. Azure Bastion Documentation</p>
+            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/bastion/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

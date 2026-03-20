@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Firewall - Network Security</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
+        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
+        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
+        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
+        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
+        .nav-link:hover {color: var(--orange) !important;}
+        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
+        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
+        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
+        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
+        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
+        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
+        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
+        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
+        .card-body {color: #e0e0e0;}
+        .capability-list {list-style: none; padding: 0;}
+        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
+        .capability-list li:before {content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px;}
+        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
+        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
+        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
+        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
+        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
+        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
+        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
+        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
+        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
+        .sidebar-item:last-child {border-bottom: none;}
+        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
+        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
+        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="container-main">
+            <span class="hero-icon">🛡️</span>
+            <h1>Azure Firewall</h1>
+            <p class="subtitle">Stateful, managed network firewall with threat intelligence and built-in DDoS protection</p>
+        </div>
+    </div>
+
+    <div class="container-main">
+        <div class="row">
+            <div class="col-lg-8">
+                <section class="mb-5">
+                    <h2 class="section-title">Overview</h2>
+                    <div class="card">
+                        <div class="card-body">
+                            <p>Azure Firewall is a managed, cloud-based network security service that protects your VNet resources. It's a stateful firewall with built-in high availability and unrestricted scalability.</p>
+                            <p>Provides Layer 4 and Layer 7 filtering, threat intelligence integration, and seamless Azure Monitor integration.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Key Capabilities</h2>
+                    <ul class="capability-list">
+                        <li><strong>Stateful Inspection:</strong> Full Layer 4 protocol inspection and filtering</li>
+                        <li><strong>Application Rules:</strong> Layer 7 filtering with FQDNs and HTTP/HTTPS inspection</li>
+                        <li><strong>Network Rules:</strong> Layer 4 filtering with protocols, ports, and IP addresses</li>
+                        <li><strong>NAT Rules:</strong> Source and destination network address translation</li>
+                        <li><strong>Threat Intelligence:</strong> Blocking known malicious IPs and domains</li>
+                        <li><strong>High Availability:</strong> Zone-redundant deployments across zones</li>
+                        <li><strong>Scalability:</strong> Handles unlimited connections simultaneously</li>
+                        <li><strong>Logging & Monitoring:</strong> Full integration with Azure Monitor and Log Analytics</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Use Cases</h2>
+                    
+                    <div class="use-case-card">
+                        <h5>🏗️ Hub-Spoke Architecture</h5>
+                        <p>Centralize firewall in hub VNet for spoke traffic inspection.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🌐 Internet Gateway</h5>
+                        <p>Single egress point for all VNet traffic with centralized logging.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🔍 Threat Prevention</h5>
+                        <p>Block malicious IPs/domains using threat intelligence feeds.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>📋 Compliance Monitoring</h5>
+                        <p>Audit and log all network traffic for compliance requirements.</p>
+                    </div>
+
+                    <div class="use-case-card">
+                        <h5>🛡️ Zero-Trust Implementation</h5>
+                        <p>Enforce strict allow-lists for all network communication.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Pricing Model</h2>
+                    <div class="pricing-tier">
+                        <h5>Deployment Fee</h5>
+                        <p><strong>Cost:</strong> ~$1.25/hour</p>
+                        <p>Base hourly charge regardless of usage.</p>
+                    </div>
+
+                    <div class="pricing-tier">
+                        <h5>Data Processing</h5>
+                        <p><strong>Cost:</strong> ~$0.016 per GB</p>
+                        <p>Charged for data processed by firewall.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">Bicep Deployment</h2>
+                    <div class="card">
+                        <div class="card-header">Azure Firewall Spec</div>
+                        <div class="card-body">
+                            <p><strong>Specification File:</strong> <code>azure-firewall.bicep</code></p>
+                            <div class="code-block">
+az bicep build --file azure-firewall.bicep
+az deployment group create \
+  --resource-group myResourceGroup \
+  --template-file azure-firewall.json
+                            </div>
+                            <p><strong>Outputs:</strong></p>
+                            <ul class="capability-list">
+                                <li>Firewall ID</li>
+                                <li>Public IP address</li>
+                                <li>Private IP address</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2 class="section-title">FAQ</h2>
+                    
+                    <div class="faq-item">
+                        <h5>Can I use Azure Firewall with NSGs?</h5>
+                        <p>Yes. NSGs filter traffic at NIC level, Firewall filters at VNet level. Both are complementary.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>What's the throughput?</h5>
+                        <p>Up to 30 Gbps per deployment automatically, scales as needed.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>Does it support IDPS?</h5>
+                        <p>Yes. Intrusion Detection/Prevention System is available in Premium tier.</p>
+                    </div>
+
+                    <div class="faq-item">
+                        <h5>What about DNS filtering?</h5>
+                        <p>Azure Firewall can filter egress DNS traffic and log all DNS queries.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h5> Quick Stats</h5>
+                    <div class="sidebar-item"><strong>Service Type:</strong> Firewall</div>
+                    <div class="sidebar-item"><strong>Throughput:</strong> 30 Gbps+</div>
+                    <div class="sidebar-item"><strong>SLA:</strong> 99.95%</div>
+                    <div class="sidebar-item"><strong>Scalability:</strong> Unlimited</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Tiers</h5>
+                    <div class="sidebar-item">• Standard (Basic rules)</div>
+                    <div class="sidebar-item">• Premium (IDPS, Encryption)</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Key Features</h5>
+                    <div class="sidebar-item">✓ Stateful inspection</div>
+                    <div class="sidebar-item">✓ Threat intelligence</div>
+                    <div class="sidebar-item">✓ Zone redundancy</div>
+                    <div class="sidebar-item">✓ Azure Monitor aligned</div>
+                    <div class="sidebar-item">✓ FQDN filtering</div>
+                </div>
+
+                <div class="sidebar">
+                    <h5> Best Practices</h5>
+                    <div class="sidebar-item">→ Use in hub-spoke model</div>
+                    <div class="sidebar-item">→ Enable threat intelligence</div>
+                    <div class="sidebar-item">→ Log all traffic</div>
+                    <div class="sidebar-item">→ Use zone redundancy</div>
+                    <div class="sidebar-item">→ Monitor regularly</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-main">
+            <p>&copy; 2024 Azure Platform. Azure Firewall Documentation</p>
+            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/firewall/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
