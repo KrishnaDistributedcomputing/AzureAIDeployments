@@ -303,6 +303,8 @@ resource gpt4Deployment 'Microsoft.CognitiveServices/accounts/deployments@2023-1
             <h3><i class="bi bi-search me-2"></i>2. Azure AI Search</h3>
             <p><strong>Category:</strong> AI Services | <strong>SKU Variants:</strong> Free, Basic, S1-S3, L1-L2</p>
 
+            <h4>Spec Outline & Template</h4>
+
             <div class="guide-box">
               <strong>Focus Areas for AI Search Spec:</strong>
               <ul class="mt-2 mb-0">
@@ -318,8 +320,9 @@ resource gpt4Deployment 'Microsoft.CognitiveServices/accounts/deployments@2023-1
 # AI Search Module Specification
 
 ## Overview
-Azure AI Search (formerly Cognitive Search) provides full-text, vector, and hybrid 
-search with semantic ranking. Use cases: RAG backends, product catalogs, doc search.
+Azure AI Search (formerly Cognitive Search) provides full-text, vector, and hybrid
+search with semantic ranking. Typical uses include RAG backends, catalog search,
+knowledge bases, and enterprise document discovery.
 
 ## Architecture
 ```
@@ -348,14 +351,14 @@ Search Results
 | Search Service | Microsoft.Search/searchServices | Main service |
 | Index | Search Index | Stores documents & vectors |
 | Indexer | Indexer | Data ingestion pipeline |
-| Data Source Connector | Data Source | Points to blob/SQL/etc |
+| Data Source | Data Source | Points to Blob, SQL, Cosmos DB, etc |
 | Skill Set | Skill Set | OCR, entity extraction, etc |
 
 ## Configuration
-- **SKU**: Choose based on throughput (Basic: 3, S1: 36, S3: unlimited partitions)
+- **SKU**: Choose based on throughput and scale needs
 - **Partitions**: 1-12 (each adds ~25GB storage)
 - **Replicas**: 1-12 (scale for query throughput)
-- **Vector Config**: embeddings field (float type, searchable)
+- **Vector Config**: embedding field (Collection(Edm.Single), searchable)
 - **Semantic Config**: custom fields for re-ranking
 
 ## Cost Estimation
@@ -383,27 +386,27 @@ resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
     replicaCount: 2
     publicNetworkAccess: 'Disabled'
     networkRuleBypassOptions: 'AzureServices'
-    encryptionWithCmk: { enforcement: 'Enforced' }
+    authOptions: {
+      aadOrApiKey: {
+        aadAuthFailureMode: 'http401WithBearerChallenge'
+      }
+    }
   }
 }
 
-resource searchIndex 'Microsoft.Search/searchServices/indexes@2023-11-01' = {
-  parent: searchService
-  name: 'products-index'
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2023-11-01' = {
+  name: 'pe-search-${uniqueSuffix}'
+  location: location
   properties: {
-    fields: [
-      { name: 'id', type: 'Edm.String', key: true }
-      { name: 'title', type: 'Edm.String', searchable: true }
-      { name: 'embedding', type: 'Collection(Edm.Single)', 
-        searchable: true, vectorSearchConfiguration: 'vectorConfig' }
-    ]
-    vectorSearch: {
-      algorithmConfigurations: [
-        { name: 'vectorConfig', algorithm: 'hnsw' }
-      ]
-    }
-    semanticConfiguration: [
-      { name: 'default', fields: [{ fieldName: 'title', weight: 2 }] }
+    subnet: { id: subnetId }
+    privateLinkServiceConnections: [
+      {
+        name: 'search-connection'
+        properties: {
+          privateLinkServiceId: searchService.id
+          groupIds: [ 'searchService' ]
+        }
+      }
     ]
   }
 }
@@ -424,6 +427,10 @@ resource searchIndex 'Microsoft.Search/searchServices/indexes@2023-11-01' = {
 5. **Use integrated vectorizer** - No need to manage embedding pipeline separately
 6. **Monitor indexing lag** - Set up alerts when indexer falls behind
 7. **Test vector dimensions** - 384D (Small) often sufficient; don't default to 3072D
+            </div>
+
+            <div class="best-practice">
+              <strong>Common Mistakes:</strong> Oversizing SKU too early, skipping semantic ranking tests, indexing documents without chunking strategy, and not monitoring indexer failures.
             </div>
           </section>
 
