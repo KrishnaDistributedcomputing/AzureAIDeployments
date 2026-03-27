@@ -1,23 +1,30 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Azure OpenAI Service | Core Azure Modules</title>
   <meta name="description" content="Azure OpenAI Service - managed access to GPT-4, GPT-4 Turbo, embeddings, and DALL-E models with enterprise security." />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
-    :root { --accent: #0078d4; --accent-dark: #50e6ff; }
-    body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh; }
-    .hero { background: linear-gradient(135deg, #0078d4 0%, #50e6ff 100%); color: white; padding: 60px 20px; }
+    :root {
+      --azure-navy: #0050a0;
+      --azure-blue: #0078d4;
+      --azure-sky: #00a2e8;
+      --azure-cyan: #50e6ff;
+      --accent: var(--azure-blue);
+      --accent-dark: var(--azure-cyan);
+    }
+    body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
     .hero h1 { font-size: 2.8rem; font-weight: 800; }
     .module-icon { font-size: 3.5rem; margin: 20px 0; }
     .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
     .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
-    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.05) 0%, rgba(80,230,255,.05) 100%); }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
     .btn-deploy { background: var(--accent); color: white; border: none; }
-    .btn-deploy:hover { background: #0062a3; color: white; }
+    .btn-deploy:hover { background: var(--azure-navy); color: white; }
     .code-block { background: #1e1e1e; color: #d4d4d4; border-radius: 8px; padding: 15px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; margin: 15px 0; }
     .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
   </style>
@@ -49,7 +56,7 @@
           <div class="module-icon">🤖</div>
           <h1 class="mb-3">Azure OpenAI Service</h1>
           <p class="lead mb-4">Managed access to OpenAI's GPT-4, GPT-4 Turbo, embeddings, and DALL-E models with enterprise security and compliance.</p>
-          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-rocket-takeoff me-2"></i>Deploy Now</a>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
           <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
         </div>
         <div class="col-lg-6 text-center">
@@ -135,7 +142,7 @@
             <p><small><strong>Resource Provider:</strong> Microsoft.CognitiveServices</small></p>
             <p><small><strong>SKU:</strong> S0, S1 (Standard/Premium)</small></p>
             <p><small><strong>Regions:</strong> East US, UK South, France Central, Sweden Central</small></p>
-            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Bicep Spec</a>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
           </div>
 
           <!-- Dependencies -->
@@ -195,50 +202,252 @@
       </div>
     </section>
 
-    <!-- Deployment -->
+    <!-- Service Specification -->
     <section id="deployment" class="mb-5">
-      <h2 class="fw-bold mb-4"><i class="bi bi-code-square me-2"></i>Deployment Spec (Bicep)</h2>
-      <p class="text-muted">Complete Infrastructure as Code template for Azure OpenAI Service deployment.</p>
-      
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+      <p class="text-muted">Spec-based development guide for Azure OpenAI Service. Author and validate this spec before requesting infrastructure provisioning.</p>
+
       <div class="spec-box">
-        <h5 class="fw-bold">Sample Bicep - openai.bicep</h5>
-        <div class="code-block">param location string = resourceGroup().location
-param environment string = 'prod'
-param apiVersion string = '2024-10-01-preview'
+        <h5 class="fw-bold">📋 Spec Header — DS-AOI-001</h5>
+        <table class="table table-sm small mb-0">
+          <tbody>
+            <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AOI-001</td></tr>
+            <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+            <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+            <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+            <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+            <tr><td class="fw-medium">Applies to</td><td>Azure OpenAI Service</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-var resourceName = 'openai-${environment}-${uniqueString(resourceGroup().id)}'
+      <div class="spec-box">
+        <h5 class="fw-bold">⚙️ Required Parameters</h5>
+        <p class="small text-muted mb-3">All parameters must be resolved before the spec advances to <strong>Approved</strong> status.</p>
+        <table class="table table-sm small">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Azure region — must be one of: East US, UK South, France Central, Sweden Central</td></tr>
+            <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage: <code>dev</code> | <code>staging</code> | <code>prod</code></td></tr>
+            <tr><td><code>modelDeployments</code></td><td>array</td><td>Yes</td><td>Model name, version, and capacity (TPM) for each deployment slot</td></tr>
+            <tr><td><code>tokensPerMinute</code></td><td>int</td><td>Yes</td><td>Quota ceiling per deployment in 1K TPM units. Must not exceed subscription quota.</td></tr>
+            <tr><td><code>contentFilter</code></td><td>bool</td><td>Yes</td><td>Enable Azure AI Content Safety filter. Must be <code>true</code> in production.</td></tr>
+            <tr><td><code>privateEndpointEnabled</code></td><td>bool</td><td>Yes</td><td>Toggle VNet isolation via Private Link. Must be <code>true</code> when public network access is denied.</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-resource openaiAccount 'Microsoft.CognitiveServices/accounts@${apiVersion}' = {
-  name: resourceName
-  location: location
-  kind: 'OpenAI'
-  sku: {
-    name: 'S0'
-  }
-  properties: {
-    apiProperties: {
-      statisticsEnabled: false
-    }
-    customSubdomainName: resourceName
-    publicNetworkAccess: 'Enabled'
-  }
-}
+      <div class="spec-box">
+        <h5 class="fw-bold">🔗 Dependency Wiring</h5>
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Key Vault</h6>
+                <p class="small mb-1">API keys and endpoint URLs must be stored in Key Vault, not in application config or environment variables.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Private Link</h6>
+                <p class="small mb-1">Configure Private Endpoint to deny public internet access and route traffic exclusively via VNet.</p>
+                <span class="badge bg-secondary">Conditional</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Azure Monitor</h6>
+                <p class="small mb-1">Diagnostic logs and request metrics must be routed to a Log Analytics workspace.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-resource gpt4Deployment 'Microsoft.CognitiveServices/accounts/deployments@${apiVersion}' = {
-  parent: openaiAccount
-  name: 'gpt-4-deployment'
-  properties: {
-    model: {
-      format: 'OpenAI'
-      name: 'gpt-4'
-      version: '1106'
-    }
-    scaleSettings: {
-      scaleType: 'Standard'
-      capacity: 20
-    }
-  }
-}
+      <div class="spec-box">
+        <h5 class="fw-bold">✓ Acceptance Gates</h5>
+        <p class="small text-muted mb-3">All gates must pass before the deployment is considered production-ready.</p>
+        <ul class="small mb-0">
+          <li class="mb-2"><strong>Gate 1 — Endpoint health:</strong> <code>GET /openai/deployments/{id}/completions</code> must return HTTP 200 within 2 seconds at P95 under normal load.</li>
+          <li class="mb-2"><strong>Gate 2 — Network isolation:</strong> A direct public endpoint call (bypassing Private Link) must return HTTP 403 in any environment where <code>privateEndpointEnabled = true</code>.</li>
+          <li class="mb-2"><strong>Gate 3 — Content filter:</strong> Submitting a known policy-violating prompt must return <code>finish_reason: content_filter</code>, not a model completion.</li>
+          <li class="mb-2"><strong>Gate 4 — Key Vault resolution:</strong> The application must retrieve the OpenAI API key from Key Vault at startup. Any hardcoded key in config fails this gate.</li>
+          <li><strong>Gate 5 — Quota compliance:</strong> Deployed TPM ceiling must not exceed the approved subscription quota documented in the environment cost approval.</li>
+        </ul>
+      </div>
 
-output openaiEndpoint string = openaiAccount.properties.endpoint
-output deploymentId string = gpt4Deployment.id
+      <div class="spec-box">
+        <h5 class="fw-bold">🚀 Spec Workflow</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Author:</strong> Complete all required parameters. Resolve every <code>&lt;placeholder&gt;</code> field before submission.</li>
+          <li class="mb-2"><strong>Review:</strong> Submit spec for peer review. At least one reviewer who is not the author must approve before status advances to <em>Approved</em>.</li>
+          <li class="mb-2"><strong>CI gate:</strong> Spec linting and dependency validation run automatically on PR. The IaC template is generated from spec inputs — no manual edits permitted.</li>
+          <li class="mb-2"><strong>Deploy:</strong> Approved spec triggers the Infrastructure-as-Code pipeline to provision or update the Azure OpenAI account and model deployments.</li>
+          <li><strong>Validate:</strong> All five acceptance gates must pass in the target environment within 30 minutes of deployment completion.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Sample Best Practice Spec -->
+    <section class="mb-5">
+      <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+      <p class="text-muted mb-4">A complete, production-ready example of DS-AOI-001 — fully resolved, no placeholders. Use this as a reference when authoring your own spec.</p>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+          <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+        </a>
+        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+        </a>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <!-- Collapsible toggle -->
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(90deg,var(--azure-navy),var(--azure-blue));color:white;border-radius:8px 8px 0 0;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#sampleSpec">
+          <span class="fw-bold"><i class="bi bi-file-earmark-check me-2"></i>DS-AOI-001 v1.0 — Azure OpenAI Service (Production) <span class="badge bg-success ms-2">Approved</span></span>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse show" id="sampleSpec">
+          <div class="card-body p-4">
+
+            <!-- Header table -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3 letter-spacing-1">1. Document Header</h6>
+              <table class="table table-sm small mb-0">
+                <tbody>
+                  <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AOI-001</td></tr>
+                  <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                  <tr><td class="fw-medium">Status</td><td><span class="badge bg-success">Approved</span></td></tr>
+                  <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                  <tr><td class="fw-medium">Owner</td><td>Platform Engineering — AI Services</td></tr>
+                  <tr><td class="fw-medium">Reviewer</td><td>Security Architecture</td></tr>
+                  <tr><td class="fw-medium">Applies to</td><td>Azure OpenAI Service — Production (East US)</td></tr>
+                  <tr><td class="fw-medium">Date</td><td>2026-03-27</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Purpose -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">2. Purpose &amp; Scope</h6>
+              <p class="small mb-2"><strong>Purpose:</strong> Define the deployment specification for Azure OpenAI Service in the production environment, including model selection, quota allocation, network configuration, and security controls required before infrastructure provisioning is requested.</p>
+              <p class="small mb-2"><strong>In scope:</strong> Azure OpenAI account, GPT-4o and text-embedding-3-large model deployments, Private Endpoint, Key Vault integration, diagnostic logging.</p>
+              <p class="small mb-0"><strong>Out of scope:</strong> Application-layer prompt engineering, fine-tuning workflows, downstream RAG pipeline configuration.</p>
+            </div>
+
+            <!-- Requirements -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">3. Functional Requirements</h6>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>FR-01</strong> — The service must expose a dedicated GPT-4o deployment slot with a minimum capacity of 40K TPM.<br><span class="text-muted">Rationale: Peak load in production is projected at 35K TPM; 40K provides 14% headroom.</span></li>
+                <li class="mb-2"><strong>FR-02</strong> — The service must expose a text-embedding-3-large deployment slot with a minimum capacity of 25K TPM.<br><span class="text-muted">Rationale: Embedding workloads run concurrently with chat and must not share quota.</span></li>
+                <li class="mb-2"><strong>FR-03</strong> — The service must return HTTP 200 from <code>GET /openai/deployments/{id}/completions</code> within 2 seconds at P95 under normal production load.<br><span class="text-muted">Rationale: SLA commitment to product team.</span></li>
+                <li><strong>FR-04</strong> — The service must enforce Azure AI Content Safety at level Medium for the hate, sexual, violence, and self-harm categories on all completions endpoints.<br><span class="text-muted">Rationale: EU AI Act compliance — content filter must be on and documented.</span></li>
+              </ul>
+            </div>
+
+            <!-- Resolved parameters -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">4. Resolved Parameters</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Approved by</th></tr></thead>
+                <tbody>
+                  <tr><td><code>location</code></td><td>East US</td><td>Infra Lead</td></tr>
+                  <tr><td><code>environment</code></td><td>prod</td><td>Infra Lead</td></tr>
+                  <tr><td><code>modelDeployments[0].name</code></td><td>gpt-4o</td><td>AI Lead</td></tr>
+                  <tr><td><code>modelDeployments[0].version</code></td><td>2024-11-20</td><td>AI Lead</td></tr>
+                  <tr><td><code>modelDeployments[0].capacityTPM</code></td><td>40 000</td><td>Finance</td></tr>
+                  <tr><td><code>modelDeployments[1].name</code></td><td>text-embedding-3-large</td><td>AI Lead</td></tr>
+                  <tr><td><code>modelDeployments[1].capacityTPM</code></td><td>25 000</td><td>Finance</td></tr>
+                  <tr><td><code>contentFilter</code></td><td>true — Medium threshold</td><td>Security</td></tr>
+                  <tr><td><code>privateEndpointEnabled</code></td><td>true</td><td>Security</td></tr>
+                  <tr><td><code>publicNetworkAccess</code></td><td>Disabled</td><td>Security</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Security -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">5. Security Controls</h6>
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="small mb-0">
+                    <li class="mb-1"><strong>Authentication:</strong> Managed Identity only — API key authentication must be disabled at the resource level.</li>
+                    <li class="mb-1"><strong>Authorization:</strong> RBAC using built-in role <code>Cognitive Services OpenAI User</code>; no Owner/Contributor assignments to the OpenAI resource.</li>
+                    <li class="mb-1"><strong>Key storage:</strong> Endpoint URL stored in Key Vault secret <code>openai-endpoint-prod</code>; no keys in app config or environment variables.</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <ul class="small mb-0">
+                    <li class="mb-1"><strong>Network:</strong> Private Endpoint in subnet <code>snet-ai-prod</code>; DNS zone <code>privatelink.openai.azure.com</code> linked to hub VNet.</li>
+                    <li class="mb-1"><strong>TLS:</strong> TLS 1.2 minimum enforced at Private Endpoint.</li>
+                    <li class="mb-1"><strong>Audit logs:</strong> All control-plane operations and data-plane request logs routed to Log Analytics workspace <code>law-ai-prod-eastus</code> with 90-day retention.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cost -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">6. Cost Estimate (itemised)</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Item</th><th>Unit</th><th>Est. Volume/mo</th><th>Unit Price</th><th>Est. Monthly</th></tr></thead>
+                <tbody>
+                  <tr><td>GPT-4o input tokens</td><td>per 1M tokens</td><td>250M</td><td>$2.50</td><td>$625</td></tr>
+                  <tr><td>GPT-4o output tokens</td><td>per 1M tokens</td><td>80M</td><td>$10.00</td><td>$800</td></tr>
+                  <tr><td>text-embedding-3-large</td><td>per 1M tokens</td><td>500M</td><td>$0.13</td><td>$65</td></tr>
+                  <tr><td>Private Endpoint</td><td>per hour</td><td>730 h</td><td>$0.01</td><td>$7</td></tr>
+                  <tr><td>Log Analytics ingestion</td><td>per GB</td><td>~15 GB</td><td>$2.30</td><td>$35</td></tr>
+                  <tr class="table-active fw-bold"><td colspan="4">Total estimated monthly</td><td>$1,532</td></tr>
+                </tbody>
+              </table>
+              <p class="small text-muted mt-2 mb-0">Approved budget ceiling: $2,000/mo. Quota alert set at 85% ($1,700). Cost approval: Finance sign-off 2026-03-15.</p>
+            </div>
+
+            <!-- Acceptance gates -->
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">7. Acceptance Gates</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Gate</th><th>Test</th><th>Pass Condition</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>G-01</td><td>Endpoint health check</td><td>HTTP 200 within 2 s at P95</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-02</td><td>Network isolation</td><td>Direct public call returns HTTP 403</td><td>Security Architecture</td></tr>
+                  <tr><td>G-03</td><td>Content filter</td><td>Policy-violating prompt returns <code>content_filter</code></td><td>AI Lead</td></tr>
+                  <tr><td>G-04</td><td>Key Vault resolution</td><td>App reads endpoint from KV at startup; no hardcoded keys</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-05</td><td>Quota compliance</td><td>Deployed TPM ≤ approved subscription quota</td><td>Finance</td></tr>
+                  <tr><td>G-06</td><td>RBAC audit</td><td>Zero Contributor/Owner role assignments scoped to OpenAI resource</td><td>Security Architecture</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Rollback -->
+            <div class="spec-box mb-0">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">8. Rollback &amp; Recovery</h6>
+              <ol class="small mb-0">
+                <li class="mb-1"><strong>Model deployment rollback:</strong> Delete the failing deployment slot via ARM API; prior slot version remains active. Max recovery time: 5 minutes.</li>
+                <li class="mb-1"><strong>Account rollback:</strong> Restore from ARM template snapshot tagged <code>pre-deploy-{timestamp}</code> stored in the deployment pipeline artifact store.</li>
+                <li><strong>Escalation:</strong> If G-02 (network isolation) fails post-deploy, immediately set <code>publicNetworkAccess = Disabled</code> via emergency change request; notify Security within 15 minutes.</li>
+              </ol>
+            </div>
+
+          </div><!-- /.card-body -->
+        </div><!-- /.collapse -->
+      </div><!-- /.card -->
+    </section>
+
+    <!-- Footer nav -->
+    <div class="text-center py-4 border-top">
+      <a href="/modules" class="btn btn-outline-primary me-2"><i class="bi bi-arrow-left me-2"></i>Back to Modules</a>
+      <a href="/modules/module-aisearch.html" class="btn btn-primary">Next: AI Search <i class="bi bi-arrow-right ms-2"></i></a>
+    </div>
+  </div><!-- /.container -->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmRXyJgX7c0f3HmGzTi/CUEfxWMp" crossorigin="anonymous"></script>
+</body>
+</html>
