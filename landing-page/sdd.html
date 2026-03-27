@@ -61,6 +61,34 @@
       display: inline-block;
       margin: 0.2rem;
     }
+    .info-strip {
+      border: 1px solid #d7e7fb;
+      background: #f4f9ff;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+    }
+    .mini-tag {
+      display: inline-block;
+      border: 1px solid #dce8f8;
+      background: #f8fbff;
+      border-radius: 999px;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.8rem;
+      margin: 0.2rem 0.15rem 0 0;
+    }
+    .step-chip {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--sdd-orange), var(--sdd-amber));
+      color: #fff;
+      font-weight: 700;
+      margin-right: 0.6rem;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -110,6 +138,16 @@
   </header>
 
   <main class="container py-5">
+    <section class="mb-4">
+      <div class="info-strip d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div>
+          <strong><i class="bi bi-compass me-2 text-primary"></i>How to use this course page:</strong>
+          Read top to bottom once, then run Labs 1 and 2 with your own feature.
+        </div>
+        <a href="#downloads" class="btn btn-sm btn-outline-primary"><i class="bi bi-box-arrow-down me-1"></i>Get worksheets</a>
+      </div>
+    </section>
+
     <section class="mb-5">
       <div class="content-card p-4 p-lg-5">
         <h2 class="fw-bold mb-3"><i class="bi bi-bullseye me-2 text-primary"></i>Learning Outcomes</h2>
@@ -139,6 +177,47 @@
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="content-card p-4 h-100">
+            <h3 class="fw-bold mb-3"><i class="bi bi-people me-2 text-primary"></i>Who This Is For</h3>
+            <ul class="small mb-3">
+              <li>Developers writing features from user stories and architecture notes</li>
+              <li>Tech leads who want consistent requirement-to-test traceability</li>
+              <li>QA and DevOps teams enforcing release gates before merge</li>
+            </ul>
+            <p class="small text-muted mb-0">No advanced tooling required. You can run this workflow using Markdown specs and your existing CI checks.</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="content-card p-4 h-100">
+            <h3 class="fw-bold mb-3"><i class="bi bi-wrench-adjustable me-2 text-success"></i>Before You Start</h3>
+            <ul class="small mb-3">
+              <li>Pick one real backlog item to use as your training feature</li>
+              <li>Have your repo and pull request workflow ready</li>
+              <li>Keep one reviewer available for fast feedback on acceptance criteria</li>
+            </ul>
+            <div>
+              <span class="mini-tag">Recommended: 1-2 people pairing</span>
+              <span class="mini-tag">Artifact-first workflow</span>
+              <span class="mini-tag">90-minute follow-up sprint trial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="content-card p-4">
+        <h2 class="fw-bold mb-3"><i class="bi bi-card-checklist me-2 text-primary"></i>Training Scenario (Example)</h2>
+        <p class="mb-3">Use this sample feature if you want a guided practice run:</p>
+        <p class="small mb-2"><strong>Feature:</strong> Add deployment pre-check endpoint that validates required architecture fields before deployment.</p>
+        <p class="small mb-2"><strong>Success Criteria:</strong> Endpoint rejects incomplete payloads, logs rule failures, and returns actionable messages.</p>
+        <p class="small mb-0"><strong>Release Gate:</strong> All acceptance criteria mapped to tests and evidence linked in pull request.</p>
       </div>
     </section>
 
@@ -202,6 +281,11 @@
               <li>Specify dependencies, risks, and rollback approach.</li>
               <li>Produce objective acceptance criteria.</li>
             </ul>
+            <h6 class="fw-bold mb-2">Runbook</h6>
+            <p class="small mb-2"><span class="step-chip">1</span>Write the objective in one sentence: what changes and why.</p>
+            <p class="small mb-2"><span class="step-chip">2</span>Define 4-6 requirements and label each one with FR/NFR IDs.</p>
+            <p class="small mb-2"><span class="step-chip">3</span>Write acceptance criteria with measurable thresholds and exact outcomes.</p>
+            <p class="small mb-3"><span class="step-chip">4</span>Add risk + rollback notes before moving to implementation mapping.</p>
             <p class="small text-muted mb-0">Output: A review-ready feature spec with unambiguous acceptance statements.</p>
           </div>
         </div>
@@ -214,9 +298,26 @@
               <li>Build a traceability table from requirement to code to test.</li>
               <li>Run a pre-release gate checklist.</li>
             </ul>
+            <h6 class="fw-bold mb-2">Runbook</h6>
+            <p class="small mb-2"><span class="step-chip">1</span>Create task IDs linked to each FR/NFR requirement.</p>
+            <p class="small mb-2"><span class="step-chip">2</span>Add test IDs linked to each acceptance criterion.</p>
+            <p class="small mb-2"><span class="step-chip">3</span>Attach evidence links for test results or validation screenshots.</p>
+            <p class="small mb-3"><span class="step-chip">4</span>Mark each release gate as pass/fail before merge approval.</p>
             <p class="small text-muted mb-0">Output: Traceability matrix and release-ready validation evidence.</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="content-card p-4">
+        <h2 class="fw-bold mb-3"><i class="bi bi-stopwatch me-2 text-primary"></i>If You Only Have 30 Minutes</h2>
+        <ul class="small mb-0">
+          <li>Minute 0-8: Read Learning Outcomes + Curriculum quickly.</li>
+          <li>Minute 8-18: Complete Lab 1 objective, requirements, and acceptance criteria.</li>
+          <li>Minute 18-26: Complete Lab 2 mapping for top 3 requirements.</li>
+          <li>Minute 26-30: Run release gate checklist and identify missing evidence.</li>
+        </ul>
       </div>
     </section>
 
@@ -231,6 +332,24 @@
           <span class="quiz-pill">Spec anti-pattern diagnosis</span>
         </div>
         <p class="small text-muted mb-0">The complete quiz and answer key are included in the downloadable course pack below.</p>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="content-card p-4">
+        <h2 class="fw-bold mb-3"><i class="bi bi-chat-dots me-2 text-primary"></i>Frequently Asked Questions</h2>
+        <div class="mb-3">
+          <h6 class="fw-bold mb-1">Do we need special tooling to use SDD?</h6>
+          <p class="small mb-0 text-muted">No. Start with a Markdown spec, issue tracker IDs, and your existing test pipeline.</p>
+        </div>
+        <div class="mb-3">
+          <h6 class="fw-bold mb-1">How detailed should one spec be?</h6>
+          <p class="small mb-0 text-muted">Keep it feature-sized. One spec should usually map to one pull request or one sprint deliverable.</p>
+        </div>
+        <div>
+          <h6 class="fw-bold mb-1">What is the most common beginner mistake?</h6>
+          <p class="small mb-0 text-muted">Using subjective language in acceptance criteria without measurable pass/fail thresholds.</p>
+        </div>
       </div>
     </section>
 
