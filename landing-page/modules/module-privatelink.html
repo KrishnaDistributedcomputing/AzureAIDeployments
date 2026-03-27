@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azure Private Link - Private Connectivity</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
     <style>
         :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
         body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
@@ -23,7 +23,7 @@
         .card-body {color: #e0e0e0;}
         .capability-list {list-style: none; padding: 0;}
         .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
-        .capability-list li:before {content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px;}
+        .capability-list li:before {content: "âœ" "; color: var(--orange); font-weight: bold; margin-right: 10px;}
         .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
         .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
         .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
@@ -56,7 +56,7 @@
 
     <div class="hero">
         <div class="container-main">
-            <span class="hero-icon">🔒</span>
+            <span class="hero-icon">ðŸ"'</span>
             <h1>Azure Private Link</h1>
             <p class="subtitle">Access Azure services privately over your own virtual networks</p>
         </div>
@@ -93,27 +93,27 @@
                     <h2 class="section-title">Use Cases</h2>
                     
                     <div class="use-case-card">
-                        <h5>🏥 Regulated Industries</h5>
+                        <h5>ðŸ¥ Regulated Industries</h5>
                         <p>HIPAA, PCI-DSS, and GDPR compliant data access without internet exposure.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🔐 Sensitive Data Access</h5>
+                        <h5>ðŸ" Sensitive Data Access</h5>
                         <p>Access databases and storage privately from applications.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🌐 Hybrid Environments</h5>
+                        <h5>ðŸŒ Hybrid Environments</h5>
                         <p>Connect on-premises networks to Azure services securely.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🛡️ Zero-Trust Networks</h5>
+                        <h5>ðŸ›¡ï¸ Zero-Trust Networks</h5>
                         <p>Implement zero-trust architecture with no internet exposure.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🚀 Multi-tier Applications</h5>
+                        <h5>ðŸš€ Multi-tier Applications</h5>
                         <p>Secure communication between application tiers.</p>
                     </div>
                 </section>
@@ -192,40 +192,56 @@ az deployment group create \
 
                 <div class="sidebar">
                     <h5> Components</h5>
-                    <div class="sidebar-item">• Private endpoint</div>
-                    <div class="sidebar-item">• Private DNS zone</div>
-                    <div class="sidebar-item">• Subnet in VNet</div>
-                    <div class="sidebar-item">• Network interface</div>
+                    <div class="sidebar-item">â€¢ Private endpoint</div>
+                    <div class="sidebar-item">â€¢ Private DNS zone</div>
+                    <div class="sidebar-item">â€¢ Subnet in VNet</div>
+                    <div class="sidebar-item">â€¢ Network interface</div>
                 </div>
 
                 <div class="sidebar">
                     <h5> Security Benefits</h5>
-                    <div class="sidebar-item">✓ No Internet exposure</div>
-                    <div class="sidebar-item">✓ No DDoS risk</div>
-                    <div class="sidebar-item">✓ Data exfiltration control</div>
-                    <div class="sidebar-item">✓ Network isolation</div>
-                    <div class="sidebar-item">✓ Audit-friendly</div>
+                    <div class="sidebar-item">âœ" No Internet exposure</div>
+                    <div class="sidebar-item">âœ" No DDoS risk</div>
+                    <div class="sidebar-item">âœ" Data exfiltration control</div>
+                    <div class="sidebar-item">âœ" Network isolation</div>
+                    <div class="sidebar-item">âœ" Audit-friendly</div>
                 </div>
 
                 <div class="sidebar">
                     <h5> Best Practices</h5>
-                    <div class="sidebar-item">→ Use with firewalls</div>
-                    <div class="sidebar-item">→ Monitor with Network Watcher</div>
-                    <div class="sidebar-item">→ Implement NSG rules</div>
-                    <div class="sidebar-item">→ Use Private DNS zones</div>
-                    <div class="sidebar-item">→ Enable flow logs</div>
+                    <div class="sidebar-item">â†' Use with firewalls</div>
+                    <div class="sidebar-item">â†' Monitor with Network Watcher</div>
+                    <div class="sidebar-item">â†' Implement NSG rules</div>
+                    <div class="sidebar-item">â†' Use Private DNS zones</div>
+                    <div class="sidebar-item">â†' Enable flow logs</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
+    <div class="container-main" style="margin-top: 24px;">
+    <div class="card" style="border:1px solid #d6e8ff;">
+        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+            <div>
+                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
+                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
         <div class="container-main">
             <p>&copy; 2024 Azure Platform. Azure Private Link Documentation</p>
             <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/private-link/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
+

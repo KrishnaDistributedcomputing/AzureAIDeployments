@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azure Functions - Serverless Computing</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
     <style>
         :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
         body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
@@ -23,7 +23,7 @@
         .card-body {color: #e0e0e0;}
         .capability-list {list-style: none; padding: 0;}
         .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
-        .capability-list li:before {content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px;}
+        .capability-list li:before {content: "âœ" "; color: var(--orange); font-weight: bold; margin-right: 10px;}
         .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
         .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
         .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
@@ -56,7 +56,7 @@
 
     <div class="hero">
         <div class="container-main">
-            <span class="hero-icon">⚡</span>
+            <span class="hero-icon">âš¡</span>
             <h1>Azure Functions</h1>
             <p class="subtitle">Serverless compute for event-driven workloads with flexible pricing models</p>
         </div>
@@ -94,27 +94,27 @@
                     <h2 class="section-title">Use Cases</h2>
                     
                     <div class="use-case-card">
-                        <h5>📧 Event Processing</h5>
+                        <h5>ðŸ"§ Event Processing</h5>
                         <p>Process messages from Service Bus, Event Grid, or Event Hubs without servers.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>⏰ Scheduled Tasks</h5>
+                        <h5>â° Scheduled Tasks</h5>
                         <p>Run batch jobs, cleanups, or maintenance on a schedule without managing VMs.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🔌 API Endpoints</h5>
+                        <h5>ðŸ"Œ API Endpoints</h5>
                         <p>Create lightweight HTTP APIs that scale automatically.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🔄 Workflow Orchestration</h5>
+                        <h5>ðŸ",, Workflow Orchestration</h5>
                         <p>Use Durable Functions to orchestrate complex, long-running workflows.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>📁 File Processing</h5>
+                        <h5>ðŸ" File Processing</h5>
                         <p>Automatically process files in Storage when uploaded or modified.</p>
                     </div>
                 </section>
@@ -206,41 +206,57 @@ az deployment group create \
 
                 <div class="sidebar">
                     <h5> Trigger Types</h5>
-                    <div class="sidebar-item">• HTTP / REST APIs</div>
-                    <div class="sidebar-item">• Timer / Schedule (CRON)</div>
-                    <div class="sidebar-item">• Storage Blobs & Queues</div>
-                    <div class="sidebar-item">• Service Bus & Event Hubs</div>
-                    <div class="sidebar-item">• Event Grid</div>
+                    <div class="sidebar-item">â€¢ HTTP / REST APIs</div>
+                    <div class="sidebar-item">â€¢ Timer / Schedule (CRON)</div>
+                    <div class="sidebar-item">â€¢ Storage Blobs & Queues</div>
+                    <div class="sidebar-item">â€¢ Service Bus & Event Hubs</div>
+                    <div class="sidebar-item">â€¢ Event Grid</div>
                 </div>
 
                 <div class="sidebar">
                     <h5> Security Features</h5>
-                    <div class="sidebar-item">✓ API authentication keys</div>
-                    <div class="sidebar-item">✓ Managed identities</div>
-                    <div class="sidebar-item">✓ Private endpoints</div>
-                    <div class="sidebar-item">✓ Key Vault integration</div>
-                    <div class="sidebar-item">✓ Azure AD authorization</div>
+                    <div class="sidebar-item">âœ" API authentication keys</div>
+                    <div class="sidebar-item">âœ" Managed identities</div>
+                    <div class="sidebar-item">âœ" Private endpoints</div>
+                    <div class="sidebar-item">âœ" Key Vault integration</div>
+                    <div class="sidebar-item">âœ" Azure AD authorization</div>
                 </div>
 
                 <div class="sidebar">
                     <h5> Best Practices</h5>
-                    <div class="sidebar-item">→ Keep functions small & focused</div>
-                    <div class="sidebar-item">→ Use managed identities</div>
-                    <div class="sidebar-item">→ Set timeout appropriately</div>
-                    <div class="sidebar-item">→ Monitor with Application Insights</div>
-                    <div class="sidebar-item">→ Use Durable Functions for workflows</div>
+                    <div class="sidebar-item">â†' Keep functions small & focused</div>
+                    <div class="sidebar-item">â†' Use managed identities</div>
+                    <div class="sidebar-item">â†' Set timeout appropriately</div>
+                    <div class="sidebar-item">â†' Monitor with Application Insights</div>
+                    <div class="sidebar-item">â†' Use Durable Functions for workflows</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer>
+    <div class="container-main" style="margin-top: 24px;">
+    <div class="card" style="border:1px solid #d6e8ff;">
+        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+            <div>
+                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
+                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
         <div class="container-main">
             <p>&copy; 2024 Azure Platform. Azure Functions Documentation</p>
             <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/azure-functions/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
+

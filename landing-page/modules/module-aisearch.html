@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Azure AI Search - Intelligent Search Platform</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
     <style>
         :root {
             --orange: #e67e22;
@@ -116,7 +116,7 @@
         }
         
         .capability-list li:before {
-            content: "✓ ";
+            content: "âœ" ";
             color: var(--orange);
             font-weight: bold;
             margin-right: 10px;
@@ -254,7 +254,7 @@
     <!-- Hero Section -->
     <div class="hero">
         <div class="container-main">
-            <span class="hero-icon">🔍</span>
+            <span class="hero-icon">ðŸ"</span>
             <h1>Azure AI Search</h1>
             <p class="subtitle">Enterprise-scale AI-powered search platform with semantic understanding and hybrid search capabilities</p>
         </div>
@@ -297,27 +297,27 @@
                     <h2 class="section-title">Use Cases</h2>
                     
                     <div class="use-case-card">
-                        <h5>📚 Knowledge Base Retrieval</h5>
+                        <h5>ðŸ"š Knowledge Base Retrieval</h5>
                         <p>Build intelligent knowledge bases and FAQ systems with semantic understanding to find relevant answers even when exact keywords don't match.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🛒 E-commerce Search</h5>
+                        <h5>ðŸ›' E-commerce Search</h5>
                         <p>Enhance product discovery with semantic search, understanding customer intent beyond keywords and improving conversion rates.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>📄 Enterprise Document Search</h5>
+                        <h5>ðŸ",, Enterprise Document Search</h5>
                         <p>Search across documents, PDFs, and scanned images with OCR and entity recognition for comprehensive content discovery.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🏥 Medical Records Retrieval</h5>
+                        <h5>ðŸ¥ Medical Records Retrieval</h5>
                         <p>Search clinical documents and medical records using semantic understanding for better patient outcomes and research.</p>
                     </div>
 
                     <div class="use-case-card">
-                        <h5>🔍 Legal Document Discovery</h5>
+                        <h5>ðŸ" Legal Document Discovery</h5>
                         <p>Search through contracts and legal documents with semantic understanding for faster e-discovery and compliance.</p>
                     </div>
                 </section>
@@ -419,41 +419,57 @@ az deployment group create \
 
                 <div class="sidebar">
                     <h5><i class="bi bi-diagram-3"></i> Dependencies</h5>
-                    <div class="sidebar-item">• Azure OpenAI (for embeddings)</div>
-                    <div class="sidebar-item">• Azure Storage (optional indexing)</div>
-                    <div class="sidebar-item">• Azure Monitor (logging)</div>
-                    <div class="sidebar-item">• Private Link (network isolation)</div>
+                    <div class="sidebar-item">â€¢ Azure OpenAI (for embeddings)</div>
+                    <div class="sidebar-item">â€¢ Azure Storage (optional indexing)</div>
+                    <div class="sidebar-item">â€¢ Azure Monitor (logging)</div>
+                    <div class="sidebar-item">â€¢ Private Link (network isolation)</div>
                 </div>
 
                 <div class="sidebar">
                     <h5><i class="bi bi-shield-check"></i> Security Best Practices</h5>
-                    <div class="sidebar-item">✓ Use API keys or Azure AD authentication</div>
-                    <div class="sidebar-item">✓ Enable Private Link for network isolation</div>
-                    <div class="sidebar-item">✓ Use encryption at rest</div>
-                    <div class="sidebar-item">✓ Monitor with Azure Monitor</div>
-                    <div class="sidebar-item">✓ Implement role-based access control</div>
+                    <div class="sidebar-item">âœ" Use API keys or Azure AD authentication</div>
+                    <div class="sidebar-item">âœ" Enable Private Link for network isolation</div>
+                    <div class="sidebar-item">âœ" Use encryption at rest</div>
+                    <div class="sidebar-item">âœ" Monitor with Azure Monitor</div>
+                    <div class="sidebar-item">âœ" Implement role-based access control</div>
                 </div>
 
                 <div class="sidebar">
                     <h5><i class="bi bi-speedometer2"></i> Performance Tips</h5>
-                    <div class="sidebar-item">→ Use replicas for read scaling</div>
-                    <div class="sidebar-item">→ Use partitions for write scaling</div>
-                    <div class="sidebar-item">→ Optimize tokenization</div>
-                    <div class="sidebar-item">→ Monitor query latency</div>
-                    <div class="sidebar-item">→ Cache popular queries</div>
+                    <div class="sidebar-item">â†' Use replicas for read scaling</div>
+                    <div class="sidebar-item">â†' Use partitions for write scaling</div>
+                    <div class="sidebar-item">â†' Optimize tokenization</div>
+                    <div class="sidebar-item">â†' Monitor query latency</div>
+                    <div class="sidebar-item">â†' Cache popular queries</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer>
+    <div class="container-main" style="margin-top: 24px;">
+    <div class="card" style="border:1px solid #d6e8ff;">
+        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+            <div>
+                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
+                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
         <div class="container-main">
             <p>&copy; 2024 Azure Platform. Azure AI Search Documentation</p>
             <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
+
