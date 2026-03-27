@@ -1,25 +1,434 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Azure Kubernetes Service - Module Guide</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure Kubernetes Service | Core Azure Modules</title>
+    <meta name="description" content="Azure Kubernetes Service (AKS) - managed Kubernetes for production AI and microservices workloads with autoscaling, workload identity, and policy enforcement." />
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
+    <style>
+        :root {
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
+        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+    </style>
 </head>
-<body class="bg-dark text-light">
-  <div class="container py-5">
-    <h1 class="mb-3">Azure Kubernetes Service (AKS)</h1>
-    <p class="lead">Managed Kubernetes for production-grade container orchestration with enterprise security and scaling.</p>
-    <h3>Key Capabilities</h3>
-    <ul>
-      <li>Managed control plane with Azure SLA</li>
-      <li>System/user node pools and autoscaling</li>
-      <li>Private clusters and network policies</li>
-      <li>Workload identity and Azure RBAC integration</li>
-    </ul>
-    <h3>Spec File</h3>
-    <p><code>landing-page/specs/azure-aks.bicep</code></p>
-    <a class="btn btn-outline-info" href="../modules.html">Back to Modules</a>
-  </div>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-diagram-3-fill"></i></div>
+                    <h1 class="mb-3">Azure Kubernetes Service</h1>
+                    <p class="lead mb-4">Managed Kubernetes for AI and enterprise workloads with autoscaling, workload identity, policy guardrails, and production-grade observability.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-hdd-network"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Azure Kubernetes Service (AKS) is Microsoft’s managed Kubernetes platform that offloads control plane operations while preserving CNCF-native APIs and tooling. Teams can deploy containerized AI inference services, APIs, event workers, and internal platforms with enterprise controls built in.</p>
+                    <p class="fs-5">This spec deploys a Standard-tier AKS cluster with autoscaling node pools, private API endpoint support, OIDC issuer + workload identity, Azure Policy addon, and Log Analytics integration for monitoring and alerting.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h6>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                <tr><td class="text-muted">Service Type</td><td class="fw-semibold">Managed Kubernetes</td></tr>
+                                <tr><td class="text-muted">Control Plane</td><td class="fw-semibold">Microsoft-managed</td></tr>
+                                <tr><td class="text-muted">Node Autoscale</td><td class="fw-semibold">2 to 6 (spec default)</td></tr>
+                                <tr><td class="text-muted">Cluster Access</td><td class="fw-semibold">Private API (default)</td></tr>
+                                <tr><td class="text-muted">Identity</td><td class="fw-semibold">Workload Identity + RBAC</td></tr>
+                                <tr><td class="text-muted">SLA</td><td class="fw-semibold">99.95% with Uptime SLA</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-box-arrow-up-right me-2"></i>Deployment</h6>
+                        <p class="mb-1 small"><strong>Resource Provider:</strong><br><code>Microsoft.ContainerService</code></p>
+                        <p class="mb-1 small"><strong>Spec File:</strong><br><code>azure-aks.bicep</code></p>
+                        <a href="https://learn.microsoft.com/en-us/azure/aks/" target="_blank" rel="noopener" class="btn btn-sm btn-deploy w-100 mt-2">
+                            <i class="bi bi-microsoft me-1"></i>Microsoft Docs
+                        </a>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-diagram-2 me-2"></i>Dependencies</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Azure Container Registry</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Key Vault (CSI secrets)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Log Analytics Workspace</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Virtual Network / Subnets</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Microsoft Entra ID</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-stars me-2"></i>Key Capabilities</h2>
+            <ul class="fs-5">
+                <li class="mb-2"><strong>Managed Control Plane:</strong> Kubernetes masters are operated, patched, and scaled by Microsoft</li>
+                <li class="mb-2"><strong>Cluster Autoscaler:</strong> Node pool scales dynamically based on pending pods and utilization</li>
+                <li class="mb-2"><strong>Private Cluster Mode:</strong> API server exposed only through private endpoint within your VNet</li>
+                <li class="mb-2"><strong>Workload Identity:</strong> OIDC-backed federation for pod-to-Azure auth without secrets</li>
+                <li class="mb-2"><strong>Azure Policy Addon:</strong> Enforce pod security, image provenance, and governance at admission time</li>
+                <li class="mb-2"><strong>Observability:</strong> Container insights and logs in Log Analytics with KQL and workbooks</li>
+                <li class="mb-2"><strong>Standard Load Balancer:</strong> Production ingress/egress with zone-aware resilience</li>
+                <li class="mb-2"><strong>Rolling Upgrades:</strong> Safe node image and Kubernetes minor upgrades with surge control</li>
+            </ul>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-grid me-2"></i>Use Cases</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-cpu text-primary me-2"></i>LLM Inference APIs</h5>
+                            <p class="card-text">Host GPU/CPU-backed model serving endpoints with horizontal autoscaling and resilient rollout strategies.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-diagram-3 text-primary me-2"></i>Microservices Platforms</h5>
+                            <p class="card-text">Run service mesh-ready microservices with centralized ingress, observability, and policy enforcement.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-arrow-repeat text-primary me-2"></i>Event Workers</h5>
+                            <p class="card-text">Scale queue consumers and stream processors on demand with HPA/KEDA in managed Kubernetes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-cloud-lock text-primary me-2"></i>Private Enterprise Apps</h5>
+                            <p class="card-text">Deploy internal-only workloads with private API endpoints, private ingress, and restricted egress paths.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing Model</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-hdd-rack text-primary me-2"></i>Node Compute</h5>
+                        <p class="text-muted small mb-2">Primary cost driver</p>
+                        <p><strong>D4s v5:</strong> ~$140 / node / month</p>
+                        <p><strong>2-6 nodes:</strong> ~$280 to $840 / month</p>
+                        <p class="text-muted small">Autoscaler limits cost spikes</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold"><i class="bi bi-star-fill text-primary me-2"></i>Cluster Platform</h5>
+                            <span class="badge bg-primary">Recommended</span>
+                        </div>
+                        <p class="text-muted small mb-2">AKS Standard tier</p>
+                        <p><strong>Control plane:</strong> Included</p>
+                        <p><strong>Uptime SLA:</strong> ~$0.10 / hour</p>
+                        <p class="text-muted small">Enable for production availability guarantees</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-journal-text text-primary me-2"></i>Monitoring + Data</h5>
+                        <p class="text-muted small mb-2">Logs, metrics, and telemetry</p>
+                        <p><strong>Log Analytics:</strong> ~$2.30 / GB ingestion</p>
+                        <p><strong>Retention:</strong> 30 days (spec default)</p>
+                        <p class="text-muted small">Set data caps and table plans for cost control</p>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Pricing Disclaimer:</strong> Prices shown are approximate and vary by region, VM SKU, node count, uptime SLA, and data ingestion volume. Always verify current pricing at <a href="https://azure.microsoft.com/pricing/details/kubernetes-service/" target="_blank" rel="noopener" class="alert-link">azure.microsoft.com/pricing</a>.
+            </div>
+        </section>
+
+        <section class="mb-5" id="deployment">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Service Specification</h2>
+
+            <div class="spec-box">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-shield-check text-primary me-2"></i>Spec Header</h5>
+                    <span class="badge bg-primary fs-6">DS-AKS-001</span>
+                </div>
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr><td class="text-muted" style="width:35%">Spec ID</td><td>DS-AKS-001</td></tr>
+                        <tr><td class="text-muted">Service</td><td>Azure Kubernetes Service (AKS)</td></tr>
+                        <tr><td class="text-muted">Bicep File</td><td><code>azure-aks.bicep</code></td></tr>
+                        <tr><td class="text-muted">API Version</td><td>2024-05-01</td></tr>
+                        <tr><td class="text-muted">Environment Tag</td><td>prod / dev / staging</td></tr>
+                        <tr><td class="text-muted">Component Tag</td><td>compute-services</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-sliders text-primary me-2"></i>Parameters</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm align-middle">
+                        <thead class="table-light">
+                            <tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>location</code></td><td>string</td><td>resourceGroup().location</td><td>Azure region for AKS and Log Analytics</td></tr>
+                            <tr><td><code>environment</code></td><td>string</td><td>prod</td><td>Environment label used in naming and tags</td></tr>
+                            <tr><td><code>apiVersion</code></td><td>string</td><td>2024-05-01</td><td>Microsoft.ContainerService API version</td></tr>
+                            <tr><td><code>kubernetesVersion</code></td><td>string</td><td>1.30</td><td>AKS Kubernetes control plane and node pool version</td></tr>
+                            <tr><td><code>nodeVmSize</code></td><td>string</td><td>Standard_D4s_v5</td><td>VM SKU for system node pool</td></tr>
+                            <tr><td><code>minNodeCount</code></td><td>int</td><td>2</td><td>Minimum autoscaler node count</td></tr>
+                            <tr><td><code>maxNodeCount</code></td><td>int</td><td>6</td><td>Maximum autoscaler node count</td></tr>
+                            <tr><td><code>enablePrivateCluster</code></td><td>bool</td><td>true</td><td>Enable private API endpoint for cluster control plane</td></tr>
+                            <tr><td><code>networkPlugin</code></td><td>string</td><td>azure</td><td>CNI plugin used for pod networking</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-diagram-2 text-primary me-2"></i>Dependency Wiring</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-node-plus me-2"></i>Managed Cluster</div>
+                            <div class="card-body small">
+                                <p>Standard-tier AKS cluster with system-assigned identity, OIDC issuer enabled, workload identity enabled, and autoscaling system node pool.</p>
+                                <p class="mb-0 text-muted">Private API endpoint enabled</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-success h-100">
+                            <div class="card-header bg-success text-white fw-bold"><i class="bi bi-shield-lock me-2"></i>Security & Policy</div>
+                            <div class="card-body small">
+                                <p>RBAC + Workload Identity for secretless pod auth to Azure resources. Azure Policy addon enabled for admission control and governance policies.</p>
+                                <p class="mb-0 text-muted">enableRBAC: true</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning h-100">
+                            <div class="card-header bg-warning text-dark fw-bold"><i class="bi bi-journal-text me-2"></i>Observability</div>
+                            <div class="card-body small">
+                                <p>Log Analytics workspace captures container logs, node metrics, and control plane events through the <code>omsagent</code> addon profile.</p>
+                                <p class="mb-0 text-muted">Retention: 30 days</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-check2-circle text-primary me-2"></i>Acceptance Gates</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">AKS cluster reports <code>Succeeded</code> with private API endpoint and autoscaler enabled on system node pool</li>
+                    <li class="mb-2">OIDC issuer and workload identity validated by successful pod token federation to an Azure resource</li>
+                    <li class="mb-2">Azure Policy addon enforces baseline policy set (deny privileged pods, require trusted registries)</li>
+                    <li class="mb-2">Container Insights data and node telemetry visible in Log Analytics within 10 minutes</li>
+                    <li class="mb-2">Rolling deployment + rollback test passes with no service downtime and healthy probes throughout</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-arrow-right-circle text-primary me-2"></i>Deployment Workflow</h5>
+                <ol class="mb-0">
+                    <li class="mb-2">Provision Log Analytics Workspace for AKS diagnostics</li>
+                    <li class="mb-2">Deploy managed cluster with private API endpoint, RBAC, network profile, and autoscaling system node pool</li>
+                    <li class="mb-2">Enable OIDC issuer + workload identity and bind Kubernetes service accounts to Azure identities</li>
+                    <li class="mb-2">Attach Azure Container Registry and configure image pull permissions for cluster identity</li>
+                    <li class="mb-2">Install ingress and cert management stack (App Gateway Ingress or NGINX + cert-manager)</li>
+                    <li class="mb-2">Apply baseline policies and pod security standards</li>
+                    <li class="mb-2">Deploy workload canary, validate autoscaling and rollback behavior</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-box-arrow-up-right text-primary me-2"></i>Bicep Outputs</h5>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-light"><tr><th>Output</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>aksId</code></td><td>string</td><td>Resource ID of the AKS managed cluster</td></tr>
+                        <tr><td><code>aksName</code></td><td>string</td><td>Name of the AKS cluster</td></tr>
+                        <tr><td><code>aksFqdn</code></td><td>string</td><td>Kubernetes API server FQDN</td></tr>
+                        <tr><td><code>nodeResourceGroup</code></td><td>string</td><td>Resource group containing AKS-managed node resources</td></tr>
+                        <tr><td><code>logAnalyticsWorkspaceId</code></td><td>string</td><td>Resource ID of the Log Analytics workspace</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-rocket-takeoff me-2"></i>How to Deploy</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-list-check text-primary me-2"></i>Prerequisites</h6>
+                        <ul class="mb-0">
+                            <li>Azure CLI 2.57+ with Bicep extension and <code>kubelogin</code></li>
+                            <li>Contributor + User Access Administrator on target subscription</li>
+                            <li>Azure Container Registry with signed container images</li>
+                            <li>Virtual network design approved (subnets for nodes/ingress)</li>
+                            <li>Defender for Cloud plan enabled for AKS</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-terminal text-primary me-2"></i>Deployment Steps</h6>
+                        <ol class="mb-0">
+                            <li>Clone repo and navigate to <code>landing-page/specs/</code></li>
+                            <li>Set <code>kubernetesVersion</code>, node sizing, and private/public API mode</li>
+                            <li>Deploy Bicep template with environment parameters</li>
+                            <li>Fetch kubeconfig and run post-deploy bootstrap manifests</li>
+                            <li>Validate workload identity and policy compliance gates</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-code-slash text-primary me-2"></i>Azure CLI Example</h6>
+                        <pre class="bg-dark text-light p-3 rounded mb-0" style="font-size:0.88rem;"><code># Deploy AKS baseline
+az deployment group create \
+  --resource-group rg-aks-prod \
+  --template-file azure-aks.bicep \
+  --parameters environment=prod kubernetesVersion=1.30 minNodeCount=2 maxNodeCount=6 \
+  --query "properties.outputs" -o json
+
+# Get credentials
+az aks get-credentials --resource-group rg-aks-prod --name aks-prod --overwrite-existing</code></pre>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-patch-check text-primary me-2"></i>Post-Deployment Checklist</h6>
+                        <div class="row g-2">
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Private API endpoint reachable from approved network</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">System node pool autoscaler active</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Workload identity federation verified</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Azure Policy compliance baseline passes</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Canary deployment + rollback tested</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Container Insights dashboards populated</label></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div>
+                        <h6 class="mb-1 fw-bold">Sample Spec-Kit Reference</h6>
+                        <p class="mb-0 text-muted" style="font-size:0.95rem;">Use the approved OpenAI Spec-Kit as a formatting and quality baseline for module specifications.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5 class="fw-bold">When should I choose AKS over Container Apps?</h5>
+                <p class="mb-0">Choose AKS when you need full Kubernetes control: custom CRDs, service mesh, advanced scheduling, daemonsets, or platform-team governance at cluster level. Choose Container Apps for faster serverless-style deployment with less platform operations overhead.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">What does Workload Identity replace?</h5>
+                <p class="mb-0">Workload Identity replaces pod-managed identities and secrets-in-config patterns. Pods use OIDC federation and short-lived tokens to obtain Azure access tokens, eliminating long-lived credentials and reducing secret sprawl.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">How do I control AKS upgrade risk?</h5>
+                <p class="mb-0">Use staged ring deployments: dev then staging then production, run conformance tests after each upgrade, set max surge for node pool upgrades, and keep rollback playbooks tested. Always pin Kubernetes versions in IaC and avoid auto-upgrade in critical windows.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Can AKS be fully private?</h5>
+                <p class="mb-0">Yes. Enable private API server, use private ingress (internal load balancer or private App Gateway), private ACR endpoints, and restricted egress through Azure Firewall/NAT Gateway. Combine with UDRs and DNS private zones for full network isolation.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">What are the top cost levers for AKS?</h5>
+                <p class="mb-0">Node VM sizing, autoscaler min/max bounds, workload right-sizing requests/limits, spot pools for non-critical jobs, and log ingestion volume are the main cost drivers. Set data retention policies and disable noisy logs in non-production environments.</p>
+            </div>
+        </section>
+    </div>
+
+    <section id="learn-more" class="py-5" style="background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 100%); color: white;">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-3"><i class="bi bi-book me-2"></i>Learn More</h2>
+            <p class="lead mb-4">Explore official Microsoft documentation for AKS architecture, production baselines, workload identity, and cluster operations.</p>
+            <a href="https://learn.microsoft.com/en-us/azure/aks/" target="_blank" rel="noopener" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-microsoft me-2"></i>Microsoft Learn
+            </a>
+            <a href="https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-shield-check me-2"></i>Workload Identity Guide
+            </a>
+        </div>
+    </section>
+
+    <footer class="py-4 bg-white border-top text-center text-muted">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 Azure AI Deployments - Azure Kubernetes Service Module</p>
+        </div>
+    </footer>
+
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
