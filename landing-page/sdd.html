@@ -323,15 +323,63 @@
 
     <section class="mb-5">
       <div class="content-card p-4">
-        <h2 class="fw-bold mb-3"><i class="bi bi-patch-question me-2 text-primary"></i>Quiz Topics</h2>
-        <div class="mb-2">
-          <span class="quiz-pill">Requirement ambiguity detection</span>
-          <span class="quiz-pill">Strong vs weak acceptance criteria</span>
-          <span class="quiz-pill">Traceability mapping</span>
-          <span class="quiz-pill">Gate-based release decisions</span>
-          <span class="quiz-pill">Spec anti-pattern diagnosis</span>
+        <h2 class="fw-bold mb-3"><i class="bi bi-patch-question me-2 text-primary"></i>Knowledge Check (Real Quiz)</h2>
+        <p class="small text-muted mb-3">Try these questions before opening the answer key. They map directly to common Spec-Driven Development review decisions.</p>
+
+        <div class="mb-3">
+          <h6 class="fw-bold mb-1">1) Requirement ambiguity detection</h6>
+          <p class="small mb-1">Which requirement is least ambiguous?</p>
+          <ul class="small mb-0">
+            <li>A. System must respond quickly during peak traffic.</li>
+            <li>B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</li>
+            <li>C. Service should scale if users increase.</li>
+          </ul>
         </div>
-        <p class="small text-muted mb-0">The complete quiz and answer key are included in the downloadable course pack below.</p>
+
+        <div class="mb-3">
+          <h6 class="fw-bold mb-1">2) Strong vs weak acceptance criteria</h6>
+          <p class="small mb-1">Which acceptance criterion is stronger?</p>
+          <ul class="small mb-0">
+            <li>A. Deployment validation should pass for most cases.</li>
+            <li>B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</li>
+            <li>C. Validation behavior should be user friendly.</li>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <h6 class="fw-bold mb-1">3) Traceability mapping</h6>
+          <p class="small mb-1">What is missing if requirement FR-03 has code changes but no linked test case?</p>
+          <ul class="small mb-0">
+            <li>A. Better commit message</li>
+            <li>B. Requirement-to-test traceability</li>
+            <li>C. More architecture diagrams</li>
+          </ul>
+        </div>
+
+        <div class="mb-3">
+          <h6 class="fw-bold mb-1">4) Gate-based release decisions</h6>
+          <p class="small mb-1">A release gate fails because rollback steps are not defined. What is the best action?</p>
+          <ul class="small mb-0">
+            <li>A. Proceed and document rollback later</li>
+            <li>B. Mark risk accepted without approver</li>
+            <li>C. Block release until rollback plan is documented and reviewed</li>
+          </ul>
+        </div>
+
+        <div class="mb-0">
+          <h6 class="fw-bold mb-1">5) Spec anti-pattern diagnosis</h6>
+          <p class="small mb-1">Which line is a spec anti-pattern?</p>
+          <ul class="small mb-2">
+            <li>A. "System must feel fast and stable."</li>
+            <li>B. "Error rate must remain below 0.5% over a 24-hour window."</li>
+            <li>C. "All required fields are validated before deployment trigger."</li>
+          </ul>
+        </div>
+
+        <div class="info-strip mt-3">
+          <strong>Answer key:</strong> 1-B, 2-B, 3-B, 4-C, 5-A.
+          <span class="ms-2">The complete quiz and answer key are included in the downloadable course pack below.</span>
+        </div>
       </div>
     </section>
 
