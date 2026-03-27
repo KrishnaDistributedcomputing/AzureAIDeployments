@@ -1,247 +1,431 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Private Link - Private Connectivity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure Private Link | Core Azure Modules</title>
+    <meta name="description" content="Azure Private Link - private connectivity to Azure services over your virtual network, eliminating internet exposure for PaaS resources." />
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
     <style>
-        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
-        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
-        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
-        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
-        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
-        .nav-link:hover {color: var(--orange) !important;}
-        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
-        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
-        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
-        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
-        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
-        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
-        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
-        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
-        .card-body {color: #e0e0e0;}
-        .capability-list {list-style: none; padding: 0;}
-        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
-        .capability-list li:before {content: "âœ" "; color: var(--orange); font-weight: bold; margin-right: 10px;}
-        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
-        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
-        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
-        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
-        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
-        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
-        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
-        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
-        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
-        .sidebar-item:last-child {border-bottom: none;}
-        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
-        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
-        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+        :root {
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
+        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸ"'</span>
-            <h1>Azure Private Link</h1>
-            <p class="subtitle">Access Azure services privately over your own virtual networks</p>
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-lock-fill"></i></div>
+                    <h1 class="mb-3">Azure Private Link</h1>
+                    <p class="lead mb-4">Access Azure PaaS services privately over your virtual network — no internet exposure, full DNS integration, and data exfiltration prevention built in.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-shield-lock"></i></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="container-main">
-        <div class="row">
-            <div class="col-lg-8">
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Azure Private Link enables private connectivity to Azure services and customer-hosted services by mapping them to a private endpoint — a network interface with a private IP address inside your VNet. Traffic never traverses the public internet, making it foundational to Zero Trust and compliance-driven architectures.</p>
+                    <p class="fs-5">The spec deploys a Private Endpoint for Azure OpenAI (Cognitive Services), a matching Private DNS Zone (<code>privatelink.openai.azure.com</code>), a VNet link, and a DNS A record pointing to the endpoint's private IP — providing complete, end-to-end private resolution.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h6>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                <tr><td class="text-muted">Service Type</td><td class="fw-semibold">Network Security</td></tr>
+                                <tr><td class="text-muted">Endpoint Cost</td><td class="fw-semibold">~$0.20 / hr</td></tr>
+                                <tr><td class="text-muted">Data Processing</td><td class="fw-semibold">$0.01 / GB</td></tr>
+                                <tr><td class="text-muted">Max Endpoints</td><td class="fw-semibold">1,000 / sub</td></tr>
+                                <tr><td class="text-muted">Latency Impact</td><td class="fw-semibold">Sub-millisecond</td></tr>
+                                <tr><td class="text-muted">Internet Exposure</td><td class="fw-semibold">None</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-box-arrow-up-right me-2"></i>Deployment</h6>
+                        <p class="mb-1 small"><strong>Resource Provider:</strong><br><code>Microsoft.Network</code></p>
+                        <p class="mb-1 small"><strong>Spec File:</strong><br><code>azure-privatelink.bicep</code></p>
+                        <a href="https://learn.microsoft.com/en-us/azure/private-link/" target="_blank" rel="noopener" class="btn btn-sm btn-deploy w-100 mt-2">
+                            <i class="bi bi-microsoft me-1"></i>Microsoft Docs
+                        </a>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-diagram-2 me-2"></i>Dependencies</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Virtual Network (vnetId)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Subnet with PE policies disabled (subnetId)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Target PaaS resource (e.g. Azure OpenAI)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Private DNS Zone</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-stars me-2"></i>Key Capabilities</h2>
+            <ul class="fs-5">
+                <li class="mb-2"><strong>Private Endpoints:</strong> Dedicated NIC in your VNet mapped to the target Azure resource</li>
+                <li class="mb-2"><strong>Private DNS Integration:</strong> Automatic DNS resolution to private IP from within the VNet</li>
+                <li class="mb-2"><strong>No Internet Exposure:</strong> PaaS services accessed entirely over Microsoft backbone — no public IP required</li>
+                <li class="mb-2"><strong>Data Exfiltration Prevention:</strong> Policy controls restrict which services can be reached, closing exfiltration channels</li>
+                <li class="mb-2"><strong>Cross-Region Support:</strong> Connect across Azure regions privately via the Microsoft global network</li>
+                <li class="mb-2"><strong>On-Premises Reach:</strong> Combine with VPN Gateway or ExpressRoute to reach private endpoints from on-prem</li>
+                <li class="mb-2"><strong>Compliance Ready:</strong> Satisfies PCI-DSS, HIPAA, ISO 27001, and SOC 2 network isolation requirements</li>
+                <li class="mb-2"><strong>Custom DNS Support:</strong> Works with custom DNS forwarders for hybrid resolution scenarios</li>
+            </ul>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-grid me-2"></i>Use Cases</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
-                            <p>Azure Private Link provides private connectivity to Azure services and customer-hosted services. Access services without exposing traffic to the internet.</p>
-                            <p>Services are accessed through private endpoints that have instances within your virtual networks.</p>
+                            <h5 class="card-title"><i class="bi bi-hospital text-primary me-2"></i>Regulated Industries</h5>
+                            <p class="card-text">HIPAA, PCI-DSS, and GDPR compliant data access — PaaS services unreachable from internet, all traffic stays on-network.</p>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Private Endpoints:</strong> Dedicated network interfaces in your VNet</li>
-                        <li><strong>Private DNS Integration:</strong> Automatic DNS resolution for private IPs</li>
-                        <li><strong>No Internet Exposure:</strong> Services not exposed to public internet</li>
-                        <li><strong>Same VNet Access:</strong> Access services using private IPs</li>
-                        <li><strong>Cross-region Support:</strong> Connect across regions privately</li>
-                        <li><strong>DDoS Protection:</strong> Protected from internet-based DDoS attacks</li>
-                        <li><strong>Data Exfiltration Prevention:</strong> Control what data leaves your VNet</li>
-                        <li><strong>Compliance Ready:</strong> Enables PCI-DSS, HIPAA, and similar compliance</li>
-                    </ul>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ¥ Regulated Industries</h5>
-                        <p>HIPAA, PCI-DSS, and GDPR compliant data access without internet exposure.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ" Sensitive Data Access</h5>
-                        <p>Access databases and storage privately from applications.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸŒ Hybrid Environments</h5>
-                        <p>Connect on-premises networks to Azure services securely.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ›¡ï¸ Zero-Trust Networks</h5>
-                        <p>Implement zero-trust architecture with no internet exposure.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸš€ Multi-tier Applications</h5>
-                        <p>Secure communication between application tiers.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Model</h2>
-                    <div class="pricing-tier">
-                        <h5>Private Endpoint</h5>
-                        <p><strong>Cost:</strong> $0.20 per endpoint per hour</p>
-                        <p>Charged per endpoint regardless of usage.</p>
-                    </div>
-
-                    <div class="pricing-tier">
-                        <h5>Data Processing</h5>
-                        <p><strong>Cost:</strong> $0.01 per GB</p>
-                        <p>Charged for data processed through endpoints.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Private Link Spec</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-privatelink.bicep</code></p>
-                            <div class="code-block">
-az bicep build --file azure-privatelink.bicep
-az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-privatelink.json
+                            <h5 class="card-title"><i class="bi bi-database-lock text-primary me-2"></i>Private AI & Data Access</h5>
+                            <p class="card-text">Connect applications to Azure OpenAI, Cosmos DB, and storage privately — no public endpoint needed, no data in transit over internet.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-building-gear text-primary me-2"></i>Hybrid Environments</h5>
+                            <p class="card-text">On-premises networks reach Azure PaaS services privately via ExpressRoute or VPN, with DNS resolution handled by custom forwarders.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-shield-check text-primary me-2"></i>Zero-Trust Networks</h5>
+                            <p class="card-text">Remove implicit trust in network location — enforce explicit authenticated access to each service with no open internet paths.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing Model</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold"><i class="bi bi-plug text-primary me-2"></i>Private Endpoint</h5>
+                            <span class="badge bg-primary">Per endpoint</span>
+                        </div>
+                        <p class="text-muted small mb-2">Charged per endpoint per hour</p>
+                        <p><strong>Rate:</strong> ~$0.014 / hour</p>
+                        <p><strong>Monthly est.:</strong> ~$10 / endpoint</p>
+                        <p class="text-muted small">One endpoint per service instance needed</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-hdd-network text-primary me-2"></i>Data Processing</h5>
+                        <p class="text-muted small mb-2">Inbound + outbound through endpoint</p>
+                        <p><strong>Rate:</strong> $0.01 / GB</p>
+                        <p><strong>Example:</strong> 1 TB = $10</p>
+                        <p class="text-muted small">Applies to all data traversing the endpoint NIC</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-globe text-primary me-2"></i>Private DNS Zone</h5>
+                        <p class="text-muted small mb-2">Per zone + per VNet link + queries</p>
+                        <p><strong>Zone:</strong> $0.50 / month</p>
+                        <p><strong>VNet link:</strong> $0.50 / month each</p>
+                        <p class="text-muted small">First 1B queries free; $0.40 per 1M after</p>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Pricing Disclaimer:</strong> Prices shown are approximate and may vary by region and Azure commitment tiers. Always verify current pricing at <a href="https://azure.microsoft.com/pricing/details/private-link/" target="_blank" rel="noopener" class="alert-link">azure.microsoft.com/pricing</a>.
+            </div>
+        </section>
+
+        <section class="mb-5" id="deployment">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Service Specification</h2>
+
+            <div class="spec-box">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-shield-check text-primary me-2"></i>Spec Header</h5>
+                    <span class="badge bg-primary fs-6">DS-PLINK-001</span>
+                </div>
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr><td class="text-muted" style="width:35%">Spec ID</td><td>DS-PLINK-001</td></tr>
+                        <tr><td class="text-muted">Service</td><td>Azure Private Link</td></tr>
+                        <tr><td class="text-muted">Bicep File</td><td><code>azure-privatelink.bicep</code></td></tr>
+                        <tr><td class="text-muted">API Version</td><td>2023-11-01</td></tr>
+                        <tr><td class="text-muted">Environment Tag</td><td>prod / dev / staging</td></tr>
+                        <tr><td class="text-muted">Component Tag</td><td>networking</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-sliders text-primary me-2"></i>Parameters</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm align-middle">
+                        <thead class="table-light">
+                            <tr><th>Parameter</th><th>Type</th><th>Default / Required</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>location</code></td><td>string</td><td>resourceGroup().location</td><td>Azure region; DNS zone resources deploy to 'global'</td></tr>
+                            <tr><td><code>environment</code></td><td>string</td><td>prod</td><td>Environment label used in resource names (pep-openai-{env})</td></tr>
+                            <tr><td><code>apiVersion</code></td><td>string</td><td>2023-11-01</td><td>Microsoft.Network API version</td></tr>
+                            <tr><td><code>vnetId</code></td><td>string</td><td><strong>Required</strong></td><td>Resource ID of the VNet to link the Private DNS Zone to</td></tr>
+                            <tr><td><code>subnetId</code></td><td>string</td><td><strong>Required</strong></td><td>Resource ID of the subnet to deploy the private endpoint NIC into</td></tr>
+                            <tr><td><code>tags</code></td><td>object</td><td>{environment, createdDate, component}</td><td>Resource tags applied to all resources</td></tr>
+                            <tr><td><code>privateLinkServiceId</code></td><td>string</td><td>Cognitive Services account ID</td><td>Full resource ID of the target PaaS service to connect privately</td></tr>
+                            <tr><td><code>groupIds</code></td><td>array</td><td>['account']</td><td>Sub-resource group ID for the target service (e.g. 'account', 'blob', 'vault')</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-diagram-2 text-primary me-2"></i>Dependency Wiring</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-hdd-network me-2"></i>Private Endpoint</div>
+                            <div class="card-body small">
+                                <p>NIC deployed into <code>subnetId</code> with a private IP. Connects to the target PaaS via <code>privateLinkServiceConnections</code>. Custom NIC name: <code>nic-pep-openai</code>.</p>
+                                <p class="mb-0 text-muted">Name: pep-openai-{environment}</p>
                             </div>
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Private endpoint ID</li>
-                                <li>Private IP address</li>
-                                <li>DNS zone ID</li>
-                            </ul>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>How does DNS work with Private Link?</h5>
-                        <p>Services resolve to private IPs when accessed from within the VNet. Public DNS resolves to public IPs outside.</p>
+                    <div class="col-md-4">
+                        <div class="card border-success h-100">
+                            <div class="card-header bg-success text-white fw-bold"><i class="bi bi-globe me-2"></i>Private DNS Zone</div>
+                            <div class="card-body small">
+                                <p>Zone <code>privatelink.openai.azure.com</code> deployed globally. Linked to <code>vnetId</code> with registration disabled. Enables private DNS resolution within the VNet.</p>
+                                <p class="mb-0 text-muted">registrationEnabled: false</p>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="faq-item">
-                        <h5>Can I access from on-premises?</h5>
-                        <p>Yes. Connect your on-premises network to Azure via VPN or ExpressRoute, then access via Private Link.</p>
+                    <div class="col-md-4">
+                        <div class="card border-warning h-100">
+                            <div class="card-header bg-warning text-dark fw-bold"><i class="bi bi-signpost me-2"></i>DNS A Record</div>
+                            <div class="card-body small">
+                                <p>A record with TTL 3600 pointing to the private endpoint NIC's <code>privateIPAddress</code>. Ensures VNet-internal name resolution routes to the private NIC automatically.</p>
+                                <p class="mb-0 text-muted">TTL: 3600 seconds</p>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="faq-item">
-                        <h5>Is there a limit on private endpoints?</h5>
-                        <p>Yes. Default limit is 1000 per subscription, but can be increased via request.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What services support Private Link?</h5>
-                        <p>Most Azure services do: Storage, Databases, OpenAI, Cognitive Services, etc.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Network Security</div>
-                    <div class="sidebar-item"><strong>Cost:</strong> $0.20/endpoint/hour</div>
-                    <div class="sidebar-item"><strong>Max Endpoints:</strong> 1000/sub (configurable)</div>
-                    <div class="sidebar-item"><strong>Latency:</strong> Sub-millisecond</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Components</h5>
-                    <div class="sidebar-item">â€¢ Private endpoint</div>
-                    <div class="sidebar-item">â€¢ Private DNS zone</div>
-                    <div class="sidebar-item">â€¢ Subnet in VNet</div>
-                    <div class="sidebar-item">â€¢ Network interface</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Security Benefits</h5>
-                    <div class="sidebar-item">âœ" No Internet exposure</div>
-                    <div class="sidebar-item">âœ" No DDoS risk</div>
-                    <div class="sidebar-item">âœ" Data exfiltration control</div>
-                    <div class="sidebar-item">âœ" Network isolation</div>
-                    <div class="sidebar-item">âœ" Audit-friendly</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Best Practices</h5>
-                    <div class="sidebar-item">â†' Use with firewalls</div>
-                    <div class="sidebar-item">â†' Monitor with Network Watcher</div>
-                    <div class="sidebar-item">â†' Implement NSG rules</div>
-                    <div class="sidebar-item">â†' Use Private DNS zones</div>
-                    <div class="sidebar-item">â†' Enable flow logs</div>
                 </div>
             </div>
-        </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-check2-circle text-primary me-2"></i>Acceptance Gates</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Private Endpoint NIC provisioned in target subnet with a private IP from the subnet address range</li>
+                    <li class="mb-2">Private DNS Zone <code>privatelink.openai.azure.com</code> linked to the VNet with <code>registrationEnabled: false</code></li>
+                    <li class="mb-2">DNS A record resolves to private endpoint IP from within the VNet (verify with <code>nslookup</code> from a VNet VM)</li>
+                    <li class="mb-2">Public DNS for the service still resolves to its public IP from outside the VNet (split-horizon confirmed)</li>
+                    <li class="mb-2">Target PaaS service reachable at private IP; public endpoint disabled or firewall-restricted</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-arrow-right-circle text-primary me-2"></i>Deployment Workflow</h5>
+                <ol class="mb-0">
+                    <li class="mb-2">Identify target PaaS resource ID and its <code>groupId</code> (e.g. <code>account</code> for Cognitive Services, <code>blob</code> for Storage)</li>
+                    <li class="mb-2">Ensure the subnet has <code>privateLinkServiceNetworkPolicies: Disabled</code> and sufficient address space</li>
+                    <li class="mb-2">Deploy <code>Microsoft.Network/privateEndpoints</code> into the subnet, referencing the target service</li>
+                    <li class="mb-2">Deploy <code>Microsoft.Network/privateDnsZones</code> (global location) with the correct zone name for the service</li>
+                    <li class="mb-2">Create a Virtual Network Link to attach the DNS zone to the VNet</li>
+                    <li class="mb-2">Create DNS A record pointing to the private endpoint's NIC private IP</li>
+                    <li class="mb-2">Disable or restrict the public endpoint on the target PaaS service via its own firewall/network rules</li>
+                    <li class="mb-2">Verify outputs: <code>privateEndpointId</code> and <code>privateDnsZoneId</code> recorded; DNS resolution tested</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-box-arrow-up-right text-primary me-2"></i>Bicep Outputs</h5>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-light"><tr><th>Output</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>privateEndpointId</code></td><td>string</td><td>Resource ID of the deployed private endpoint</td></tr>
+                        <tr><td><code>privateDnsZoneId</code></td><td>string</td><td>Resource ID of the Private DNS Zone</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-rocket-takeoff me-2"></i>How to Deploy</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-list-check text-primary me-2"></i>Prerequisites</h6>
+                        <ul class="mb-0">
+                            <li>Azure CLI 2.57+ with Bicep extension</li>
+                            <li>Existing VNet and subnet (PE policies disabled)</li>
+                            <li>Target PaaS resource deployed and resource ID known</li>
+                            <li>Network Contributor + Private DNS Zone Contributor roles</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-terminal text-primary me-2"></i>Deployment Steps</h6>
+                        <ol class="mb-0">
+                            <li>Collect <code>vnetId</code>, <code>subnetId</code>, and target PaaS resource ID</li>
+                            <li>Update <code>privateLinkServiceId</code> and <code>groupIds</code> in the Bicep file</li>
+                            <li>Run <code>az deployment group create</code> (see below)</li>
+                            <li>Disable the public endpoint on the target service</li>
+                            <li>Run DNS validation from a VM inside the VNet</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-code-slash text-primary me-2"></i>Azure CLI Example</h6>
+                        <pre class="bg-dark text-light p-3 rounded mb-0" style="font-size:0.88rem;"><code># Deploy Private Link resources
+az deployment group create \
+  --resource-group rg-networking-prod \
+  --template-file azure-privatelink.bicep \
+  --parameters environment=prod \
+               vnetId=/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Network/virtualNetworks/{vnet} \
+               subnetId=/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Network/virtualNetworks/{vnet}/subnets/{subnet} \
+  --query "properties.outputs" -o json
+
+# Verify DNS resolution from within the VNet
+nslookup your-resource.openai.azure.com</code></pre>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-patch-check text-primary me-2"></i>Post-Deployment Checklist</h6>
+                        <div class="row g-2">
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Private Endpoint NIC has private IP assigned</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">DNS A record resolves to private IP from VNet</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Public endpoint disabled / firewall-restricted</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Split-horizon DNS confirmed (inside vs outside)</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Private DNS Zone linked to correct VNet</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Target service reachable at private IP</label></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div>
+                        <h6 class="mb-1 fw-bold">Sample Spec-Kit Reference</h6>
+                        <p class="mb-0 text-muted" style="font-size:0.95rem;">Use the approved OpenAI Spec-Kit as a formatting and quality baseline for module specifications.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5 class="fw-bold">How does DNS resolution work with Private Link?</h5>
+                <p class="mb-0">Within the VNet, the Private DNS Zone overrides public DNS — the service FQDN resolves to the private endpoint's IP. Outside the VNet, public DNS still resolves to the public IP. This split-horizon pattern ensures correct routing without changing application configuration.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Can I access Private Link endpoints from on-premises?</h5>
+                <p class="mb-0">Yes. Connect your on-premises network to the VNet via VPN Gateway or ExpressRoute, then configure a DNS forwarder (e.g. Azure DNS Private Resolver) to forward queries for <code>privatelink.*</code> zones to the Azure Private DNS Zone. Applications on-prem then resolve to the private IP.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">What is the groupId and how do I find it for my service?</h5>
+                <p class="mb-0">The <code>groupId</code> identifies the sub-resource of the target service. Common values: <code>account</code> (Cognitive Services / OpenAI), <code>blob</code> / <code>file</code> / <code>queue</code> (Storage), <code>vault</code> (Key Vault), <code>sql</code> (SQL MI). Use <code>az network private-link-resource list</code> to enumerate supported groupIds for any resource.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Is there a limit on private endpoints per subscription?</h5>
+                <p class="mb-0">The default quota is 1,000 private endpoints per subscription. This can be increased by submitting a support request to Microsoft. Plan for one endpoint per service instance per network boundary.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Should I disable the public endpoint after deploying Private Link?</h5>
+                <p class="mb-0">Yes, for a security-compliant deployment. After verifying the private endpoint works, disable or restrict the service's public endpoint via its own network/firewall rules. Leaving both active creates a redundant public exposure path that undermines the Privacy Link security boundary.</p>
+            </div>
+        </section>
     </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
+    <section id="learn-more" class="py-5" style="background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 100%); color: white;">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-3"><i class="bi bi-book me-2"></i>Learn More</h2>
+            <p class="lead mb-4">Explore official Microsoft documentation for Azure Private Link architecture, DNS integration, and hybrid connectivity patterns.</p>
+            <a href="https://learn.microsoft.com/en-us/azure/private-link/" target="_blank" rel="noopener" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-microsoft me-2"></i>Microsoft Learn
+            </a>
+            <a href="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-globe me-2"></i>Private Endpoint DNS Guide
+            </a>
         </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Private Link Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/private-link/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+    </section>
+
+    <footer class="py-4 bg-white border-top text-center text-muted">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 Azure AI Deployments &mdash; Azure Private Link Module</p>
         </div>
     </footer>
 
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
-
