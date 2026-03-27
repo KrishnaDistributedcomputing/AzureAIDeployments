@@ -1,253 +1,385 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Entra ID - Identity & Access</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Microsoft Entra ID | Core Azure Modules</title>
+    <meta name="description" content="Microsoft Entra ID - tenant identity, authentication, access control, workload identities, and governance baseline for Azure platform services." />
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
     <style>
-        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
-        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
-        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
-        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
-        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
-        .nav-link:hover {color: var(--orange) !important;}
-        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
-        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
-        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
-        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
-        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
-        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
-        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
-        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
-        .card-body {color: #e0e0e0;}
-        .capability-list {list-style: none; padding: 0;}
-        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
-        .capability-list li:before {content: "âœ" "; color: var(--orange); font-weight: bold; margin-right: 10px;}
-        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
-        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
-        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
-        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
-        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
-        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
-        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
-        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
-        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
-        .sidebar-item:last-child {border-bottom: none;}
-        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
-        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
-        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+        :root {
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
+        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸ'¤</span>
-            <h1>Azure Entra ID</h1>
-            <p class="subtitle">Enterprise-grade identity and access management platform</p>
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-person-badge-fill"></i></div>
+                    <h1 class="mb-3">Microsoft Entra ID</h1>
+                    <p class="lead mb-4">Unified identity, authentication, authorization, workload identity, and governance baseline for Azure platform services and enterprise access control.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-shield-lock-fill"></i></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="container-main">
-        <div class="row">
-            <div class="col-lg-8">
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure Entra ID (formerly Azure AD) is Microsoft's cloud-based identity and access management service. It enables organizations to manage user identities and access to both cloud and on-premises applications.</p>
-                            <p>Entra ID provides single sign-on, multi-factor authentication, and comprehensive identity security.</p>
-                        </div>
-                    </div>
-                </section>
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Microsoft Entra ID provides the identity plane for Azure platforms and enterprise applications. It centralizes sign-in, authorization, conditional access, service principals, managed identities, and access governance so teams can apply zero-trust controls consistently across users, workloads, and external collaboration.</p>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Single Sign-On (SSO):</strong> One credential for all applications</li>
-                        <li><strong>Multi-Factor Authentication:</strong> Passwordless sign-in and MFA</li>
-                        <li><strong>Managed Identities:</strong> Service principals without managing credentials</li>
-                        <li><strong>Conditional Access:</strong> Risk-based access control policies</li>
-                        <li><strong>Identity Protection:</strong> Detect and respond to identity risks</li>
-                        <li><strong>Role-Based Access Control:</strong> Fine-grained permissions management</li>
-                        <li><strong>Hybrid Identity:</strong> Sync on-premises AD with cloud</li>
-                        <li><strong>B2B & B2C:</strong> External user collaboration and consumer identity</li>
+                    <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+                    <ul class="fs-5">
+                        <li><strong>Single Sign-On:</strong> Centralized authentication across Microsoft and third-party applications</li>
+                        <li><strong>Conditional Access:</strong> Policy-based enforcement using user, device, location, and risk signals</li>
+                        <li><strong>Managed and Federated Identities:</strong> Secretless workload authentication for Azure services, AKS, and CI/CD</li>
+                        <li><strong>Role and Group Governance:</strong> Group-based access assignment and tenant-wide privilege segmentation</li>
+                        <li><strong>Identity Protection:</strong> Risk detection for suspicious sign-ins, compromised credentials, and anomalous behavior</li>
+                        <li><strong>External Identity Controls:</strong> B2B collaboration, guest access lifecycle, and review workflows</li>
                     </ul>
-                </section>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ" Secure Access</h5>
-                        <p>Implement zero-trust access with conditional policies and MFA.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸŒ Hybrid Cloud</h5>
-                        <p>Sync identity between on-premises Active Directory and cloud.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ¤ External Collaboration</h5>
-                        <p>Manage access for partners, vendors, and customers securely.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ"± Passwordless Authentication</h5>
-                        <p>Use Windows Hello, FIDO2 security keys, or Authenticator app.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ›¡ï¸ Identity Risk Management</h5>
-                        <p>Detect anomalous sign-ins and remediate threats automatically.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Model</h2>
-                    <div class="pricing-tier">
-                        <h5>Free Tier</h5>
-                        <p><strong>Cost:</strong> Free</p>
-                        <p>Basic user and group management, limited features.</p>
-                    </div>
-
-                    <div class="pricing-tier">
-                        <h5>Premium P1</h5>
-                        <p><strong>Cost:</strong> ~$6 per user/month</p>
-                        <p>Conditional Access, MFA, self-service password reset.</p>
-                    </div>
-
-                    <div class="pricing-tier">
-                        <h5>Premium P2</h5>
-                        <p><strong>Cost:</strong> ~$9 per user/month</p>
-                        <p>Identity Protection, Privileged Identity Management (PIM).</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Entra ID Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-entraid.bicep</code></p>
-                            <div class="code-block">
-az bicep build --file azure-entraid.bicep
-az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-entraid.json
+                    <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Privileged Access Baseline</h5>
+                                    <p class="card-text">Enforce MFA, compliant device access, and least-privilege controls for administrators and operators.</p>
+                                </div>
                             </div>
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>App registration ID</li>
-                                <li>Service principal ID</li>
-                                <li>Tenant ID</li>
-                            </ul>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Platform Workload Identity</h5>
+                                    <p class="card-text">Use service principals, managed identities, and OIDC federation for applications and automation.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Enterprise App Onboarding</h5>
+                                    <p class="card-text">Standardize app registration, owner assignment, permissions review, and role mapping.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">B2B Collaboration Governance</h5>
+                                    <p class="card-text">Manage guest users, access packages, and periodic reviews for external identities.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What's the difference between Entra ID and Active Directory?</h5>
-                        <p>AD is on-premises directory service, Entra ID is cloud-based identity platform with additional security features.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Can I use passwordless authentication?</h5>
-                        <p>Yes. Multiple options: Windows Hello, FIDO2 keys, Microsoft Authenticator app.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>How do I manage B2B access?</h5>
-                        <p>Use Entra ID B2B collaboration to invite external users and grant selective access.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What's Conditional Access?</h5>
-                        <p>Policy engine that evaluates conditions (location, device, risk) and enforces access decisions.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Identity</div>
-                    <div class="sidebar-item"><strong>Users Supported:</strong> Unlimited</div>
-                    <div class="sidebar-item"><strong>SLA:</strong> 99.99%</div>
-                    <div class="sidebar-item"><strong>Authentication Methods:</strong> 10+</div>
                 </div>
 
-                <div class="sidebar">
-                    <h5> Core Components</h5>
-                    <div class="sidebar-item">â€¢ Users & Groups</div>
-                    <div class="sidebar-item">â€¢ Applications & Assignments</div>
-                    <div class="sidebar-item">â€¢ Conditional Access</div>
-                    <div class="sidebar-item">â€¢ Multi-Factor Authentication</div>
-                </div>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Service Type:</strong> Tenant identity and access control</li>
+                            <li><strong>Scope:</strong> Organization-wide identity plane</li>
+                            <li><strong>Primary Controls:</strong> MFA, CA, RBAC, workload identity</li>
+                            <li><strong>Security Model:</strong> Zero-trust and least privilege</li>
+                            <li><strong>Integration:</strong> Azure, Microsoft 365, external apps</li>
+                        </ul>
+                    </div>
 
-                <div class="sidebar">
-                    <h5> Security Features</h5>
-                    <div class="sidebar-item">âœ" Multi-factor authentication</div>
-                    <div class="sidebar-item">âœ" Conditional access policies</div>
-                    <div class="sidebar-item">âœ" Identity protection</div>
-                    <div class="sidebar-item">âœ" Privileged identity management</div>
-                    <div class="sidebar-item">âœ" Passwordless options</div>
-                </div>
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-rocket-takeoff me-2"></i>Deployment</h5>
+                        <p><small><strong>Resource Provider:</strong> Microsoft.Graph</small></p>
+                        <p><small><strong>Core Resources:</strong> App registration + service principal + security groups</small></p>
+                        <p><small><strong>Spec File:</strong> specs/azure-entraid.bicep</small></p>
+                        <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
+                    </div>
 
-                <div class="sidebar">
-                    <h5> Best Practices</h5>
-                    <div class="sidebar-item">â†' Enable MFA for all users</div>
-                    <div class="sidebar-item">â†' Use Conditional Access</div>
-                    <div class="sidebar-item">â†' Monitor sign-in logs</div>
-                    <div class="sidebar-item">â†' Implement PIM</div>
-                    <div class="sidebar-item">â†' Regular access reviews</div>
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-link-45deg me-2"></i>Dependencies</h5>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Azure RBAC and management group hierarchy</li>
+                            <li>+ Managed identities for downstream services</li>
+                            <li>+ Conditional Access and sign-in monitoring posture</li>
+                            <li>+ Access review and external identity governance</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5>Entra ID Free</h5>
+                        <p class="text-muted">Core directory and SSO</p>
+                        <p><strong>Approx:</strong> $0 per user/month</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Basic identity and authentication</li>
+                            <li>+ Suitable for low-governance scenarios</li>
+                            <li>+ Limited policy automation</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
+                        <h5>Entra ID P1</h5>
+                        <p class="text-muted">Operational identity baseline</p>
+                        <p><strong>Approx:</strong> About $6 per user/month</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Conditional Access support</li>
+                            <li>+ Dynamic groups and self-service features</li>
+                            <li>+ Strong fit for enterprise platform teams</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5>Entra ID P2</h5>
+                        <p class="text-muted">Advanced identity security</p>
+                        <p><strong>Approx:</strong> About $9 per user/month</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Identity Protection capabilities</li>
+                            <li>+ Privileged Identity Management</li>
+                            <li>+ Higher governance maturity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+                <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can vary by licensing agreement, bundle entitlements, tenant requirements, and Microsoft pricing updates. Confirm current licensing with Microsoft before approval.
+            </div>
+        </section>
+
+        <section id="deployment" class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+            <p class="text-muted">Specification-first deployment guide for Microsoft Entra ID. Resolve all placeholders and validate identity governance controls before production rollout.</p>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Spec Header - DS-ENTRAID-001</h5>
+                <table class="table table-sm small mb-0">
+                    <tbody>
+                        <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-ENTRAID-001</td></tr>
+                        <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                        <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+                        <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                        <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+                        <tr><td class="fw-medium">Applies to</td><td>Microsoft Entra ID</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Required Parameters</h5>
+                <table class="table table-sm small mb-0">
+                    <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment ring such as <code>dev</code>, <code>staging</code>, or <code>prod</code></td></tr>
+                        <tr><td><code>appDisplayName</code></td><td>string</td><td>Yes</td><td>Application registration display name for platform workloads</td></tr>
+                        <tr><td><code>groupPrefix</code></td><td>string</td><td>Yes</td><td>Prefix used to create standard operator and auditor security groups</td></tr>
+                        <tr><td><code>graphApiVersion</code></td><td>string</td><td>Yes</td><td>Microsoft Graph resource API version used by the Bicep deployment</td></tr>
+                        <tr><td><code>requireMfaForAdmins</code></td><td>bool</td><td>Yes</td><td>Policy flag that indicates privileged roles require MFA protection</td></tr>
+                        <tr><td><code>tags</code></td><td>object</td><td>Yes</td><td>Governance metadata for environment, ownership, and lifecycle tracking</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Dependency Wiring</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">App Registration</h6>
+                                <p class="small mb-1">Defines workload identity, audience, permissions, and enterprise application pairing.</p>
+                                <span class="badge" style="background:var(--azure-blue)">Required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Service Principal + Groups</h6>
+                                <p class="small mb-1">Maps the application into tenant access and role assignment workflows.</p>
+                                <span class="badge" style="background:var(--azure-blue)">Required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Conditional Access + Governance</h6>
+                                <p class="small mb-1">Operational policies, reviews, and monitoring needed for privileged control.</p>
+                                <span class="badge bg-secondary">Conditional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Acceptance Gates</h5>
+                <ul class="small mb-0">
+                    <li class="mb-2"><strong>Gate 1:</strong> App registration, service principal, and security groups are created with approved naming and ownership.</li>
+                    <li class="mb-2"><strong>Gate 2:</strong> Privileged access paths enforce MFA and tenant access policies according to baseline controls.</li>
+                    <li class="mb-2"><strong>Gate 3:</strong> Graph permissions and Azure RBAC assignments are validated for least privilege.</li>
+                    <li class="mb-2"><strong>Gate 4:</strong> Workload identity flows are tested without long-lived secrets where federation or managed identity is expected.</li>
+                    <li><strong>Gate 5:</strong> Sign-in monitoring, access review, and audit evidence are operationally validated.</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Spec Workflow</h5>
+                <ol class="small mb-0">
+                    <li class="mb-2"><strong>Author:</strong> Define identity boundary, application purpose, permissions, and governance requirements.</li>
+                    <li class="mb-2"><strong>Review:</strong> Obtain platform, security, and IAM approval for tenant-scoped changes.</li>
+                    <li class="mb-2"><strong>Validate:</strong> Confirm group naming, permission sets, and MFA posture before rollout.</li>
+                    <li class="mb-2"><strong>Deploy:</strong> Execute approved IaC at tenant scope with controlled operator access.</li>
+                    <li><strong>Evidence:</strong> Capture sign-in, policy, and assignment validation artifacts for auditability.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+            <p class="text-muted">Use this sequence to deploy the Microsoft Entra ID baseline from specification and verify governance and access controls.</p>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">1. Prerequisites</h5>
+                <ul class="small mb-0">
+                    <li>Azure CLI authenticated with tenant-level rights and Bicep support available</li>
+                    <li>Approved application naming, group prefix, and tenant identity governance model</li>
+                    <li>Graph permission requirements reviewed by platform and security stakeholders</li>
+                    <li>Conditional Access, access review, and logging expectations documented for the target environment</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">2. Deployment Steps</h5>
+                <ol class="small mb-0">
+                    <li class="mb-2">Review tenant-scope impact and confirm the deployment operator is approved.</li>
+                    <li class="mb-2">Compile and review the Entra ID Bicep template.</li>
+                    <li class="mb-2">Deploy with approved environment, app name, and group prefix inputs.</li>
+                    <li class="mb-2">Verify app registration, enterprise app, and group creation.</li>
+                    <li>Validate downstream RBAC, MFA posture, and workload identity behavior.</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">3. Azure CLI Example</h5>
+                <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az bicep build \
+  --file specs/azure-entraid.bicep
+
+az deployment tenant create \
+  --name entraid-baseline-&lt;environment&gt; \
+  --location eastus \
+  --template-file specs/azure-entraid.bicep \
+  --parameters environment=&lt;environment&gt; appDisplayName=&lt;app-name&gt; groupPrefix=&lt;group-prefix&gt;</code></pre>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">4. Validation Checklist</h5>
+                <ul class="small mb-0">
+                    <li>Outputs <code>appId</code>, <code>servicePrincipalObjectId</code>, <code>operatorsGroupId</code>, and <code>auditorsGroupId</code> are returned</li>
+                    <li>App registration and enterprise application are visible with approved audience and owners</li>
+                    <li>Group-based role mapping and least-privilege assignments are confirmed</li>
+                    <li>Privileged MFA and workload identity patterns are validated</li>
+                    <li>Audit and sign-in monitoring evidence is available to operations teams</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+            <p class="text-muted mb-4">Use the approved sample spec-kit as a formatting and governance baseline when authoring Entra ID specifications.</p>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+                    <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+                </a>
+                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+                </a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+                    <i class="bi bi-github me-2"></i>Open on GitHub
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5>When should I use managed identity versus an app registration?</h5>
+                <p class="mb-0">Use managed identities for Azure-hosted workloads when possible. Use app registrations when you need cross-platform identity, explicit application audiences, or tenant-level integration patterns.</p>
+            </div>
+            <div class="faq-item">
+                <h5>How should Conditional Access be rolled out?</h5>
+                <p class="mb-0">Start with report-only mode, review sign-in impact, then phase enforcement by role and application criticality to avoid operational lockout.</p>
+            </div>
+            <div class="faq-item">
+                <h5>How do I secure CI/CD access to Azure?</h5>
+                <p class="mb-0">Prefer workload identity federation with branch or subject restrictions instead of storing long-lived client secrets in pipelines.</p>
+            </div>
+        </section>
     </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
+    <section id="learn-more" class="py-4 bg-white border-top">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-3">Learn More</h3>
+            <a href="https://learn.microsoft.com/entra/fundamentals/" target="_blank" rel="noopener" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-microsoft me-2"></i>Official Microsoft Entra Documentation
+            </a>
         </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Entra ID Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/entra/fundamentals/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+    </section>
+
+    <footer class="py-4 text-center text-muted bg-light border-top">
+        <div class="container">
+            <small>&copy; 2026 Azure AI Deployment Essentials. Module documentation for architecture and deployment planning.</small>
         </div>
     </footer>
 
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
-
