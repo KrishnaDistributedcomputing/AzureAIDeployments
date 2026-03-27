@@ -3,139 +3,290 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Spec-Driven Development - Azure AI Deployment Patterns</title>
-  <meta name="description" content="Spec-Driven Development guidance for Azure AI landing zones, module specifications, and deployment-ready architecture contracts." />
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjHS1QVoT2H8K1OKNqNdfHU6rEQf12wnhx0VTpEpfJ35vAVgdW2hIGd" crossorigin="anonymous" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" integrity="sha384-dFA4uY42aIvygz1mUGzoKF25ZD/vaXfJ/Z2JnW+MD8LKnMeJkelNj8jlPREo2by1" crossorigin="anonymous" />
+  <title>Spec-Driven Development | 1-Hour Mixed Course</title>
+  <meta name="description" content="1-hour Udemy-style mixed course on Spec-Driven Development with hands-on labs, quiz, and reusable templates." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
-    :root { --accent: #e67e22; --accent-soft: rgba(230,126,34,.1); }
-    [data-bs-theme="dark"] { --accent: #ffb347; --accent-soft: rgba(255,179,71,.12); }
-    .hero { position: relative; overflow: hidden; background: linear-gradient(135deg, #8a4b08 0%, #c96f12 45%, #f3a53d 100%); color: #fff; }
-    [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #2b1802 0%, #6a3908 45%, #9d5c13 100%); }
-    .hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 35%); pointer-events: none; }
-    .hero .container { position: relative; z-index: 1; }
-    .feature-card { border: 1px solid rgba(0,0,0,.08); border-radius: 18px; padding: 1.25rem; height: 100%; background: var(--bs-body-bg); box-shadow: 0 12px 28px rgba(0,0,0,.06); }
-    .feature-icon { width: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; background: var(--accent-soft); color: var(--accent); font-size: 1.35rem; }
-    .cta-strip { border: 1px solid rgba(230,126,34,.18); background: linear-gradient(135deg, var(--accent-soft), rgba(13,110,253,.06)); border-radius: 20px; }
-    .rule-box { border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 10px; padding: 1rem 1.1rem; }
+    :root {
+      --sdd-orange: #e67e22;
+      --sdd-amber: #f39c12;
+      --sdd-ink: #2b2f38;
+      --sdd-sky: #f5fbff;
+    }
+    body {
+      background: linear-gradient(180deg, #f7fbff 0%, #ffffff 38%, #fbfcff 100%);
+      color: var(--sdd-ink);
+    }
+    .hero {
+      background: linear-gradient(135deg, #0b5ed7 0%, #1794d2 55%, #38c9f2 100%);
+      color: #fff;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+    }
+    .badge-sdd {
+      background: linear-gradient(135deg, var(--sdd-orange), var(--sdd-amber));
+      color: #fff;
+    }
+    .glass-card {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      border-radius: 16px;
+    }
+    .content-card {
+      border: 1px solid #e4edf6;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(16, 48, 88, 0.08);
+    }
+    .course-step {
+      border-left: 4px solid var(--sdd-orange);
+      background: var(--sdd-sky);
+      border-radius: 10px;
+      padding: 1rem;
+      height: 100%;
+    }
+    .download-card {
+      border: 1px solid #dfe7ef;
+      border-radius: 12px;
+      height: 100%;
+    }
+    .quiz-pill {
+      background: #fff6ea;
+      border: 1px solid #f7dcb9;
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.85rem;
+      display: inline-block;
+      margin: 0.2rem;
+    }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+  <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
     <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">
-        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI <span class="badge bg-warning text-dark ms-1" style="font-size:.6rem;vertical-align:middle">BETA</span>
+      <a class="navbar-brand fw-bold" href="/">
+        <i class="bi bi-diagram-3-fill text-primary me-2"></i>Azure AI Deployment Patterns
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain" aria-controls="navMain" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link fw-semibold" href="index.html">AI Patterns</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="landing-zone.html">Landing Zone</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold" href="modules.html">Modules</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold active" href="sdd.html">Spec-Driven Development</a></li>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">Modules</a></li>
+          <li class="nav-item"><a class="nav-link" href="/help">Help</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <section class="hero py-5">
-    <div class="container py-4">
-      <div class="row align-items-center g-4">
-        <div class="col-lg-7">
-          <span class="badge rounded-pill bg-light text-dark mb-3"><i class="bi bi-journal-code me-2"></i>Architecture Contracts for Delivery</span>
+  <header class="hero py-5">
+    <div class="container py-3">
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-8">
+          <span class="badge badge-sdd px-3 py-2 mb-3"><i class="bi bi-play-circle me-2"></i>1-Hour Mixed Course</span>
           <h1 class="display-5 fw-bold mb-3">Spec-Driven Development</h1>
-          <p class="lead mb-4">Use explicit module specs, deployment contracts, and rulesets to move from architecture intent to repeatable Azure implementation without losing governance or platform standards.</p>
-          <div class="d-flex flex-wrap gap-3">
-            <a href="module-spec-guide.html" class="btn btn-light btn-lg"><i class="bi bi-file-earmark-code me-2"></i>Open Spec Guide</a>
-            <a href="modules.html" class="btn btn-outline-light btn-lg"><i class="bi bi-puzzle me-2"></i>Browse Modules</a>
+          <p class="lead mb-4">Design better, build faster, and ship safer by turning architecture and delivery expectations into executable specifications.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="#curriculum" class="btn btn-light btn-lg"><i class="bi bi-journal-richtext me-2"></i>View Curriculum</a>
+            <a href="#downloads" class="btn btn-outline-light btn-lg"><i class="bi bi-download me-2"></i>Download Course Pack</a>
           </div>
         </div>
-        <div class="col-lg-5">
-          <div class="cta-strip p-4 text-dark bg-white bg-opacity-75">
-            <div class="row g-3 text-center">
-              <div class="col-4">
-                <div class="fw-bold fs-3">27</div>
-                <div class="small text-muted">Core modules</div>
-              </div>
-              <div class="col-4">
-                <div class="fw-bold fs-3">10</div>
-                <div class="small text-muted">Reference patterns</div>
-              </div>
-              <div class="col-4">
-                <div class="fw-bold fs-3">1</div>
-                <div class="small text-muted">Ruleset baseline</div>
-              </div>
-            </div>
+        <div class="col-lg-4">
+          <div class="glass-card p-4">
+            <h5 class="fw-bold mb-3">Course Snapshot</h5>
+            <ul class="list-unstyled mb-0 small">
+              <li class="mb-2"><i class="bi bi-clock-history me-2"></i>Duration: 60 minutes</li>
+              <li class="mb-2"><i class="bi bi-people-fill me-2"></i>Audience: Beginner to Intermediate</li>
+              <li class="mb-2"><i class="bi bi-layers-fill me-2"></i>Format: Theory + Hands-on Labs + Quiz</li>
+              <li><i class="bi bi-check2-circle me-2"></i>Outcome: Feature-level spec-to-release workflow</li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </header>
 
-  <section class="py-5">
+  <main class="container py-5">
+    <section class="mb-5">
+      <div class="content-card p-4 p-lg-5">
+        <h2 class="fw-bold mb-3"><i class="bi bi-bullseye me-2 text-primary"></i>Learning Outcomes</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="course-step">
+              <h6 class="fw-bold">Write Better Specs</h6>
+              <p class="small mb-0">Create clear requirements, constraints, assumptions, and acceptance criteria that engineering can execute without ambiguity.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="course-step">
+              <h6 class="fw-bold">Build With Traceability</h6>
+              <p class="small mb-0">Map each requirement to implementation tasks and tests so every line of delivery has a rationale and validation path.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="course-step">
+              <h6 class="fw-bold">Validate With Gates</h6>
+              <p class="small mb-0">Apply objective release gates before merge and deployment to reduce late rework and production regressions.</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="course-step">
+              <h6 class="fw-bold">Scale Team Consistency</h6>
+              <p class="small mb-0">Reuse a standard spec template and review checklist so teams align across architecture, coding, QA, and operations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="curriculum" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-collection-play me-2 text-primary"></i>Curriculum (60 Minutes)</h2>
+      <div class="content-card p-4">
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th style="width: 18%">Time</th>
+                <th style="width: 25%">Module</th>
+                <th>What Learners Do</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>0:00-0:05</td>
+                <td>Welcome + Outcomes</td>
+                <td>Understand what Spec-Driven Development changes in daily delivery and what the final artifact will be.</td>
+              </tr>
+              <tr>
+                <td>0:05-0:15</td>
+                <td>Core Concepts</td>
+                <td>Learn the SDD workflow: spec authoring, review, implementation mapping, and acceptance gates.</td>
+              </tr>
+              <tr>
+                <td>0:15-0:30</td>
+                <td>Hands-on Lab 1</td>
+                <td>Draft a one-page feature specification with requirements, non-functional constraints, dependencies, and rollback plan.</td>
+              </tr>
+              <tr>
+                <td>0:30-0:45</td>
+                <td>Hands-on Lab 2</td>
+                <td>Convert the spec to implementation tasks and test cases, then create requirement-to-test traceability.</td>
+              </tr>
+              <tr>
+                <td>0:45-0:55</td>
+                <td>Validation + Anti-Patterns</td>
+                <td>Apply release gates and detect common failure modes: vague criteria, hidden dependencies, and unverifiable statements.</td>
+              </tr>
+              <tr>
+                <td>0:55-1:00</td>
+                <td>Quiz + Wrap-up</td>
+                <td>Complete final quiz and capture your action plan to adopt SDD in your next sprint.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="content-card p-4 h-100">
+            <h3 class="fw-bold mb-3"><i class="bi bi-flask me-2 text-success"></i>Lab 1: Write the Spec</h3>
+            <ul class="small mb-3">
+              <li>Define scope, assumptions, and out-of-scope boundaries.</li>
+              <li>Add functional requirements and measurable non-functional constraints.</li>
+              <li>Specify dependencies, risks, and rollback approach.</li>
+              <li>Produce objective acceptance criteria.</li>
+            </ul>
+            <p class="small text-muted mb-0">Output: A review-ready feature spec with unambiguous acceptance statements.</p>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="content-card p-4 h-100">
+            <h3 class="fw-bold mb-3"><i class="bi bi-diagram-2 me-2 text-info"></i>Lab 2: Build From the Spec</h3>
+            <ul class="small mb-3">
+              <li>Create implementation tasks mapped to each requirement.</li>
+              <li>Write at least one validation method per acceptance criterion.</li>
+              <li>Build a traceability table from requirement to code to test.</li>
+              <li>Run a pre-release gate checklist.</li>
+            </ul>
+            <p class="small text-muted mb-0">Output: Traceability matrix and release-ready validation evidence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <div class="content-card p-4">
+        <h2 class="fw-bold mb-3"><i class="bi bi-patch-question me-2 text-primary"></i>Quiz Topics</h2>
+        <div class="mb-2">
+          <span class="quiz-pill">Requirement ambiguity detection</span>
+          <span class="quiz-pill">Strong vs weak acceptance criteria</span>
+          <span class="quiz-pill">Traceability mapping</span>
+          <span class="quiz-pill">Gate-based release decisions</span>
+          <span class="quiz-pill">Spec anti-pattern diagnosis</span>
+        </div>
+        <p class="small text-muted mb-0">The complete quiz and answer key are included in the downloadable course pack below.</p>
+      </div>
+    </section>
+
+    <section id="downloads" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-download me-2 text-primary"></i>Course Pack</h2>
+      <div class="row g-3">
+        <div class="col-md-6 col-xl-3">
+          <div class="download-card p-3">
+            <h6 class="fw-bold"><i class="bi bi-journal-text me-2"></i>Course Outline</h6>
+            <p class="small text-muted">Lecture-by-lecture plan with timing and instructor notes.</p>
+            <a href="specs/sdd-1hour-course-outline.md" class="btn btn-sm btn-primary">Open</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="download-card p-3">
+            <h6 class="fw-bold"><i class="bi bi-clipboard2-check me-2"></i>Lab Worksheet</h6>
+            <p class="small text-muted">Lab prompts, deliverables, and completion checklist.</p>
+            <a href="specs/sdd-lab-worksheet.md" class="btn btn-sm btn-primary">Open</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="download-card p-3">
+            <h6 class="fw-bold"><i class="bi bi-list-task me-2"></i>Quiz + Answer Key</h6>
+            <p class="small text-muted">10-question assessment with concise rationale per answer.</p>
+            <a href="specs/sdd-quiz-answer-key.md" class="btn btn-sm btn-primary">Open</a>
+          </div>
+        </div>
+        <div class="col-md-6 col-xl-3">
+          <div class="download-card p-3">
+            <h6 class="fw-bold"><i class="bi bi-file-earmark-code me-2"></i>Spec Template</h6>
+            <p class="small text-muted">Reusable template for feature-level spec-driven delivery.</p>
+            <a href="specs/sdd-feature-spec-template.md" class="btn btn-sm btn-primary">Open</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-4">
+      <div class="content-card p-4">
+        <h2 class="fw-bold mb-3"><i class="bi bi-rocket-takeoff me-2 text-primary"></i>Next Step</h2>
+        <p class="mb-3">After this course, run the template on one real backlog item and enforce acceptance gates during your next pull request review.</p>
+        <a href="/module-specs" class="btn btn-outline-primary me-2"><i class="bi bi-file-earmark-text me-2"></i>View Module Spec Guide</a>
+        <a href="/modules" class="btn btn-outline-dark"><i class="bi bi-grid-3x3-gap me-2"></i>Explore Azure Modules</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-4 bg-body-tertiary text-center border-top">
     <div class="container">
-      <div class="row g-4 mb-5">
-        <div class="col-lg-4">
-          <div class="feature-card">
-            <div class="feature-icon mb-3"><i class="bi bi-diagram-3"></i></div>
-            <h2 class="h4 fw-bold">Define the Module Contract</h2>
-            <p class="text-muted mb-0">Document the service purpose, topology, network boundaries, identity pattern, cost model, and deployment outputs before implementation starts.</p>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="feature-card">
-            <div class="feature-icon mb-3"><i class="bi bi-shield-check"></i></div>
-            <h2 class="h4 fw-bold">Enforce the Guardrails</h2>
-            <p class="text-muted mb-0">Use the ruleset and module guide to keep platform decisions consistent across networking, security, observability, and deployment workflows.</p>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="feature-card">
-            <div class="feature-icon mb-3"><i class="bi bi-rocket-takeoff"></i></div>
-            <h2 class="h4 fw-bold">Deploy with Confidence</h2>
-            <p class="text-muted mb-0">Translate the approved spec into Bicep templates, module pages, and implementation artifacts that stay aligned with architecture intent.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4 align-items-start">
-        <div class="col-lg-7">
-          <h2 class="fw-bold mb-3">Working Model</h2>
-          <div class="rule-box mb-3">
-            Start with the architecture outcome, not the resource list. A module spec should explain why the service exists, how it fits the landing zone, and what downstream teams can rely on.
-          </div>
-          <ol class="ps-3">
-            <li class="mb-2">Choose the target module or pattern and capture the intended business capability.</li>
-            <li class="mb-2">Define interfaces: identity, networking, secrets, telemetry, private access, and outputs.</li>
-            <li class="mb-2">Apply the shared ruleset so teams inherit consistent design constraints.</li>
-            <li class="mb-2">Map the approved contract into Bicep and supporting documentation.</li>
-          </ol>
-        </div>
-        <div class="col-lg-5">
-          <div class="feature-card">
-            <h2 class="h4 fw-bold mb-3">Jump To</h2>
-            <div class="d-grid gap-2">
-              <a href="module-spec-guide.html" class="btn btn-primary"><i class="bi bi-file-earmark-code me-2"></i>Module Specification Guide</a>
-              <a href="modules.html" class="btn btn-outline-primary"><i class="bi bi-puzzle me-2"></i>Core Module Catalog</a>
-              <a href="Ruleset/SPEC-RULES-001_Universal_Ruleset.md" class="btn btn-outline-secondary"><i class="bi bi-journal-text me-2"></i>Universal Ruleset</a>
-              <a href="index.html#modules" class="btn btn-outline-dark"><i class="bi bi-stars me-2"></i>New Services on Homepage</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="border-top py-4">
-    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
-      <div class="text-muted small">Spec-Driven Development for Azure AI deployment patterns.</div>
-      <div class="small"><a href="help.html">Help</a> · <a href="module-spec-guide.html">Spec Guide</a> · <a href="modules.html">Modules</a></div>
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns - Spec-Driven Development Course</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" rel="noopener" class="text-body-secondary">
+        <i class="bi bi-github me-1"></i>GitHub Repository
+      </a>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55DQYC+9uNTmQvcQV1RoGtR1uxHnL" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
