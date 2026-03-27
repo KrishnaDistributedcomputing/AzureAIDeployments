@@ -1,405 +1,493 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Monitor - Monitoring & Observability</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
-    <style>
-        :root {
-            --orange: #e67e22;
-            --dark-bg: #1a1a1a;
-        }
-        body {
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            border-bottom: 3px solid var(--orange);
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--orange) !important;
-            font-size: 1.5rem;
-        }
-        .nav-link {
-            color: #b0b0b0 !important;
-            margin: 0 8px;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: var(--orange) !important;
-        }
-        .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--orange);
-            margin-bottom: 40px;
-        }
-        .hero-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .hero h1 {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #ecf0f1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .section-title {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2rem;
-            margin-top: 40px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--orange);
-        }
-        .card {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 20px;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
-        }
-        .card-header {
-            background-color: var(--orange);
-            color: white;
-            font-weight: bold;
-            border-radius: 0;
-        }
-        .card-body {
-            color: #e0e0e0;
-        }
-        .capability-list {
-            list-style: none;
-            padding: 0;
-        }
-        .capability-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-        }
-        .capability-list li:before {
-            content: "âœ" ";
-            color: var(--orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .pricing-tier {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .pricing-tier h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .use-case-card {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-            border-left: 4px solid var(--orange);
-        }
-        .use-case-card h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .faq-item {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .faq-item h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .sidebar {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .sidebar h5 {
-            color: var(--orange);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-            font-size: 0.95rem;
-        }
-        .sidebar-item:last-child {
-            border-bottom: none;
-        }
-        .code-block {
-            background-color: #1a1a1a;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            color: #7ec699;
-            font-size: 0.9rem;
-        }
-        footer {
-            background-color: #2c2c2c;
-            border-top: 2px solid var(--orange);
-            padding: 30px 0;
-            margin-top: 50px;
-            color: #b0b0b0;
-            text-align: center;
-        }
-        .container-main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure Monitor | Core Azure Modules</title>
+  <meta name="description" content="Azure Monitor - unified observability platform for metrics, logs, traces, alerting, and operational intelligence." />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+  <style>
+    :root {
+      --azure-navy: #0050a0;
+      --azure-blue: #0078d4;
+      --azure-sky: #00a2e8;
+      --azure-cyan: #50e6ff;
+      --accent: var(--azure-blue);
+      --accent-dark: var(--azure-cyan);
+    }
+    body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; }
+    .module-icon { font-size: 3.5rem; margin: 20px 0; }
+    .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+    .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+    .btn-deploy { background: var(--accent); color: white; border: none; }
+    .btn-deploy:hover { background: var(--azure-navy); color: white; }
+    .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸ"Š</span>
-            <h1>Azure Monitor</h1>
-            <p class="subtitle">Comprehensive monitoring, diagnostics, and analytics for applications and infrastructure</p>
-        </div>
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/modules">
+        <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="container-main">
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="module-icon">📊</div>
+          <h1 class="mb-3">Azure Monitor</h1>
+          <p class="lead mb-4">Unified observability platform for collecting, analyzing, and acting on metrics, logs, traces, and alerts across cloud workloads.</p>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+          <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div style="font-size: 10rem; opacity: 0.3;">📊</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <section class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+          <p class="fs-5">Azure Monitor provides end-to-end observability for infrastructure and applications by combining metrics, logs, traces, and alerting. It helps teams maintain reliability, detect anomalies early, and accelerate troubleshooting through unified telemetry analysis.</p>
+
+          <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+          <ul class="fs-5">
+            <li><strong>Metrics at Scale:</strong> Near-real-time performance telemetry and trend analysis for Azure resources</li>
+            <li><strong>Log Analytics:</strong> Deep query analysis with KQL across operational, security, and application data</li>
+            <li><strong>Application Insights:</strong> Distributed tracing, dependency maps, and user transaction diagnostics</li>
+            <li><strong>Alerting and Action Groups:</strong> Proactive signal-based alerting with automated response integration</li>
+            <li><strong>Workbooks and Dashboards:</strong> Custom visual diagnostics and executive observability views</li>
+            <li><strong>Cost and Retention Controls:</strong> Data capping, sampling, and retention tuning for spend governance</li>
+          </ul>
+
+          <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🚨 Incident Detection</h5>
+                  <p class="card-text">Detect service regressions and trigger response workflows using metric and log alerts.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🧩 Application Troubleshooting</h5>
+                  <p class="card-text">Correlate failures across services with traces, dependency maps, and query diagnostics.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">📈 Capacity and Performance Planning</h5>
+                  <p class="card-text">Analyze utilization trends and saturation points to forecast scaling requirements.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🛡️ Compliance and Audit</h5>
+                  <p class="card-text">Retain and query telemetry evidence to support security and regulatory requirements.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="spec-box">
+            <h5 class="fw-bold">📊 Quick Stats</h5>
+            <ul class="list-unstyled">
+              <li><strong>Typical Monthly:</strong> $200 - $3,000</li>
+              <li><strong>Primary Components:</strong> Metrics, Logs, Traces</li>
+              <li><strong>Query Engine:</strong> KQL</li>
+              <li><strong>Alerting:</strong> Metric + log + smart detection</li>
+              <li><strong>Integration:</strong> Broad Azure service coverage</li>
+            </ul>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🚀 Deployment</h5>
+            <p><small><strong>Resource Provider:</strong> Microsoft.OperationalInsights / Microsoft.Insights</small></p>
+            <p><small><strong>Core Resources:</strong> Log Analytics Workspace + Application Insights</small></p>
+            <p><small><strong>Data Strategy:</strong> Ingestion cap + retention policy required</small></p>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🔗 Dependencies</h5>
+            <ul class="list-unstyled small">
+              <li>✓ Log Analytics Workspace</li>
+              <li>✓ Application Insights</li>
+              <li>✓ Action Groups (for alert routing)</li>
+              <li>✓ Azure RBAC (query and admin access)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="pricing-tier recommended">
+            <h5>Log Analytics Ingestion</h5>
+            <p class="text-muted">Primary telemetry cost driver</p>
+            <p><strong>Approx:</strong> $2.30-$3.00 per GB ingested</p>
+            <ul class="list-unstyled small">
+              <li>✓ Scales with log volume</li>
+              <li>✓ Daily cap controls available</li>
+              <li>✓ Retention tuning supported</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Application Insights</h5>
+            <p class="text-muted">APM and tracing telemetry</p>
+            <p><strong>Approx:</strong> Included with ingestion model</p>
+            <ul class="list-unstyled small">
+              <li>✓ Sampling for high-volume apps</li>
+              <li>✓ Dependency tracking</li>
+              <li>✓ Distributed trace diagnostics</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Alerts and Automation</h5>
+            <p class="text-muted">Signal and execution-based charges</p>
+            <p><strong>Approx:</strong> Variable by alert count and runs</p>
+            <ul class="list-unstyled small">
+              <li>✓ Metric and log alert rules</li>
+              <li>✓ Action group notifications</li>
+              <li>✓ Automated remediation triggers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+        <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can vary by region, data ingestion volume, retention period, alert frequency, and Microsoft pricing updates. Confirm current rates in the official Azure pricing calculator before sign-off.
+      </div>
+    </section>
+
+    <section id="deployment" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+      <p class="text-muted">Spec-based development guide for Azure Monitor. Author and validate this spec before requesting infrastructure provisioning.</p>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">📋 Spec Header - DS-AMON-001</h5>
+        <table class="table table-sm small mb-0">
+          <tbody>
+            <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AMON-001</td></tr>
+            <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+            <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+            <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+            <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+            <tr><td class="fw-medium">Applies to</td><td>Azure Monitor</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">⚙️ Required Parameters</h5>
+        <p class="small text-muted mb-3">All parameters must be resolved before the spec advances to <strong>Approved</strong> status.</p>
+        <table class="table table-sm small">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Parameter-driven deployment region for workspace and App Insights</td></tr>
+            <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage: <code>dev</code> | <code>staging</code> | <code>prod</code></td></tr>
+            <tr><td><code>workspaceSku</code></td><td>string</td><td>Yes</td><td>Log Analytics SKU, commonly <code>PerGB2018</code></td></tr>
+            <tr><td><code>retentionInDays</code></td><td>int</td><td>Yes</td><td>Telemetry retention policy window</td></tr>
+            <tr><td><code>dailyQuotaGb</code></td><td>int</td><td>Yes</td><td>Ingestion cap for spend control and anomaly protection</td></tr>
+            <tr><td><code>publicNetworkAccessForIngestion</code></td><td>string</td><td>Yes</td><td><code>Enabled</code> or <code>Disabled</code> based on network policy</td></tr>
+            <tr><td><code>publicNetworkAccessForQuery</code></td><td>string</td><td>Yes</td><td><code>Enabled</code> or <code>Disabled</code> for query endpoints</td></tr>
+            <tr><td><code>alertRuleBaseline</code></td><td>array</td><td>Conditional</td><td>Required when deploying monitor baseline together with alerting</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">🔗 Dependency Wiring</h5>
         <div class="row">
-            <div class="col-lg-8">
-                
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure Monitor is Azure's comprehensive solution for collecting, analyzing, and acting on telemetry from cloud and on-premises environments. It helps you maximize availability and performance of your applications and services.</p>
-                            <p>Azure Monitor collects metrics, logs, and traces (observability triad) for complete visibility into your systems.</p>
-                        </div>
-                    </div>
-                </section>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Log Analytics</h6>
+                <p class="small mb-1">Primary workspace for logs, query analytics, and alert rule scopes.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Application Insights</h6>
+                <p class="small mb-1">Application-level telemetry linked to workspace for end-to-end diagnostics.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Action Groups</h6>
+                <p class="small mb-1">Alert routing for operations notifications and automated response pipelines.</p>
+                <span class="badge bg-secondary">Conditional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Metrics:</strong> Numerical values on a time series for performance monitoring</li>
-                        <li><strong>Logs:</strong> Event data for diagnostics and troubleshooting with KQL queries</li>
-                        <li><strong>Application Insights:</strong> End-to-end monitoring for web applications and services</li>
-                        <li><strong>Alerts:</strong> Proactive notifications based on condition thresholds</li>
-                        <li><strong>Dashboards:</strong> Customizable visualizations of key metrics</li>
-                        <li><strong>Workbooks:</strong> Interactive reports combining metrics, logs, and visualizations</li>
-                        <li><strong>Log Analytics:</strong> Kusto Query Language (KQL) for deep analysis</li>
-                        <li><strong>VM Insights:</strong> Performance and health monitoring for virtual machines</li>
-                    </ul>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">✓ Acceptance Gates</h5>
+        <p class="small text-muted mb-3">All gates must pass before the deployment is considered production-ready.</p>
+        <ul class="small mb-0">
+          <li class="mb-2"><strong>Gate 1 - Workspace health:</strong> Workspace ingestion and query endpoints are operational with expected access behavior.</li>
+          <li class="mb-2"><strong>Gate 2 - App Insights linkage:</strong> Application Insights resource is connected to the target Log Analytics workspace.</li>
+          <li class="mb-2"><strong>Gate 3 - Data policy:</strong> Retention and daily quota settings match approved governance values.</li>
+          <li class="mb-2"><strong>Gate 4 - Alert readiness:</strong> Baseline alert rules trigger expected signals and route notifications correctly.</li>
+          <li><strong>Gate 5 - Observability access:</strong> Authorized operations users can query telemetry and dashboards without permission gaps.</li>
+        </ul>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ" Application Performance Monitoring</h5>
-                        <p>Monitor application performance, dependencies, and user experiences with Application Insights.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">🚀 Spec Workflow</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Author:</strong> Define telemetry scope, retention policy, and baseline alerts; resolve all <code>&lt;placeholder&gt;</code> values.</li>
+          <li class="mb-2"><strong>Review:</strong> Submit for platform and security review with at least one non-author approver.</li>
+          <li class="mb-2"><strong>CI gate:</strong> Validate workspace settings, ingestion controls, and dependency bindings before IaC generation.</li>
+          <li class="mb-2"><strong>Deploy:</strong> Approved spec deploys workspace, App Insights, and baseline monitor controls.</li>
+          <li><strong>Validate:</strong> Execute acceptance tests and capture evidence in release records.</li>
+        </ol>
+      </div>
+    </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸš¨ Alert Management</h5>
-                        <p>Set up proactive alerts for anomalies and critical conditions with intelligent alerting.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+      <p class="text-muted">Use this workflow to deploy Azure Monitor from the parameter-driven specification and validate telemetry readiness before relying on alerts and dashboards.</p>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"ˆ Infrastructure Monitoring</h5>
-                        <p>Monitor VMs, containers, and on-premises infrastructure from a single pane of glass.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">1. Prerequisites</h5>
+        <ul class="small mb-0">
+          <li>Azure CLI with Bicep support installed and authenticated to the target subscription</li>
+          <li>Approved values for <code>location</code>, <code>environment</code>, retention, and ingestion cap parameters</li>
+          <li>Action groups and notification channels prepared for alert routing</li>
+          <li>RBAC model defined for operations teams and telemetry consumers</li>
+        </ul>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"§ Troubleshooting & Diagnostics</h5>
-                        <p>Deep-dive into logs and traces to troubleshoot issues quickly and efficiently.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">2. Deployment Steps</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Create or select the resource group:</strong> Use the approved monitoring resource boundary.</li>
+          <li class="mb-2"><strong>Validate policy settings:</strong> Confirm retention, daily quota, and network access controls.</li>
+          <li class="mb-2"><strong>Build the Bicep template:</strong> Compile deployment artifact before execution.</li>
+          <li class="mb-2"><strong>Deploy with approved parameters:</strong> Pass parameter-driven <code>location</code> and <code>environment</code> values.</li>
+          <li><strong>Run post-deploy checks:</strong> Validate ingestion, queries, dashboard visibility, and alert routing behavior.</li>
+        </ol>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"Š Capacity Planning</h5>
-                        <p>Analyze trends and usage patterns to plan for future capacity requirements.</p>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">3. Azure CLI Example</h5>
+        <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
 
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Structure</h2>
-                    
-                    <div class="pricing-tier">
-                        <h5>Log Analytics (Per GB)</h5>
-                        <p><strong>Cost:</strong> ~$2.99/GB ingested, $0.10/GB retained</p>
-                        <p>Pay for data ingestion and retention.</p>
-                    </div>
+az group create \
+  --name rg-monitor-&lt;environment&gt; \
+  --location &lt;location&gt;
 
-                    <div class="pricing-tier">
-                        <h5>Application Insights</h5>
-                        <p><strong>Cost:</strong> First 5GB free, then $2.99/GB</p>
-                        <p>Included in Log Analytics pricing.</p>
-                    </div>
+az bicep build \
+  --file specs/azure-monitor.bicep
 
-                    <div class="pricing-tier">
-                        <h5>Metrics & Alerts</h5>
-                        <p><strong>Cost:</strong> First 10,000 time series free, $0.30 per additional 1,000</p>
-                        <p>Based on number of metric time series.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Monitor Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-monitor.bicep</code></p>
-                            
-                            <div class="code-block">
-az bicep build --file azure-monitor.bicep
 az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-monitor.json
-                            </div>
+  --resource-group rg-monitor-&lt;environment&gt; \
+  --template-file specs/azure-monitor.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+      </div>
 
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Workspace ID</li>
-                                <li>Workspace resource ID</li>
-                                <li>App Insights instrumentation key</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">4. Validation Checklist</h5>
+        <ul class="small mb-0">
+          <li>Workspace and App Insights resources exist and are linked correctly</li>
+          <li>Telemetry ingestion occurs and queries return expected results</li>
+          <li>Retention and daily cap match approved values</li>
+          <li>Alert rules fire correctly and action groups receive notifications</li>
+          <li>RBAC access for operations teams is validated</li>
+        </ul>
+      </div>
+    </section>
 
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What's KQL and why should I use it?</h5>
-                        <p>Kusto Query Language (KQL) is a powerful query language for analyzing logs. It enables complex queries for troubleshooting and analytics.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+      <p class="text-muted mb-4">A complete, production-ready example of DS-AMON-001 - fully resolved, no placeholders. Use this as a reference when authoring your own spec.</p>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+          <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+        </a>
+        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+        </a>
+        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+          <i class="bi bi-github me-2"></i>Open on GitHub
+        </a>
+      </div>
 
-                    <div class="faq-item">
-                        <h5>How long is data retained?</h5>
-                        <p>Default retention is 30 days for Log Analytics, up to 730 days available. Retention cost is lower than ingestion.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Can I monitor on-premises resources?</h5>
-                        <p>Yes. Use Log Analytics agent or Azure Monitor agents on on-premises machines to send data to Azure.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>How do I set up alerting?</h5>
-                        <p>Create metric alerts, log alerts, or smart detection rules. Configure action groups for notifications.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Observability</div>
-                    <div class="sidebar-item"><strong>Primary Components:</strong> 3 pillars</div>
-                    <div class="sidebar-item"><strong>Query Language:</strong> KQL</div>
-                    <div class="sidebar-item"><strong>Integration:</strong> All Azure services</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-diagram-3"></i> Core Components</h5>
-                    <div class="sidebar-item">â€¢ Log Analytics workspace</div>
-                    <div class="sidebar-item">â€¢ Application Insights</div>
-                    <div class="sidebar-item">â€¢ Metrics</div>
-                    <div class="sidebar-item">â€¢ Alerts & Action Groups</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-shield-check"></i> Security Tips</h5>
-                    <div class="sidebar-item">âœ" Use Private Link for logs</div>
-                    <div class="sidebar-item">âœ" Enable customer-managed keys</div>
-                    <div class="sidebar-item">âœ" Control access with RBAC</div>
-                    <div class="sidebar-item">âœ" Audit sensitive data</div>
-                    <div class="sidebar-item">âœ" Mask PII in logs</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-speedometer2"></i> Best Practices</h5>
-                    <div class="sidebar-item">â†' Use sampling for high-volume apps</div>
-                    <div class="sidebar-item">â†' Set up cost alerts</div>
-                    <div class="sidebar-item">â†' Use workbooks for dashboards</div>
-                    <div class="sidebar-item">â†' Automate remediation</div>
-                    <div class="sidebar-item">â†' Archive to storage for cost</div>
-                </div>
-            </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(90deg,var(--azure-navy),var(--azure-blue));color:white;border-radius:8px 8px 0 0;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#sampleSpec">
+          <span class="fw-bold"><i class="bi bi-file-earmark-check me-2"></i>DS-AMON-001 v1.0 - Azure Monitor (Production) <span class="badge bg-success ms-2">Approved</span></span>
+          <i class="bi bi-chevron-down"></i>
         </div>
+        <div class="collapse show" id="sampleSpec">
+          <div class="card-body p-4">
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">1. Document Header</h6>
+              <table class="table table-sm small mb-0">
+                <tbody>
+                  <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AMON-001</td></tr>
+                  <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                  <tr><td class="fw-medium">Status</td><td><span class="badge bg-success">Approved</span></td></tr>
+                  <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                  <tr><td class="fw-medium">Owner</td><td>Platform Engineering - Observability</td></tr>
+                  <tr><td class="fw-medium">Reviewer</td><td>SRE Architecture</td></tr>
+                  <tr><td class="fw-medium">Applies to</td><td>Azure Monitor - Production (&lt;location&gt;)</td></tr>
+                  <tr><td class="fw-medium">Date</td><td>2026-03-27</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">2. Purpose and Scope</h6>
+              <p class="small mb-2"><strong>Purpose:</strong> Define observability deployment requirements for metrics, logs, traces, and alerting across platform services.</p>
+              <p class="small mb-2"><strong>In scope:</strong> Workspace provisioning, App Insights linkage, retention policy, ingestion cap, and alert baseline controls.</p>
+              <p class="small mb-0"><strong>Out of scope:</strong> Application-specific custom telemetry schema design and business KPI modeling.</p>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">3. Functional Requirements</h6>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>FR-01</strong> - Monitoring platform must ingest and retain telemetry according to approved policy.<br><span class="text-muted">Rationale: Enables operational visibility and post-incident analysis.</span></li>
+                <li class="mb-2"><strong>FR-02</strong> - Alerting baseline must detect critical service degradation conditions.<br><span class="text-muted">Rationale: Reduces mean time to detect incidents.</span></li>
+                <li class="mb-2"><strong>FR-03</strong> - Application telemetry must be correlated with infrastructure signals.<br><span class="text-muted">Rationale: Supports faster root-cause analysis.</span></li>
+                <li><strong>FR-04</strong> - Access to telemetry must follow least-privilege RBAC model.<br><span class="text-muted">Rationale: Protects sensitive operational data.</span></li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">4. Resolved Parameters</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Approved by</th></tr></thead>
+                <tbody>
+                  <tr><td><code>location</code></td><td>&lt;location&gt; (parameter-driven)</td><td>Infra Lead</td></tr>
+                  <tr><td><code>environment</code></td><td>prod</td><td>Infra Lead</td></tr>
+                  <tr><td><code>workspaceSku</code></td><td>PerGB2018</td><td>Observability Lead</td></tr>
+                  <tr><td><code>retentionInDays</code></td><td>30</td><td>Security</td></tr>
+                  <tr><td><code>dailyQuotaGb</code></td><td>10</td><td>FinOps</td></tr>
+                  <tr><td><code>publicNetworkAccessForIngestion</code></td><td>Enabled</td><td>Network Security</td></tr>
+                  <tr><td><code>publicNetworkAccessForQuery</code></td><td>Enabled</td><td>Network Security</td></tr>
+                  <tr><td><code>alertRuleBaseline</code></td><td>enabled</td><td>SRE</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">5. Security Controls</h6>
+              <ul class="small mb-0">
+                <li class="mb-1"><strong>Access governance:</strong> Restrict telemetry access through RBAC roles and scoped permissions.</li>
+                <li class="mb-1"><strong>Data handling:</strong> Mask or filter sensitive fields in logs where required by policy.</li>
+                <li class="mb-1"><strong>Retention policy:</strong> Enforce approved retention and purge settings for compliance.</li>
+                <li class="mb-1"><strong>Network controls:</strong> Apply private access model where security posture requires it.</li>
+                <li><strong>Auditability:</strong> Track alert modifications, query access, and workspace configuration changes.</li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">6. Cost Estimate (itemised)</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Item</th><th>Unit</th><th>Est. Volume/mo</th><th>Unit Price</th><th>Est. Monthly</th></tr></thead>
+                <tbody>
+                  <tr><td>Log ingestion</td><td>per GB</td><td>300 GB</td><td>$2.30</td><td>$690</td></tr>
+                  <tr><td>Retention over included window</td><td>per GB-month</td><td>120 GB</td><td>$0.10</td><td>$12</td></tr>
+                  <tr><td>Alert evaluations</td><td>per rule/month</td><td>60</td><td>$0.10</td><td>$6</td></tr>
+                  <tr><td>Application telemetry overhead</td><td>estimated</td><td>included</td><td>-</td><td>$0</td></tr>
+                  <tr class="table-active fw-bold"><td colspan="4">Total estimated monthly</td><td>$708</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">7. Acceptance Gates</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Gate</th><th>Test</th><th>Pass Condition</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>G-01</td><td>Ingestion health</td><td>Telemetry streams arrive without sustained ingestion failures</td><td>SRE</td></tr>
+                  <tr><td>G-02</td><td>Alert baseline</td><td>Critical alerts trigger and route to action groups</td><td>SRE</td></tr>
+                  <tr><td>G-03</td><td>Data policy</td><td>Retention and cap values match approved settings</td><td>Security</td></tr>
+                  <tr><td>G-04</td><td>Access controls</td><td>RBAC permissions validated for operations team</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-05</td><td>Query capability</td><td>KQL queries return expected operational data</td><td>Observability Team</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-0">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">8. Rollback and Recovery</h6>
+              <ol class="small mb-0">
+                <li class="mb-1"><strong>Configuration rollback:</strong> Reapply prior approved monitor deployment artifact.</li>
+                <li class="mb-1"><strong>Alert rollback:</strong> Restore previous alert baseline package and action routing configuration.</li>
+                <li><strong>Escalation:</strong> If telemetry loss persists, trigger observability incident, route to SRE on-call, and apply emergency ingestion policy.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn-more" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+      <div class="faq-item">
+        <h5>How should we control Monitor costs?</h5>
+        <p>Use ingestion sampling, retention tuning, data caps, and alert hygiene to control monthly spend while preserving critical visibility.</p>
+      </div>
+      <div class="faq-item">
+        <h5>When should App Insights be linked to Log Analytics?</h5>
+        <p>For unified operational analysis and cross-resource querying, workspace-based Application Insights should be the default model.</p>
+      </div>
+      <div class="faq-item">
+        <h5>What is the best starting alert strategy?</h5>
+        <p>Start with a minimal critical alert baseline, then expand using signal quality reviews to avoid noise and alert fatigue.</p>
+      </div>
+    </section>
+
+    <div class="text-center py-4 border-top">
+      <a href="/modules" class="btn btn-outline-primary me-2"><i class="bi bi-arrow-left me-2"></i>Back to Modules</a>
+      <a href="/modules/module-eventgrid.html" class="btn btn-primary">Next: Event Grid <i class="bi bi-arrow-right ms-2"></i></a>
     </div>
+  </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Monitor Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/azure-monitor/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
-        </div>
-    </footer>
-
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmRXyJgX7c0f3HmGzTi/CUEfxWMp" crossorigin="anonymous"></script>
 </body>
 </html>
-
