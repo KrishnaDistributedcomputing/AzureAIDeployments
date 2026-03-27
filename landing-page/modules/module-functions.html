@@ -1,262 +1,391 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Functions - Serverless Computing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure Functions | Core Azure Modules</title>
+    <meta name="description" content="Azure Functions - event-driven serverless compute platform for APIs, automation, and integration workflows with elastic scaling." />
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
     <style>
-        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
-        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
-        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
-        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
-        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
-        .nav-link:hover {color: var(--orange) !important;}
-        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
-        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
-        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
-        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
-        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
-        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
-        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
-        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
-        .card-body {color: #e0e0e0;}
-        .capability-list {list-style: none; padding: 0;}
-        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
-        .capability-list li:before {content: "âœ" "; color: var(--orange); font-weight: bold; margin-right: 10px;}
-        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
-        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
-        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
-        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
-        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
-        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
-        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
-        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
-        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
-        .sidebar-item:last-child {border-bottom: none;}
-        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
-        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
-        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+        :root {
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
+        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">âš¡</span>
-            <h1>Azure Functions</h1>
-            <p class="subtitle">Serverless compute for event-driven workloads with flexible pricing models</p>
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                    <h1 class="mb-3">Azure Functions</h1>
+                    <p class="lead mb-4">Event-driven serverless compute for APIs, automation, and integration workflows with elastic scale and pay-for-use efficiency.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-lightning"></i></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="container-main">
-        <div class="row">
-            <div class="col-lg-8">
-                
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure Functions is a serverless compute service that lets you run code on-demand without managing infrastructure. Execute code in response to events from Azure services, on a schedule, or directly from the internet.</p>
-                            <p>Scale automatically based on demand and pay only for the compute time you consume.</p>
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Azure Functions enables teams to run code in response to events without managing servers. It supports lightweight APIs, asynchronous processing, scheduled automation, and orchestrated workflows while scaling automatically based on demand.</p>
+
+                    <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+                    <ul class="fs-5">
+                        <li><strong>Event-Driven Runtime:</strong> Trigger execution from HTTP, queues, timers, and platform events</li>
+                        <li><strong>Flexible Hosting:</strong> Consumption, Flex Consumption, Premium, and App Service hosting options</li>
+                        <li><strong>Multi-Language Support:</strong> Build functions with Python, C#, JavaScript, Java, and more</li>
+                        <li><strong>Durable Workflows:</strong> Coordinate long-running orchestrations and stateful function chains</li>
+                        <li><strong>Built-In Observability:</strong> Integrates with Application Insights and Azure Monitor telemetry</li>
+                        <li><strong>Secure Integration:</strong> Managed identity, TLS controls, and platform security capabilities</li>
+                    </ul>
+
+                    <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Event Processing Pipelines</h5>
+                                    <p class="card-text">Handle Event Grid, Service Bus, and Storage events with on-demand compute.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Serverless API Endpoints</h5>
+                                    <p class="card-text">Deliver low-ops HTTP APIs that scale automatically with request volume.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Scheduled Automation</h5>
+                                    <p class="card-text">Run operational jobs and routine maintenance with timer-based triggers.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Workflow Orchestration</h5>
+                                    <p class="card-text">Build resilient business processes using Durable Functions coordination patterns.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Multi-language Support:</strong> C#, Python, JavaScript, Java, PowerShell, and more</li>
-                        <li><strong>Event-driven Execution:</strong> Triggers from Azure services, HTTP, or schedules</li>
-                        <li><strong>Auto-scaling:</strong> Scale from 0 to thousands based on load</li>
-                        <li><strong>Flexible Hosting:</strong> Consumption, Premium, or Dedicated App Service plans</li>
-                        <li><strong>Durable Functions:</strong> Orchestrate long-running, stateful workflows</li>
-                        <li><strong>Input/Output Bindings:</strong> Declaratively connect to data sources and outputs</li>
-                        <li><strong>Monitoring & Diagnostics:</strong> Built-in Application Insights integration</li>
-                        <li><strong>Development Tools:</strong> VS Code extensions and local runtime for testing</li>
-                    </ul>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ"§ Event Processing</h5>
-                        <p>Process messages from Service Bus, Event Grid, or Event Hubs without servers.</p>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Service Type:</strong> Serverless compute platform</li>
+                            <li><strong>Execution Model:</strong> Event and trigger based</li>
+                            <li><strong>Runtime:</strong> Functions v4 ecosystem</li>
+                            <li><strong>Scale:</strong> Automatic, demand-based</li>
+                            <li><strong>Security Baseline:</strong> HTTPS-only and TLS 1.2 support</li>
+                        </ul>
                     </div>
 
-                    <div class="use-case-card">
-                        <h5>â° Scheduled Tasks</h5>
-                        <p>Run batch jobs, cleanups, or maintenance on a schedule without managing VMs.</p>
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-rocket-takeoff me-2"></i>Deployment</h5>
+                        <p><small><strong>Resource Providers:</strong> Microsoft.Web + Microsoft.Storage</small></p>
+                        <p><small><strong>Core Resources:</strong> Function App + App Service Plan + Storage Account</small></p>
+                        <p><small><strong>Spec File:</strong> specs/azure-functions.bicep</small></p>
+                        <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
                     </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"Œ API Endpoints</h5>
-                        <p>Create lightweight HTTP APIs that scale automatically.</p>
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-link-45deg me-2"></i>Dependencies</h5>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Storage account for runtime state</li>
+                            <li>+ Hosting plan aligned to workload profile</li>
+                            <li>+ Monitoring and diagnostic integration</li>
+                            <li>+ Identity and secret management controls</li>
+                        </ul>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ",, Workflow Orchestration</h5>
-                        <p>Use Durable Functions to orchestrate complex, long-running workflows.</p>
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
+                        <h5>Consumption</h5>
+                        <p class="text-muted">Pay for executions and run duration</p>
+                        <p><strong>Approx:</strong> $0.20 per 1M executions plus compute time</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Efficient for sporadic workloads</li>
+                            <li>+ Scale-to-zero economics</li>
+                            <li>+ Cold-start behavior possible</li>
+                        </ul>
                     </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ" File Processing</h5>
-                        <p>Automatically process files in Storage when uploaded or modified.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Hosting Plans</h2>
-                    
+                </div>
+                <div class="col-md-4">
                     <div class="pricing-tier">
-                        <h5>Consumption Plan</h5>
-                        <p><strong>Cost:</strong> $0.20 per 1M executions + execution time</p>
-                        <p>Best for unpredictable, event-driven workloads with cost efficiency.</p>
+                        <h5>Flex/Premium</h5>
+                        <p class="text-muted">Predictable and pre-warmed options</p>
+                        <p><strong>Approx:</strong> vCore/memory-based hourly pricing</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Reduced cold-start impact</li>
+                            <li>+ Better control for steady traffic</li>
+                            <li>+ Supports advanced scaling controls</li>
+                        </ul>
                     </div>
-
-                    <div class="pricing-tier">
-                        <h5>Premium Plan</h5>
-                        <p><strong>Cost:</strong> $0.04/hour per vCore + 0.2GB memory</p>
-                        <p>Predictable workloads with better performance and always-warm instances.</p>
-                    </div>
-
-                    <div class="pricing-tier">
-                        <h5>Flex Consumption</h5>
-                        <p><strong>Cost:</strong> $0.000278/vCore-second when running</p>
-                        <p>New pay-per-second model with advanced scaling.</p>
-                    </div>
-
+                </div>
+                <div class="col-md-4">
                     <div class="pricing-tier">
                         <h5>App Service Plan</h5>
-                        <p><strong>Cost:</strong> Free tier or standard App Service pricing</p>
-                        <p>Fixed cost, for guaranteed capacity or existing plans.</p>
+                        <p class="text-muted">Dedicated capacity model</p>
+                        <p><strong>Approx:</strong> Based on selected App Service tier</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Works with existing App Service estates</li>
+                            <li>+ Fixed capacity planning model</li>
+                            <li>+ Suitable for predictable baseline traffic</li>
+                        </ul>
                     </div>
-                </section>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+                <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can vary by region, execution volume, runtime duration, plan type, and Microsoft pricing updates. Confirm current rates in the official Azure pricing calculator before approval.
+            </div>
+        </section>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Functions Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-functions.bicep</code></p>
-                            <div class="code-block">
-az bicep build --file azure-functions.bicep
-az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-functions.json
+        <section id="deployment" class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+            <p class="text-muted">Specification-first deployment guide for Azure Functions. Resolve all placeholders and validate acceptance gates before production rollout.</p>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Spec Header - DS-FUNC-001</h5>
+                <table class="table table-sm small mb-0">
+                    <tbody>
+                        <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-FUNC-001</td></tr>
+                        <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                        <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+                        <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                        <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+                        <tr><td class="fw-medium">Applies to</td><td>Azure Functions</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Required Parameters</h5>
+                <table class="table table-sm small mb-0">
+                    <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Parameter-driven deployment region for plan, app, and storage</td></tr>
+                        <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage such as <code>dev</code>, <code>staging</code>, or <code>prod</code></td></tr>
+                        <tr><td><code>apiVersion</code></td><td>string</td><td>Yes</td><td>Resource API version used for Microsoft.Web resources</td></tr>
+                        <tr><td><code>tags</code></td><td>object</td><td>Yes</td><td>Governance and ownership metadata applied to all resources</td></tr>
+                        <tr><td><code>sku.name/tier</code></td><td>object</td><td>Yes</td><td>Hosting profile (Flex Consumption in current baseline)</td></tr>
+                        <tr><td><code>siteConfig.linuxFxVersion</code></td><td>string</td><td>Yes</td><td>Runtime stack selection (e.g., <code>PYTHON|3.11</code>)</td></tr>
+                        <tr><td><code>FUNCTIONS_WORKER_RUNTIME</code></td><td>string</td><td>Yes</td><td>Function language runtime setting for execution host</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Dependency Wiring</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Storage Account</h6>
+                                <p class="small mb-1">Backs triggers, state, and runtime storage bindings for function host operations.</p>
+                                <span class="badge" style="background:var(--azure-blue)">Required</span>
                             </div>
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Function App ID</li>
-                                <li>Function App name</li>
-                                <li>Default host key</li>
-                            </ul>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What's the execution timeout?</h5>
-                        <p>Consumption: 5 minutes, Premium: 30 minutes configurable, Durable Functions can run indefinitely.</p>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Hosting Plan</h6>
+                                <p class="small mb-1">Determines scaling behavior, cold-start profile, and cost envelope.</p>
+                                <span class="badge" style="background:var(--azure-blue)">Required</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="faq-item">
-                        <h5>Can I use local development?</h5>
-                        <p>Yes. Azure Functions Core Tools allow local development and testing before deployment.</p>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Telemetry + Secrets</h6>
+                                <p class="small mb-1">Monitoring and secret management integration for production readiness.</p>
+                                <span class="badge bg-secondary">Conditional</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="faq-item">
-                        <h5>What's the cold start issue?</h5>
-                        <p>Consumption plan has cold starts. Premium plan has warm instances. Flex Consumption minimizes cold starts.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Can I share code between functions?</h5>
-                        <p>Yes. Use shared code in separate library files or create shared bindings.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Serverless Compute</div>
-                    <div class="sidebar-item"><strong>Languages:</strong> 7+ supported</div>
-                    <div class="sidebar-item"><strong>Timeout:</strong> 5-30 min (plan dependent)</div>
-                    <div class="sidebar-item"><strong>Max Memory:</strong> 1.5-3.5 GB</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Trigger Types</h5>
-                    <div class="sidebar-item">â€¢ HTTP / REST APIs</div>
-                    <div class="sidebar-item">â€¢ Timer / Schedule (CRON)</div>
-                    <div class="sidebar-item">â€¢ Storage Blobs & Queues</div>
-                    <div class="sidebar-item">â€¢ Service Bus & Event Hubs</div>
-                    <div class="sidebar-item">â€¢ Event Grid</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Security Features</h5>
-                    <div class="sidebar-item">âœ" API authentication keys</div>
-                    <div class="sidebar-item">âœ" Managed identities</div>
-                    <div class="sidebar-item">âœ" Private endpoints</div>
-                    <div class="sidebar-item">âœ" Key Vault integration</div>
-                    <div class="sidebar-item">âœ" Azure AD authorization</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Best Practices</h5>
-                    <div class="sidebar-item">â†' Keep functions small & focused</div>
-                    <div class="sidebar-item">â†' Use managed identities</div>
-                    <div class="sidebar-item">â†' Set timeout appropriately</div>
-                    <div class="sidebar-item">â†' Monitor with Application Insights</div>
-                    <div class="sidebar-item">â†' Use Durable Functions for workflows</div>
                 </div>
             </div>
-        </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Acceptance Gates</h5>
+                <ul class="small mb-0">
+                    <li class="mb-2"><strong>Gate 1:</strong> Function app, plan, and storage resources deploy successfully in approved <code>&lt;location&gt;</code>.</li>
+                    <li class="mb-2"><strong>Gate 2:</strong> Trigger execution and HTTP endpoints respond as expected for baseline scenarios.</li>
+                    <li class="mb-2"><strong>Gate 3:</strong> Runtime, TLS, and HTTPS-only settings align with security policy.</li>
+                    <li class="mb-2"><strong>Gate 4:</strong> Scale behavior and timeout profile are validated against workload requirements.</li>
+                    <li><strong>Gate 5:</strong> Monitoring telemetry and operational alerting are available to support teams.</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Spec Workflow</h5>
+                <ol class="small mb-0">
+                    <li class="mb-2"><strong>Author:</strong> Define trigger model, runtime stack, hosting plan, and security controls.</li>
+                    <li class="mb-2"><strong>Review:</strong> Obtain platform, security, and operations approval on execution profile.</li>
+                    <li class="mb-2"><strong>Validate:</strong> Confirm parameter completeness and integration dependencies.</li>
+                    <li class="mb-2"><strong>Deploy:</strong> Execute approved IaC with environment-specific parameter values.</li>
+                    <li><strong>Evidence:</strong> Capture functional and operational validation outputs for release records.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+            <p class="text-muted">Use this sequence to deploy Azure Functions from specification and validate trigger, runtime, and scaling readiness.</p>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">1. Prerequisites</h5>
+                <ul class="small mb-0">
+                    <li>Azure CLI with Bicep support installed and authenticated to target subscription</li>
+                    <li>Approved <code>location</code>, <code>environment</code>, runtime, and hosting plan values</li>
+                    <li>Security baseline decisions for identity, public network access, and secrets handling</li>
+                    <li>Monitoring and alerting design aligned with operational support model</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">2. Deployment Steps</h5>
+                <ol class="small mb-0">
+                    <li class="mb-2">Create or select the resource group for compute resources.</li>
+                    <li class="mb-2">Compile and review the Functions Bicep template.</li>
+                    <li class="mb-2">Deploy plan, storage, and function app with approved parameters.</li>
+                    <li class="mb-2">Validate endpoint behavior and event trigger execution.</li>
+                    <li>Confirm diagnostics, scale settings, and operational alerts.</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">3. Azure CLI Example</h5>
+                <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
+
+az group create \
+  --name rg-functions-&lt;environment&gt; \
+  --location &lt;location&gt;
+
+az bicep build \
+  --file specs/azure-functions.bicep
+
+az deployment group create \
+  --resource-group rg-functions-&lt;environment&gt; \
+  --template-file specs/azure-functions.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">4. Validation Checklist</h5>
+                <ul class="small mb-0">
+                    <li>Outputs <code>functionAppId</code>, <code>functionAppName</code>, and <code>functionAppUrl</code> are returned</li>
+                    <li>HTTP endpoints and non-HTTP triggers execute successfully</li>
+                    <li>HTTPS-only and TLS baseline are enforced</li>
+                    <li>Runtime settings and worker version match application expectations</li>
+                    <li>Application telemetry is visible in operations dashboards</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+            <p class="text-muted mb-4">Use the approved sample spec-kit as a formatting and governance baseline when authoring Azure Functions specifications.</p>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+                    <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+                </a>
+                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+                </a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+                    <i class="bi bi-github me-2"></i>Open on GitHub
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5>How can cold start impact be reduced?</h5>
+                <p class="mb-0">Use Flex or Premium hosting options for pre-warmed behavior and tune trigger patterns to reduce startup latency impact.</p>
+            </div>
+            <div class="faq-item">
+                <h5>Which plan is best for unpredictable workloads?</h5>
+                <p class="mb-0">Consumption or Flex models are typically effective for bursty workloads where scale-to-zero economics are desired.</p>
+            </div>
+            <div class="faq-item">
+                <h5>How should secrets be handled in functions?</h5>
+                <p class="mb-0">Avoid embedding secrets in code or settings; integrate managed identity and centralized secret stores for secure runtime access.</p>
+            </div>
+        </section>
     </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
+    <section id="learn-more" class="py-4 bg-white border-top">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-3">Learn More</h3>
+            <a href="https://learn.microsoft.com/azure/azure-functions/functions-overview" target="_blank" rel="noopener" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-microsoft me-2"></i>Official Azure Functions Documentation
+            </a>
         </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Functions Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/azure-functions/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+    </section>
+
+    <footer class="py-4 text-center text-muted bg-light border-top">
+        <div class="container">
+            <small>&copy; 2026 Azure AI Deployment Essentials. Module documentation for architecture and deployment planning.</small>
         </div>
     </footer>
 
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
-
