@@ -1,13 +1,13 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Module Spec Writing Guide — Azure AI Templates</title>
+  <title>Module Spec Writing Guide - Azure AI Templates</title>
   <meta name="description" content="Complete guide to writing specifications for all 18 Azure core modules." />
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root { --accent: #0078d4; --accent-dark: #50e6ff; }
     [data-bs-theme="dark"] { --accent: #50e6ff; }
@@ -67,7 +67,7 @@
     <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#fff" stroke-width="0.5"/></pattern></defs><rect width="1200" height="400" fill="url(#grid)"/></svg>
     <div class="container py-5">
       <h1 class="display-4 fw-bold mb-3">Module Specification Writing Guide</h1>
-      <p class="lead">Complete templates and best practices for documenting all 27 Azure core modules.</p>
+      <p class="lead">Complete templates and best practices for documenting all 23 Azure core modules.</p>
       <p class="text-white-50">Write consistent, production-ready specifications with architecture diagrams, resource inventory, costs, and Bicep templates.</p>
     </div>
   </section>
@@ -102,14 +102,10 @@
               <a href="#sqlmi" class="list-group-item list-group-item-action"><small>17. SQL MI</small></a>
               <a href="#bastion" class="list-group-item list-group-item-action"><small>18. Bastion</small></a>
               <a href="#avd" class="list-group-item list-group-item-action"><small>19. Azure Virtual Desktop</small></a>
-              <a href="#aks" class="list-group-item list-group-item-action"><small>20. Azure Kubernetes Service</small></a>
-              <a href="#appservice" class="list-group-item list-group-item-action"><small>21. Azure App Service</small></a>
-              <a href="#datafactory" class="list-group-item list-group-item-action"><small>22. Azure Data Factory</small></a>
-              <a href="#servicebus" class="list-group-item list-group-item-action"><small>23. Azure Service Bus</small></a>
-              <a href="#frontdoor" class="list-group-item list-group-item-action"><small>24. Azure Front Door</small></a>
-              <a href="#eventhubs" class="list-group-item list-group-item-action"><small>25. Azure Event Hubs</small></a>
-              <a href="#logicapps" class="list-group-item list-group-item-action"><small>26. Azure Logic Apps</small></a>
-              <a href="#redis" class="list-group-item list-group-item-action"><small>27. Azure Cache for Redis</small></a>
+              <a href="#aks" class="list-group-item list-group-item-action"><small>20. AKS</small></a>
+              <a href="#appservice" class="list-group-item list-group-item-action"><small>21. App Service</small></a>
+              <a href="#datafactory" class="list-group-item list-group-item-action"><small>22. Data Factory</small></a>
+              <a href="#servicebus" class="list-group-item list-group-item-action"><small>23. Service Bus</small></a>
             </div>
           </div>
         </div>
@@ -124,22 +120,67 @@
               <p class="mt-2 mb-0">A comprehensive document that describes an Azure service, its components, configuration, best practices, cost modeling, and deployment guidance. Each spec should be 150-300 lines and include all critical information for architects and engineers.</p>
             </div>
 
+            <div class="best-practice mt-3">
+              <strong>Start Here (10-Minute Training Path):</strong>
+              <ol class="mb-0 mt-2">
+                <li>Read the 10 standard sections below once from top to bottom.</li>
+                <li>Pick one module from the left menu (recommended: Azure OpenAI).</li>
+                <li>Copy its structure and fill only three items first: Overview, Resource Inventory, and Bicep Template.</li>
+                <li>Complete the remaining sections and validate with the checklist at the bottom of this page.</li>
+              </ol>
+            </div>
+
             <h4>Standard Spec Sections</h4>
             <ul class="list-unstyled">
-              <li class="mb-2"><strong>1. Overview</strong> — Service description, primary use cases, key features (2-3 paragraphs)</li>
-              <li class="mb-2"><strong>2. Architecture</strong> — ASCII diagram or description of component layout</li>
-              <li class="mb-2"><strong>3. Key Capabilities</strong> — Feature list with brief explanations (5-10 items)</li>
-              <li class="mb-2"><strong>4. Resource Inventory</strong> — Full list of Azure resources required (table format)</li>
-              <li class="mb-2"><strong>5. Configuration</strong> — Key settings, SKUs, scaling parameters</li>
-              <li class="mb-2"><strong>6. Cost Estimation</strong> — Monthly cost breakdown, pricing model explanation</li>
-              <li class="mb-2"><strong>7. SLAs & Limits</strong> — Service availability, throughput limits, quotas</li>
-              <li class="mb-2"><strong>8. Bicep Template</strong> — IaC code snippet (50-100 lines)</li>
-              <li class="mb-2"><strong>9. Well-Architected Framework</strong> — Alignment with 5 pillars</li>
-              <li class="mb-2"><strong>10. Best Practices</strong> — Production deployment recommendations</li>
+              <li class="mb-2"><strong>1. Overview</strong> - Service description, primary use cases, key features (2-3 paragraphs)</li>
+              <li class="mb-2"><strong>2. Architecture</strong> - ASCII diagram or description of component layout</li>
+              <li class="mb-2"><strong>3. Key Capabilities</strong> - Feature list with brief explanations (5-10 items)</li>
+              <li class="mb-2"><strong>4. Resource Inventory</strong> - Full list of Azure resources required (table format)</li>
+              <li class="mb-2"><strong>5. Configuration</strong> - Key settings, SKUs, scaling parameters</li>
+              <li class="mb-2"><strong>6. Cost Estimation</strong> - Monthly cost breakdown, pricing model explanation</li>
+              <li class="mb-2"><strong>7. SLAs & Limits</strong> - Service availability, throughput limits, quotas</li>
+              <li class="mb-2"><strong>8. Bicep Template</strong> - IaC code snippet (50-100 lines)</li>
+              <li class="mb-2"><strong>9. Well-Architected Framework</strong> - Alignment with 5 pillars</li>
+              <li class="mb-2"><strong>10. Best Practices</strong> - Production deployment recommendations</li>
             </ul>
 
+            <h4>Easy-to-Follow Training Sequence</h4>
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th style="width: 20%">Step</th>
+                    <th style="width: 40%">What to do</th>
+                    <th>Output</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Step 1 (5 min)</td>
+                    <td>Choose a module and read its Focus Areas.</td>
+                    <td>Clear understanding of scope and module goals.</td>
+                  </tr>
+                  <tr>
+                    <td>Step 2 (10 min)</td>
+                    <td>Draft Overview, Architecture, and Key Capabilities.</td>
+                    <td>First readable draft for technical review.</td>
+                  </tr>
+                  <tr>
+                    <td>Step 3 (10 min)</td>
+                    <td>Complete Resource Inventory, Configuration, and Cost.</td>
+                    <td>Operational and budgeting clarity.</td>
+                  </tr>
+                  <tr>
+                    <td>Step 4 (10 min)</td>
+                    <td>Add SLAs, Bicep snippet, and Best Practices.</td>
+                    <td>Deployment-ready specification.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
             <div class="best-practice mt-3">
-              <strong>📌 Pro Tip:</strong> Use consistent formatting, include pricing units, and always link to official Azure docs. Readers should be able to copy-paste Bicep code directly into their IaC projects.
+              <strong>Pro Tip:</strong> Use consistent formatting, include pricing units, and always link to official Azure docs. Readers should be able to copy-paste Bicep code directly into their IaC projects.
             </div>
           </section>
 
@@ -170,13 +211,13 @@ Key use cases: GenAI apps, RAG systems, code generation, semantic search.
 ## Architecture
 ```
 User Application
-    ↓
+    ->
 API Management (optional gateway)
-    ↓
+    ->
 Azure OpenAI (Cognitive Services)
-    ├─ Deployments (gpt-4, embeddings)
-    ├─ Model versions
-    └─ Rate limits per deployment
+    |-- Deployments (gpt-4, embeddings)
+    |-- Model versions
+    \-- Rate limits per deployment
 ```
 
 ## Key Capabilities
@@ -243,13 +284,13 @@ resource gpt4Deployment 'Microsoft.CognitiveServices/accounts/deployments@2023-1
 - **Operational Excellence**: Log all requests, set up alerts on quota exhaustion
 
 ## Best Practices
-1. **Never hardcode API keys** — use Azure AD with managed identities
-2. **Implement batching** — use Batch API for cost savings (50% cheaper)
-3. **Cache embeddings** — reuse vector embeddings to reduce token cost
-4. **Monitor token usage** — set up alerts when approaching quota limits
-5. **Version models explicitly** — pin to specific version, test updates separately
-6. **Implement retry logic** — handle rate limiting gracefully with exponential backoff
-7. **Use embeddings cache** — store embeddings in cache (Redis/Cosmos) to avoid recomputation
+1. **Never hardcode API keys** - use Azure AD with managed identities
+2. **Implement batching** - use Batch API for cost savings (50% cheaper)
+3. **Cache embeddings** - reuse vector embeddings to reduce token cost
+4. **Monitor token usage** - set up alerts when approaching quota limits
+5. **Version models explicitly** - pin to specific version, test updates separately
+6. **Implement retry logic** - handle rate limiting gracefully with exponential backoff
+7. **Use embeddings cache** - store embeddings in cache (Redis/Cosmos) to avoid recomputation
             </div>
 
             <div class="best-practice">
@@ -283,13 +324,13 @@ search with semantic ranking. Use cases: RAG backends, product catalogs, doc sea
 ## Architecture
 ```
 Data Source (Blob, SQL, etc.)
-    ↓
+    ->
 Indexer with Enrichment Skills
-    ↓
+    ->
 Search Index (Vector + BM25)
-    ↓
+    ->
 Semantic Reranker
-    ↓
+    ->
 Search Results
 ```
 
@@ -376,13 +417,13 @@ resource searchIndex 'Microsoft.Search/searchServices/indexes@2023-11-01' = {
 - **Operational Excellence**: Monitor query latency, track indexing failures, alert on quota
 
 ## Best Practices
-1. **Use hybrid search** — Combine full-text (BM25) + vector for accuracy
-2. **Enable semantic ranking** — Cheap relative benefit for ranking quality
-3. **Batch indexing** — Use batch API for bulk updates (not single-doc updates)
-4. **Disable queryLanguage if not needed** — Reduces index size by 5-10%
-5. **Use integrated vectorizer** — No need to manage embedding pipeline separately
-6. **Monitor indexing lag** — Set up alerts when indexer falls behind
-7. **Test vector dimensions** — 384D (Small) often sufficient; don't default to 3072D
+1. **Use hybrid search** - Combine full-text (BM25) + vector for accuracy
+2. **Enable semantic ranking** - Cheap relative benefit for ranking quality
+3. **Batch indexing** - Use batch API for bulk updates (not single-doc updates)
+4. **Disable queryLanguage if not needed** - Reduces index size by 5-10%
+5. **Use integrated vectorizer** - No need to manage embedding pipeline separately
+6. **Monitor indexing lag** - Set up alerts when indexer falls behind
+7. **Test vector dimensions** - 384D (Small) often sufficient; don't default to 3072D
             </div>
           </section>
 
@@ -410,11 +451,11 @@ Azure AI Foundry is a unified platform for building, evaluating, and deploying A
 applications. It provides Prompt flow, Evaluations, and built-in safety governance.
 
 ## Key Components
-1. **Hub** — Organization-level resource (single per org)
-2. **Projects** — Team workspaces (multiple per hub)
-3. **Prompt Flow** — Visual workflow for chaining models/APIs
-4. **Evaluations** — Quality/safety metrics and benchmarking
-5. **Content Filters** — Safety policies (hate, violence, sexual, self-harm)
+1. **Hub** - Organization-level resource (single per org)
+2. **Projects** - Team workspaces (multiple per hub)
+3. **Prompt Flow** - Visual workflow for chaining models/APIs
+4. **Evaluations** - Quality/safety metrics and benchmarking
+5. **Content Filters** - Safety policies (hate, violence, sexual, self-harm)
 
 ## Resource Inventory
 | Component | Type | Purpose |
@@ -468,13 +509,13 @@ resource aiProject 'Microsoft.MachineLearningServices/workspaces@2023-08-01' = {
 ```
 
 ## Best Practices
-1. **Organize by team** — One project per AI application/team
-2. **Use Prompt Flow for orchestration** — Chain models, APIs, tools
-3. **Evaluate before deployment** — Run evaluation suite on flow outputs
-4. **Implement content filters** — Enable all safety filters in production
-5. **Version control flows** — Commit flow YAML to Git
-6. **Monitor safety metrics** — Track content filter triggers and adjust thresholds
-7. **Document flow inputs/outputs** — Include examples in flow descriptions
+1. **Organize by team** - One project per AI application/team
+2. **Use Prompt Flow for orchestration** - Chain models, APIs, tools
+3. **Evaluate before deployment** - Run evaluation suite on flow outputs
+4. **Implement content filters** - Enable all safety filters in production
+5. **Version control flows** - Commit flow YAML to Git
+6. **Monitor safety metrics** - Track content filter triggers and adjust thresholds
+7. **Document flow inputs/outputs** - Include examples in flow descriptions
             </div>
           </section>
 
@@ -523,7 +564,7 @@ token-aware rate limiting, request transformation, caching.
 - Backend: https://{{ openai-instance }}.openai.azure.com
 - Rate limit policy: X tokens/minute (not requests/minute)
 - Caching: Disable for LLM calls (non-deterministic)
-- Routing: /v1/chat/completions → Azure OpenAI deployment
+- Routing: /v1/chat/completions -> Azure OpenAI deployment
 
 ## Cost Estimation
 - **Consumption**: $0.035 per unit (1M units = ~$35)
@@ -567,13 +608,13 @@ resource openaiBackend 'Microsoft.ApiManagement/service/backends@2023-05-01-prev
 - **Operational Excellence**: Analytics on token usage, API health monitoring
 
 ## Best Practices
-1. **Token-aware rate limiting** — Use policies to count tokens, not just requests
-2. **Cache non-semantic requests** — Cache embeddings lookups, not completions
-3. **Circuit breaker pattern** — Return cached/fallback response on timeout
-4. **Monitor token spend** — Track token consumption via analytics blade
-5. **Use managed identities** — Authenticate to OpenAI with service principal
-6. **Implement retry logic in policy** — Handle transient failures gracefully
-7. **Version APIs explicitly** — v1, v2, etc. for safe rollouts
+1. **Token-aware rate limiting** - Use policies to count tokens, not just requests
+2. **Cache non-semantic requests** - Cache embeddings lookups, not completions
+3. **Circuit breaker pattern** - Return cached/fallback response on timeout
+4. **Monitor token spend** - Track token consumption via analytics blade
+5. **Use managed identities** - Authenticate to OpenAI with service principal
+6. **Implement retry logic in policy** - Handle transient failures gracefully
+7. **Version APIs explicitly** - v1, v2, etc. for safe rollouts
             </div>
           </section>
 
@@ -674,13 +715,13 @@ resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 - **Operational Excellence**: Enable audit logging, set up alerts on suspicious access
 
 ## Best Practices
-1. **Use RBAC over Access Policies** — Simpler, more granular
-2. **Enable purge protection** — Prevents accidental permanent deletion
-3. **Rotate secrets regularly** — Implement automation (Logic Apps, Functions)
-4. **Set expiration dates** — Secrets should have TTL
-5. **Audit all access** — Enable diagnostic logging, review monthly
-6. **Use managed identities for access** — Never hardcode credentials
-7. **Private endpoints only** — No public network access for Key Vault
+1. **Use RBAC over Access Policies** - Simpler, more granular
+2. **Enable purge protection** - Prevents accidental permanent deletion
+3. **Rotate secrets regularly** - Implement automation (Logic Apps, Functions)
+4. **Set expiration dates** - Secrets should have TTL
+5. **Audit all access** - Enable diagnostic logging, review monthly
+6. **Use managed identities for access** - Never hardcode credentials
+7. **Private endpoints only** - No public network access for Key Vault
             </div>
           </section>
 
@@ -798,66 +839,34 @@ resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
           </section>
 
           <section id="aks" class="module-section">
-            <h3><i class="bi bi-diagram-3-fill me-2"></i>20. Azure Kubernetes Service</h3>
-            <p><strong>Focus:</strong> Managed Kubernetes orchestration, cluster security, autoscaling, workload identity</p>
+            <h3><i class="bi bi-diagram-3 me-2"></i>20. Azure Kubernetes Service</h3>
+            <p><strong>Focus:</strong> Managed Kubernetes, node pools, autoscaling, workload identity, network policy</p>
             <div class="guide-box">
-              <strong>Spec Highlights:</strong> Node pool strategy, CNI and network policy selection, private API server, pod identity/workload identity, autoscaler profiles, observability stack
+              <strong>Spec Highlights:</strong> Private vs public cluster, system/user node pools, ingress strategy, RBAC model, image supply chain security, upgrade channels
             </div>
           </section>
 
           <section id="appservice" class="module-section">
-            <h3><i class="bi bi-window-stack me-2"></i>21. Azure App Service</h3>
-            <p><strong>Focus:</strong> Managed web/API hosting, deployment slots, scaling, secure app configuration</p>
+            <h3><i class="bi bi-window me-2"></i>21. App Service</h3>
+            <p><strong>Focus:</strong> Web/API hosting, deployment slots, autoscale, VNet integration, managed identity</p>
             <div class="guide-box">
-              <strong>Spec Highlights:</strong> App Service Plan sizing, slot strategy, TLS and custom domains, VNet integration, managed identity + Key Vault references
+              <strong>Spec Highlights:</strong> Plan SKU selection, runtime stack strategy, slot swap design, private endpoint and outbound routing, TLS and auth configuration
             </div>
           </section>
 
           <section id="datafactory" class="module-section">
-            <h3><i class="bi bi-arrow-repeat me-2"></i>22. Azure Data Factory</h3>
-            <p><strong>Focus:</strong> Data ingestion and orchestration, ETL/ELT pipeline design, integration runtime topology</p>
+            <h3><i class="bi bi-bezier2 me-2"></i>22. Data Factory</h3>
+            <p><strong>Focus:</strong> Data orchestration, hybrid connectivity, scheduling, retries, operational observability</p>
             <div class="guide-box">
-              <strong>Spec Highlights:</strong> Pipeline dependency graph, connector mapping, data flow compute sizing, self-hosted IR placement, scheduling and retry model
+              <strong>Spec Highlights:</strong> Pipeline dependency graph, integration runtime placement, trigger windows, parameterization standards, data lineage and alerting
             </div>
           </section>
 
           <section id="servicebus" class="module-section">
-            <h3><i class="bi bi-hdd-network-fill me-2"></i>23. Azure Service Bus</h3>
-            <p><strong>Focus:</strong> Enterprise messaging reliability, queue/topic topology, replay and dead-letter strategy</p>
+            <h3><i class="bi bi-sign-turn-right me-2"></i>23. Service Bus</h3>
+            <p><strong>Focus:</strong> Reliable messaging, queue/topic topology, dead-letter handling, transactional processing</p>
             <div class="guide-box">
-              <strong>Spec Highlights:</strong> Namespace tier selection, queue/topic partitioning, sessions and ordering, duplicate detection windows, DR alias and failover posture
-            </div>
-          </section>
-
-          <section id="frontdoor" class="module-section">
-            <h3><i class="bi bi-signpost-split-fill me-2"></i>24. Azure Front Door</h3>
-            <p><strong>Focus:</strong> Global routing, edge security, WAF policy design, multi-origin failover</p>
-            <div class="guide-box">
-              <strong>Spec Highlights:</strong> Origin group topology, route rule sets, WAF custom rules, health probe tuning, custom domain TLS strategy
-            </div>
-          </section>
-
-          <section id="eventhubs" class="module-section">
-            <h3><i class="bi bi-broadcast-pin me-2"></i>25. Azure Event Hubs</h3>
-            <p><strong>Focus:</strong> Streaming ingestion scale, partition model, retention and consumer architecture</p>
-            <div class="guide-box">
-              <strong>Spec Highlights:</strong> Throughput unit sizing, partition count planning, capture configuration, Kafka endpoint enablement, geo-disaster recovery alias
-            </div>
-          </section>
-
-          <section id="logicapps" class="module-section">
-            <h3><i class="bi bi-diagram-2-fill me-2"></i>26. Azure Logic Apps</h3>
-            <p><strong>Focus:</strong> Workflow automation, connector governance, integration error handling</p>
-            <div class="guide-box">
-              <strong>Spec Highlights:</strong> Stateful vs stateless model, connector authentication pattern, retry policy design, secure inputs/outputs, split-on and parallelization
-            </div>
-          </section>
-
-          <section id="redis" class="module-section">
-            <h3><i class="bi bi-lightning-charge-fill me-2"></i>27. Azure Cache for Redis</h3>
-            <p><strong>Focus:</strong> In-memory cache strategy, key design, eviction policy and HA topology</p>
-            <div class="guide-box">
-              <strong>Spec Highlights:</strong> SKU/tier sizing, clustering and sharding, persistence options, private endpoint design, cache invalidation strategy
+              <strong>Spec Highlights:</strong> Standard vs Premium tier decision, topic subscription filters, duplicate detection, lock duration tuning, DR alias and failover model
             </div>
           </section>
 
@@ -875,18 +884,18 @@ resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
             </ol>
 
             <div class="best-practice mt-4">
-              <strong>📋 Template Checklist:</strong>
+              <strong> Template Checklist:</strong>
               <ul class="mt-2 mb-0">
-                <li>✅ Overview (2-3 paragraphs)</li>
-                <li>✅ Architecture diagram (ASCII or Mermaid)</li>
-                <li>✅ Key capabilities list (5-10 items)</li>
-                <li>✅ Resource inventory table</li>
-                <li>✅ Configuration guide</li>
-                <li>✅ Cost breakdown (monthly estimate)</li>
-                <li>✅ SLAs and limits table</li>
-                <li>✅ Bicep template (50-100 LOC)</li>
-                <li>✅ WAF alignment (5 pillars)</li>
-                <li>✅ Best practices (5-10 items)</li>
+                <li>[ ] Overview (2-3 paragraphs)</li>
+                <li>[ ] Architecture diagram (ASCII or Mermaid)</li>
+                <li>[ ] Key capabilities list (5-10 items)</li>
+                <li>[ ] Resource inventory table</li>
+                <li>[ ] Configuration guide</li>
+                <li>[ ] Cost breakdown (monthly estimate)</li>
+                <li>[ ] SLAs and limits table</li>
+                <li>[ ] Bicep template (50-100 LOC)</li>
+                <li>[ ] WAF alignment (5 pillars)</li>
+                <li>[ ] Best practices (5-10 items)</li>
               </ul>
             </div>
           </section>
@@ -906,7 +915,7 @@ resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
   <script>
     function toggleTheme() {
       const html = document.documentElement;
@@ -921,3 +930,5 @@ resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   </script>
 </body>
 </html>
+
+
