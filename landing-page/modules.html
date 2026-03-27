@@ -1,20 +1,22 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Core Azure Modules — AI Deployment Essentials</title>
+  <title>Core Azure Modules – AI Deployment Essentials</title>
   <meta name="description" content="Core Azure modules for AI deployments: OpenAI, AI Search, Foundry, networking, monitoring, and more." />
   <meta name="keywords" content="Azure modules, OpenAI, AI Search, Cosmos DB, Fabric, networking, security" />
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root { --accent: #0078d4; --accent-dark: #50e6ff; }
     [data-bs-theme="dark"] { --accent: #50e6ff; }
     .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
     .module-card { border-left: 4px solid var(--accent); border-radius: 8px; transition: transform .2s, box-shadow .2s; cursor: pointer; }
     .module-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .module-card:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, white 45%); outline-offset: 2px; }
+    .module-card .module-cta { display: inline-flex; align-items: center; gap: .25rem; margin-top: .75rem; font-size: .75rem; font-weight: 600; text-decoration: none; }
     .module-icon { font-size: 2rem; margin-bottom: 1rem; }
     .hero { position: relative; min-height: 280px; background: linear-gradient(135deg, #0050a0 0%, #0078d4 40%, #00a2e8 70%, #50e6ff 100%); overflow: hidden; }
     [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #001830 0%, #003566 40%, #0050a0 100%); }
@@ -24,6 +26,9 @@
     [data-bs-theme="dark"] .module-detail { background: rgba(0, 120, 212, 0.1); }
     .spec-box { background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto; }
     [data-bs-theme="dark"] .spec-box { background: #2d2d2d; border-color: #444; color: #e0e0e0; }
+    .spec-implementation { border: 1px dashed var(--accent); border-radius: 8px; padding: 1rem; margin-top: 1rem; background: rgba(0,120,212,.05); }
+    .spec-implementation h6 { font-weight: 700; margin-bottom: .5rem; }
+    .spec-implementation ul { margin-bottom: .75rem; }
     #backToTop { position: fixed; bottom: 2rem; right: 2rem; z-index: 1050; display: none; }
   </style>
 </head>
@@ -85,7 +90,7 @@
         <div class="col-md-3">
           <div class="card h-100 shadow-sm">
             <div class="card-body">
-              <h6 class="fw-bold text-success">🔐 Security & Access</h6>
+              <h6 class="fw-bold text-success">🔒 Security & Access</h6>
               <small class="text-muted">Identity, secrets, and network isolation</small>
             </div>
           </div>
@@ -103,7 +108,7 @@
 
     <!-- Module Cards -->
     <section class="mb-5">
-      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>27 Core Modules</h2>
+      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>23 Core Modules</h2>
       <div class="module-grid">
         <!-- AI Services -->
         <div class="card module-card shadow-sm" data-module="openai">
@@ -116,7 +121,7 @@
 
         <div class="card module-card shadow-sm" data-module="aisearch">
           <div class="card-body">
-            <div class="module-icon">🔍</div>
+            <div class="module-icon">🔒</div>
             <h6 class="fw-bold">AI Search</h6>
             <small class="text-muted">Vector + semantic search</small>
           </div>
@@ -141,7 +146,7 @@
         <!-- Storage & Data -->
         <div class="card module-card shadow-sm" data-module="keyvault">
           <div class="card-body">
-            <div class="module-icon">🔐</div>
+            <div class="module-icon">🔒</div>
             <h6 class="fw-bold">Key Vault</h6>
             <small class="text-muted">Secrets & certificates</small>
           </div>
@@ -182,7 +187,7 @@
 
         <div class="card module-card shadow-sm" data-module="privatelink">
           <div class="card-body">
-            <div class="module-icon">🔒</div>
+            <div class="module-icon">🔑</div>
             <h6 class="fw-bold">Private Link</h6>
             <small class="text-muted">Network isolation</small>
           </div>
@@ -207,7 +212,7 @@
         <!-- Compute & Monitoring -->
         <div class="card module-card shadow-sm" data-module="containerapps">
           <div class="card-body">
-            <div class="module-icon">☁️</div>
+            <div class="module-icon">✅</div>
             <h6 class="fw-bold">Container Apps</h6>
             <small class="text-muted">Managed containers</small>
           </div>
@@ -247,7 +252,7 @@
 
         <div class="card module-card shadow-sm" data-module="bastion">
           <div class="card-body">
-            <div class="module-icon">🔐</div>
+            <div class="module-icon">🔒</div>
             <h6 class="fw-bold">Azure Bastion</h6>
             <small class="text-muted">Secure remote access</small>
           </div>
@@ -265,63 +270,31 @@
           <div class="card-body">
             <div class="module-icon">☸️</div>
             <h6 class="fw-bold">Azure Kubernetes Service</h6>
-            <small class="text-muted">Managed Kubernetes clusters</small>
+            <small class="text-muted">Managed Kubernetes</small>
           </div>
         </div>
 
         <div class="card module-card shadow-sm" data-module="appservice">
           <div class="card-body">
             <div class="module-icon">🌐</div>
-            <h6 class="fw-bold">Azure App Service</h6>
-            <small class="text-muted">Managed web app hosting</small>
+            <h6 class="fw-bold">App Service</h6>
+            <small class="text-muted">Web apps and APIs</small>
           </div>
         </div>
 
         <div class="card module-card shadow-sm" data-module="datafactory">
           <div class="card-body">
-            <div class="module-icon">🏭</div>
-            <h6 class="fw-bold">Azure Data Factory</h6>
+            <div class="module-icon">🚀</div>
+            <h6 class="fw-bold">Data Factory</h6>
             <small class="text-muted">Data integration pipelines</small>
           </div>
         </div>
 
         <div class="card module-card shadow-sm" data-module="servicebus">
           <div class="card-body">
-            <div class="module-icon">🚌</div>
-            <h6 class="fw-bold">Azure Service Bus</h6>
-            <small class="text-muted">Enterprise messaging</small>
-          </div>
-        </div>
-
-        <div class="card module-card shadow-sm" data-module="frontdoor">
-          <div class="card-body">
-            <div class="module-icon">🚪</div>
-            <h6 class="fw-bold">Azure Front Door</h6>
-            <small class="text-muted">Global edge delivery</small>
-          </div>
-        </div>
-
-        <div class="card module-card shadow-sm" data-module="eventhubs">
-          <div class="card-body">
-            <div class="module-icon">📡</div>
-            <h6 class="fw-bold">Azure Event Hubs</h6>
-            <small class="text-muted">High-throughput streaming</small>
-          </div>
-        </div>
-
-        <div class="card module-card shadow-sm" data-module="logicapps">
-          <div class="card-body">
-            <div class="module-icon">🧩</div>
-            <h6 class="fw-bold">Azure Logic Apps</h6>
-            <small class="text-muted">Workflow automation</small>
-          </div>
-        </div>
-
-        <div class="card module-card shadow-sm" data-module="redis">
-          <div class="card-body">
-            <div class="module-icon">⚡</div>
-            <h6 class="fw-bold">Azure Cache for Redis</h6>
-            <small class="text-muted">Low-latency caching</small>
+            <div class="module-icon">🚀</div>
+            <h6 class="fw-bold">Service Bus</h6>
+            <small class="text-muted">Reliable messaging</small>
           </div>
         </div>
       </div>
@@ -329,6 +302,9 @@
 
     <!-- Module Details -->
     <section id="modules-detail" class="mb-5">
+      <div class="alert alert-warning small" role="alert">
+        <strong>Pricing disclaimer:</strong> Monthly costs shown across module details are planning estimates only and vary by region, usage profile, sizing, and Microsoft pricing updates.
+      </div>
       <!-- Azure OpenAI -->
       <div class="module-detail" id="openai-detail" style="display:none">
         <h4 class="fw-bold mb-2">🤖 Azure OpenAI Service</h4>
@@ -347,7 +323,7 @@
 
       <!-- AI Search -->
       <div class="module-detail" id="aisearch-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🔍 Azure AI Search</h4>
+        <h4 class="fw-bold mb-2">🔒 Azure AI Search</h4>
         <p><strong>Purpose:</strong> Full-text and vector search engine for enterprise content. Supports hybrid search combining semantic and keyword matching.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
@@ -395,7 +371,7 @@
 
       <!-- Key Vault -->
       <div class="module-detail" id="keyvault-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🔐 Azure Key Vault</h4>
+        <h4 class="fw-bold mb-2">🔒 Azure Key Vault</h4>
         <p><strong>Purpose:</strong> Centralized secrets management for API keys, connection strings, certificates, and encryption keys with audit logging.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
@@ -475,7 +451,7 @@
 
       <!-- Private Link -->
       <div class="module-detail" id="privatelink-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🔒 Azure Private Link</h4>
+        <h4 class="fw-bold mb-2">🔑 Azure Private Link</h4>
         <p><strong>Purpose:</strong> Private connectivity to Azure PaaS services without exposing to the public internet.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
@@ -523,7 +499,7 @@
 
       <!-- Container Apps -->
       <div class="module-detail" id="containerapps-detail" style="display:none">
-        <h4 class="fw-bold mb-2">☁️ Azure Container Apps</h4>
+        <h4 class="fw-bold mb-2">✅ Azure Container Apps</h4>
         <p><strong>Purpose:</strong> Serverless container hosting with automatic scaling and built-in networking without Kubernetes complexity.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
@@ -605,7 +581,7 @@
 
       <!-- Azure Bastion -->
       <div class="module-detail" id="bastion-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🔐 Azure Bastion</h4>
+        <h4 class="fw-bold mb-2">🔒 Azure Bastion</h4>
         <p><strong>Purpose:</strong> Secure remote access to VMs via RDP/SSH through HTML5 browser without exposing public IPs.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
@@ -644,144 +620,75 @@
       <!-- Azure Kubernetes Service -->
       <div class="module-detail" id="aks-detail" style="display:none">
         <h4 class="fw-bold mb-2">☸️ Azure Kubernetes Service (AKS)</h4>
-        <p><strong>Purpose:</strong> Managed Kubernetes control plane for containerized applications with autoscaling, identity integration, and enterprise security.</p>
+        <p><strong>Purpose:</strong> Managed Kubernetes platform for containerized AI and enterprise applications with built-in scaling, upgrades, and security controls.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
-          <li>Managed Kubernetes control plane with SLA</li>
-          <li>Node pools for system and workload isolation</li>
-          <li>Cluster autoscaler and horizontal pod autoscaling</li>
-          <li>Azure CNI and network policy support</li>
-          <li>Microsoft Entra workload identity and Azure RBAC</li>
-          <li>Private cluster mode and API server restrictions</li>
-          <li>Integrated monitoring with Container Insights</li>
+          <li>Managed control plane with automatic patching</li>
+          <li>Cluster autoscaler and node pool scaling</li>
+          <li>Microsoft Entra integration and Azure RBAC</li>
+          <li>Private cluster and network policy support</li>
+          <li>Ingress with App Gateway or NGINX</li>
+          <li>Workload identity for secretless service access</li>
         </ul>
-        <p><strong>Common Use Cases:</strong> Microservices, AI inference APIs, platform backends, event-driven processing</p>
-        <p><strong>Typical Monthly Cost:</strong> $250 - $2,500 depending on node size, count, and uptime</p>
+        <p><strong>Common Use Cases:</strong> LLM inference APIs, microservices platforms, event-driven workers, internal platform engineering</p>
+        <p><strong>Typical Monthly Cost:</strong> $300 - $3,500+ (node VM size and scale dependent)</p>
       </div>
 
       <!-- Azure App Service -->
       <div class="module-detail" id="appservice-detail" style="display:none">
         <h4 class="fw-bold mb-2">🌐 Azure App Service</h4>
-        <p><strong>Purpose:</strong> Fully managed platform for hosting web apps and APIs with CI/CD, TLS, identity, and autoscaling support.</p>
+        <p><strong>Purpose:</strong> Fully managed PaaS for hosting web apps and APIs with autoscaling, deployment slots, and enterprise authentication.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
           <li>Managed runtime for .NET, Node.js, Python, Java, and PHP</li>
+          <li>Autoscale and zone redundancy options</li>
           <li>Deployment slots for blue/green releases</li>
-          <li>Built-in TLS certificates and custom domains</li>
-          <li>VNet integration and private endpoint support</li>
-          <li>Autoscale based on CPU, memory, or schedule</li>
+          <li>VNet integration and private endpoints</li>
           <li>Managed identity and Key Vault references</li>
+          <li>Built-in TLS, custom domains, and WAF fronting</li>
         </ul>
-        <p><strong>Common Use Cases:</strong> Public web apps, internal APIs, backend-for-frontend services, partner portals</p>
-        <p><strong>Typical Monthly Cost:</strong> $60 - $600 per app plan depending on SKU and scale</p>
+        <p><strong>Common Use Cases:</strong> API gateways, internal portals, operational dashboards, business web applications</p>
+        <p><strong>Typical Monthly Cost:</strong> $70 - $800+ (tier and instance count dependent)</p>
       </div>
 
       <!-- Azure Data Factory -->
       <div class="module-detail" id="datafactory-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🏭 Azure Data Factory</h4>
-        <p><strong>Purpose:</strong> Cloud data integration service for orchestrating ETL/ELT pipelines across SaaS, on-premises, and Azure data stores.</p>
+        <h4 class="fw-bold mb-2">🚀 Azure Data Factory</h4>
+        <p><strong>Purpose:</strong> Cloud ETL/ELT orchestration service for moving and transforming data across SaaS, databases, and data lakes.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
-          <li>Visual pipeline authoring with low-code orchestration</li>
-          <li>100+ connectors for structured and unstructured data sources</li>
-          <li>Mapping data flows for transformation at scale</li>
-          <li>Managed integration runtime and self-hosted IR support</li>
-          <li>Triggering by schedule, event, and tumbling window</li>
-          <li>Built-in monitoring, retries, and alert integration</li>
+          <li>Visual pipeline orchestration with scheduling and triggers</li>
+          <li>200+ connectors for cloud and on-prem sources</li>
+          <li>Mapping Data Flows for low-code transformations</li>
+          <li>Self-hosted integration runtime for hybrid connectivity</li>
+          <li>Parameterized pipelines and reusable templates</li>
+          <li>Monitoring, retry policies, and operational lineage</li>
         </ul>
-        <p><strong>Common Use Cases:</strong> Data ingestion, warehouse loading, lakehouse prep, multi-system synchronization</p>
-        <p><strong>Typical Monthly Cost:</strong> $100 - $1,500 based on activity runs, DIU usage, and data movement</p>
+        <p><strong>Common Use Cases:</strong> Batch ingestion, ERP/CRM integration, lakehouse loading, data quality preprocessing for AI</p>
+        <p><strong>Typical Monthly Cost:</strong> $80 - $2,000+ (activity runs, data movement, and integration runtime dependent)</p>
       </div>
 
       <!-- Azure Service Bus -->
       <div class="module-detail" id="servicebus-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🚌 Azure Service Bus</h4>
-        <p><strong>Purpose:</strong> Reliable enterprise message broker for decoupled systems with queues, topics, sessions, and dead-letter handling.</p>
+        <h4 class="fw-bold mb-2">🚀 Azure Service Bus</h4>
+        <p><strong>Purpose:</strong> Enterprise message broker for reliable asynchronous communication between distributed services.</p>
         <p><strong>Key Capabilities:</strong></p>
         <ul>
-          <li>Queues and topics/subscriptions for async integration</li>
-          <li>FIFO processing with sessions and duplicate detection</li>
+          <li>Queues and topics/subscriptions for pub-sub patterns</li>
           <li>Dead-letter queues and poison message handling</li>
+          <li>Duplicate detection and message sessions</li>
           <li>Scheduled delivery and transaction support</li>
-          <li>Private endpoint and virtual network integration</li>
-          <li>Geo-disaster recovery alias for namespace failover</li>
+          <li>Private networking and RBAC-based access</li>
+          <li>Geo-disaster recovery namespace pairing</li>
         </ul>
-        <p><strong>Common Use Cases:</strong> Order processing, workflow orchestration, integration between microservices, event buffering</p>
-        <p><strong>Typical Monthly Cost:</strong> $15 - $400 depending on tier, throughput units, and operations</p>
-      </div>
-
-      <!-- Azure Front Door -->
-      <div class="module-detail" id="frontdoor-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🚪 Azure Front Door</h4>
-        <p><strong>Purpose:</strong> Global edge entry point for web workloads with anycast routing, WAF, TLS offload, and intelligent failover.</p>
-        <p><strong>Key Capabilities:</strong></p>
-        <ul>
-          <li>Global anycast-based HTTP/HTTPS routing</li>
-          <li>Web Application Firewall (WAF) policy enforcement</li>
-          <li>Origin health probes and automatic failover</li>
-          <li>Path-based routing and rules engine</li>
-          <li>Built-in DDoS-resilient edge network</li>
-          <li>Managed TLS certificates and custom domains</li>
-        </ul>
-        <p><strong>Common Use Cases:</strong> Global APIs, multi-region web apps, zero-downtime failover, edge security controls</p>
-        <p><strong>Typical Monthly Cost:</strong> $35 - $450 based on requests, rules, and data transfer</p>
-      </div>
-
-      <!-- Azure Event Hubs -->
-      <div class="module-detail" id="eventhubs-detail" style="display:none">
-        <h4 class="fw-bold mb-2">📡 Azure Event Hubs</h4>
-        <p><strong>Purpose:</strong> Big data streaming ingestion platform for telemetry and event pipelines at massive scale.</p>
-        <p><strong>Key Capabilities:</strong></p>
-        <ul>
-          <li>Millions of events per second ingestion</li>
-          <li>Partitioned consumer model with checkpointing</li>
-          <li>Kafka-compatible endpoint support</li>
-          <li>Capture to Storage/Data Lake for cold path analytics</li>
-          <li>Private endpoint and VNet integration</li>
-          <li>Geo-recovery namespace alias support</li>
-        </ul>
-        <p><strong>Common Use Cases:</strong> IoT telemetry, clickstream analytics, SIEM feeds, real-time operational events</p>
-        <p><strong>Typical Monthly Cost:</strong> $25 - $1,000 based on throughput units and retention</p>
-      </div>
-
-      <!-- Azure Logic Apps -->
-      <div class="module-detail" id="logicapps-detail" style="display:none">
-        <h4 class="fw-bold mb-2">🧩 Azure Logic Apps</h4>
-        <p><strong>Purpose:</strong> Low-code integration and workflow orchestration service for automating processes across cloud and on-prem systems.</p>
-        <p><strong>Key Capabilities:</strong></p>
-        <ul>
-          <li>Visual workflow designer with built-in connectors</li>
-          <li>Stateful and stateless execution models</li>
-          <li>Enterprise connectors (SAP, SQL, Service Bus, M365)</li>
-          <li>Managed identity and secure parameter handling</li>
-          <li>Exception handling, retries, and compensation</li>
-          <li>Native monitoring in Azure Monitor</li>
-        </ul>
-        <p><strong>Common Use Cases:</strong> Approval flows, integration middleware, notification orchestration, B2B workflows</p>
-        <p><strong>Typical Monthly Cost:</strong> $15 - $300 depending on connector calls and workflow runs</p>
-      </div>
-
-      <!-- Azure Cache for Redis -->
-      <div class="module-detail" id="redis-detail" style="display:none">
-        <h4 class="fw-bold mb-2">⚡ Azure Cache for Redis</h4>
-        <p><strong>Purpose:</strong> In-memory data store for ultra-low latency caching, session state, and pub/sub messaging.</p>
-        <p><strong>Key Capabilities:</strong></p>
-        <ul>
-          <li>Sub-millisecond read latency for hot data</li>
-          <li>Cache-aside and write-through patterns</li>
-          <li>Data persistence and zone redundancy options</li>
-          <li>Private endpoint and network isolation support</li>
-          <li>Key expiration and eviction policies</li>
-          <li>Pub/Sub for lightweight signaling workflows</li>
-        </ul>
-        <p><strong>Common Use Cases:</strong> Session cache, token cache, API response cache, rate limiting, feature flags</p>
-        <p><strong>Typical Monthly Cost:</strong> $40 - $900 based on tier, memory size, and replication</p>
+        <p><strong>Common Use Cases:</strong> Order workflows, integration backbones, event buffering, command processing, AI job orchestration</p>
+        <p><strong>Typical Monthly Cost:</strong> $10 - $700+ (tier, throughput, and advanced feature usage dependent)</p>
       </div>
     </section>
 
     <!-- Sample Spec Kit -->
     <section class="mb-5 pb-4 border-bottom">
-      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Sample Spec Kit — Bicep Deployment</h2>
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Sample Spec Kit – Bicep Deployment</h2>
       <p class="text-muted mb-3">Infrastructure as Code example deploying a complete AI workload with the core modules.</p>
       <div class="spec-box">
 <pre>@description('Deploy core AI workload')
@@ -1003,33 +910,160 @@ output cosmosDbEndpoint string = cosmosDb.properties.documentEndpoint
 
   <button id="backToTop" class="btn btn-info btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
   <script>
-    // Module detail display
-    document.querySelectorAll('.module-card').forEach(card => {
-      card.addEventListener('click', () => {
+    const moduleLinks = {
+      openai: 'modules/module-openai.html',
+      aisearch: 'modules/module-aisearch.html',
+      foundry: 'https://learn.microsoft.com/azure/ai-foundry/',
+      apigm: 'modules/module-apimgmt.html',
+      keyvault: 'modules/module-keyvault.html',
+      cosmosdb: 'modules/module-cosmosdb.html',
+      fabric: 'https://learn.microsoft.com/fabric/',
+      containerreg: 'modules/module-containerreg.html',
+      vnet: 'modules/module-vnet.html',
+      privatelink: 'modules/module-privatelink.html',
+      firewall: 'modules/module-firewall.html',
+      entraid: 'modules/module-entraid.html',
+      containerapps: 'modules/module-containerapps.html',
+      functions: 'modules/module-functions.html',
+      monitor: 'modules/module-monitor.html',
+      eventgrid: 'modules/module-eventgrid.html',
+      sqlmi: 'modules/module-sqlmi.html',
+      bastion: 'modules/module-bastion.html',
+      avd: 'https://learn.microsoft.com/azure/virtual-desktop/',
+      aks: 'https://learn.microsoft.com/azure/aks/',
+      appservice: 'https://learn.microsoft.com/azure/app-service/',
+      datafactory: 'https://learn.microsoft.com/azure/data-factory/',
+      servicebus: 'https://learn.microsoft.com/azure/service-bus-messaging/'
+    };
+
+    const moduleSpecs = {
+      openai: { spec: 'azure-openai.bicep', params: 'modelDeployments, tokensPerMinute, contentFilter, privateEndpointEnabled', deps: 'Key Vault, Private Link, Monitor', test: 'Validate deployment health and deny public access.' },
+      aisearch: { spec: 'azure-aisearch.bicep', params: 'sku, replicas, partitions, semanticEnabled, privateEndpointEnabled', deps: 'OpenAI embeddings, Private Link', test: 'Index sample vectors and assert semantic query quality.' },
+      foundry: { spec: 'azure-ai-foundry.spec.yaml', params: 'projectName, workspaceSku, evaluationSet, promptFlows', deps: 'OpenAI, AI Search, Key Vault', test: 'Run prompt-flow evaluation gate in CI.' },
+      apigm: { spec: 'azure-apimgmt.bicep', params: 'sku, policies, quotaPerMinute, cacheEnabled', deps: 'OpenAI backend, Entra ID', test: 'Contract test all routed APIs and enforce throttling policy.' },
+      keyvault: { spec: 'azure-keyvault.bicep', params: 'rbacMode, purgeProtection, softDelete, networkAcl', deps: 'Entra ID, managed identities', test: 'Verify secret get/set with least-privilege identities only.' },
+      cosmosdb: { spec: 'azure-cosmosdb.bicep', params: 'apiType, throughput, consistency, failoverRegions', deps: 'VNet/Private Link, Monitor', test: 'Run throughput and failover validation suite.' },
+      fabric: { spec: 'azure-fabric.bicep', params: 'capacitySku, workspaceModel, onelakePolicies', deps: 'Entra ID, Monitor', test: 'Validate data refresh SLA and workspace access controls.' },
+      containerreg: { spec: 'azure-containerreg.bicep', params: 'sku, zoneRedundancy, retentionPolicy, contentTrust', deps: 'Container Apps or AKS', test: 'Enforce image signing and vulnerability threshold gates.' },
+      vnet: { spec: 'azure-vnet.bicep', params: 'addressSpace, subnetPlan, nsgAssociations, dnsStrategy', deps: 'Firewall, Bastion, Private Link', test: 'Validate route tables and forbidden east-west flows.' },
+      privatelink: { spec: 'azure-privatelink.bicep', params: 'endpointTargets, subnetId, dnsZoneLinks', deps: 'VNet, private DNS zones', test: 'Resolve private FQDNs and deny public endpoint connectivity.' },
+      firewall: { spec: 'azure-firewall.bicep', params: 'skuTier, appRules, netRules, threatIntelMode', deps: 'Hub VNet, Monitor', test: 'Run allow/deny test matrix and rule drift checks.' },
+      entraid: { spec: 'azure-entraid.bicep', params: 'groups, appRegistrations, roleAssignments, conditionalAccess', deps: 'All service identities', test: 'Policy test for MFA and least privilege.' },
+      containerapps: { spec: 'azure-containerapps.bicep', params: 'environmentType, ingress, scaleRules, revisionsMode', deps: 'ACR, Key Vault, Monitor', test: 'Deploy canary revision and validate autoscaling behavior.' },
+      functions: { spec: 'azure-functions.bicep', params: 'planType, runtime, triggerBindings, appSettings', deps: 'Storage, Monitor, Key Vault', test: 'Run trigger integration tests and cold-start SLO checks.' },
+      monitor: { spec: 'azure-monitor.bicep', params: 'workspaceSku, alertRules, actionGroups, retentionDays', deps: 'All workload resources', test: 'Fire synthetic alerts and verify action delivery.' },
+      eventgrid: { spec: 'azure-eventgrid.bicep', params: 'topics, subscriptions, filters, deadLetter', deps: 'Functions or Service Bus', test: 'Publish replay events and validate subscription routing.' },
+      sqlmi: { spec: 'azure-sqlmi.bicep', params: 'vCores, storageGb, backupPolicy, zoneRedundant', deps: 'VNet, Key Vault, Monitor', test: 'Run migration smoke test and backup-restore validation.' },
+      bastion: { spec: 'azure-bastion.bicep', params: 'sku, hostScaling, subnetId, ipConfig', deps: 'VNet, Entra ID', test: 'Validate secure RDP/SSH access and session audit logs.' },
+      avd: { spec: 'azure-avd.spec.yaml', params: 'hostPoolType, autoscaleSchedule, imageVersion, profileStorage', deps: 'Entra ID, Monitor, Bastion', test: 'Validate sign-in latency and profile attach reliability.' },
+      aks: { spec: 'azure-aks.spec.yaml', params: 'nodePools, networkPlugin, workloadIdentity, autoscaler', deps: 'ACR, Key Vault, Monitor', test: 'Run conformance checks and rollout/rollback scenarios.' },
+      appservice: { spec: 'azure-appservice.spec.yaml', params: 'planSku, runtimeStack, slotConfig, vnetIntegration', deps: 'Key Vault, APIM, Monitor', test: 'Blue-green deployment test with health probes.' },
+      datafactory: { spec: 'azure-datafactory.spec.yaml', params: 'pipelines, linkedServices, irMode, triggerSchedule', deps: 'Storage, Key Vault, Monitor', test: 'Run pipeline unit tests and data quality assertions.' },
+      servicebus: { spec: 'azure-servicebus.spec.yaml', params: 'tier, queuesTopics, retryPolicy, duplicateDetection', deps: 'Functions/Event Grid, Monitor', test: 'Load-test throughput and dead-letter handling.' }
+    };
+
+    function addCardCtas() {
+      document.querySelectorAll('.module-card').forEach(card => {
         const moduleId = card.dataset.module;
-        const detailId = moduleId + '-detail';
-        
-        // Hide all details
-        document.querySelectorAll('[id$="-detail"]').forEach(el => {
-          el.style.display = 'none';
+        const target = moduleLinks[moduleId] || '#';
+        const body = card.querySelector('.card-body');
+        if (!body || body.querySelector('.module-cta')) return;
+
+        const cta = document.createElement('a');
+        cta.href = target;
+        cta.target = target.startsWith('http') ? '_blank' : '_self';
+        cta.rel = target.startsWith('http') ? 'noopener noreferrer' : '';
+        cta.className = 'module-cta text-primary';
+        cta.innerHTML = '<i class="bi bi-box-arrow-up-right"></i>Open spec guide';
+        cta.addEventListener('click', event => event.stopPropagation());
+        body.appendChild(cta);
+
+        const detailsBtn = document.createElement('button');
+        detailsBtn.type = 'button';
+        detailsBtn.className = 'btn btn-link btn-sm p-0 ms-2 module-cta';
+        detailsBtn.innerHTML = '<i class="bi bi-lightbulb me-1"></i>Implementation steps';
+        detailsBtn.addEventListener('click', event => {
+          event.stopPropagation();
+          showModuleDetail(card);
         });
-        
-        // Remove active class
-        document.querySelectorAll('.module-card').forEach(c => {
-          c.classList.remove('border-info');
-        });
-        
-        // Show selected detail
-        const detail = document.getElementById(detailId);
-        if (detail) {
-          detail.style.display = 'block';
-          detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          card.classList.add('border-info');
+        body.appendChild(detailsBtn);
+      });
+    }
+
+    function openModuleTarget(moduleId) {
+      const target = moduleLinks[moduleId] || '#';
+      if (target === '#') return;
+
+      if (target.startsWith('http')) {
+        window.open(target, '_blank', 'noopener,noreferrer');
+        return;
+      }
+
+      window.location.href = target;
+    }
+
+    function renderSpecImplementation(moduleId, detailEl) {
+      const moduleSpec = moduleSpecs[moduleId];
+      if (!moduleSpec || !detailEl) return;
+
+      const old = detailEl.querySelector('.spec-implementation');
+      if (old) old.remove();
+
+      const guide = document.createElement('div');
+      guide.className = 'spec-implementation';
+      guide.innerHTML = `
+        <h6><i class="bi bi-diagram-3 me-2"></i>Spec-Based Implementation for This Service</h6>
+        <ul>
+          <li><strong>Author service spec:</strong> Start with <code>${moduleSpec.spec}</code> and lock the resource API versions.</li>
+          <li><strong>Define inputs:</strong> ${moduleSpec.params}</li>
+          <li><strong>Wire dependencies:</strong> ${moduleSpec.deps}</li>
+          <li><strong>Acceptance gate:</strong> ${moduleSpec.test}</li>
+        </ul>
+        <a class="btn btn-sm btn-outline-primary" href="${moduleLinks[moduleId] || '#'}" ${moduleLinks[moduleId] && moduleLinks[moduleId].startsWith('http') ? 'target="_blank" rel="noopener noreferrer"' : ''}>
+          <i class="bi bi-book me-1"></i>Open Service Reference
+        </a>
+      `;
+      detailEl.appendChild(guide);
+    }
+
+    function showModuleDetail(card) {
+      const moduleId = card.dataset.module;
+      const detailId = moduleId + '-detail';
+
+      document.querySelectorAll('[id$="-detail"]').forEach(el => {
+        el.style.display = 'none';
+      });
+
+      document.querySelectorAll('.module-card').forEach(c => {
+        c.classList.remove('border-info');
+      });
+
+      const detail = document.getElementById(detailId);
+      if (detail) {
+        detail.style.display = 'block';
+        renderSpecImplementation(moduleId, detail);
+        detail.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        card.classList.add('border-info');
+      }
+    }
+
+    // Make every card clickable and keyboard accessible.
+    document.querySelectorAll('.module-card').forEach(card => {
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Open ${card.dataset.module} implementation guide`);
+      card.addEventListener('click', () => openModuleTarget(card.dataset.module));
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openModuleTarget(card.dataset.module);
         }
       });
     });
+
+    addCardCtas();
 
     // Theme toggle
     const toggle = document.getElementById('themeToggle');
@@ -1047,3 +1081,4 @@ output cosmosDbEndpoint string = cosmosDb.properties.documentEndpoint
   </script>
 </body>
 </html>
+
