@@ -89,6 +89,19 @@
       margin-right: 0.6rem;
       font-size: 0.9rem;
     }
+    .quiz-choice {
+      border: 1px solid #e4ecf7;
+      border-radius: 10px;
+      padding: 0.55rem 0.75rem;
+      margin-bottom: 0.45rem;
+      background: #fbfdff;
+    }
+    .quiz-result {
+      border: 1px solid #d7e7fb;
+      background: #f4f9ff;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+    }
   </style>
 </head>
 <body>
@@ -324,60 +337,59 @@
     <section class="mb-5">
       <div class="content-card p-4">
         <h2 class="fw-bold mb-3"><i class="bi bi-patch-question me-2 text-primary"></i>Knowledge Check (Real Quiz)</h2>
-        <p class="small text-muted mb-3">Try these questions before opening the answer key. They map directly to common Spec-Driven Development review decisions.</p>
+        <p class="small text-muted mb-3">Select one answer per question, then click <strong>Check Score</strong> for instant results.</p>
 
-        <div class="mb-3">
-          <h6 class="fw-bold mb-1">1) Requirement ambiguity detection</h6>
-          <p class="small mb-1">Which requirement is least ambiguous?</p>
-          <ul class="small mb-0">
-            <li>A. System must respond quickly during peak traffic.</li>
-            <li>B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</li>
-            <li>C. Service should scale if users increase.</li>
-          </ul>
-        </div>
+        <form id="sddQuizForm">
+          <div class="mb-3">
+            <h6 class="fw-bold mb-2">1) Requirement ambiguity detection</h6>
+            <p class="small mb-2">Which requirement is least ambiguous?</p>
+            <label class="quiz-choice small d-block"><input type="radio" name="q1" value="A" class="me-2">A. System must respond quickly during peak traffic.</label>
+            <label class="quiz-choice small d-block"><input type="radio" name="q1" value="B" class="me-2">B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</label>
+            <label class="quiz-choice small d-block mb-0"><input type="radio" name="q1" value="C" class="me-2">C. Service should scale if users increase.</label>
+          </div>
 
-        <div class="mb-3">
-          <h6 class="fw-bold mb-1">2) Strong vs weak acceptance criteria</h6>
-          <p class="small mb-1">Which acceptance criterion is stronger?</p>
-          <ul class="small mb-0">
-            <li>A. Deployment validation should pass for most cases.</li>
-            <li>B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</li>
-            <li>C. Validation behavior should be user friendly.</li>
-          </ul>
-        </div>
+          <div class="mb-3">
+            <h6 class="fw-bold mb-2">2) Strong vs weak acceptance criteria</h6>
+            <p class="small mb-2">Which acceptance criterion is stronger?</p>
+            <label class="quiz-choice small d-block"><input type="radio" name="q2" value="A" class="me-2">A. Deployment validation should pass for most cases.</label>
+            <label class="quiz-choice small d-block"><input type="radio" name="q2" value="B" class="me-2">B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</label>
+            <label class="quiz-choice small d-block mb-0"><input type="radio" name="q2" value="C" class="me-2">C. Validation behavior should be user friendly.</label>
+          </div>
 
-        <div class="mb-3">
-          <h6 class="fw-bold mb-1">3) Traceability mapping</h6>
-          <p class="small mb-1">What is missing if requirement FR-03 has code changes but no linked test case?</p>
-          <ul class="small mb-0">
-            <li>A. Better commit message</li>
-            <li>B. Requirement-to-test traceability</li>
-            <li>C. More architecture diagrams</li>
-          </ul>
-        </div>
+          <div class="mb-3">
+            <h6 class="fw-bold mb-2">3) Traceability mapping</h6>
+            <p class="small mb-2">What is missing if requirement FR-03 has code changes but no linked test case?</p>
+            <label class="quiz-choice small d-block"><input type="radio" name="q3" value="A" class="me-2">A. Better commit message</label>
+            <label class="quiz-choice small d-block"><input type="radio" name="q3" value="B" class="me-2">B. Requirement-to-test traceability</label>
+            <label class="quiz-choice small d-block mb-0"><input type="radio" name="q3" value="C" class="me-2">C. More architecture diagrams</label>
+          </div>
 
-        <div class="mb-3">
-          <h6 class="fw-bold mb-1">4) Gate-based release decisions</h6>
-          <p class="small mb-1">A release gate fails because rollback steps are not defined. What is the best action?</p>
-          <ul class="small mb-0">
-            <li>A. Proceed and document rollback later</li>
-            <li>B. Mark risk accepted without approver</li>
-            <li>C. Block release until rollback plan is documented and reviewed</li>
-          </ul>
-        </div>
+          <div class="mb-3">
+            <h6 class="fw-bold mb-2">4) Gate-based release decisions</h6>
+            <p class="small mb-2">A release gate fails because rollback steps are not defined. What is the best action?</p>
+            <label class="quiz-choice small d-block"><input type="radio" name="q4" value="A" class="me-2">A. Proceed and document rollback later</label>
+            <label class="quiz-choice small d-block"><input type="radio" name="q4" value="B" class="me-2">B. Mark risk accepted without approver</label>
+            <label class="quiz-choice small d-block mb-0"><input type="radio" name="q4" value="C" class="me-2">C. Block release until rollback plan is documented and reviewed</label>
+          </div>
 
-        <div class="mb-0">
-          <h6 class="fw-bold mb-1">5) Spec anti-pattern diagnosis</h6>
-          <p class="small mb-1">Which line is a spec anti-pattern?</p>
-          <ul class="small mb-2">
-            <li>A. "System must feel fast and stable."</li>
-            <li>B. "Error rate must remain below 0.5% over a 24-hour window."</li>
-            <li>C. "All required fields are validated before deployment trigger."</li>
-          </ul>
-        </div>
+          <div class="mb-3">
+            <h6 class="fw-bold mb-2">5) Spec anti-pattern diagnosis</h6>
+            <p class="small mb-2">Which line is a spec anti-pattern?</p>
+            <label class="quiz-choice small d-block"><input type="radio" name="q5" value="A" class="me-2">A. "System must feel fast and stable."</label>
+            <label class="quiz-choice small d-block"><input type="radio" name="q5" value="B" class="me-2">B. "Error rate must remain below 0.5% over a 24-hour window."</label>
+            <label class="quiz-choice small d-block mb-0"><input type="radio" name="q5" value="C" class="me-2">C. "All required fields are validated before deployment trigger."</label>
+          </div>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="button" class="btn btn-primary" onclick="gradeSddQuiz()"><i class="bi bi-check2-circle me-1"></i>Check Score</button>
+            <button type="reset" class="btn btn-outline-secondary" onclick="resetSddQuiz()"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+          </div>
+        </form>
+
+        <div id="sddQuizResult" class="quiz-result d-none" aria-live="polite"></div>
 
         <div class="info-strip mt-3">
-          <strong>Answer key:</strong> 1-B, 2-B, 3-B, 4-C, 5-A.
+          <strong>Downloadable full quiz:</strong>
           <span class="ms-2">The complete quiz and answer key are included in the downloadable course pack below.</span>
         </div>
       </div>
@@ -454,6 +466,60 @@
     </div>
   </footer>
 
+  <script>
+    function gradeSddQuiz() {
+      const answerKey = { q1: 'B', q2: 'B', q3: 'B', q4: 'C', q5: 'A' };
+      const explanations = {
+        q1: 'B is measurable and testable with clear thresholds.',
+        q2: 'B defines concrete behavior and expected HTTP response.',
+        q3: 'Without a linked test, traceability is incomplete.',
+        q4: 'Failed release gates should block until mitigated or formally approved.',
+        q5: '"Feels fast" is subjective and not objectively testable.'
+      };
+
+      const unanswered = [];
+      let correct = 0;
+      let details = '';
+
+      Object.keys(answerKey).forEach((q) => {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (!selected) {
+          unanswered.push(q.replace('q', 'Q'));
+          return;
+        }
+        if (selected.value === answerKey[q]) {
+          correct += 1;
+          details += `<li><strong>${q.toUpperCase()}:</strong> Correct. ${explanations[q]}</li>`;
+        } else {
+          details += `<li><strong>${q.toUpperCase()}:</strong> Incorrect. Correct answer: ${answerKey[q]}. ${explanations[q]}</li>`;
+        }
+      });
+
+      const resultEl = document.getElementById('sddQuizResult');
+      if (unanswered.length > 0) {
+        resultEl.classList.remove('d-none');
+        resultEl.innerHTML = `<strong>Complete all questions first.</strong> Missing: ${unanswered.join(', ')}.`;
+        return;
+      }
+
+      const percent = Math.round((correct / 5) * 100);
+      let badge = 'Needs review';
+      if (percent >= 90) badge = 'Excellent';
+      else if (percent >= 70) badge = 'Good';
+
+      resultEl.classList.remove('d-none');
+      resultEl.innerHTML = `
+        <div class="mb-2"><strong>Score:</strong> ${correct}/5 (${percent}%) - ${badge}</div>
+        <ul class="small mb-0">${details}</ul>
+      `;
+    }
+
+    function resetSddQuiz() {
+      const resultEl = document.getElementById('sddQuizResult');
+      resultEl.classList.add('d-none');
+      resultEl.innerHTML = '';
+    }
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
