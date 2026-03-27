@@ -1,160 +1,437 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Virtual Desktop - Cloud Desktop Service</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure Virtual Desktop | Core Azure Modules</title>
+    <meta name="description" content="Azure Virtual Desktop - deliver secure, scalable Windows desktops and remote apps from Azure with Entra ID integration, FSLogix profiles, and autoscale." />
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
     <style>
-        :root { --orange: #e67e22; --dark-bg: #1a1a1a; }
-        body { background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; }
-        .navbar { background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange); }
-        .navbar-brand { font-weight: bold; color: var(--orange) !important; font-size: 1.5rem; }
-        .nav-link { color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease; }
-        .nav-link:hover { color: var(--orange) !important; }
-        .hero { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px; }
-        .hero-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
-        .hero h1 { color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px; }
-        .hero .subtitle { font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto; }
-        .section-title { color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange); }
-        .card { background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; margin-bottom: 20px; }
-        .card-header { background-color: var(--orange); color: white; font-weight: bold; border-radius: 0; }
-        .capability-list { list-style: none; padding: 0; }
-        .capability-list li { padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0; }
-        .capability-list li:before { content: "✓ "; color: var(--orange); font-weight: bold; margin-right: 10px; }
-        .use-case-card { background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange); }
-        .use-case-card h5 { color: var(--orange); margin-bottom: 10px; }
-        .pricing-tier { background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px; }
-        .pricing-tier h5 { color: var(--orange); margin-bottom: 10px; }
-        .code-block { background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem; }
-        .sidebar { background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
-        .sidebar h5 { color: var(--orange); margin-bottom: 15px; }
-        .sidebar-item { padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem; }
-        .sidebar-item:last-child { border-bottom: none; }
-        footer { background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center; }
-        .container-main { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        :root {
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
+        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">🖥️</span>
-            <h1>Azure Virtual Desktop</h1>
-            <p class="subtitle">Securely stream full Windows desktops and apps from Azure with centralized identity, policy, and autoscaling.</p>
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-display"></i></div>
+                    <h1 class="mb-3">Azure Virtual Desktop</h1>
+                    <p class="lead mb-4">Deliver secure, scalable Windows desktops and remote apps from Azure — with Entra ID integration, FSLogix profile containers, autoscale, and full session monitoring built in.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-pc-display-horizontal"></i></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div class="container-main">
-        <div class="row">
-            <div class="col-lg-8">
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Azure Virtual Desktop (AVD) is a cloud-based desktop and application virtualization service that runs on Azure. It enables IT teams to deliver full Windows 11 multi-session desktops, individual app streams (RemoteApp), and persistent personal desktops — all secured by Microsoft Entra ID and managed through the Azure portal.</p>
+                    <p class="fs-5">The spec provisions the three core AVD control-plane resources: a Host Pool (compute session scheduler), an Application Group (desktop or RemoteApp publisher), and a Workspace (user-facing connection hub) — wired to a Log Analytics workspace for full session and connectivity diagnostics.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h6>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                <tr><td class="text-muted">Service Type</td><td class="fw-semibold">Desktop Virtualization</td></tr>
+                                <tr><td class="text-muted">OS</td><td class="fw-semibold">Windows 10/11 Multi-Session</td></tr>
+                                <tr><td class="text-muted">Host Pool Types</td><td class="fw-semibold">Pooled / Personal</td></tr>
+                                <tr><td class="text-muted">Max Sessions</td><td class="fw-semibold">Up to 10 (spec default)</td></tr>
+                                <tr><td class="text-muted">Identity</td><td class="fw-semibold">Microsoft Entra ID</td></tr>
+                                <tr><td class="text-muted">SLA</td><td class="fw-semibold">99.9% (control plane)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-box-arrow-up-right me-2"></i>Deployment</h6>
+                        <p class="mb-1 small"><strong>Resource Provider:</strong><br><code>Microsoft.DesktopVirtualization</code></p>
+                        <p class="mb-1 small"><strong>Spec File:</strong><br><code>azure-avd.bicep</code></p>
+                        <a href="https://learn.microsoft.com/en-us/azure/virtual-desktop/" target="_blank" rel="noopener" class="btn btn-sm btn-deploy w-100 mt-2">
+                            <i class="bi bi-microsoft me-1"></i>Microsoft Docs
+                        </a>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-diagram-2 me-2"></i>Dependencies</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Microsoft Entra ID (user assignment)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Log Analytics Workspace (diagnostics)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Session Host VMs (registered post-deploy)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Azure Bastion (admin access)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>FSLogix Storage (profile containers)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-stars me-2"></i>Key Capabilities</h2>
+            <ul class="fs-5">
+                <li class="mb-2"><strong>Pooled &amp; Personal Host Pools:</strong> Pooled multi-session for cost-efficient shared desktops; Personal for dedicated persistent desktops</li>
+                <li class="mb-2"><strong>RemoteApp Publishing:</strong> Publish individual applications as streamed windows without delivering the full desktop</li>
+                <li class="mb-2"><strong>Autoscale Start/Stop:</strong> Automatically start session hosts on demand and shut down idle VMs to reduce compute costs</li>
+                <li class="mb-2"><strong>FSLogix Profile Containers:</strong> Roaming user profiles stored in Azure Files or Azure NetApp Files for consistent experience across session hosts</li>
+                <li class="mb-2"><strong>Entra ID + Conditional Access:</strong> MFA, device compliance, and location-based policies applied at sign-in</li>
+                <li class="mb-2"><strong>Scheduled Agent Updates:</strong> Host agent patched on configurable maintenance windows (Sunday 02:00 in spec default)</li>
+                <li class="mb-2"><strong>Session Host Hardening:</strong> Integrate with Microsoft Defender for Cloud and Intune for endpoint protection and compliance</li>
+                <li class="mb-2"><strong>Full Observability:</strong> Session, connection, and host diagnostics streamed to Log Analytics; pre-built Azure Monitor workbooks available</li>
+            </ul>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-grid me-2"></i>Use Cases</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
-                            <p>Azure Virtual Desktop (AVD) is Microsoft’s desktop and app virtualization platform for Windows 11/10 Enterprise multi-session and RemoteApp delivery in Azure.</p>
-                            <p>It supports pooled and personal host pools, Microsoft Entra-based access controls, and cost optimization with autoscaling and start-on-connect.</p>
+                            <h5 class="card-title"><i class="bi bi-building text-primary me-2"></i>Secure Contractor Access</h5>
+                            <p class="card-text">Provide third-party contractors a managed Windows environment without granting access to corporate devices or on-premises networks.</p>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Pooled and Personal Host Pools:</strong> Match user experience to workload needs</li>
-                        <li><strong>RemoteApp Delivery:</strong> Publish only apps instead of full desktops</li>
-                        <li><strong>FSLogix Profiles:</strong> Fast, roaming profile containers</li>
-                        <li><strong>Start VM on Connect:</strong> Reduce compute cost for variable usage</li>
-                        <li><strong>Conditional Access:</strong> Enforce MFA and compliance checks</li>
-                        <li><strong>Centralized Observability:</strong> Azure Monitor + Log Analytics insights</li>
-                    </ul>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    <div class="use-case-card">
-                        <h5>Secure Contractor Access</h5>
-                        <p>Provide isolated desktops for third-party users without exposing internal networks.</p>
-                    </div>
-                    <div class="use-case-card">
-                        <h5>Task Worker Desktops</h5>
-                        <p>Run pooled sessions for call center, operations, and front-line teams.</p>
-                    </div>
-                    <div class="use-case-card">
-                        <h5>Legacy App Virtualization</h5>
-                        <p>Publish specific Windows apps through RemoteApp while keeping data centralized.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Guidance</h2>
-                    <div class="pricing-tier">
-                        <h5>Pooled Host Pool</h5>
-                        <p><strong>Typical:</strong> $120-$220 per active user/month (shared compute).</p>
-                    </div>
-                    <div class="pricing-tier">
-                        <h5>Personal Host Pool</h5>
-                        <p><strong>Typical:</strong> $220-$450 per user/month (dedicated compute).</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Virtual Desktop Spec</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-avd.bicep</code></p>
-                            <div class="code-block">
-az bicep build --file azure-avd.bicep
-az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-avd.json
+                            <h5 class="card-title"><i class="bi bi-headset text-primary me-2"></i>Call Centre Desktops</h5>
+                            <p class="card-text">Cost-efficient pooled multi-session desktops for high-volume shift workers — thin clients at the endpoint, Azure compute in the cloud.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-shield-lock text-primary me-2"></i>Regulated Workloads</h5>
+                            <p class="card-text">HIPAA, PCI-DSS, and government-classified workloads benefit from fully auditable sessions, Conditional Access enforcement, and data-never-leaving-Azure patterns.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-window-stack text-primary me-2"></i>Legacy App Virtualization</h5>
+                            <p class="card-text">Run legacy Windows apps that can't be modernised via RemoteApp publishing — users get a seamless application window without managing old OS environments locally.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing Model</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-people text-primary me-2"></i>Pooled (Multi-Session)</h5>
+                        <p class="text-muted small mb-2">Shared desktops, most cost-efficient</p>
+                        <p><strong>D4s v5 VM:</strong> ~$140 / month</p>
+                        <p><strong>Up to 10 concurrent users</strong></p>
+                        <p class="text-muted small">~$14 / user/month at max utilisation</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold"><i class="bi bi-star-fill text-primary me-2"></i>Personal (Persistent)</h5>
+                            <span class="badge bg-primary">Power Users</span>
+                        </div>
+                        <p class="text-muted small mb-2">Dedicated VM per user</p>
+                        <p><strong>D4s v5:</strong> ~$140 / user/month</p>
+                        <p><strong>With Autostop:</strong> ~$60 / user/month</p>
+                        <p class="text-muted small">Best for developers and power users</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-hdd text-primary me-2"></i>FSLogix + Storage</h5>
+                        <p class="text-muted small mb-2">Profile container storage</p>
+                        <p><strong>Azure Files (Standard):</strong> ~$2 / user/month</p>
+                        <p><strong>Azure NetApp Files:</strong> ~$8 / user/month</p>
+                        <p class="text-muted small">Plus Log Analytics ingestion (~$2.30/GB)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Pricing Disclaimer:</strong> Prices shown are approximate and vary significantly by VM SKU, region, user concurrency, autoscale configuration, and Azure Reserved Instance discounts. Always verify current pricing at <a href="https://azure.microsoft.com/pricing/details/virtual-desktop/" target="_blank" rel="noopener" class="alert-link">azure.microsoft.com/pricing</a>.
+            </div>
+        </section>
+
+        <section class="mb-5" id="deployment">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Service Specification</h2>
+
+            <div class="spec-box">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-shield-check text-primary me-2"></i>Spec Header</h5>
+                    <span class="badge bg-primary fs-6">DS-AVD-001</span>
+                </div>
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr><td class="text-muted" style="width:35%">Spec ID</td><td>DS-AVD-001</td></tr>
+                        <tr><td class="text-muted">Service</td><td>Azure Virtual Desktop</td></tr>
+                        <tr><td class="text-muted">Bicep File</td><td><code>azure-avd.bicep</code></td></tr>
+                        <tr><td class="text-muted">API Version</td><td>2022-09-09</td></tr>
+                        <tr><td class="text-muted">Environment Tag</td><td>prod / dev / staging</td></tr>
+                        <tr><td class="text-muted">Component Tag</td><td>virtual-desktop</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-sliders text-primary me-2"></i>Parameters</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm align-middle">
+                        <thead class="table-light">
+                            <tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>location</code></td><td>string</td><td>resourceGroup().location</td><td>Azure region for the AVD control-plane resources</td></tr>
+                            <tr><td><code>environment</code></td><td>string</td><td>prod</td><td>Deployment environment label used in resource names</td></tr>
+                            <tr><td><code>apiVersion</code></td><td>string</td><td>2022-09-09</td><td>Microsoft.DesktopVirtualization API version</td></tr>
+                            <tr><td><code>hostPoolType</code></td><td>string</td><td>Pooled</td><td>Host pool type: <code>Pooled</code> (shared) or <code>Personal</code> (dedicated)</td></tr>
+                            <tr><td><code>maxSessionLimit</code></td><td>int</td><td>10</td><td>Maximum concurrent sessions per session host in a Pooled pool</td></tr>
+                            <tr><td><code>loadBalancerType</code></td><td>string</td><td>BreadthFirst</td><td>Session distribution: <code>BreadthFirst</code> (spread) or <code>DepthFirst</code> (fill)</td></tr>
+                            <tr><td><code>startVMOnConnect</code></td><td>bool</td><td>true</td><td>Automatically start a stopped session host when a user connects</td></tr>
+                            <tr><td><code>tags</code></td><td>object</td><td>{environment, createdDate, component}</td><td>Resource tags applied to all resources</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-diagram-2 text-primary me-2"></i>Dependency Wiring</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-server me-2"></i>Host Pool</div>
+                            <div class="card-body small">
+                                <p>Core session scheduling resource. Configured as <code>Pooled / BreadthFirst</code> with <code>maxSessionLimit: 10</code> and <code>startVMOnConnect: true</code>. Agent patched on Sunday at 02:00.</p>
+                                <p class="mb-0 text-muted">Name: vdpool-{environment}-{hash}</p>
                             </div>
-                            <p><strong>Outputs:</strong> Host pool ID, workspace ID, application group ID.</p>
                         </div>
                     </div>
-                </section>
+                    <div class="col-md-4">
+                        <div class="card border-success h-100">
+                            <div class="card-header bg-success text-white fw-bold"><i class="bi bi-collection me-2"></i>Application Group</div>
+                            <div class="card-body small">
+                                <p>Desktop Application Group linked to the Host Pool. Publishes the full Windows desktop to assigned Entra ID users or groups. Set <code>applicationGroupType: Desktop</code>.</p>
+                                <p class="mb-0 text-muted">Name: vdag-desktop-{environment}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning h-100">
+                            <div class="card-header bg-warning text-dark fw-bold"><i class="bi bi-journal-text me-2"></i>Log Analytics</div>
+                            <div class="card-body small">
+                                <p>Log Analytics workspace for AVD diagnostic settings. Captures host pool, connection, session host, and agent health events. Retention: 30 days.</p>
+                                <p class="mb-0 text-muted">SKU: PerGB2018</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5>Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> EUC / VDI</div>
-                    <div class="sidebar-item"><strong>Session Model:</strong> Pooled or Personal</div>
-                    <div class="sidebar-item"><strong>Identity:</strong> Microsoft Entra ID</div>
-                    <div class="sidebar-item"><strong>Network:</strong> Private VNet + NSG</div>
-                </div>
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-check2-circle text-primary me-2"></i>Acceptance Gates</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Host Pool, Application Group, and Workspace all provisioned with correct naming convention and tags</li>
+                    <li class="mb-2">At least one session host VM registered to the Host Pool (validated via <code>az desktopvirtualization sessionhost list</code>)</li>
+                    <li class="mb-2">Entra ID user or group assigned to the Application Group and able to sign in via Windows App or Remote Desktop Client</li>
+                    <li class="mb-2">FSLogix profile mounts successfully on sign-in; profile container visible in Azure Files share</li>
+                    <li class="mb-2">Session and connectivity diagnostics flowing to Log Analytics within 5 minutes of first sign-in</li>
+                </ul>
+            </div>
 
-                <div class="sidebar">
-                    <h5>Security Controls</h5>
-                    <div class="sidebar-item">MFA + Conditional Access</div>
-                    <div class="sidebar-item">Private egress design</div>
-                    <div class="sidebar-item">Defender + patch governance</div>
-                    <div class="sidebar-item">Session monitoring and logs</div>
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-arrow-right-circle text-primary me-2"></i>Deployment Workflow</h5>
+                <ol class="mb-0">
+                    <li class="mb-2">Deploy AVD control plane: Host Pool + Application Group + Workspace via <code>azure-avd.bicep</code></li>
+                    <li class="mb-2">Capture <code>registrationToken</code> output from Host Pool (valid 24 hours)</li>
+                    <li class="mb-2">Create session host VMs (Windows 11 Multi-Session + FSLogix gallery image) and register using the token</li>
+                    <li class="mb-2">Configure FSLogix profile container settings on session hosts pointing to Azure Files share</li>
+                    <li class="mb-2">Assign Entra ID users or groups to the Application Group via Azure RBAC (<code>Desktop Virtualization User</code> role)</li>
+                    <li class="mb-2">Configure Conditional Access policy in Entra ID targeting the Windows Virtual Desktop app</li>
+                    <li class="mb-2">Enable autoscale (Start/Stop) on the Host Pool with peak/off-peak schedule</li>
+                    <li class="mb-2">Verify outputs and run acceptance gates: sign-in test, FSLogix mount, diagnostics</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-box-arrow-up-right text-primary me-2"></i>Bicep Outputs</h5>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-light"><tr><th>Output</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>hostPoolId</code></td><td>string</td><td>Resource ID of the AVD Host Pool</td></tr>
+                        <tr><td><code>hostPoolName</code></td><td>string</td><td>Name of the AVD Host Pool (used when registering session hosts)</td></tr>
+                        <tr><td><code>applicationGroupId</code></td><td>string</td><td>Resource ID of the Desktop Application Group</td></tr>
+                        <tr><td><code>workspaceId</code></td><td>string</td><td>Resource ID of the AVD Workspace</td></tr>
+                        <tr><td><code>registrationToken</code></td><td>string</td><td>Registration token for joining session host VMs to the Host Pool (valid 24 h)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-rocket-takeoff me-2"></i>How to Deploy</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-list-check text-primary me-2"></i>Prerequisites</h6>
+                        <ul class="mb-0">
+                            <li>Azure CLI 2.57+ with Bicep extension</li>
+                            <li>Resource Group in target region</li>
+                            <li>Entra ID P1 or P2 licence for Conditional Access</li>
+                            <li>Desktop Virtualization Contributor role</li>
+                            <li>Azure Files share for FSLogix profile containers</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-terminal text-primary me-2"></i>Deployment Steps</h6>
+                        <ol class="mb-0">
+                            <li>Clone repo and navigate to <code>landing-page/specs/</code></li>
+                            <li>Set <code>hostPoolType</code>, <code>maxSessionLimit</code>, and <code>loadBalancerType</code></li>
+                            <li>Run <code>az deployment group create</code> (see below)</li>
+                            <li>Capture <code>registrationToken</code> and register session host VMs</li>
+                            <li>Assign Entra ID users and verify sign-in + FSLogix mount</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-code-slash text-primary me-2"></i>Azure CLI Example</h6>
+                        <pre class="bg-dark text-light p-3 rounded mb-0" style="font-size:0.88rem;"><code># Deploy AVD control plane
+az deployment group create \
+  --resource-group rg-avd-prod \
+  --template-file azure-avd.bicep \
+  --parameters environment=prod hostPoolType=Pooled maxSessionLimit=10 \
+  --query "properties.outputs" -o json
+
+# Assign user to Application Group
+az role assignment create \
+  --assignee user@contoso.com \
+  --role "Desktop Virtualization User" \
+  --scope &lt;applicationGroupId&gt;</code></pre>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-patch-check text-primary me-2"></i>Post-Deployment Checklist</h6>
+                        <div class="row g-2">
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Host Pool, App Group, Workspace provisioned</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Session host VMs registered to Host Pool</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">User/group assigned in Application Group</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Sign-in test successful via Remote Desktop</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">FSLogix profile mounts on sign-in</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Diagnostics flowing to Log Analytics</label></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div>
+                        <h6 class="mb-1 fw-bold">Sample Spec-Kit Reference</h6>
+                        <p class="mb-0 text-muted" style="font-size:0.95rem;">Use the approved OpenAI Spec-Kit as a formatting and quality baseline for module specifications.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5 class="fw-bold">What is the difference between Pooled and Personal host pools?</h5>
+                <p class="mb-0">Pooled host pools share session hosts across multiple users simultaneously (multi-session Windows) — ideal for call centres, contractors, and task workers. Personal host pools assign one dedicated VM per user — best for developers, power users, or workloads requiring persistent local state.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">How does autoscale work to control costs?</h5>
+                <p class="mb-0">AVD Autoscale uses a configurable peak/off-peak schedule and session thresholds to start additional session hosts as demand rises and deallocate (not delete) VMs when sessions drop. Combined with <code>startVMOnConnect: true</code>, users trigger VM starts on demand, reducing always-on idle spend.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">What is FSLogix and why is it needed?</h5>
+                <p class="mb-0">FSLogix Profile Containers redirect the Windows user profile into a VHD/VHDX file stored on Azure Files or Azure NetApp Files. When a user connects to any session host in the pool, their profile mounts instantly — preserving browser history, app settings, and personal data regardless of which VM handles the session.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">How do I register session host VMs to the Host Pool?</h5>
+                <p class="mb-0">The Bicep spec outputs a <code>registrationToken</code> valid for 24 hours. Install the AVD agent on each session host VM and provide the token during installation. Alternatively, use the Azure Image Builder pipeline or Deployment Script to automate session host creation and registration as part of the same deployment.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Can I use Private Link with Azure Virtual Desktop?</h5>
+                <p class="mb-0">Yes. AVD supports Private Link for the control plane (gateway, broker, web access, diagnostics) to prevent traffic from traversing the public internet. Deploy private endpoints for the Host Pool and Workspace resources, and configure Private DNS zones for <code>privatelink.wvd.microsoft.com</code>.</p>
+            </div>
+        </section>
     </div>
 
-    <footer>
-        <div class="container-main">
-            <p class="mb-0">Azure AI Deployment Patterns © 2026</p>
+    <section id="learn-more" class="py-5" style="background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 100%); color: white;">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-3"><i class="bi bi-book me-2"></i>Learn More</h2>
+            <p class="lead mb-4">Explore official Microsoft documentation for Azure Virtual Desktop architecture, FSLogix profile containers, autoscale configuration, and security hardening.</p>
+            <a href="https://learn.microsoft.com/en-us/azure/virtual-desktop/" target="_blank" rel="noopener" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-microsoft me-2"></i>Microsoft Learn
+            </a>
+            <a href="https://learn.microsoft.com/en-us/azure/virtual-desktop/autoscale-scenarios" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-arrows-angle-expand me-2"></i>Autoscale Guide
+            </a>
+        </div>
+    </section>
+
+    <footer class="py-4 bg-white border-top text-center text-muted">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 Azure AI Deployments &mdash; Azure Virtual Desktop Module</p>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>

@@ -1,28 +1,34 @@
 // Azure Virtual Desktop - Deployment Spec
 param location string = resourceGroup().location
 param environment string = 'prod'
-param apiVersion string = '2024-04-03'
+param apiVersion string = '2022-09-09'
+param hostPoolType string = 'Pooled'
+param maxSessionLimit int = 10
+param loadBalancerType string = 'BreadthFirst'
+param startVMOnConnect bool = true
 param tags object = {
   environment: environment
   createdDate: utcNow('u')
-  component: 'end-user-compute'
+  component: 'virtual-desktop'
 }
 
-@description('Host pool type: Pooled or Personal')
-param hostPoolType ('Pooled' | 'Personal') = 'Pooled'
+var hostPoolName = 'vdpool-${environment}-${uniqueString(resourceGroup().id)}'
+var appGroupName = 'vdag-desktop-${environment}'
+var workspaceName = 'vdws-${environment}-${uniqueString(resourceGroup().id)}'
+var logAnalyticsWorkspaceName = 'law-avd-${environment}-${uniqueString(resourceGroup().id)}'
 
-@description('Desktop assignment type: Automatic for pooled, Direct for personal')
-param personalDesktopAssignmentType ('Automatic' | 'Direct') = 'Automatic'
-
-@description('Preferred app group type')
-param preferredAppGroupType ('Desktop' | 'RailApplications') = 'Desktop'
-
-@description('Validation environment for pre-production testing')
-param validationEnvironment bool = false
-
-var hostPoolName = 'avd-hp-${environment}-${uniqueString(resourceGroup().id)}'
-var workspaceName = 'avd-ws-${environment}-${uniqueString(resourceGroup().id)}'
-var appGroupName = 'avd-dag-${environment}-${uniqueString(resourceGroup().id)}'
+// Log Analytics Workspace for AVD diagnostics
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: logAnalyticsWorkspaceName
+  location: location
+  tags: tags
+  properties: {
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+  }
+}
 
 // AVD Host Pool
 resource hostPool 'Microsoft.DesktopVirtualization/hostPools@${apiVersion}' = {
@@ -31,14 +37,36 @@ resource hostPool 'Microsoft.DesktopVirtualization/hostPools@${apiVersion}' = {
   tags: tags
   properties: {
     hostPoolType: hostPoolType
-    loadBalancerType: hostPoolType == 'Pooled' ? 'DepthFirst' : 'Persistent'
-    preferredAppGroupType: preferredAppGroupType
-    validationEnvironment: validationEnvironment
-    maxSessionLimit: hostPoolType == 'Pooled' ? 16 : 1
-    personalDesktopAssignmentType: hostPoolType == 'Personal' ? personalDesktopAssignmentType : null
-    startVMOnConnect: true
-    publicNetworkAccess: 'Disabled'
-    managementType: 'Automated'
+    loadBalancerType: loadBalancerType
+    preferredAppGroupType: 'Desktop'
+    maxSessionLimit: maxSessionLimit
+    startVMOnConnect: startVMOnConnect
+    validationEnvironment: false
+    registrationInfo: {
+      expirationTime: dateTimeAdd(utcNow(), 'P1D')
+      registrationTokenOperation: 'Update'
+    }
+    agentUpdate: {
+      type: 'Scheduled'
+      maintenanceWindows: [
+        {
+          dayOfWeek: 'Sunday'
+          hour: 2
+        }
+      ]
+    }
+  }
+}
+
+// AVD Application Group (Desktop)
+resource applicationGroup 'Microsoft.DesktopVirtualization/applicationGroups@${apiVersion}' = {
+  name: appGroupName
+  location: location
+  tags: tags
+  properties: {
+    hostPoolArmPath: hostPool.id
+    applicationGroupType: 'Desktop'
+    description: 'Desktop application group for ${environment} environment'
   }
 }
 
@@ -48,35 +76,30 @@ resource workspace 'Microsoft.DesktopVirtualization/workspaces@${apiVersion}' = 
   location: location
   tags: tags
   properties: {
+    applicationGroupReferences: [
+      applicationGroup.id
+    ]
     description: 'AVD workspace for ${environment} environment'
-    friendlyName: 'AVD Workspace ${toUpper(environment)}'
-    publicNetworkAccess: 'Disabled'
   }
 }
 
-// Desktop Application Group
-resource desktopAppGroup 'Microsoft.DesktopVirtualization/applicationGroups@${apiVersion}' = {
-  name: appGroupName
-  location: location
-  tags: tags
+// Diagnostic Settings for Host Pool
+resource hostPoolDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'diag-${hostPoolName}'
+  scope: hostPool
   properties: {
-    applicationGroupType: 'Desktop'
-    hostPoolArmPath: hostPool.id
-    friendlyName: 'Desktop App Group ${toUpper(environment)}'
-    description: 'Desktop delivery for ${environment} users'
+    workspaceId: logAnalyticsWorkspace.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
   }
-}
-
-// Workspace association with app group
-resource appGroupAssociation 'Microsoft.DesktopVirtualization/workspaces/applicationGroups@${apiVersion}' = {
-  parent: workspace
-  name: last(split(desktopAppGroup.id, '/'))
-  properties: {}
 }
 
 output hostPoolId string = hostPool.id
 output hostPoolName string = hostPool.name
+output applicationGroupId string = applicationGroup.id
 output workspaceId string = workspace.id
-output workspaceName string = workspace.name
-output applicationGroupId string = desktopAppGroup.id
-output applicationGroupName string = desktopAppGroup.name
+output registrationToken string = hostPool.properties.registrationInfo.token
