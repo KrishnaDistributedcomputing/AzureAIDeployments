@@ -1,25 +1,439 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Azure App Service - Module Guide</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure App Service | Core Azure Modules</title>
+    <meta name="description" content="Azure App Service - fully managed web hosting for APIs and web apps with deployment slots, autoscale, and enterprise security controls." />
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
+    <style>
+        :root {
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
+        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+    </style>
 </head>
-<body class="bg-dark text-light">
-  <div class="container py-5">
-    <h1 class="mb-3">Azure App Service</h1>
-    <p class="lead">Fully managed platform for web apps and APIs with secure defaults and CI/CD support.</p>
-    <h3>Key Capabilities</h3>
-    <ul>
-      <li>Managed runtime for popular languages</li>
-      <li>Deployment slots for safe releases</li>
-      <li>TLS, domains, and identity integration</li>
-      <li>VNet integration and autoscaling</li>
-    </ul>
-    <h3>Spec File</h3>
-    <p><code>landing-page/specs/azure-appservice.bicep</code></p>
-    <a class="btn btn-outline-info" href="../modules.html">Back to Modules</a>
-  </div>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-globe2"></i></div>
+                    <h1 class="mb-3">Azure App Service</h1>
+                    <p class="lead mb-4">Managed platform for web apps and APIs with deployment slots, autoscale, VNet integration, managed identity, and production-grade operations.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-window-stack"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Azure App Service provides a fully managed PaaS runtime for web applications and HTTP APIs. It removes infrastructure management overhead while supporting enterprise security controls, CI/CD workflows, deployment slots, autoscale, and deep telemetry integrations.</p>
+                    <p class="fs-5">This specification deploys a Linux App Service Plan, a production web app, a staging slot for blue-green releases, system-assigned managed identity, and Application Insights wiring for centralized observability.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h6>
+                        <table class="table table-sm mb-0">
+                            <tbody>
+                                <tr><td class="text-muted">Service Type</td><td class="fw-semibold">Web Hosting PaaS</td></tr>
+                                <tr><td class="text-muted">Runtime</td><td class="fw-semibold">Linux (Python 3.11 default)</td></tr>
+                                <tr><td class="text-muted">Tier</td><td class="fw-semibold">PremiumV3 (default)</td></tr>
+                                <tr><td class="text-muted">Deployment Slots</td><td class="fw-semibold">Production + Staging</td></tr>
+                                <tr><td class="text-muted">Identity</td><td class="fw-semibold">SystemAssigned</td></tr>
+                                <tr><td class="text-muted">SLA</td><td class="fw-semibold">99.95% multi-instance</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-box-arrow-up-right me-2"></i>Deployment</h6>
+                        <p class="mb-1 small"><strong>Resource Provider:</strong><br><code>Microsoft.Web</code></p>
+                        <p class="mb-1 small"><strong>Spec File:</strong><br><code>azure-appservice.bicep</code></p>
+                        <a href="https://learn.microsoft.com/en-us/azure/app-service/" target="_blank" rel="noopener" class="btn btn-sm btn-deploy w-100 mt-2">
+                            <i class="bi bi-microsoft me-1"></i>Microsoft Docs
+                        </a>
+                    </div>
+                    <div class="spec-box">
+                        <h6 class="fw-bold text-primary"><i class="bi bi-diagram-2 me-2"></i>Dependencies</h6>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Application Insights</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Key Vault (secrets)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>Entra ID / Managed Identity</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>VNet Integration (optional)</li>
+                            <li class="mb-1"><i class="bi bi-check-circle text-success me-2"></i>API Management (front door)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-stars me-2"></i>Key Capabilities</h2>
+            <ul class="fs-5">
+                <li class="mb-2"><strong>Managed Runtime:</strong> Host APIs and web apps without managing VMs or orchestrators</li>
+                <li class="mb-2"><strong>Deployment Slots:</strong> Blue-green and canary deployments with near-zero downtime slot swaps</li>
+                <li class="mb-2"><strong>Autoscale:</strong> Scale up/out based on CPU, memory, and request metrics</li>
+                <li class="mb-2"><strong>Managed Identity:</strong> Secretless access to Key Vault, Storage, and downstream Azure services</li>
+                <li class="mb-2"><strong>Security Baseline:</strong> HTTPS-only, FTPS disabled, TLS 1.2 enforced by default</li>
+                <li class="mb-2"><strong>Always On:</strong> Keeps apps warm for lower latency and stable background execution</li>
+                <li class="mb-2"><strong>Observability:</strong> Native App Insights telemetry and distributed tracing support</li>
+                <li class="mb-2"><strong>Network Controls:</strong> VNet integration, private endpoints, and access restrictions</li>
+            </ul>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-grid me-2"></i>Use Cases</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-plug text-primary me-2"></i>Enterprise APIs</h5>
+                            <p class="card-text">Host REST/GraphQL APIs with autoscale, managed identity, and APIM integration for policy-based governance.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-browser-chrome text-primary me-2"></i>Web Applications</h5>
+                            <p class="card-text">Deploy customer-facing web apps with continuous delivery and deployment slot-based rollouts.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-cloud-lock text-primary me-2"></i>Private Apps</h5>
+                            <p class="card-text">Run line-of-business apps with VNet integration, private endpoints, and restricted inbound access.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="bi bi-arrow-left-right text-primary me-2"></i>Blue-Green Delivery</h5>
+                            <p class="card-text">Validate staging slot releases before controlled swap to production with rapid rollback support.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing Model</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-rocket text-primary me-2"></i>Basic / Standard</h5>
+                        <p class="text-muted small mb-2">Dev and low-scale apps</p>
+                        <p><strong>B1:</strong> ~$55 / month</p>
+                        <p><strong>S1:</strong> ~$73 / month</p>
+                        <p class="text-muted small">Single instance, limited networking features</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold"><i class="bi bi-star-fill text-primary me-2"></i>PremiumV3</h5>
+                            <span class="badge bg-primary">Recommended</span>
+                        </div>
+                        <p class="text-muted small mb-2">Production APIs and web apps</p>
+                        <p><strong>P1v3:</strong> ~$145 / month / instance</p>
+                        <p><strong>P2v3:</strong> ~$290 / month / instance</p>
+                        <p class="text-muted small">Supports advanced networking + higher scale</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5 class="fw-bold"><i class="bi bi-journal-text text-primary me-2"></i>Telemetry + Add-ons</h5>
+                        <p class="text-muted small mb-2">Observability and diagnostics</p>
+                        <p><strong>App Insights:</strong> ~$2.30 / GB ingestion</p>
+                        <p><strong>Retention:</strong> 90 days default</p>
+                        <p class="text-muted small">Cost scales with traffic and logging verbosity</p>
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Pricing Disclaimer:</strong> Prices are approximate and vary by region, instance size, scale count, and reservation discounts. Always verify current pricing at <a href="https://azure.microsoft.com/pricing/details/app-service/" target="_blank" rel="noopener" class="alert-link">azure.microsoft.com/pricing</a>.
+            </div>
+        </section>
+
+        <section class="mb-5" id="deployment">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2"></i>Service Specification</h2>
+
+            <div class="spec-box">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0"><i class="bi bi-shield-check text-primary me-2"></i>Spec Header</h5>
+                    <span class="badge bg-primary fs-6">DS-APPSVC-001</span>
+                </div>
+                <table class="table table-bordered table-sm">
+                    <tbody>
+                        <tr><td class="text-muted" style="width:35%">Spec ID</td><td>DS-APPSVC-001</td></tr>
+                        <tr><td class="text-muted">Service</td><td>Azure App Service</td></tr>
+                        <tr><td class="text-muted">Bicep File</td><td><code>azure-appservice.bicep</code></td></tr>
+                        <tr><td class="text-muted">API Version</td><td>2023-12-01</td></tr>
+                        <tr><td class="text-muted">Environment Tag</td><td>prod / dev / staging</td></tr>
+                        <tr><td class="text-muted">Component Tag</td><td>compute-services</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-sliders text-primary me-2"></i>Parameters</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm align-middle">
+                        <thead class="table-light">
+                            <tr><th>Parameter</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>location</code></td><td>string</td><td>resourceGroup().location</td><td>Azure region for plan, app, and telemetry</td></tr>
+                            <tr><td><code>environment</code></td><td>string</td><td>prod</td><td>Environment label used in naming and tags</td></tr>
+                            <tr><td><code>apiVersion</code></td><td>string</td><td>2023-12-01</td><td>Microsoft.Web API version</td></tr>
+                            <tr><td><code>appServicePlanSkuName</code></td><td>string</td><td>P1v3</td><td>Plan instance size and performance class</td></tr>
+                            <tr><td><code>appServicePlanSkuTier</code></td><td>string</td><td>PremiumV3</td><td>Pricing tier for App Service Plan</td></tr>
+                            <tr><td><code>appRuntimeStack</code></td><td>string</td><td>PYTHON|3.11</td><td>Linux runtime stack for the web app</td></tr>
+                            <tr><td><code>alwaysOn</code></td><td>bool</td><td>true</td><td>Keeps app warm for lower latency and reliability</td></tr>
+                            <tr><td><code>httpsOnly</code></td><td>bool</td><td>true</td><td>Redirect HTTP traffic to HTTPS only</td></tr>
+                            <tr><td><code>ftpsState</code></td><td>string</td><td>Disabled</td><td>Disables FTP/FTPS endpoint to reduce attack surface</td></tr>
+                            <tr><td><code>minimumTlsVersion</code></td><td>string</td><td>1.2</td><td>Minimum supported TLS protocol version</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-diagram-2 text-primary me-2"></i>Dependency Wiring</h5>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="card border-primary h-100">
+                            <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-server me-2"></i>App Service Plan</div>
+                            <div class="card-body small">
+                                <p>Linux PremiumV3 plan provides compute for production and staging slots. This is the primary compute cost unit and scale boundary.</p>
+                                <p class="mb-0 text-muted">SKU: P1v3 (default)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-success h-100">
+                            <div class="card-header bg-success text-white fw-bold"><i class="bi bi-globe2 me-2"></i>Web App + Slot</div>
+                            <div class="card-body small">
+                                <p>Production app plus <code>staging</code> slot for safe release validation and slot-swap deployment. Runtime and security settings match across both.</p>
+                                <p class="mb-0 text-muted">kind: app,linux</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-warning h-100">
+                            <div class="card-header bg-warning text-dark fw-bold"><i class="bi bi-journal-text me-2"></i>Application Insights</div>
+                            <div class="card-body small">
+                                <p>Connection string injected into app settings for request telemetry, traces, dependencies, and failure diagnostics.</p>
+                                <p class="mb-0 text-muted">Application_Type: web</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-check2-circle text-primary me-2"></i>Acceptance Gates</h5>
+                <ul class="mb-0">
+                    <li class="mb-2">Web app and staging slot deploy successfully with HTTPS-only and TLS 1.2 enforced</li>
+                    <li class="mb-2">Managed identity enabled; Key Vault secret retrieval succeeds using RBAC</li>
+                    <li class="mb-2">Deployment slot swap from staging to production completes with no downtime</li>
+                    <li class="mb-2">Application Insights receives request, exception, and dependency telemetry within 5 minutes</li>
+                    <li class="mb-2">Security baseline validated: FTPS disabled, HTTP blocked, and SCM access restricted</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-arrow-right-circle text-primary me-2"></i>Deployment Workflow</h5>
+                <ol class="mb-0">
+                    <li class="mb-2">Provision Application Insights component for telemetry collection</li>
+                    <li class="mb-2">Deploy Linux App Service Plan with selected SKU and capacity</li>
+                    <li class="mb-2">Deploy production web app with managed identity and security settings</li>
+                    <li class="mb-2">Create staging deployment slot for release validation</li>
+                    <li class="mb-2">Deploy build artifact to staging slot and run smoke tests</li>
+                    <li class="mb-2">Swap staging slot into production and monitor health metrics</li>
+                    <li class="mb-2">Capture outputs and update downstream integrations (APIM, DNS, monitors)</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold mb-3"><i class="bi bi-box-arrow-up-right text-primary me-2"></i>Bicep Outputs</h5>
+                <table class="table table-bordered table-sm">
+                    <thead class="table-light"><tr><th>Output</th><th>Type</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>appServicePlanId</code></td><td>string</td><td>Resource ID of the App Service Plan</td></tr>
+                        <tr><td><code>webAppId</code></td><td>string</td><td>Resource ID of the production web app</td></tr>
+                        <tr><td><code>webAppName</code></td><td>string</td><td>Name of the production web app</td></tr>
+                        <tr><td><code>webAppUrl</code></td><td>string</td><td>Default HTTPS URL of the production web app</td></tr>
+                        <tr><td><code>stagingSlotId</code></td><td>string</td><td>Resource ID of the staging deployment slot</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-rocket-takeoff me-2"></i>How to Deploy</h2>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-list-check text-primary me-2"></i>Prerequisites</h6>
+                        <ul class="mb-0">
+                            <li>Azure CLI 2.57+ with Bicep extension</li>
+                            <li>Contributor role on target resource group</li>
+                            <li>Build artifact/package ready for deployment</li>
+                            <li>App Insights and Key Vault governance standards defined</li>
+                            <li>Domain/DNS ownership for production hostname</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="spec-box h-100">
+                        <h6 class="fw-bold"><i class="bi bi-terminal text-primary me-2"></i>Deployment Steps</h6>
+                        <ol class="mb-0">
+                            <li>Clone repo and navigate to <code>landing-page/specs/</code></li>
+                            <li>Set plan SKU and runtime stack parameters</li>
+                            <li>Deploy Bicep template and capture outputs</li>
+                            <li>Deploy app build to staging slot</li>
+                            <li>Execute slot swap and monitor post-cutover health</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-code-slash text-primary me-2"></i>Azure CLI Example</h6>
+                        <pre class="bg-dark text-light p-3 rounded mb-0" style="font-size:0.88rem;"><code># Deploy App Service baseline
+az deployment group create \
+  --resource-group rg-appsvc-prod \
+  --template-file azure-appservice.bicep \
+  --parameters environment=prod appServicePlanSkuName=P1v3 appRuntimeStack=PYTHON|3.11 \
+  --query "properties.outputs" -o json
+
+# Swap staging slot to production
+az webapp deployment slot swap \
+  --resource-group rg-appsvc-prod \
+  --name appsvc-prod \
+  --slot staging \
+  --target-slot production</code></pre>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="spec-box">
+                        <h6 class="fw-bold mb-2"><i class="bi bi-patch-check text-primary me-2"></i>Post-Deployment Checklist</h6>
+                        <div class="row g-2">
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">HTTPS-only and TLS 1.2 enforced</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Staging slot deployed and smoke tested</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Managed identity enabled and RBAC verified</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Application Insights telemetry visible</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">Slot swap completed with stable health probes</label></div></div>
+                            <div class="col-md-6"><div class="form-check"><input class="form-check-input" type="checkbox" disabled><label class="form-check-label">FTPS disabled and SCM access restricted</label></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div>
+                        <h6 class="mb-1 fw-bold">Sample Spec-Kit Reference</h6>
+                        <p class="mb-0 text-muted" style="font-size:0.95rem;">Use the approved OpenAI Spec-Kit as a formatting and quality baseline for module specifications.</p>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
+                        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
+                        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5 class="fw-bold">When should I choose App Service over AKS or Container Apps?</h5>
+                <p class="mb-0">Choose App Service for mainstream web/API workloads where you want fast PaaS deployment, deployment slots, and minimal platform operations. Choose AKS for advanced orchestration needs and Container Apps for event-driven container workloads with scale-to-zero.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Why use deployment slots in production?</h5>
+                <p class="mb-0">Slots let you deploy and validate new versions in an isolated staging environment using production-like settings, then swap with almost zero downtime. Rollback is immediate by swapping back.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">How do I handle secrets safely?</h5>
+                <p class="mb-0">Enable managed identity on the app and reference Key Vault secrets in app settings using Key Vault references or SDK-based retrieval. Avoid hardcoding secrets in code or pipeline variables.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">Can App Service be private-only?</h5>
+                <p class="mb-0">Yes. Use private endpoints for inbound access, VNet integration for outbound private connectivity, and access restrictions to block public traffic paths. Pair with WAF/APIM for controlled ingress.</p>
+            </div>
+            <div class="faq-item">
+                <h5 class="fw-bold">What are the top cost levers?</h5>
+                <p class="mb-0">Primary levers are plan SKU, instance count, autoscale thresholds, and telemetry ingestion volume. Right-size instance class, scale schedules, and logging verbosity per environment.</p>
+            </div>
+        </section>
+    </div>
+
+    <section id="learn-more" class="py-5" style="background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 100%); color: white;">
+        <div class="container text-center">
+            <h2 class="fw-bold mb-3"><i class="bi bi-book me-2"></i>Learn More</h2>
+            <p class="lead mb-4">Explore official Microsoft documentation for App Service architecture, networking, deployment slots, and production operations.</p>
+            <a href="https://learn.microsoft.com/en-us/azure/app-service/" target="_blank" rel="noopener" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-microsoft me-2"></i>Microsoft Learn
+            </a>
+            <a href="https://learn.microsoft.com/en-us/azure/app-service/deploy-staging-slots" target="_blank" rel="noopener" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-arrow-left-right me-2"></i>Deployment Slots Guide
+            </a>
+        </div>
+    </section>
+
+    <footer class="py-4 bg-white border-top text-center text-muted">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 Azure AI Deployments - Azure App Service Module</p>
+        </div>
+    </footer>
+
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>

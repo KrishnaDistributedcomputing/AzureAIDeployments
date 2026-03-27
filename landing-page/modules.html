@@ -933,7 +933,7 @@ output cosmosDbEndpoint string = cosmosDb.properties.documentEndpoint
       bastion: 'modules/module-bastion.html',
       avd: 'modules/module-avd.html',
       aks: 'modules/module-aks.html',
-      appservice: 'https://learn.microsoft.com/azure/app-service/',
+      appservice: 'modules/module-appservice.html',
       datafactory: 'https://learn.microsoft.com/azure/data-factory/',
       servicebus: 'https://learn.microsoft.com/azure/service-bus-messaging/'
     };
@@ -959,7 +959,7 @@ output cosmosDbEndpoint string = cosmosDb.properties.documentEndpoint
       bastion: { spec: 'azure-bastion.bicep', params: 'sku, hostScaling, subnetId, ipConfig', deps: 'VNet, Entra ID', test: 'Validate secure RDP/SSH access and session audit logs.' },
       avd: { spec: 'azure-avd.bicep', params: 'hostPoolType, maxSessionLimit, loadBalancerType, startVMOnConnect', deps: 'Entra ID, Monitor, Bastion', test: 'Validate sign-in latency and profile attach reliability.' },
       aks: { spec: 'azure-aks.bicep', params: 'kubernetesVersion, nodeVmSize, minNodeCount/maxNodeCount, enablePrivateCluster', deps: 'ACR, Key Vault, Monitor', test: 'Run conformance checks and rollout/rollback scenarios.' },
-      appservice: { spec: 'azure-appservice.spec.yaml', params: 'planSku, runtimeStack, slotConfig, vnetIntegration', deps: 'Key Vault, APIM, Monitor', test: 'Blue-green deployment test with health probes.' },
+      appservice: { spec: 'azure-appservice.bicep', params: 'appServicePlanSkuName, appRuntimeStack, alwaysOn, minimumTlsVersion', deps: 'Key Vault, APIM, Monitor', test: 'Blue-green deployment test with health probes.' },
       datafactory: { spec: 'azure-datafactory.spec.yaml', params: 'pipelines, linkedServices, irMode, triggerSchedule', deps: 'Storage, Key Vault, Monitor', test: 'Run pipeline unit tests and data quality assertions.' },
       servicebus: { spec: 'azure-servicebus.spec.yaml', params: 'tier, queuesTopics, retryPolicy, duplicateDetection', deps: 'Functions/Event Grid, Monitor', test: 'Load-test throughput and dead-letter handling.' }
     };
