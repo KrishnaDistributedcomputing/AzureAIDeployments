@@ -72,8 +72,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png"/>
   <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjHS1QVoT2H8K1OKNqNdfHU6rEQf12wnhx0VTpEpfJ35vAVgdW2hIGd" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" integrity="sha384-dFA4uY42aIvygz1mUGzoKF25ZD/vaXfJ/Z2JnW+MD8LKnMeJkelNj8jlPREo2by1" crossorigin="anonymous" />
   <style>
     :root { --accent: #0078d4; --accent-dark: #50e6ff; }
     [data-bs-theme="dark"] { --accent: #50e6ff; }
@@ -120,6 +120,11 @@
     .module-card { border-left: 4px solid var(--accent); transition: transform .15s, box-shadow .15s; cursor: pointer; }
     .module-card:hover { transform: translateY(-4px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }
     a.module-card:hover strong { color: var(--accent) !important; }
+    .module-summary { border:1px solid rgba(13,110,253,.16); background:linear-gradient(135deg,rgba(13,110,253,.06),rgba(25,135,84,.05)); border-radius:18px; padding:1.25rem; }
+    .module-pill { display:inline-flex; align-items:center; gap:.45rem; border:1px solid var(--bs-border-color); border-radius:999px; padding:.45rem .8rem; background:var(--bs-body-bg); color:var(--bs-body-color); font-size:.92rem; font-weight:600; text-decoration:none; }
+    .module-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .hero-update { border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08); border-radius:18px; padding:1rem 1.1rem; backdrop-filter:blur(10px); }
+    .hero-update-stat { min-width:110px; }
     .nav-link.active { font-weight: 600; }
     footer a { color: var(--accent); }
     .search-box { max-width: 460px; }
@@ -248,10 +253,23 @@
             <span class="text-white-50" style="font-size:.88rem">Landing Zone Accelerator &middot; AVM &middot; Entra Governance</span>
           </div>
           <p class="text-white-50 mb-4" style="font-size:.85rem">Each pattern includes: services, costs, SLA alignment, WAF checklist, and Bicep deployment templates.</p>
+          <div class="hero-update mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+              <div>
+                <div class="fw-bold mb-1"><i class="bi bi-megaphone-fill me-2"></i>Latest portal expansion</div>
+                <div class="text-white-50 small">Nine new service guides are live across the landing page, module catalog, and Bicep spec library.</div>
+              </div>
+              <div class="d-flex flex-wrap gap-2">
+                <div class="hero-update-stat badge text-bg-light">27 modules</div>
+                <div class="hero-update-stat badge" style="background:rgba(25,135,84,.85)">9 new guides</div>
+                <div class="hero-update-stat badge" style="background:rgba(230,126,34,.9)">Direct links live</div>
+              </div>
+            </div>
+          </div>
           <div class="d-flex flex-wrap gap-3 mb-4">
             <a href="#patterns" class="btn btn-light hero-btn"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Explore Patterns</a>
             <a href="#comparison" class="btn btn-outline-light hero-btn"><i class="bi bi-table me-2"></i>Compare All</a>
-
+            <a href="#modules" class="btn btn-outline-light hero-btn"><i class="bi bi-puzzle me-2"></i>Browse New Services</a>
           </div>
         </div>
         <div class="col-lg-5">
@@ -299,7 +317,7 @@
                 </div>
                 <div class="flex-grow-1">
                   <h6 class="fw-bold mb-1">Spec-Driven Development</h6>
-                  <small class="opacity-75">Enforce architecture &amp; contracts at build time</small>
+                  <small class="opacity-75">Module catalog, spec guide, and direct service pages</small>
                 </div>
                 <i class="bi bi-arrow-right fs-4 opacity-50"></i>
               </div>
@@ -329,8 +347,8 @@
         </div>
         <div class="col-6 col-md">
           <div class="stat-card bg-body shadow-sm">
-            <div class="stat-number" data-count="40">40+</div>
-            <div class="text-muted small fw-semibold">Azure Services</div>
+            <div class="stat-number" data-count="27">27</div>
+            <div class="text-muted small fw-semibold">Core Modules</div>
           </div>
         </div>
         <div class="col-6 col-md">
@@ -341,8 +359,8 @@
         </div>
         <div class="col-6 col-md">
           <div class="stat-card bg-body shadow-sm">
-            <div class="stat-number"><i class="bi bi-file-earmark-code"></i></div>
-            <div class="text-muted small fw-semibold">Spec-Driven Deploy</div>
+            <div class="stat-number" data-count="9">9</div>
+            <div class="text-muted small fw-semibold">New Service Guides</div>
           </div>
         </div>
       </div>
@@ -846,8 +864,36 @@
   <!-- Modules -->
   <section id="modules" class="py-5">
     <div class="container">
-      <h2 class="text-center fw-bold mb-4">Core Azure Modules</h2>
-      <p class="text-center text-muted mb-4">Click any module to view its Azure documentation</p>
+      <div class="text-center mb-4">
+        <h2 class="fw-bold mb-2">Core Azure Modules <span class="badge bg-primary-subtle text-primary border border-primary-subtle">27 total</span></h2>
+        <p class="text-muted mb-0">The landing page now includes the latest service batch and a direct path into the new service guides.</p>
+      </div>
+
+      <div class="module-summary mb-4">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
+          <div>
+            <h3 class="h5 fw-bold mb-1">Newly Added Services</h3>
+            <p class="text-muted mb-0">AVD, AKS, App Service, Data Factory, Service Bus, Front Door, Event Hubs, Logic Apps, and Redis are now surfaced directly from the homepage.</p>
+          </div>
+          <div class="d-flex flex-wrap gap-2 align-self-start align-self-lg-center">
+            <a href="modules.html" class="btn btn-outline-primary"><i class="bi bi-box-arrow-up-right me-2"></i>Open Full Module Catalog</a>
+            <a href="module-spec-guide.html" class="btn btn-primary"><i class="bi bi-file-earmark-code me-2"></i>Open Spec Guide</a>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="module-pill" href="modules/module-avd.html"><i class="bi bi-display"></i>Azure Virtual Desktop</a>
+          <a class="module-pill" href="modules/module-aks.html"><i class="bi bi-diagram-3"></i>AKS</a>
+          <a class="module-pill" href="modules/module-appservice.html"><i class="bi bi-window"></i>App Service</a>
+          <a class="module-pill" href="modules/module-datafactory.html"><i class="bi bi-arrow-repeat"></i>Data Factory</a>
+          <a class="module-pill" href="modules/module-servicebus.html"><i class="bi bi-hdd-network"></i>Service Bus</a>
+          <a class="module-pill" href="modules/module-frontdoor.html"><i class="bi bi-signpost-split"></i>Front Door</a>
+          <a class="module-pill" href="modules/module-eventhubs.html"><i class="bi bi-broadcast-pin"></i>Event Hubs</a>
+          <a class="module-pill" href="modules/module-logicapps.html"><i class="bi bi-diagram-2"></i>Logic Apps</a>
+          <a class="module-pill" href="modules/module-redis.html"><i class="bi bi-lightning-charge"></i>Redis</a>
+        </div>
+      </div>
+
+      <p class="text-center text-muted mb-4">Click any module card below to open service documentation.</p>
       <div class="row g-3">
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/" target="_blank" rel="noopener noreferrer" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-brain text-primary me-2"></i><strong class="text-body">Azure OpenAI</strong><p class="small text-muted mb-0">GPT-4o, embeddings, DALL-E</p></a></div>
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" rel="noopener noreferrer" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-search text-primary me-2"></i><strong class="text-body">AI Search</strong><p class="small text-muted mb-0">Vector + semantic search</p></a></div>
@@ -871,6 +917,15 @@
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/azure-arc/" target="_blank" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-globe2 text-primary me-2"></i><strong class="text-body">Azure Arc</strong><p class="small text-muted mb-0">Hybrid management</p></a></div>
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/migrate/" target="_blank" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-box-arrow-in-up-right text-primary me-2"></i><strong class="text-body">Azure Migrate</strong><p class="small text-muted mb-0">Discovery &amp; migration</p></a></div>
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/bastion/" target="_blank" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-lock-fill text-primary me-2"></i><strong class="text-body">Azure Bastion</strong><p class="small text-muted mb-0">Secure VM access</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-avd.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-display text-primary me-2"></i><strong class="text-body">Azure Virtual Desktop</strong><p class="small text-muted mb-0">Cloud desktop delivery</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-aks.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-diagram-3 text-primary me-2"></i><strong class="text-body">Azure Kubernetes Service</strong><p class="small text-muted mb-0">Managed Kubernetes</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-appservice.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-window text-primary me-2"></i><strong class="text-body">Azure App Service</strong><p class="small text-muted mb-0">Web and API hosting</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-datafactory.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-arrow-repeat text-primary me-2"></i><strong class="text-body">Azure Data Factory</strong><p class="small text-muted mb-0">Data pipelines</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-servicebus.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-hdd-network text-primary me-2"></i><strong class="text-body">Azure Service Bus</strong><p class="small text-muted mb-0">Reliable messaging</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-frontdoor.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-signpost-split text-primary me-2"></i><strong class="text-body">Azure Front Door</strong><p class="small text-muted mb-0">Global edge routing</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-eventhubs.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-broadcast-pin text-primary me-2"></i><strong class="text-body">Azure Event Hubs</strong><p class="small text-muted mb-0">Streaming ingestion</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-logicapps.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-diagram-2 text-primary me-2"></i><strong class="text-body">Azure Logic Apps</strong><p class="small text-muted mb-0">Workflow automation</p></a></div>
+        <div class="col-md-4 col-lg-3"><a href="modules/module-redis.html" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-lightning-charge text-primary me-2"></i><strong class="text-body">Azure Cache for Redis</strong><p class="small text-muted mb-0">Low-latency cache</p></a></div>
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/ddos-protection/" target="_blank" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-shield-fill-exclamation text-primary me-2"></i><strong class="text-body">DDoS Protection</strong><p class="small text-muted mb-0">Network protection</p></a></div>
         <div class="col-md-4 col-lg-3"><a href="https://learn.microsoft.com/en-us/azure/managed-grafana/" target="_blank" class="card module-card h-100 p-3 text-decoration-none"><i class="bi bi-bar-chart-fill text-primary me-2"></i><strong class="text-body">Managed Grafana</strong><p class="small text-muted mb-0">Dashboards &amp; monitoring</p></a></div>
       </div>
@@ -1081,7 +1136,7 @@
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/cognitive-services/openai-service/" target="_blank">AOAI</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/api-management/" target="_blank">APIM</a> &middot; <a href="https://ai.azure.com" target="_blank">AI Foundry</a></p>
       <div class="text-center mt-3">
         <a href="pattern1.html" class="btn btn-primary me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(1)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="1"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1106,7 +1161,7 @@
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/azure-firewall/" target="_blank">Firewall</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/virtual-network-manager/" target="_blank">VNet Manager</a></p>
       <div class="text-center mt-3">
         <a href="pattern2.html" class="btn btn-info text-white me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(2)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="2"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1131,7 +1186,7 @@
       <p class="small text-muted">Source: <a href="https://ai.azure.com" target="_blank">AI Foundry</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/api-management/" target="_blank">APIM</a></p>
       <div class="text-center mt-3">
         <a href="pattern3.html" class="btn btn-success me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-outline-success" onclick="openDeploySpec(3)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-outline-success" data-spec="3"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1156,7 +1211,7 @@
       <p class="small text-muted">Source: <a href="https://ai.azure.com" target="_blank">AI Foundry</a> &middot; GPU: NC A100 v4 at $2.47/hr &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/machine-learning/" target="_blank">Compute</a></p>
       <div class="text-center mt-3">
         <a href="pattern4.html" class="btn btn-warning me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(4)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="4"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1182,7 +1237,7 @@
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/functions/" target="_blank">Functions Flex</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/container-apps/" target="_blank">Container Apps</a> — gpt-4o-mini: $0.15/$0.60 per 1M tokens</p>
       <div class="text-center mt-3">
         <a href="pattern5.html" class="btn btn-danger me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(5)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="5"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1208,7 +1263,7 @@
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/azure-firewall/" target="_blank">Firewall Premium</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/key-vault/" target="_blank">Managed HSM</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/confidential-ledger/" target="_blank">Confidential Ledger</a></p>
       <div class="text-center mt-3">
         <a href="pattern6.html" class="btn btn-dark me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(6)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="6"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1233,7 +1288,7 @@
       <p class="small text-muted">Source: <a href="https://azure.microsoft.com/en-us/pricing/details/microsoft-fabric/" target="_blank">Fabric</a> &middot; <a href="https://azure.microsoft.com/en-us/pricing/details/databricks/" target="_blank">Databricks</a></p>
       <div class="text-center mt-3">
         <a href="pattern7.html" class="btn btn-secondary me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(7)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="7"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1264,7 +1319,7 @@
       <details class="mb-3"><summary class="fw-semibold" style="cursor:pointer;color:#e67e22"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.95%</strong> — how is this calculated?</summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">IaaS VMs with Availability Zones provide 99.95%. Combined with high-SLA managed services, the composite stays very high.</p><p class="mb-2 font-monospace">0.9995 (VM AZ) × 0.9999 (Storage) × 0.9995 (Bastion) × 0.9999 (LB)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure VM (Availability Zone)</td><td>99.95%</td></tr><tr><td>Azure Storage (LRS)</td><td>99.99%</td></tr><tr><td>Azure Bastion</td><td>99.95%</td></tr><tr><td>Load Balancer</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.9995 × 0.9999 × 0.9995 × 0.9999 = <strong>0.9988 ≈ 99.95%</strong></p><p class="mb-0 text-muted">Bastion is for management access only — if excluded from the serving path, the composite rises to ~99.98%.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <div class="text-center mt-3">
         <a href="pattern8.html" class="btn me-2" style="background:#e67e22;color:#fff"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(8)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="8"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1294,7 +1349,7 @@
       <details class="mb-3"><summary class="fw-semibold" style="cursor:pointer;color:#0db7ed"><i class="bi bi-calculator me-1"></i>Composite SLA <strong>99.97%</strong> — how is this calculated? <span class="badge bg-success ms-1">Highest Overall</span></summary><div class="mt-2 small bg-light rounded p-3"><p class="mb-2">Azure SQL services are among the highest-SLA offerings. SQL MI and SQL DB both offer 99.99%, pushing the composite close to five-nines.</p><p class="mb-2 font-monospace">0.9999 (SQL MI) × 0.9999 (SQL DB) × 0.9995 (SQL VM) × 0.9999 (Key Vault)</p><table class="table table-sm table-bordered mb-2"><thead><tr><th>Service</th><th>Individual SLA</th></tr></thead><tbody><tr><td>Azure SQL MI (Next-gen GP)</td><td>99.99%</td></tr><tr><td>Azure SQL Database</td><td>99.99%</td></tr><tr><td>SQL on Azure VM</td><td>99.95%</td></tr><tr><td>Key Vault</td><td>99.99%</td></tr></tbody></table><p class="mb-1"><strong>Calculation:</strong> 0.9999 × 0.9999 × 0.9995 × 0.9999 = <strong>0.9992 ≈ 99.97%</strong></p><p class="mb-0 text-muted">SQL MI+DB are 99.99%. If SQL VM (99.95%) is replaced with another MI, composite rises to ~99.97+%.</p><p class="mb-0 mt-1"><a href="https://learn.microsoft.com/en-us/azure/architecture/framework/resiliency/business-metrics#composite-slas" target="_blank"><i class="bi bi-box-arrow-up-right me-1"></i>Microsoft: Composite SLA calculation guide</a> · <a href="https://azure.microsoft.com/en-us/support/legal/sla/summary/" target="_blank">Azure SLA summary</a></p></div></details>
       <div class="text-center mt-3">
         <a href="pattern9.html" class="btn me-2" style="background:#0db7ed;color:#fff"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(9)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="9"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1326,7 +1381,7 @@
       <p class="small text-muted">Follows all 6 CAF phases: Strategy &rarr; Plan &rarr; Ready &rarr; Adopt &rarr; Govern &rarr; Manage. IaC via <a href="https://aka.ms/avm" target="_blank">Azure Verified Modules</a>.</p>
       <div class="text-center mt-3">
         <a href="pattern10.html" class="btn btn-success me-2"><i class="bi bi-arrow-right-circle me-2"></i>View Full Details, BOM &amp; Architecture</a>
-        <button class="btn btn-success" onclick="openDeploySpec(10)"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
+        <button class="btn btn-success" data-spec="10"><i class="bi bi-file-earmark-code me-2"></i>Generate Deployment Spec</button>
       </div>
     </div>
   </div></div></div>
@@ -1407,7 +1462,7 @@
                 </div>
               </div></div>
 
-              <button type="button" class="btn btn-success btn-lg w-100" onclick="generateSpec()"><i class="bi bi-gear-wide-connected me-2"></i>Generate Deployment Spec Sheet</button>
+              <button type="button" class="btn btn-success btn-lg w-100" id="generateSpecBtn"><i class="bi bi-gear-wide-connected me-2"></i>Generate Deployment Spec Sheet</button>
             </form>
           </div>
 
@@ -1474,10 +1529,10 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="fw-bold mb-0"><i class="bi bi-check-circle-fill text-success me-2"></i>Deployment Spec Generated</h5>
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary btn-sm" onclick="copySpec()"><i class="bi bi-clipboard me-1"></i>Copy to Clipboard</button>
-            <button class="btn btn-primary btn-sm" onclick="downloadSpec()"><i class="bi bi-download me-1"></i>Download .md</button>
-            <button class="btn btn-outline-secondary btn-sm" onclick="downloadSpecYaml()"><i class="bi bi-filetype-yml me-1"></i>Download workflow.yml</button>
-            <button class="btn btn-outline-dark btn-sm" onclick="backToInputs()"><i class="bi bi-arrow-left me-1"></i>Back</button>
+            <button class="btn btn-outline-primary btn-sm" id="copySpecBtn"><i class="bi bi-clipboard me-1"></i>Copy to Clipboard</button>
+            <button class="btn btn-primary btn-sm" id="downloadSpecBtn"><i class="bi bi-download me-1"></i>Download .md</button>
+            <button class="btn btn-outline-secondary btn-sm" id="downloadSpecYamlBtn"><i class="bi bi-filetype-yml me-1"></i>Download workflow.yml</button>
+            <button class="btn btn-outline-dark btn-sm" id="backToInputsBtn"><i class="bi bi-arrow-left me-1"></i>Back</button>
           </div>
         </div>
         <pre id="specOutput" class="bg-body-tertiary border rounded-3 p-4" style="max-height:65vh;overflow:auto;white-space:pre-wrap;font-size:.82rem;font-family:'Cascadia Code','Fira Code','Consolas','Courier New',monospace;line-height:1.5"></pre>
@@ -1507,12 +1562,12 @@
   </div>
 
   <!-- Back to Top -->
-  <button id="backToTop" class="btn btn-primary rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <button id="backToTop" class="btn btn-primary rounded-circle shadow">
     <i class="bi bi-arrow-up"></i>
   </button>
 
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55DQYC+9uNTmQvcQV1RoGtR1uxHnL" crossorigin="anonymous"></script>
   <script>
     // Dark mode toggle
     const themeBtn = document.getElementById('themeToggle');
@@ -1523,6 +1578,23 @@
       html.setAttribute('data-bs-theme', dark ? 'light' : 'dark');
       icon.className = dark ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
     });
+
+    document.addEventListener('click', (event) => {
+      const specButton = event.target.closest('[data-spec]');
+      if (specButton) {
+        openDeploySpec(parseInt(specButton.getAttribute('data-spec'), 10));
+      }
+    });
+
+    document.getElementById('backToTop')?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('generateSpecBtn')?.addEventListener('click', generateSpec);
+    document.getElementById('copySpecBtn')?.addEventListener('click', copySpec);
+    document.getElementById('downloadSpecBtn')?.addEventListener('click', downloadSpec);
+    document.getElementById('downloadSpecYamlBtn')?.addEventListener('click', downloadSpecYaml);
+    document.getElementById('backToInputsBtn')?.addEventListener('click', backToInputs);
 
     // ── Currency Conversion Engine ──────────────────────────────
     (function() {

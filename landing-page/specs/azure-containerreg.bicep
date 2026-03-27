@@ -21,7 +21,7 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@${apiVersion}
     type: 'SystemAssigned'
   }
   properties: {
-    adminUserEnabled: false
+    adminUserEnabled: false  // ✓ REQUIRED: Use managed identities for authentication
     publicNetworkAccess: 'Enabled'
     networkRuleBypassOptions: 'AzureServices'
     policies: {

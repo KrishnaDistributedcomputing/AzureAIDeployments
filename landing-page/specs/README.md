@@ -1,6 +1,6 @@
 # Azure Core Modules - Bicep Specifications Guide
 
-Comprehensive Infrastructure as Code (Bicep) deployment templates and quick-start guides for all 16 Core Azure Modules.
+Comprehensive Infrastructure as Code (Bicep) deployment templates and quick-start guides for all 27 Core Azure Modules.
 
 ## 📋 Complete Module Inventory
 
@@ -12,14 +12,16 @@ Comprehensive Infrastructure as Code (Bicep) deployment templates and quick-star
 | **Azure AI Foundry** | Built-in | Coming soon | Included | ✅ Ready |
 | **Container Registry** | `azure-containerreg.bicep` | Coming soon | $10-50/mo | ✅ Ready |
 
-### 💾 Data & Storage Services (3 modules)
+### 💾 Data & Storage Services (5 modules)
 | Module | Bicep Spec | Landing Page | Pricing (est.) | Status |
 |--------|-----------|-------------|----------------|--------|
 | **Cosmos DB** | `azure-cosmosdb.bicep` | Coming soon | $50-500+/mo | ✅ Ready |
 | **Microsoft Fabric** | `azure-fabric.bicep` | Coming soon | $500-5,000+/mo | ✅ Ready |
 | **Key Vault** | `azure-keyvault.bicep` | Coming soon | $15-50/mo | ✅ Ready |
+| **Azure Data Factory** | `azure-datafactory.bicep` | `/modules/module-datafactory.html` | $100-1,500/mo | ✅ Ready |
+| **Azure Cache for Redis** | `azure-redis.bicep` | `/modules/module-redis.html` | $40-900/mo | ✅ Ready |
 
-### 🌐 Networking & Security (5 modules)
+### 🌐 Networking & Security (6 modules)
 | Module | Bicep Spec | Landing Page | Pricing (est.) | Status |
 |--------|-----------|-------------|----------------|--------|
 | **Virtual Network** | `azure-vnet.bicep` | Coming soon | Free - $30/mo | ✅ Ready |
@@ -27,25 +29,32 @@ Comprehensive Infrastructure as Code (Bicep) deployment templates and quick-star
 | **Azure Firewall** | `azure-firewall.bicep` | Coming soon | $912+/mo | ✅ Ready |
 | **DDoS Protection** | `azure-ddosprotection.bicep` | Coming soon | $2,944/mo | ✅ Ready |
 | **Azure Bastion** | `azure-bastion.bicep` | Coming soon | $65/mo | ✅ Ready |
+| **Azure Front Door** | `azure-frontdoor.bicep` | `/modules/module-frontdoor.html` | $35-450/mo | ✅ Ready |
 
-### ⚡ Compute & Orchestration (2 modules)
+### ⚡ Compute & Orchestration (5 modules)
 | Module | Bicep Spec | Landing Page | Pricing (est.) | Status |
 |--------|-----------|-------------|----------------|--------|
 | **Container Apps** | `azure-containerapps.bicep` | Coming soon | $0.000024/vCPU-s | ✅ Ready |
 | **Azure Functions** | `azure-functions.bicep` | Coming soon | $0.20/1M exec | ✅ Ready |
+| **Azure Virtual Desktop** | `azure-avd.bicep` | `/modules/module-avd.html` | $120-450/user/mo | ✅ Ready |
+| **Azure Kubernetes Service** | `azure-aks.bicep` | `/modules/module-aks.html` | $250-2,500/mo | ✅ Ready |
+| **Azure App Service** | `azure-appservice.bicep` | `/modules/module-appservice.html` | $60-600/mo | ✅ Ready |
 
-### 📊 Monitoring & Management (3 modules)
+### 📊 Monitoring & Management (5 modules)
 | Module | Bicep Spec | Landing Page | Pricing (est.) | Status |
 |--------|-----------|-------------|----------------|--------|
 | **Azure Monitor** | `azure-monitor.bicep` | Coming soon | $2.30-0.50/GB | ✅ Ready |
 | **Event Grid** | `azure-eventgrid.bicep` | Coming soon | $0.50/1M ops | ✅ Ready |
 | **Entra ID** | `azure-entraid.bicep` | Coming soon | Free-800/user | ✅ Ready |
+| **Azure Service Bus** | `azure-servicebus.bicep` | `/modules/module-servicebus.html` | $15-400/mo | ✅ Ready |
+| **Azure Event Hubs** | `azure-eventhubs.bicep` | `/modules/module-eventhubs.html` | $25-1,000/mo | ✅ Ready |
 
-### 🔗 Enterprise Services (2 modules)
+### 🔗 Enterprise Services (3 modules)
 | Module | Bicep Spec | Landing Page | Pricing (est.) | Status |
 |--------|-----------|-------------|----------------|--------|
 | **API Management** | `azure-apimgmt.bicep` | Coming soon | $150-500/mo | ✅ Ready |
 | **SQL Managed Instance** | `azure-sqlmi.bicep` | Coming soon | $500-2,000/mo | ✅ Ready |
+| **Azure Logic Apps** | `azure-logicapps.bicep` | `/modules/module-logicapps.html` | $15-300/mo | ✅ Ready |
 
 ---
 

@@ -103,7 +103,7 @@
 
     <!-- Module Cards -->
     <section class="mb-5">
-      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>18 Core Modules</h2>
+      <h2 class="fw-bold mb-4"><i class="bi bi-puzzle me-2"></i>27 Core Modules</h2>
       <div class="module-grid">
         <!-- AI Services -->
         <div class="card module-card shadow-sm" data-module="openai">
@@ -250,6 +250,78 @@
             <div class="module-icon">🔐</div>
             <h6 class="fw-bold">Azure Bastion</h6>
             <small class="text-muted">Secure remote access</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="avd">
+          <div class="card-body">
+            <div class="module-icon">🖥️</div>
+            <h6 class="fw-bold">Azure Virtual Desktop</h6>
+            <small class="text-muted">Secure cloud desktops</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="aks">
+          <div class="card-body">
+            <div class="module-icon">☸️</div>
+            <h6 class="fw-bold">Azure Kubernetes Service</h6>
+            <small class="text-muted">Managed Kubernetes clusters</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="appservice">
+          <div class="card-body">
+            <div class="module-icon">🌐</div>
+            <h6 class="fw-bold">Azure App Service</h6>
+            <small class="text-muted">Managed web app hosting</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="datafactory">
+          <div class="card-body">
+            <div class="module-icon">🏭</div>
+            <h6 class="fw-bold">Azure Data Factory</h6>
+            <small class="text-muted">Data integration pipelines</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="servicebus">
+          <div class="card-body">
+            <div class="module-icon">🚌</div>
+            <h6 class="fw-bold">Azure Service Bus</h6>
+            <small class="text-muted">Enterprise messaging</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="frontdoor">
+          <div class="card-body">
+            <div class="module-icon">🚪</div>
+            <h6 class="fw-bold">Azure Front Door</h6>
+            <small class="text-muted">Global edge delivery</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="eventhubs">
+          <div class="card-body">
+            <div class="module-icon">📡</div>
+            <h6 class="fw-bold">Azure Event Hubs</h6>
+            <small class="text-muted">High-throughput streaming</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="logicapps">
+          <div class="card-body">
+            <div class="module-icon">🧩</div>
+            <h6 class="fw-bold">Azure Logic Apps</h6>
+            <small class="text-muted">Workflow automation</small>
+          </div>
+        </div>
+
+        <div class="card module-card shadow-sm" data-module="redis">
+          <div class="card-body">
+            <div class="module-icon">⚡</div>
+            <h6 class="fw-bold">Azure Cache for Redis</h6>
+            <small class="text-muted">Low-latency caching</small>
           </div>
         </div>
       </div>
@@ -548,6 +620,162 @@
         </ul>
         <p><strong>Common Use Cases:</strong> Secure VM management, compliance-required access, enterprise administration, remote troubleshooting</p>
         <p><strong>Typical Monthly Cost (Standard):</strong> $10/day + $0.25/hour when in use (~$300-500/mo)</p>
+      </div>
+
+      <!-- Azure Virtual Desktop -->
+      <div class="module-detail" id="avd-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🖥️ Azure Virtual Desktop (AVD)</h4>
+        <p><strong>Purpose:</strong> Deliver secure, scalable Windows desktops and remote apps from Azure with centralized management and identity controls.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Pooled and personal desktop host pools</li>
+          <li>RemoteApp publishing for individual applications</li>
+          <li>Autoscale with start/stop for cost control</li>
+          <li>Microsoft Entra ID integration and Conditional Access</li>
+          <li>FSLogix profile containers for roaming user profiles</li>
+          <li>Session host hardening with Defender and Intune policies</li>
+          <li>Private network deployment with Bastion-supported administration</li>
+          <li>Monitoring through Log Analytics and Azure Monitor workbooks</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Secure contractor access, call-center desktops, regulated workloads, legacy app virtualization, developer workstations</p>
+        <p><strong>Typical Monthly Cost:</strong> $120 - $450 per active user (depends on VM sizing, concurrency, and session schedule)</p>
+      </div>
+
+      <!-- Azure Kubernetes Service -->
+      <div class="module-detail" id="aks-detail" style="display:none">
+        <h4 class="fw-bold mb-2">☸️ Azure Kubernetes Service (AKS)</h4>
+        <p><strong>Purpose:</strong> Managed Kubernetes control plane for containerized applications with autoscaling, identity integration, and enterprise security.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Managed Kubernetes control plane with SLA</li>
+          <li>Node pools for system and workload isolation</li>
+          <li>Cluster autoscaler and horizontal pod autoscaling</li>
+          <li>Azure CNI and network policy support</li>
+          <li>Microsoft Entra workload identity and Azure RBAC</li>
+          <li>Private cluster mode and API server restrictions</li>
+          <li>Integrated monitoring with Container Insights</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Microservices, AI inference APIs, platform backends, event-driven processing</p>
+        <p><strong>Typical Monthly Cost:</strong> $250 - $2,500 depending on node size, count, and uptime</p>
+      </div>
+
+      <!-- Azure App Service -->
+      <div class="module-detail" id="appservice-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🌐 Azure App Service</h4>
+        <p><strong>Purpose:</strong> Fully managed platform for hosting web apps and APIs with CI/CD, TLS, identity, and autoscaling support.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Managed runtime for .NET, Node.js, Python, Java, and PHP</li>
+          <li>Deployment slots for blue/green releases</li>
+          <li>Built-in TLS certificates and custom domains</li>
+          <li>VNet integration and private endpoint support</li>
+          <li>Autoscale based on CPU, memory, or schedule</li>
+          <li>Managed identity and Key Vault references</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Public web apps, internal APIs, backend-for-frontend services, partner portals</p>
+        <p><strong>Typical Monthly Cost:</strong> $60 - $600 per app plan depending on SKU and scale</p>
+      </div>
+
+      <!-- Azure Data Factory -->
+      <div class="module-detail" id="datafactory-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🏭 Azure Data Factory</h4>
+        <p><strong>Purpose:</strong> Cloud data integration service for orchestrating ETL/ELT pipelines across SaaS, on-premises, and Azure data stores.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Visual pipeline authoring with low-code orchestration</li>
+          <li>100+ connectors for structured and unstructured data sources</li>
+          <li>Mapping data flows for transformation at scale</li>
+          <li>Managed integration runtime and self-hosted IR support</li>
+          <li>Triggering by schedule, event, and tumbling window</li>
+          <li>Built-in monitoring, retries, and alert integration</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Data ingestion, warehouse loading, lakehouse prep, multi-system synchronization</p>
+        <p><strong>Typical Monthly Cost:</strong> $100 - $1,500 based on activity runs, DIU usage, and data movement</p>
+      </div>
+
+      <!-- Azure Service Bus -->
+      <div class="module-detail" id="servicebus-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🚌 Azure Service Bus</h4>
+        <p><strong>Purpose:</strong> Reliable enterprise message broker for decoupled systems with queues, topics, sessions, and dead-letter handling.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Queues and topics/subscriptions for async integration</li>
+          <li>FIFO processing with sessions and duplicate detection</li>
+          <li>Dead-letter queues and poison message handling</li>
+          <li>Scheduled delivery and transaction support</li>
+          <li>Private endpoint and virtual network integration</li>
+          <li>Geo-disaster recovery alias for namespace failover</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Order processing, workflow orchestration, integration between microservices, event buffering</p>
+        <p><strong>Typical Monthly Cost:</strong> $15 - $400 depending on tier, throughput units, and operations</p>
+      </div>
+
+      <!-- Azure Front Door -->
+      <div class="module-detail" id="frontdoor-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🚪 Azure Front Door</h4>
+        <p><strong>Purpose:</strong> Global edge entry point for web workloads with anycast routing, WAF, TLS offload, and intelligent failover.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Global anycast-based HTTP/HTTPS routing</li>
+          <li>Web Application Firewall (WAF) policy enforcement</li>
+          <li>Origin health probes and automatic failover</li>
+          <li>Path-based routing and rules engine</li>
+          <li>Built-in DDoS-resilient edge network</li>
+          <li>Managed TLS certificates and custom domains</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Global APIs, multi-region web apps, zero-downtime failover, edge security controls</p>
+        <p><strong>Typical Monthly Cost:</strong> $35 - $450 based on requests, rules, and data transfer</p>
+      </div>
+
+      <!-- Azure Event Hubs -->
+      <div class="module-detail" id="eventhubs-detail" style="display:none">
+        <h4 class="fw-bold mb-2">📡 Azure Event Hubs</h4>
+        <p><strong>Purpose:</strong> Big data streaming ingestion platform for telemetry and event pipelines at massive scale.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Millions of events per second ingestion</li>
+          <li>Partitioned consumer model with checkpointing</li>
+          <li>Kafka-compatible endpoint support</li>
+          <li>Capture to Storage/Data Lake for cold path analytics</li>
+          <li>Private endpoint and VNet integration</li>
+          <li>Geo-recovery namespace alias support</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> IoT telemetry, clickstream analytics, SIEM feeds, real-time operational events</p>
+        <p><strong>Typical Monthly Cost:</strong> $25 - $1,000 based on throughput units and retention</p>
+      </div>
+
+      <!-- Azure Logic Apps -->
+      <div class="module-detail" id="logicapps-detail" style="display:none">
+        <h4 class="fw-bold mb-2">🧩 Azure Logic Apps</h4>
+        <p><strong>Purpose:</strong> Low-code integration and workflow orchestration service for automating processes across cloud and on-prem systems.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Visual workflow designer with built-in connectors</li>
+          <li>Stateful and stateless execution models</li>
+          <li>Enterprise connectors (SAP, SQL, Service Bus, M365)</li>
+          <li>Managed identity and secure parameter handling</li>
+          <li>Exception handling, retries, and compensation</li>
+          <li>Native monitoring in Azure Monitor</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Approval flows, integration middleware, notification orchestration, B2B workflows</p>
+        <p><strong>Typical Monthly Cost:</strong> $15 - $300 depending on connector calls and workflow runs</p>
+      </div>
+
+      <!-- Azure Cache for Redis -->
+      <div class="module-detail" id="redis-detail" style="display:none">
+        <h4 class="fw-bold mb-2">⚡ Azure Cache for Redis</h4>
+        <p><strong>Purpose:</strong> In-memory data store for ultra-low latency caching, session state, and pub/sub messaging.</p>
+        <p><strong>Key Capabilities:</strong></p>
+        <ul>
+          <li>Sub-millisecond read latency for hot data</li>
+          <li>Cache-aside and write-through patterns</li>
+          <li>Data persistence and zone redundancy options</li>
+          <li>Private endpoint and network isolation support</li>
+          <li>Key expiration and eviction policies</li>
+          <li>Pub/Sub for lightweight signaling workflows</li>
+        </ul>
+        <p><strong>Common Use Cases:</strong> Session cache, token cache, API response cache, rate limiting, feature flags</p>
+        <p><strong>Typical Monthly Cost:</strong> $40 - $900 based on tier, memory size, and replication</p>
       </div>
     </section>
 

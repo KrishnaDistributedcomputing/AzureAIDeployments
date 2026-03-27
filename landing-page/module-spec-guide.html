@@ -67,7 +67,7 @@
     <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#fff" stroke-width="0.5"/></pattern></defs><rect width="1200" height="400" fill="url(#grid)"/></svg>
     <div class="container py-5">
       <h1 class="display-4 fw-bold mb-3">Module Specification Writing Guide</h1>
-      <p class="lead">Complete templates and best practices for documenting all 18 Azure core modules.</p>
+      <p class="lead">Complete templates and best practices for documenting all 27 Azure core modules.</p>
       <p class="text-white-50">Write consistent, production-ready specifications with architecture diagrams, resource inventory, costs, and Bicep templates.</p>
     </div>
   </section>
@@ -101,6 +101,15 @@
               <a href="#eventgrid" class="list-group-item list-group-item-action"><small>16. Event Grid</small></a>
               <a href="#sqlmi" class="list-group-item list-group-item-action"><small>17. SQL MI</small></a>
               <a href="#bastion" class="list-group-item list-group-item-action"><small>18. Bastion</small></a>
+              <a href="#avd" class="list-group-item list-group-item-action"><small>19. Azure Virtual Desktop</small></a>
+              <a href="#aks" class="list-group-item list-group-item-action"><small>20. Azure Kubernetes Service</small></a>
+              <a href="#appservice" class="list-group-item list-group-item-action"><small>21. Azure App Service</small></a>
+              <a href="#datafactory" class="list-group-item list-group-item-action"><small>22. Azure Data Factory</small></a>
+              <a href="#servicebus" class="list-group-item list-group-item-action"><small>23. Azure Service Bus</small></a>
+              <a href="#frontdoor" class="list-group-item list-group-item-action"><small>24. Azure Front Door</small></a>
+              <a href="#eventhubs" class="list-group-item list-group-item-action"><small>25. Azure Event Hubs</small></a>
+              <a href="#logicapps" class="list-group-item list-group-item-action"><small>26. Azure Logic Apps</small></a>
+              <a href="#redis" class="list-group-item list-group-item-action"><small>27. Azure Cache for Redis</small></a>
             </div>
           </div>
         </div>
@@ -777,6 +786,78 @@ resource rbacRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
             <p><strong>Focus:</strong> Browser-based RDP/SSH, no public IPs needed, network isolation</p>
             <div class="guide-box">
               <strong>Spec Highlights:</strong> SKU variants (Basic, Standard, Developer), session recording, graphical access from browser, JIT access integration
+            </div>
+          </section>
+
+          <section id="avd" class="module-section">
+            <h3><i class="bi bi-display me-2"></i>19. Azure Virtual Desktop</h3>
+            <p><strong>Focus:</strong> Secure desktop virtualization, host pools, app groups, autoscaling, profile management</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Host pool type (pooled/personal), workspace and app group topology, session host image strategy, FSLogix profile storage, autoscale schedules, conditional access and MFA controls
+            </div>
+          </section>
+
+          <section id="aks" class="module-section">
+            <h3><i class="bi bi-diagram-3-fill me-2"></i>20. Azure Kubernetes Service</h3>
+            <p><strong>Focus:</strong> Managed Kubernetes orchestration, cluster security, autoscaling, workload identity</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Node pool strategy, CNI and network policy selection, private API server, pod identity/workload identity, autoscaler profiles, observability stack
+            </div>
+          </section>
+
+          <section id="appservice" class="module-section">
+            <h3><i class="bi bi-window-stack me-2"></i>21. Azure App Service</h3>
+            <p><strong>Focus:</strong> Managed web/API hosting, deployment slots, scaling, secure app configuration</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> App Service Plan sizing, slot strategy, TLS and custom domains, VNet integration, managed identity + Key Vault references
+            </div>
+          </section>
+
+          <section id="datafactory" class="module-section">
+            <h3><i class="bi bi-arrow-repeat me-2"></i>22. Azure Data Factory</h3>
+            <p><strong>Focus:</strong> Data ingestion and orchestration, ETL/ELT pipeline design, integration runtime topology</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Pipeline dependency graph, connector mapping, data flow compute sizing, self-hosted IR placement, scheduling and retry model
+            </div>
+          </section>
+
+          <section id="servicebus" class="module-section">
+            <h3><i class="bi bi-hdd-network-fill me-2"></i>23. Azure Service Bus</h3>
+            <p><strong>Focus:</strong> Enterprise messaging reliability, queue/topic topology, replay and dead-letter strategy</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Namespace tier selection, queue/topic partitioning, sessions and ordering, duplicate detection windows, DR alias and failover posture
+            </div>
+          </section>
+
+          <section id="frontdoor" class="module-section">
+            <h3><i class="bi bi-signpost-split-fill me-2"></i>24. Azure Front Door</h3>
+            <p><strong>Focus:</strong> Global routing, edge security, WAF policy design, multi-origin failover</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Origin group topology, route rule sets, WAF custom rules, health probe tuning, custom domain TLS strategy
+            </div>
+          </section>
+
+          <section id="eventhubs" class="module-section">
+            <h3><i class="bi bi-broadcast-pin me-2"></i>25. Azure Event Hubs</h3>
+            <p><strong>Focus:</strong> Streaming ingestion scale, partition model, retention and consumer architecture</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Throughput unit sizing, partition count planning, capture configuration, Kafka endpoint enablement, geo-disaster recovery alias
+            </div>
+          </section>
+
+          <section id="logicapps" class="module-section">
+            <h3><i class="bi bi-diagram-2-fill me-2"></i>26. Azure Logic Apps</h3>
+            <p><strong>Focus:</strong> Workflow automation, connector governance, integration error handling</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> Stateful vs stateless model, connector authentication pattern, retry policy design, secure inputs/outputs, split-on and parallelization
+            </div>
+          </section>
+
+          <section id="redis" class="module-section">
+            <h3><i class="bi bi-lightning-charge-fill me-2"></i>27. Azure Cache for Redis</h3>
+            <p><strong>Focus:</strong> In-memory cache strategy, key design, eviction policy and HA topology</p>
+            <div class="guide-box">
+              <strong>Spec Highlights:</strong> SKU/tier sizing, clustering and sharding, persistence options, private endpoint design, cache invalidation strategy
             </div>
           </section>
 

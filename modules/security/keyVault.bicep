@@ -19,7 +19,7 @@ param softDeleteRetentionInDays int = 90
 param enablePurgeProtection bool = true
 
 @description('Whether to disable public network access')
-param publicNetworkAccess ('Enabled' | 'Disabled') = 'Enabled'
+param publicNetworkAccess ('Enabled' | 'Disabled') = 'Disabled'
 
 @description('Tenant ID')
 param tenantId string = subscription().tenantId
