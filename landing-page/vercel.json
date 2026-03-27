@@ -11,6 +11,7 @@
     { "source": "/patterns/sql-migration", "destination": "/pattern9.html" },
     { "source": "/patterns/greenfield-azure", "destination": "/pattern10.html" },
     { "source": "/landing-zone", "destination": "/landing-zone.html" },
+    { "source": "/sdd", "destination": "/sdd.html" },
     { "source": "/education", "destination": "/csi-education.html" },
     { "source": "/modules", "destination": "/modules.html" },
     { "source": "/module-specs", "destination": "/module-spec-guide.html" },

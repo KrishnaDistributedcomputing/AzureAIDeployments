@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spec-Driven Development - Azure AI Deployment Patterns</title>
+  <meta name="description" content="Spec-Driven Development guidance for Azure AI landing zones, module specifications, and deployment-ready architecture contracts." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjHS1QVoT2H8K1OKNqNdfHU6rEQf12wnhx0VTpEpfJ35vAVgdW2hIGd" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" integrity="sha384-dFA4uY42aIvygz1mUGzoKF25ZD/vaXfJ/Z2JnW+MD8LKnMeJkelNj8jlPREo2by1" crossorigin="anonymous" />
+  <style>
+    :root { --accent: #e67e22; --accent-soft: rgba(230,126,34,.1); }
+    [data-bs-theme="dark"] { --accent: #ffb347; --accent-soft: rgba(255,179,71,.12); }
+    .hero { position: relative; overflow: hidden; background: linear-gradient(135deg, #8a4b08 0%, #c96f12 45%, #f3a53d 100%); color: #fff; }
+    [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #2b1802 0%, #6a3908 45%, #9d5c13 100%); }
+    .hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 35%); pointer-events: none; }
+    .hero .container { position: relative; z-index: 1; }
+    .feature-card { border: 1px solid rgba(0,0,0,.08); border-radius: 18px; padding: 1.25rem; height: 100%; background: var(--bs-body-bg); box-shadow: 0 12px 28px rgba(0,0,0,.06); }
+    .feature-icon { width: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; background: var(--accent-soft); color: var(--accent); font-size: 1.35rem; }
+    .cta-strip { border: 1px solid rgba(230,126,34,.18); background: linear-gradient(135deg, var(--accent-soft), rgba(13,110,253,.06)); border-radius: 20px; }
+    .rule-box { border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 10px; padding: 1rem 1.1rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI <span class="badge bg-warning text-dark ms-1" style="font-size:.6rem;vertical-align:middle">BETA</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link fw-semibold" href="index.html">AI Patterns</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="landing-zone.html">Landing Zone</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="modules.html">Modules</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold active" href="sdd.html">Spec-Driven Development</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero py-5">
+    <div class="container py-4">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <span class="badge rounded-pill bg-light text-dark mb-3"><i class="bi bi-journal-code me-2"></i>Architecture Contracts for Delivery</span>
+          <h1 class="display-5 fw-bold mb-3">Spec-Driven Development</h1>
+          <p class="lead mb-4">Use explicit module specs, deployment contracts, and rulesets to move from architecture intent to repeatable Azure implementation without losing governance or platform standards.</p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="module-spec-guide.html" class="btn btn-light btn-lg"><i class="bi bi-file-earmark-code me-2"></i>Open Spec Guide</a>
+            <a href="modules.html" class="btn btn-outline-light btn-lg"><i class="bi bi-puzzle me-2"></i>Browse Modules</a>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="cta-strip p-4 text-dark bg-white bg-opacity-75">
+            <div class="row g-3 text-center">
+              <div class="col-4">
+                <div class="fw-bold fs-3">27</div>
+                <div class="small text-muted">Core modules</div>
+              </div>
+              <div class="col-4">
+                <div class="fw-bold fs-3">10</div>
+                <div class="small text-muted">Reference patterns</div>
+              </div>
+              <div class="col-4">
+                <div class="fw-bold fs-3">1</div>
+                <div class="small text-muted">Ruleset baseline</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4 mb-5">
+        <div class="col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon mb-3"><i class="bi bi-diagram-3"></i></div>
+            <h2 class="h4 fw-bold">Define the Module Contract</h2>
+            <p class="text-muted mb-0">Document the service purpose, topology, network boundaries, identity pattern, cost model, and deployment outputs before implementation starts.</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon mb-3"><i class="bi bi-shield-check"></i></div>
+            <h2 class="h4 fw-bold">Enforce the Guardrails</h2>
+            <p class="text-muted mb-0">Use the ruleset and module guide to keep platform decisions consistent across networking, security, observability, and deployment workflows.</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon mb-3"><i class="bi bi-rocket-takeoff"></i></div>
+            <h2 class="h4 fw-bold">Deploy with Confidence</h2>
+            <p class="text-muted mb-0">Translate the approved spec into Bicep templates, module pages, and implementation artifacts that stay aligned with architecture intent.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 align-items-start">
+        <div class="col-lg-7">
+          <h2 class="fw-bold mb-3">Working Model</h2>
+          <div class="rule-box mb-3">
+            Start with the architecture outcome, not the resource list. A module spec should explain why the service exists, how it fits the landing zone, and what downstream teams can rely on.
+          </div>
+          <ol class="ps-3">
+            <li class="mb-2">Choose the target module or pattern and capture the intended business capability.</li>
+            <li class="mb-2">Define interfaces: identity, networking, secrets, telemetry, private access, and outputs.</li>
+            <li class="mb-2">Apply the shared ruleset so teams inherit consistent design constraints.</li>
+            <li class="mb-2">Map the approved contract into Bicep and supporting documentation.</li>
+          </ol>
+        </div>
+        <div class="col-lg-5">
+          <div class="feature-card">
+            <h2 class="h4 fw-bold mb-3">Jump To</h2>
+            <div class="d-grid gap-2">
+              <a href="module-spec-guide.html" class="btn btn-primary"><i class="bi bi-file-earmark-code me-2"></i>Module Specification Guide</a>
+              <a href="modules.html" class="btn btn-outline-primary"><i class="bi bi-puzzle me-2"></i>Core Module Catalog</a>
+              <a href="Ruleset/SPEC-RULES-001_Universal_Ruleset.md" class="btn btn-outline-secondary"><i class="bi bi-journal-text me-2"></i>Universal Ruleset</a>
+              <a href="index.html#modules" class="btn btn-outline-dark"><i class="bi bi-stars me-2"></i>New Services on Homepage</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-top py-4">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <div class="text-muted small">Spec-Driven Development for Azure AI deployment patterns.</div>
+      <div class="small"><a href="help.html">Help</a> · <a href="module-spec-guide.html">Spec Guide</a> · <a href="modules.html">Modules</a></div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55DQYC+9uNTmQvcQV1RoGtR1uxHnL" crossorigin="anonymous"></script>
+</body>
+</html>
