@@ -1,4 +1,4 @@
-{
+﻿{
   "routes": [
     { "route": "/patterns/centralized-hub", "rewrite": "/pattern1.html" },
     { "route": "/patterns/decentralized-spoke", "rewrite": "/pattern2.html" },
@@ -15,6 +15,7 @@
     { "route": "/education", "rewrite": "/csi-education.html" },
     { "route": "/modules", "rewrite": "/modules.html" },
     { "route": "/module-specs", "rewrite": "/module-spec-guide.html" },
+    { "route": "/quiz", "rewrite": "/quiz.html" },
     { "route": "/monitoring", "rewrite": "/monitoring.html" },
     { "route": "/help", "rewrite": "/help.html" }
   ],
@@ -23,15 +24,17 @@
     "exclude": ["/img/*", "*.css", "*.js", "*.svg", "*.png", "*.jpg", "*.ico"]
   },
   "globalHeaders": {
+    "Content-Type": "text/html; charset=utf-8",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
     "X-XSS-Protection": "1; mode=block",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=()",
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
-    "Content-Security-Policy": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https:; svg-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+    "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https:; svg-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
   },
   "mimeTypes": {
     ".svg": "image/svg+xml"
   }
 }
+

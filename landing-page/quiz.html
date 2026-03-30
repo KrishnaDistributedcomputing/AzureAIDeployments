@@ -1,667 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Knowledge Check - Spec-Driven Development Quiz</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        :root {
-            --sdd-orange: #e67e22;
-            --sdd-amber: #f39c12;
-            --sdd-ink: #2b2f38;
-            --sdd-sky: #f5fbff;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Knowledge Check Quiz | Azure AI Deployment Patterns</title>
+  <meta name="description" content="Interactive Spec-Driven Development knowledge check with instant scoring and explanations." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --quiz-pink: #ff4db8;
+      --quiz-cyan: #35e0ff;
+      --quiz-green: #6dff91;
+      --quiz-ink: #1d1733;
+      --quiz-soft: #f7f5ff;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, var(--sdd-sky) 0%, #ffffff 100%);
-            color: var(--sdd-ink);
-        }
+    body {
+      color: var(--quiz-ink);
+      background:
+        radial-gradient(900px 500px at 10% 0%, rgba(255, 77, 184, .12), transparent 55%),
+        radial-gradient(800px 450px at 90% 10%, rgba(53, 224, 255, .12), transparent 55%),
+        linear-gradient(180deg, #fff, #f7fbff 60%, #f8fff8 100%);
+      min-height: 100vh;
+    }
 
-        .hero-section {
-            background: linear-gradient(135deg, var(--sdd-orange) 0%, var(--sdd-amber) 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            margin-bottom: 60px;
-            border-radius: 8px;
-        }
+    .quiz-shell {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 40px 16px 80px;
+    }
 
-        .hero-section h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 48px 28px;
+      color: #fff;
+      background: linear-gradient(135deg, #2b0a3d 0%, #7c3aed 32%, #0f62fe 68%, #06b6d4 100%);
+      box-shadow: 0 24px 60px rgba(43, 10, 61, .22);
+    }
 
-        .hero-section p {
-            font-size: 1.1rem;
-            margin-bottom: 0;
-            opacity: 0.95;
-        }
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(12px);
+      opacity: .45;
+    }
 
-        .content-card {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      right: -40px;
+      top: -40px;
+      background: rgba(255, 77, 184, .65);
+    }
 
-        .quiz-section {
-            margin-bottom: 35px;
-        }
+    .hero::after {
+      width: 180px;
+      height: 180px;
+      left: -30px;
+      bottom: -30px;
+      background: rgba(109, 255, 145, .5);
+    }
 
-        .question-number {
-            display: inline-block;
-            background: var(--sdd-orange);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 32px;
-            font-weight: 700;
-            margin-right: 10px;
-        }
+    .hero h1 {
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 12px;
+    }
 
-        .question-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--sdd-ink);
-        }
+    .hero p {
+      margin-bottom: 0;
+      font-size: 1.06rem;
+      color: rgba(255,255,255,.88);
+      max-width: 700px;
+    }
 
-        .quiz-choice {
-            background: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
 
-        .quiz-choice:hover {
-            background: #f0f1f3;
-            border-color: var(--sdd-orange);
-        }
+    .quiz-card,
+    .faq-card,
+    .download-card {
+      background: rgba(255,255,255,.82);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(124, 58, 237, .08);
+      border-radius: 24px;
+      box-shadow: 0 18px 50px rgba(31, 38, 135, .08);
+    }
 
-        .quiz-choice input[type="radio"] {
-            margin-right: 10px;
-            cursor: pointer;
-        }
+    .quiz-card {
+      padding: 28px;
+      margin-top: 28px;
+    }
 
-        .quiz-choice label {
-            margin-bottom: 0;
-            cursor: pointer;
-            display: block;
-        }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
 
-        .quiz-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 30px;
-        }
+    .section-subtitle {
+      color: #625b7a;
+      margin-bottom: 28px;
+    }
 
-        .quiz-buttons button {
-            flex: 1;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .question-block {
+      padding: 22px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(247,245,255,.95));
+      border: 1px solid rgba(124,58,237,.08);
+      margin-bottom: 18px;
+    }
 
-        .btn-check-score {
-            background: var(--sdd-orange);
-            color: white;
-        }
+    .question-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
 
-        .btn-check-score:hover {
-            background: #d66e0f;
-            transform: translateY(-2px);
-        }
+    .question-prompt {
+      color: #625b7a;
+      margin-bottom: 14px;
+    }
 
-        .btn-reset {
-            background: #6c757d;
-            color: white;
-        }
+    .option {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(124,58,237,.12);
+      background: #fff;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    }
 
-        .btn-reset:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
+    .option:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,77,184,.4);
+      box-shadow: 0 10px 22px rgba(255,77,184,.08);
+      background: #fffaff;
+    }
 
-        .quiz-result {
-            background: linear-gradient(135deg, var(--sdd-sky) 0%, #e8f4ff 100%);
-            border-left: 4px solid var(--sdd-orange);
-            border-radius: 6px;
-            padding: 20px;
-            margin-top: 30px;
-            display: none;
-        }
+    .option input {
+      margin-right: 10px;
+    }
 
-        .quiz-result.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
+    .quiz-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .btn-quiz-primary {
+      border: 0;
+      color: #081b2f;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--quiz-pink), var(--quiz-cyan));
+      box-shadow: 0 12px 26px rgba(255,77,184,.2);
+    }
 
-        .result-score {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--sdd-orange);
-            margin-bottom: 10px;
-        }
+    .btn-quiz-secondary {
+      border: 1px solid rgba(124,58,237,.16);
+      background: #fff;
+      color: var(--quiz-ink);
+      font-weight: 600;
+    }
 
-        .result-rating {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
+    .result-panel,
+    .warning-panel {
+      display: none;
+      margin-top: 24px;
+      border-radius: 18px;
+      padding: 18px;
+    }
 
-        .result-feedback {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #d9e1e7;
-        }
+    .result-panel.show,
+    .warning-panel.show {
+      display: block;
+    }
 
-        .feedback-item {
-            margin-bottom: 15px;
-            padding: 12px;
-            background: white;
-            border-left: 3px solid #28a745;
-            border-radius: 4px;
-        }
+    .result-panel {
+      background: linear-gradient(135deg, rgba(53,224,255,.14), rgba(109,255,145,.14));
+      border: 1px solid rgba(53,224,255,.22);
+    }
 
-        .feedback-item.incorrect {
-            border-left-color: #dc3545;
-        }
+    .warning-panel {
+      background: rgba(255, 209, 102, .18);
+      border: 1px solid rgba(255, 209, 102, .5);
+    }
 
-        .feedback-label {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
+    .score {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
 
-        .feedback-text {
-            font-size: 0.95rem;
-            color: #555;
-        }
+    .feedback-item {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.72);
+      border-left: 4px solid var(--quiz-green);
+    }
 
-        .feedback-correct {
-            color: #28a745;
-            font-weight: 600;
-        }
+    .feedback-item.incorrect {
+      border-left-color: var(--quiz-pink);
+    }
 
-        .feedback-incorrect {
-            color: #dc3545;
-            font-weight: 600;
-        }
+    .download-card,
+    .faq-card {
+      padding: 24px;
+      margin-top: 24px;
+    }
 
-        .warning-message {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 20px;
-            display: none;
-        }
+    .download-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      text-decoration: none;
+      color: var(--quiz-ink);
+      background: linear-gradient(135deg, rgba(255,77,184,.12), rgba(53,224,255,.12));
+      border: 1px solid rgba(124,58,237,.12);
+      font-weight: 700;
+    }
 
-        .warning-message.show {
-            display: block;
-        }
+    .faq-item + .faq-item {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(124,58,237,.08);
+    }
 
-        .faq-section {
-            margin-top: 50px;
-        }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--quiz-ink);
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
 
-        .faq-item {
-            margin-bottom: 25px;
-        }
-
-        .faq-question {
-            font-weight: 600;
-            font-size: 1.05rem;
-            color: var(--sdd-ink);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .faq-question i {
-            color: var(--sdd-orange);
-            margin-right: 10px;
-        }
-
-        .faq-answer {
-            color: #555;
-            line-height: 1.6;
-            margin-left: 25px;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--sdd-ink);
-            margin-bottom: 40px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid var(--sdd-orange);
-        }
-
-        .download-section {
-            margin-top: 50px;
-            padding: 30px;
-            background: linear-gradient(135deg, #f5fbff 0%, #e8f4ff 100%);
-            border-radius: 8px;
-            border: 1px solid #d9e1e7;
-        }
-
-        .download-section h3 {
-            color: var(--sdd-ink);
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .download-item {
-            display: inline-block;
-            background: white;
-            border: 1px solid #d9e1e7;
-            border-radius: 6px;
-            padding: 15px 20px;
-            margin-right: 15px;
-            margin-bottom: 15px;
-            text-decoration: none;
-            color: var(--sdd-orange);
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .download-item:hover {
-            background: var(--sdd-orange);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.2);
-        }
-
-        .download-item i {
-            margin-right: 8px;
-        }
-
-        .nav-link-custom {
-            margin-bottom: 30px;
-        }
-
-        .nav-link-custom a {
-            color: var(--sdd-orange);
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-link-custom a:hover {
-            opacity: 0.8;
-        }
-    </style>
+    @media (max-width: 768px) {
+      .hero { padding: 36px 20px; }
+      .quiz-card { padding: 20px; }
+      .question-block { padding: 18px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container py-5">
-        <!-- Navigation -->
-        <div class="nav-link-custom">
-            <a href="/"><i class="bi bi-house"></i> Back to Home</a>
+  <div class="quiz-shell">
+    <a class="back-link" href="/">
+      <i class="bi bi-arrow-left"></i>
+      Back to Home
+    </a>
+
+    <section class="hero">
+      <div class="hero-chip"><i class="bi bi-stars"></i> Interactive Assessment</div>
+      <h1>Knowledge Check Quiz</h1>
+      <p>Select one answer per question, then click Check Score for instant results. This quiz focuses on clear specifications, acceptance criteria, traceability, release gates, and common spec anti-patterns.</p>
+    </section>
+
+    <section class="quiz-card">
+      <h2 class="section-title">Knowledge Check (Real Quiz)</h2>
+      <p class="section-subtitle">Five practical questions with immediate scoring and answer explanations.</p>
+
+      <form id="quizForm">
+        <div class="question-block">
+          <div class="question-title">1. Requirement ambiguity detection</div>
+          <div class="question-prompt">Which requirement is least ambiguous?</div>
+          <label class="option"><input type="radio" name="q1" value="A">A. System must respond quickly during peak traffic.</label>
+          <label class="option"><input type="radio" name="q1" value="B">B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</label>
+          <label class="option"><input type="radio" name="q1" value="C">C. Service should scale if users increase.</label>
         </div>
 
-        <!-- Hero Section -->
-        <div class="hero-section">
-            <h1><i class="bi bi-clipboard-check"></i> Knowledge Check</h1>
-            <p>Real Quiz – Real Feedback. Select one answer per question, then click Check Score for instant results.</p>
+        <div class="question-block">
+          <div class="question-title">2. Strong vs weak acceptance criteria</div>
+          <div class="question-prompt">Which acceptance criterion is stronger?</div>
+          <label class="option"><input type="radio" name="q2" value="A">A. Deployment validation should pass for most cases.</label>
+          <label class="option"><input type="radio" name="q2" value="B">B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</label>
+          <label class="option"><input type="radio" name="q2" value="C">C. Validation behavior should be user friendly.</label>
         </div>
 
-        <!-- Quiz Container -->
-        <div class="content-card">
-            <form id="quizForm">
-                <!-- Question 1 -->
-                <div class="quiz-section">
-                    <div class="question-title">
-                        <span class="question-number">1</span>
-                        Requirement ambiguity detection
-                    </div>
-                    <p style="color: #666; margin-bottom: 15px;">Which requirement is least ambiguous?</p>
-                    
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q1" value="A"> 
-                            <strong>A.</strong> System must respond quickly during peak traffic.
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q1" value="B"> 
-                            <strong>B.</strong> API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q1" value="C"> 
-                            <strong>C.</strong> Service should scale if users increase.
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Question 2 -->
-                <div class="quiz-section">
-                    <div class="question-title">
-                        <span class="question-number">2</span>
-                        Strong vs weak acceptance criteria
-                    </div>
-                    <p style="color: #666; margin-bottom: 15px;">Which acceptance criterion is stronger?</p>
-                    
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q2" value="A"> 
-                            <strong>A.</strong> Deployment validation should pass for most cases.
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q2" value="B"> 
-                            <strong>B.</strong> Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q2" value="C"> 
-                            <strong>C.</strong> Validation behavior should be user friendly.
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Question 3 -->
-                <div class="quiz-section">
-                    <div class="question-title">
-                        <span class="question-number">3</span>
-                        Traceability mapping
-                    </div>
-                    <p style="color: #666; margin-bottom: 15px;">What is missing if requirement FR-03 has code changes but no linked test case?</p>
-                    
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q3" value="A"> 
-                            <strong>A.</strong> Better commit message
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q3" value="B"> 
-                            <strong>B.</strong> Requirement-to-test traceability
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q3" value="C"> 
-                            <strong>C.</strong> More architecture diagrams
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Question 4 -->
-                <div class="quiz-section">
-                    <div class="question-title">
-                        <span class="question-number">4</span>
-                        Gate-based release decisions
-                    </div>
-                    <p style="color: #666; margin-bottom: 15px;">A release gate fails because rollback steps are not defined. What is the best action?</p>
-                    
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q4" value="A"> 
-                            <strong>A.</strong> Proceed and document rollback later
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q4" value="B"> 
-                            <strong>B.</strong> Mark risk accepted without approver
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q4" value="C"> 
-                            <strong>C.</strong> Block release until rollback plan is documented and reviewed
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Question 5 -->
-                <div class="quiz-section">
-                    <div class="question-title">
-                        <span class="question-number">5</span>
-                        Spec anti-pattern diagnosis
-                    </div>
-                    <p style="color: #666; margin-bottom: 15px;">Which line is a spec anti-pattern?</p>
-                    
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q5" value="A"> 
-                            <strong>A.</strong> "System must feel fast and stable."
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q5" value="B"> 
-                            <strong>B.</strong> "Error rate must remain below 0.5% over a 24-hour window."
-                        </label>
-                    </div>
-                    <div class="quiz-choice">
-                        <label>
-                            <input type="radio" name="q5" value="C"> 
-                            <strong>C.</strong> "All required fields are validated before deployment trigger."
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Buttons -->
-                <div class="quiz-buttons">
-                    <button type="button" class="btn-check-score" onclick="gradeQuiz()">
-                        <i class="bi bi-check-circle"></i> Check Score
-                    </button>
-                    <button type="button" class="btn-reset" onclick="resetQuiz()">
-                        <i class="bi bi-arrow-counterclockwise"></i> Reset
-                    </button>
-                </div>
-
-                <!-- Warning Message -->
-                <div class="warning-message" id="warningMessage">
-                    <i class="bi bi-exclamation-triangle"></i> 
-                    <strong>Incomplete quiz:</strong> Please answer all 5 questions before checking your score.
-                </div>
-
-                <!-- Results Section -->
-                <div class="quiz-result" id="quizResult">
-                    <div class="result-score" id="scoreDisplay"></div>
-                    <div class="result-rating" id="ratingDisplay"></div>
-                    <div class="result-feedback" id="feedbackDisplay"></div>
-                </div>
-            </form>
+        <div class="question-block">
+          <div class="question-title">3. Traceability mapping</div>
+          <div class="question-prompt">What is missing if requirement FR-03 has code changes but no linked test case?</div>
+          <label class="option"><input type="radio" name="q3" value="A">A. Better commit message</label>
+          <label class="option"><input type="radio" name="q3" value="B">B. Requirement-to-test traceability</label>
+          <label class="option"><input type="radio" name="q3" value="C">C. More architecture diagrams</label>
         </div>
 
-        <!-- Download Section -->
-        <div class="download-section">
-            <h3><i class="bi bi-download"></i> Full Quiz Resources</h3>
-            <p>Access the complete quiz and detailed answer key:</p>
-            <a href="/specs/sdd-quiz-answer-key.md" class="download-item">
-                <i class="bi bi-file-pdf"></i> Complete Quiz & Answer Key
-            </a>
+        <div class="question-block">
+          <div class="question-title">4. Gate-based release decisions</div>
+          <div class="question-prompt">A release gate fails because rollback steps are not defined. What is the best action?</div>
+          <label class="option"><input type="radio" name="q4" value="A">A. Proceed and document rollback later</label>
+          <label class="option"><input type="radio" name="q4" value="B">B. Mark risk accepted without approver</label>
+          <label class="option"><input type="radio" name="q4" value="C">C. Block release until rollback plan is documented and reviewed</label>
         </div>
 
-        <!-- FAQ Section -->
-        <div class="content-card">
-            <h2 class="section-title">
-                <i class="bi bi-question-circle"></i> Frequently Asked Questions
-            </h2>
-
-            <div class="faq-section">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="bi bi-question-lg"></i> Do we need special tooling to use SDD?
-                    </div>
-                    <div class="faq-answer">
-                        No. Start with a Markdown spec, issue tracker IDs, and your existing test pipeline. Spec-Driven Development is a methodology, not a tool dependency.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="bi bi-question-lg"></i> How detailed should one spec be?
-                    </div>
-                    <div class="faq-answer">
-                        Keep it feature-sized. One spec should usually map to one pull request or one sprint deliverable. Avoid creating specs that span multiple teams or months of work.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="bi bi-question-lg"></i> What is the most common beginner mistake?
-                    </div>
-                    <div class="faq-answer">
-                        Using subjective language in acceptance criteria without measurable pass/fail thresholds. Replace words like "should," "nice," and "feels" with concrete metrics: time, error rates, throughput, and field-level behaviors.
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="bi bi-question-lg"></i> How long does this quiz take?
-                    </div>
-                    <div class="faq-answer">
-                        Most learners complete the 5-question quiz in 5–10 minutes. Results are instant once you click "Check Score."
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <i class="bi bi-question-lg"></i> Is there a passing score?
-                    </div>
-                    <div class="faq-answer">
-                        The quiz is self-diagnostic. A score of 4/5 (80%) or higher demonstrates solid understanding. Below that, review the explanations and foundational SDD principles.
-                    </div>
-                </div>
-            </div>
+        <div class="question-block">
+          <div class="question-title">5. Spec anti-pattern diagnosis</div>
+          <div class="question-prompt">Which line is a spec anti-pattern?</div>
+          <label class="option"><input type="radio" name="q5" value="A">A. "System must feel fast and stable."</label>
+          <label class="option"><input type="radio" name="q5" value="B">B. "Error rate must remain below 0.5% over a 24-hour window."</label>
+          <label class="option"><input type="radio" name="q5" value="C">C. "All required fields are validated before deployment trigger."</label>
         </div>
 
-        <!-- Footer Navigation -->
-        <div style="text-align: center; margin-top: 50px; color: #999;">
-            <p>
-                <a href="/" style="color: var(--sdd-orange); text-decoration: none;">← Back to Home</a> | 
-                <a href="/sdd" style="color: var(--sdd-orange); text-decoration: none;">View Full SDD Course</a>
-            </p>
+        <div class="quiz-actions">
+          <button type="button" class="btn btn-quiz-primary" id="checkScoreBtn">
+            <i class="bi bi-clipboard-check me-1"></i>Check Score
+          </button>
+          <button type="button" class="btn btn-quiz-secondary" id="resetQuizBtn">
+            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+          </button>
         </div>
-    </div>
 
-    <script>
-        // Answer key for grading
-        const answerKey = {
-            q1: 'B',
-            q2: 'B',
-            q3: 'B',
-            q4: 'C',
-            q5: 'A'
-        };
+        <div class="warning-panel" id="warningPanel">
+          <strong><i class="bi bi-exclamation-circle me-1"></i>Complete all 5 questions.</strong> Answer every question before scoring.
+        </div>
 
-        // Explanations for each question
-        const explanations = {
-            q1: 'Option B is measurable and testable with clear thresholds (300ms, p95, 200 RPS). Options A and C are vague and subjective.',
-            q2: 'Option B defines concrete behavior with specific HTTP status codes and field-level error details. Options A and C lack measurable criteria.',
-            q3: 'Code changes without linked test cases break the requirement-to-test chain. You cannot verify the requirement was actually implemented.',
-            q4: 'Release gates exist to prevent known risks. A blocked gate without a documented rollback plan should block the release. Proceeding without a plan is a dangerous precedent.',
-            q5: 'Option A uses subjective language ("feel fast and stable") without measurable thresholds. Options B and C are concrete and testable.'
-        };
+        <div class="result-panel" id="resultPanel">
+          <div class="score" id="scoreText"></div>
+          <div id="ratingText"></div>
+          <div id="feedbackList"></div>
+        </div>
+      </form>
+    </section>
 
-        function gradeQuiz() {
-            const unanswered = [];
-            let correct = 0;
+    <section class="download-card">
+      <h3 class="section-title">Downloadable full quiz</h3>
+      <p class="section-subtitle">The complete quiz and answer key are included in the downloadable course pack below.</p>
+      <a class="download-link" href="/specs/sdd-quiz-answer-key.md">
+        <i class="bi bi-download"></i>
+        Open full quiz and answer key
+      </a>
+    </section>
 
-            // Check which questions are unanswered
-            Object.keys(answerKey).forEach((q) => {
-                const selected = document.querySelector(`input[name="${q}"]:checked`);
-                if (!selected) {
-                    unanswered.push(q);
-                } else if (selected.value === answerKey[q]) {
-                    correct += 1;
-                }
-            });
+    <section class="faq-card">
+      <h3 class="section-title">Frequently Asked Questions</h3>
 
-            // Show warning if incomplete
-            const warningEl = document.getElementById('warningMessage');
-            if (unanswered.length > 0) {
-                warningEl.classList.add('show');
-                document.getElementById('quizResult').classList.remove('show');
-                return;
-            }
-            warningEl.classList.remove('show');
+      <div class="faq-item">
+        <strong>Do we need special tooling to use SDD?</strong>
+        <p class="mb-0 mt-2">No. Start with a Markdown spec, issue tracker IDs, and your existing test pipeline.</p>
+      </div>
 
-            // Calculate percentage and rating
-            const percentage = Math.round((correct / 5) * 100);
-            let rating = '';
-            if (percentage >= 90) rating = 'Excellent! You have strong command of SDD principles.';
-            else if (percentage >= 80) rating = 'Good! Solid understanding with minor gaps.';
-            else if (percentage >= 70) rating = 'Fair. Review the explanations below and revisit key concepts.';
-            else rating = 'Needs Review. Study the full SDD course and try again.';
+      <div class="faq-item">
+        <strong>How detailed should one spec be?</strong>
+        <p class="mb-0 mt-2">Keep it feature-sized. One spec should usually map to one pull request or one sprint deliverable.</p>
+      </div>
 
-            // Display score
-            const resultEl = document.getElementById('quizResult');
-            document.getElementById('scoreDisplay').innerHTML = `${correct}/5 (${percentage}%)`;
-            document.getElementById('ratingDisplay').innerHTML = rating;
+      <div class="faq-item">
+        <strong>What is the most common beginner mistake?</strong>
+        <p class="mb-0 mt-2">Using subjective language in acceptance criteria without measurable pass/fail thresholds.</p>
+      </div>
+    </section>
+  </div>
 
-            // Generate per-question feedback
-            let feedbackHTML = '<strong>Question Breakdown:</strong>';
-            Object.keys(answerKey).forEach((q, idx) => {
-                const selected = document.querySelector(`input[name="${q}"]:checked`);
-                const isCorrect = selected.value === answerKey[q];
-                const feedbackClass = isCorrect ? '' : 'incorrect';
+  <script>
+    const answerKey = { q1: 'B', q2: 'B', q3: 'B', q4: 'C', q5: 'A' };
+    const explanations = {
+      q1: 'B is measurable and testable with a clear threshold and workload envelope.',
+      q2: 'B describes an exact failure mode, response code, and required error detail.',
+      q3: 'Without a linked test, the requirement is not traceable through validation.',
+      q4: 'A failed release gate should block the release until rollback is documented and reviewed.',
+      q5: '"Feel fast and stable" is subjective and not objectively testable.'
+    };
 
-                feedbackHTML += `
-                    <div class="feedback-item ${feedbackClass}">
-                        <div class="feedback-label">Q${idx + 1}: 
-                            <span class="${isCorrect ? 'feedback-correct' : 'feedback-incorrect'}">
-                                ${isCorrect ? '✓ Correct' : '✗ Incorrect'}
-                            </span>
-                        </div>
-                        <div class="feedback-text">
-                            <strong>Your answer:</strong> ${selected.value}<br>
-                            <strong>Correct answer:</strong> ${answerKey[q]}<br>
-                            <strong>Why:</strong> ${explanations[q]}
-                        </div>
-                    </div>
-                `;
-            });
+    function scoreQuiz() {
+      const unanswered = [];
+      let correct = 0;
 
-            document.getElementById('feedbackDisplay').innerHTML = feedbackHTML;
-            resultEl.classList.add('show');
+      Object.keys(answerKey).forEach((question) => {
+        const selected = document.querySelector(`input[name="${question}"]:checked`);
+        if (!selected) {
+          unanswered.push(question);
+          return;
         }
-
-        function resetQuiz() {
-            document.getElementById('quizForm').reset();
-            document.getElementById('quizResult').classList.remove('show');
-            document.getElementById('warningMessage').classList.remove('show');
+        if (selected.value === answerKey[question]) {
+          correct += 1;
         }
-    </script>
+      });
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      const warningPanel = document.getElementById('warningPanel');
+      const resultPanel = document.getElementById('resultPanel');
+
+      if (unanswered.length) {
+        warningPanel.classList.add('show');
+        resultPanel.classList.remove('show');
+        return;
+      }
+
+      warningPanel.classList.remove('show');
+
+      const percent = Math.round((correct / 5) * 100);
+      let rating = 'Needs review';
+      if (percent === 100) rating = 'Excellent';
+      else if (percent >= 80) rating = 'Strong';
+      else if (percent >= 60) rating = 'Good start';
+
+      document.getElementById('scoreText').textContent = `${correct}/5 (${percent}%)`;
+      document.getElementById('ratingText').innerHTML = `<strong>${rating}</strong> — review the explanations below.`;
+
+      const feedback = Object.keys(answerKey).map((question, index) => {
+        const selected = document.querySelector(`input[name="${question}"]:checked`).value;
+        const isCorrect = selected === answerKey[question];
+        return `
+          <div class="feedback-item ${isCorrect ? '' : 'incorrect'}">
+            <strong>Q${index + 1}: ${isCorrect ? 'Correct' : 'Incorrect'}</strong><br>
+            Your answer: ${selected} | Correct answer: ${answerKey[question]}<br>
+            ${explanations[question]}
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('feedbackList').innerHTML = feedback;
+      resultPanel.classList.add('show');
+    }
+
+    function resetQuiz() {
+      document.getElementById('quizForm').reset();
+      document.getElementById('warningPanel').classList.remove('show');
+      document.getElementById('resultPanel').classList.remove('show');
+    }
+
+    document.getElementById('checkScoreBtn').addEventListener('click', scoreQuiz);
+    document.getElementById('resetQuizBtn').addEventListener('click', resetQuiz);
+  </script>
 </body>
 </html>
