@@ -119,6 +119,88 @@
       margin-bottom: 28px;
     }
 
+    .quiz-map {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .map-chip {
+      display: block;
+      text-decoration: none;
+      color: var(--quiz-ink);
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,77,184,.08), rgba(53,224,255,.08));
+      border: 1px solid rgba(124,58,237,.1);
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .map-chip:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(53,224,255,.12);
+    }
+
+    .map-chip strong {
+      display: block;
+      font-size: .95rem;
+      margin-bottom: 4px;
+    }
+
+    .map-chip span {
+      display: block;
+      color: #625b7a;
+      font-size: .9rem;
+    }
+
+    .quiz-section {
+      margin-bottom: 26px;
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(246,249,255,.92));
+      border: 1px solid rgba(124,58,237,.08);
+    }
+
+    .quiz-section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-section-kicker {
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--quiz-pink);
+      margin-bottom: 6px;
+    }
+
+    .quiz-section-heading {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0;
+    }
+
+    .quiz-section-text {
+      color: #625b7a;
+      margin-bottom: 0;
+    }
+
+    .quiz-section-badge {
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: .85rem;
+      font-weight: 700;
+      background: rgba(109,255,145,.16);
+      color: #176a34;
+      white-space: nowrap;
+    }
+
     .question-block {
       padding: 22px;
       border-radius: 20px;
@@ -211,6 +293,25 @@
       margin-bottom: 4px;
     }
 
+    .section-score-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .section-score-chip {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(124,58,237,.08);
+    }
+
+    .section-score-chip strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
     .feedback-item {
       margin-top: 14px;
       padding: 14px;
@@ -280,47 +381,95 @@
 
     <section class="quiz-card">
       <h2 class="section-title">Knowledge Check (Real Quiz)</h2>
-      <p class="section-subtitle">Five practical questions with immediate scoring and answer explanations.</p>
+      <p class="section-subtitle">Five practical questions organized into themed sections with immediate scoring and answer explanations.</p>
+
+      <div class="quiz-map">
+        <a class="map-chip" href="#section-foundations">
+          <strong>Section 1</strong>
+          <span>Requirements and acceptance criteria</span>
+        </a>
+        <a class="map-chip" href="#section-delivery">
+          <strong>Section 2</strong>
+          <span>Traceability and release controls</span>
+        </a>
+        <a class="map-chip" href="#section-quality">
+          <strong>Section 3</strong>
+          <span>Spec writing quality and anti-patterns</span>
+        </a>
+      </div>
 
       <form id="quizForm">
-        <div class="question-block">
-          <div class="question-title">1. Requirement ambiguity detection</div>
-          <div class="question-prompt">Which requirement is least ambiguous?</div>
-          <label class="option"><input type="radio" name="q1" value="A">A. System must respond quickly during peak traffic.</label>
-          <label class="option"><input type="radio" name="q1" value="B">B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</label>
-          <label class="option"><input type="radio" name="q1" value="C">C. Service should scale if users increase.</label>
+        <div class="quiz-section" id="section-foundations">
+          <div class="quiz-section-header">
+            <div>
+              <div class="quiz-section-kicker">Section 1</div>
+              <h3 class="quiz-section-heading">Requirements and Acceptance Criteria</h3>
+              <p class="quiz-section-text">Focus on measurable requirements, precision, and testable acceptance rules.</p>
+            </div>
+            <div class="quiz-section-badge">2 questions</div>
+          </div>
+
+          <div class="question-block">
+            <div class="question-title">1. Requirement ambiguity detection</div>
+            <div class="question-prompt">Which requirement is least ambiguous?</div>
+            <label class="option"><input type="radio" name="q1" value="A">A. System must respond quickly during peak traffic.</label>
+            <label class="option"><input type="radio" name="q1" value="B">B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</label>
+            <label class="option"><input type="radio" name="q1" value="C">C. Service should scale if users increase.</label>
+          </div>
+
+          <div class="question-block mb-0">
+            <div class="question-title">2. Strong vs weak acceptance criteria</div>
+            <div class="question-prompt">Which acceptance criterion is stronger?</div>
+            <label class="option"><input type="radio" name="q2" value="A">A. Deployment validation should pass for most cases.</label>
+            <label class="option"><input type="radio" name="q2" value="B">B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</label>
+            <label class="option"><input type="radio" name="q2" value="C">C. Validation behavior should be user friendly.</label>
+          </div>
         </div>
 
-        <div class="question-block">
-          <div class="question-title">2. Strong vs weak acceptance criteria</div>
-          <div class="question-prompt">Which acceptance criterion is stronger?</div>
-          <label class="option"><input type="radio" name="q2" value="A">A. Deployment validation should pass for most cases.</label>
-          <label class="option"><input type="radio" name="q2" value="B">B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</label>
-          <label class="option"><input type="radio" name="q2" value="C">C. Validation behavior should be user friendly.</label>
+        <div class="quiz-section" id="section-delivery">
+          <div class="quiz-section-header">
+            <div>
+              <div class="quiz-section-kicker">Section 2</div>
+              <h3 class="quiz-section-heading">Traceability and Release Controls</h3>
+              <p class="quiz-section-text">Check whether the spec is linked to tests and whether release gates are enforced correctly.</p>
+            </div>
+            <div class="quiz-section-badge">2 questions</div>
+          </div>
+
+          <div class="question-block">
+            <div class="question-title">3. Traceability mapping</div>
+            <div class="question-prompt">What is missing if requirement FR-03 has code changes but no linked test case?</div>
+            <label class="option"><input type="radio" name="q3" value="A">A. Better commit message</label>
+            <label class="option"><input type="radio" name="q3" value="B">B. Requirement-to-test traceability</label>
+            <label class="option"><input type="radio" name="q3" value="C">C. More architecture diagrams</label>
+          </div>
+
+          <div class="question-block mb-0">
+            <div class="question-title">4. Gate-based release decisions</div>
+            <div class="question-prompt">A release gate fails because rollback steps are not defined. What is the best action?</div>
+            <label class="option"><input type="radio" name="q4" value="A">A. Proceed and document rollback later</label>
+            <label class="option"><input type="radio" name="q4" value="B">B. Mark risk accepted without approver</label>
+            <label class="option"><input type="radio" name="q4" value="C">C. Block release until rollback plan is documented and reviewed</label>
+          </div>
         </div>
 
-        <div class="question-block">
-          <div class="question-title">3. Traceability mapping</div>
-          <div class="question-prompt">What is missing if requirement FR-03 has code changes but no linked test case?</div>
-          <label class="option"><input type="radio" name="q3" value="A">A. Better commit message</label>
-          <label class="option"><input type="radio" name="q3" value="B">B. Requirement-to-test traceability</label>
-          <label class="option"><input type="radio" name="q3" value="C">C. More architecture diagrams</label>
-        </div>
+        <div class="quiz-section" id="section-quality">
+          <div class="quiz-section-header">
+            <div>
+              <div class="quiz-section-kicker">Section 3</div>
+              <h3 class="quiz-section-heading">Spec Writing Quality</h3>
+              <p class="quiz-section-text">Identify subjective wording and anti-patterns that weaken a spec.</p>
+            </div>
+            <div class="quiz-section-badge">1 question</div>
+          </div>
 
-        <div class="question-block">
-          <div class="question-title">4. Gate-based release decisions</div>
-          <div class="question-prompt">A release gate fails because rollback steps are not defined. What is the best action?</div>
-          <label class="option"><input type="radio" name="q4" value="A">A. Proceed and document rollback later</label>
-          <label class="option"><input type="radio" name="q4" value="B">B. Mark risk accepted without approver</label>
-          <label class="option"><input type="radio" name="q4" value="C">C. Block release until rollback plan is documented and reviewed</label>
-        </div>
-
-        <div class="question-block">
-          <div class="question-title">5. Spec anti-pattern diagnosis</div>
-          <div class="question-prompt">Which line is a spec anti-pattern?</div>
-          <label class="option"><input type="radio" name="q5" value="A">A. "System must feel fast and stable."</label>
-          <label class="option"><input type="radio" name="q5" value="B">B. "Error rate must remain below 0.5% over a 24-hour window."</label>
-          <label class="option"><input type="radio" name="q5" value="C">C. "All required fields are validated before deployment trigger."</label>
+          <div class="question-block mb-0">
+            <div class="question-title">5. Spec anti-pattern diagnosis</div>
+            <div class="question-prompt">Which line is a spec anti-pattern?</div>
+            <label class="option"><input type="radio" name="q5" value="A">A. "System must feel fast and stable."</label>
+            <label class="option"><input type="radio" name="q5" value="B">B. "Error rate must remain below 0.5% over a 24-hour window."</label>
+            <label class="option"><input type="radio" name="q5" value="C">C. "All required fields are validated before deployment trigger."</label>
+          </div>
         </div>
 
         <div class="quiz-actions">
@@ -339,6 +488,7 @@
         <div class="result-panel" id="resultPanel">
           <div class="score" id="scoreText"></div>
           <div id="ratingText"></div>
+          <div class="section-score-grid" id="sectionScores"></div>
           <div id="feedbackList"></div>
         </div>
       </form>
@@ -375,6 +525,11 @@
 
   <script>
     const answerKey = { q1: 'B', q2: 'B', q3: 'B', q4: 'C', q5: 'A' };
+    const quizSections = [
+      { title: 'Section 1: Requirements and Acceptance Criteria', questions: ['q1', 'q2'] },
+      { title: 'Section 2: Traceability and Release Controls', questions: ['q3', 'q4'] },
+      { title: 'Section 3: Spec Writing Quality', questions: ['q5'] }
+    ];
     const explanations = {
       q1: 'B is measurable and testable with a clear threshold and workload envelope.',
       q2: 'B describes an exact failure mode, response code, and required error detail.',
@@ -417,6 +572,20 @@
 
       document.getElementById('scoreText').textContent = `${correct}/5 (${percent}%)`;
       document.getElementById('ratingText').innerHTML = `<strong>${rating}</strong> — review the explanations below.`;
+
+      const sectionScores = quizSections.map((section) => {
+        const sectionCorrect = section.questions.filter((question) => {
+          const selected = document.querySelector(`input[name="${question}"]:checked`).value;
+          return selected === answerKey[question];
+        }).length;
+        return `
+          <div class="section-score-chip">
+            <strong>${section.title}</strong>
+            ${sectionCorrect}/${section.questions.length} correct
+          </div>
+        `;
+      }).join('');
+      document.getElementById('sectionScores').innerHTML = sectionScores;
 
       const feedback = Object.keys(answerKey).map((question, index) => {
         const selected = document.querySelector(`input[name="${question}"]:checked`).value;
