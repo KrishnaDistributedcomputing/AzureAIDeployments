@@ -54,6 +54,10 @@
     [data-bs-theme="dark"] .help-panel h3 { color: var(--accent); }
     .console-panel { background: #07111f; color: #b9ffdc; font-family: Consolas, "Courier New", monospace; font-size: 0.86rem; white-space: pre-wrap; min-height: 226px; }
     .console-panel .prompt { color: #50e6ff; }
+    .arch-banner { background: linear-gradient(135deg, #eef4ff, #f6f0ff); border: 1px solid #dbe4ff; border-radius: 8px; padding: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+    [data-bs-theme="dark"] .arch-banner { background: linear-gradient(135deg, rgba(0,120,212,0.18), rgba(127,86,217,0.18)); border-color: var(--line); }
+    .arch-banner h3 { font-size: 1.1rem; margin: 0 0 0.25rem; }
+    .arch-banner p { color: var(--muted); margin: 0; max-width: 640px; }
     .proof-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
     .proof-card h3 { font-size: 1rem; }
     .artifact-table th, .artifact-table td { vertical-align: middle; font-size: 0.9rem; }
@@ -95,6 +99,7 @@
           <p class="lead mb-0">A compact executive walkthrough that proves recoverability is owned, controlled, cost-visible, and auditable across the enterprise — aligned to the Microsoft Cloud Adoption Framework.</p>
           <div class="compact-nav">
             <a href="#click-demo">Click Demo</a>
+            <a href="#architecture">Architecture</a>
             <a href="#proof">Proof</a>
             <a href="#artifacts">Artifacts</a>
             <a href="#references">References</a>
@@ -173,6 +178,16 @@ What it means: backup is managed as a business control, not a per-team afterthou
 Why it matters: executives need ownership, spend, readiness, and evidence in one story.
 Key takeaway: Pattern D makes recoverability governable and auditable.</div>
         </aside>
+      </div>
+    </section>
+
+    <section class="mb-4" id="architecture">
+      <div class="arch-banner">
+        <div>
+          <h3><i class="bi bi-easel2 text-primary me-1"></i>Interactive architecture walkthrough</h3>
+          <p>Step through tiered ownership, Azure Policy guardrails, validated recovery, FinOps spend, and the board evidence pack in a guided click-through.</p>
+        </div>
+        <a href="/backup-pattern-d-architecture" class="btn btn-primary btn-lg text-nowrap"><i class="bi bi-play-circle me-1"></i>Launch architecture demo</a>
       </div>
     </section>
 

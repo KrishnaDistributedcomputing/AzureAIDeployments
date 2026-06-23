@@ -20,6 +20,7 @@
       { "source": "/backup-pattern-c-demo", "destination": "/pattern-c-demo.html" },
       { "source": "/backup-pattern-c-architecture", "destination": "/pattern-c-architecture.html" },
       { "source": "/backup-pattern-d-demo", "destination": "/pattern-d-demo.html" },
+      { "source": "/backup-pattern-d-architecture", "destination": "/pattern-d-architecture.html" },
     { "source": "/sdd", "destination": "/sdd.html" },
     { "source": "/education", "destination": "/csi-education.html" },
     { "source": "/modules", "destination": "/modules.html" },

@@ -20,6 +20,7 @@
     { "route": "/backup-pattern-c-demo", "rewrite": "/pattern-c-demo.html" },
     { "route": "/backup-pattern-c-architecture", "rewrite": "/pattern-c-architecture.html" },
     { "route": "/backup-pattern-d-demo", "rewrite": "/pattern-d-demo.html" },
+    { "route": "/backup-pattern-d-architecture", "rewrite": "/pattern-d-architecture.html" },
     { "route": "/sdd", "rewrite": "/sdd.html" },
     { "route": "/education", "rewrite": "/csi-education.html" },
     { "route": "/modules", "rewrite": "/modules.html" },
