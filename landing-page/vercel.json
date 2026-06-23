@@ -11,6 +11,12 @@
     { "source": "/patterns/sql-migration", "destination": "/pattern9.html" },
     { "source": "/patterns/greenfield-azure", "destination": "/pattern10.html" },
     { "source": "/landing-zone", "destination": "/landing-zone.html" },
+      { "source": "/azure-backup", "destination": "/azure-backup.html" },
+      { "source": "/azure-backup/live", "destination": "/azure-backup-demo-live.html" },
+      { "source": "/backup-pattern-a-demo", "destination": "/pattern-a-demo.html" },
+      { "source": "/backup-pattern-b-demo", "destination": "/pattern-b-demo.html" },
+      { "source": "/backup-pattern-c-demo", "destination": "/pattern-c-demo.html" },
+      { "source": "/backup-pattern-d-demo", "destination": "/pattern-d-demo.html" },
     { "source": "/sdd", "destination": "/sdd.html" },
     { "source": "/education", "destination": "/csi-education.html" },
     { "source": "/modules", "destination": "/modules.html" },
@@ -35,6 +41,24 @@
         { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https:; svg-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" }
       ]
     },
+      {
+        "source": "/:path(.*\\.md)",
+        "headers": [
+          { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        ]
+      },
+      {
+        "source": "/:path(.*\\.kql)",
+        "headers": [
+          { "key": "Content-Type", "value": "text/plain; charset=utf-8" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        ]
+      },
     {
       "source": "/(.*)",
       "headers": [
