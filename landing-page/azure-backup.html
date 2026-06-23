@@ -24,6 +24,9 @@
     .metric-tile span { color: rgba(255, 255, 255, 0.76); font-size: 0.86rem; }
     .hub-card, .pattern-card, .reference-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
     .hub-card { padding: 1.25rem; }
+    .explainer-banner { position: relative; overflow: hidden; border-color: rgba(0, 120, 212, 0.35); background: linear-gradient(135deg, rgba(0, 120, 212, 0.08), rgba(80, 230, 255, 0.06)); }
+    [data-bs-theme="dark"] .explainer-banner { background: linear-gradient(135deg, rgba(0, 120, 212, 0.18), rgba(80, 230, 255, 0.08)); border-color: rgba(80, 230, 255, 0.28); }
+    .explainer-banner::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--primary), var(--accent)); }
     .section-title { color: var(--primary-dark); font-weight: 800; margin: 0 0 1rem; display: flex; align-items: center; gap: 0.45rem; }
     [data-bs-theme="dark"] .section-title { color: var(--accent); }
     .quick-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
@@ -89,6 +92,7 @@
           <h1 class="display-5 fw-bold mb-3">Azure Backup Demo & Production Deployment Patterns</h1>
           <p class="lead mb-0">A compact landing page for the four backup patterns, business click-through demos, published deployment artifacts, and the minimum decisions needed before moving from demo to production.</p>
           <div class="compact-nav">
+            <a href="#explainer">Interactive demo</a>
             <a href="#patterns">Patterns</a>
             <a href="#artifacts">Artifacts</a>
             <a href="#decisions">Decisions</a>
@@ -108,6 +112,22 @@
   </section>
 
   <main class="container py-4 py-lg-5">
+    <section class="mb-4" id="explainer" aria-label="Interactive Azure Backup explainer">
+      <div class="hub-card explainer-banner">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-8">
+            <h2 class="section-title h4 mb-2"><i class="bi bi-easel2 me-2"></i>Interactive Azure Backup Explainer</h2>
+            <p class="mb-0">New to these patterns? Start with a short, animated walkthrough of how Azure Backup protects workloads, vaults, and recovery paths &mdash; the fastest way to get the big picture before exploring the demos below.</p>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+              <a class="btn btn-lg btn-primary" href="/backup-explainer" target="_blank" rel="noopener" title="Open the interactive animated explainer in a new tab"><i class="bi bi-play-btn me-1"></i>Launch interactive demo</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="mb-4" id="summary">
       <div class="hub-card">
         <div class="row g-3 align-items-center">

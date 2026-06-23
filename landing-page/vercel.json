@@ -12,6 +12,7 @@
     { "source": "/patterns/greenfield-azure", "destination": "/pattern10.html" },
     { "source": "/landing-zone", "destination": "/landing-zone.html" },
       { "source": "/azure-backup", "destination": "/azure-backup.html" },
+      { "source": "/backup-explainer", "destination": "/AzureBackup_Explainer.html" },
       { "source": "/azure-backup/live", "destination": "/azure-backup-demo-live.html" },
       { "source": "/backup-pattern-a-demo", "destination": "/pattern-a-demo.html" },
       { "source": "/backup-pattern-a-architecture", "destination": "/pattern-a-architecture.html" },
@@ -73,6 +74,16 @@
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=()" },
         { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
         { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https:; svg-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" }
+      ]
+    },
+    {
+      "source": "/backup-explainer",
+      "headers": [
+        { "key": "Content-Type", "value": "text/html; charset=utf-8" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self' blob: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' blob:; img-src 'self' data: blob: https:; font-src 'self' data: blob:; connect-src 'self' blob: data:; frame-src 'self' blob: data:; worker-src 'self' blob:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'" }
       ]
     }
   ]

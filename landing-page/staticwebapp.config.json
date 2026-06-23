@@ -12,6 +12,7 @@
     { "route": "/patterns/greenfield-azure", "rewrite": "/pattern10.html" },
     { "route": "/landing-zone", "rewrite": "/landing-zone.html" },
     { "route": "/azure-backup", "rewrite": "/azure-backup.html" },
+    { "route": "/backup-explainer", "rewrite": "/AzureBackup_Explainer.html", "headers": { "Content-Security-Policy": "default-src 'self' blob: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline' blob:; img-src 'self' data: blob: https:; font-src 'self' data: blob:; connect-src 'self' blob: data:; frame-src 'self' blob: data:; worker-src 'self' blob:; media-src 'self' blob: data:; object-src 'none'; base-uri 'self'" } },
     { "route": "/azure-backup/live", "rewrite": "/azure-backup-demo-live.html" },
     { "route": "/backup-pattern-a-demo", "rewrite": "/pattern-a-demo.html" },
     { "route": "/backup-pattern-a-architecture", "rewrite": "/pattern-a-architecture.html" },
