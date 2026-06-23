@@ -1,1527 +1,323 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pattern A: Core Demo — Azure Backup Live Demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        :root {
-            --azure-blue: #0078d4;
-            --azure-light: #0099ff;
-            --success-green: #107c10;
-            --warning-orange: #ffc107;
-            --danger-red: #d83b01;
-            --dark-bg: #1a1a1a;
-            --card-bg: #2d2d2d;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-        }
-
-        .hero-section {
-            background: linear-gradient(135deg, #0078d4 0%, #0099ff 50%, #00bfff 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(0,0,0,0.1) 0%, transparent 50%);
-            pointer-events: none;
-        }
-
-        .hero-section h1 {
-            font-size: 3em;
-            font-weight: bold;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .hero-section p {
-            font-size: 1.3em;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 30px;
-        }
-
-        .stat-box {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px;
-            display: inline-block;
-            min-width: 150px;
-        }
-
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .stat-label {
-            font-size: 0.9em;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .nav-sticky {
-            position: sticky;
-            top: 0;
-            background: rgba(20, 20, 30, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 120, 212, 0.2);
-            z-index: 100;
-            padding: 15px 0;
-        }
-
-        .nav-sticky .nav-link {
-            color: #e0e0e0;
-            margin: 0 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-sticky .nav-link:hover,
-        .nav-sticky .nav-link.active {
-            color: #00bfff;
-            border-bottom: 2px solid #00bfff;
-        }
-
-        .section {
-            background: #1a1a2e;
-            border: 1px solid #0078d4;
-            border-radius: 8px;
-            padding: 40px;
-            margin: 30px 0;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .section-title {
-            color: #00bfff;
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-title i {
-            font-size: 1.3em;
-        }
-
-        .user-profile {
-            background: linear-gradient(135deg, #2d2d3d 0%, #3d3d4d 100%);
-            border: 2px solid #0078d4;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #0078d4 0%, #00bfff 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .user-info h3 {
-            color: #00bfff;
-            margin: 0;
-        }
-
-        .user-info p {
-            color: #b0b0b0;
-            margin: 5px 0 0 0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .status-badge.active {
-            background: #107c10;
-            color: white;
-        }
-
-        .status-badge.pending {
-            background: #ffc107;
-            color: black;
-        }
-
-        .status-badge.protected {
-            background: #0078d4;
-            color: white;
-        }
-
-        .timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .timeline-item {
-            margin-bottom: 30px;
-            padding-left: 50px;
-            position: relative;
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 15px;
-            top: 5px;
-            width: 20px;
-            height: 20px;
-            background: #0078d4;
-            border-radius: 50%;
-            border: 3px solid #1a1a2e;
-        }
-
-        .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 24px;
-            top: 25px;
-            width: 2px;
-            height: 30px;
-            background: #0078d4;
-        }
-
-        .timeline-item:last-child::after {
-            display: none;
-        }
-
-        .timeline-item h4 {
-            color: #00bfff;
-            margin-bottom: 10px;
-        }
-
-        .timeline-item p {
-            color: #b0b0b0;
-            margin: 5px 0;
-        }
-
-        .architecture-diagram {
-            background: #2d2d3d;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-
-        .code-block {
-            background: #1a1a2e;
-            border-left: 4px solid #0078d4;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-
-        .code-block code {
-            color: #00bfff;
-            font-size: 0.9em;
-        }
-
-        .workflow-card {
-            background: #2d2d3d;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-
-        .workflow-card h5 {
-            color: #00bfff;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .step-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .step-list li {
-            padding: 10px 0;
-            padding-left: 30px;
-            position: relative;
-            color: #b0b0b0;
-        }
-
-        .step-list li::before {
-            content: '→';
-            position: absolute;
-            left: 0;
-            color: #00bfff;
-            font-weight: bold;
-        }
-
-        .cost-table {
-            background: #2d2d3d;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .cost-table table {
-            color: #e0e0e0;
-        }
-
-        .cost-table th {
-            background: #0078d4;
-            color: white;
-            padding: 15px;
-        }
-
-        .cost-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #404050;
-        }
-
-        .cost-total {
-            background: #107c10;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2em;
-        }
-
-        .demo-output {
-            background: #0a0a0a;
-            border: 2px solid #00bfff;
-            border-radius: 4px;
-            padding: 15px;
-            margin: 15px 0;
-            font-family: monospace;
-            font-size: 0.85em;
-            color: #00ff00;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .demo-output .line {
-            margin: 3px 0;
-        }
-
-        .demo-output .success {
-            color: #00ff00;
-        }
-
-        .demo-output .info {
-            color: #00bfff;
-        }
-
-        .demo-output .warning {
-            color: #ffc107;
-        }
-
-        .demo-output .error {
-            color: #ff6b6b;
-        }
-
-        .file-list {
-            background: #2d2d3d;
-            border: 1px solid #0078d4;
-            border-radius: 4px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #404050;
-        }
-
-        .file-item:last-child {
-            border-bottom: none;
-        }
-
-        .file-icon {
-            color: #00bfff;
-            font-size: 1.2em;
-        }
-
-        .file-info {
-            flex-grow: 1;
-        }
-
-        .file-name {
-            color: #e0e0e0;
-            font-weight: bold;
-        }
-
-        .file-size {
-            color: #b0b0b0;
-            font-size: 0.9em;
-        }
-
-        .btn-custom {
-            background: #0078d4;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-custom:hover {
-            background: #00bfff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 120, 212, 0.4);
-        }
-
-        .faq-item {
-            background: #2d2d3d;
-            border-left: 4px solid #0078d4;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-
-        .faq-item h5 {
-            color: #00bfff;
-            margin-bottom: 10px;
-        }
-
-        .faq-item p {
-            color: #b0b0b0;
-        }
-
-        .success-check {
-            color: #107c10;
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .alert-custom {
-            background: rgba(0, 120, 212, 0.1);
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            color: #e0e0e0;
-        }
-
-        .alert-custom i {
-            color: #00bfff;
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .metric-card {
-            background: #2d2d3d;
-            border: 2px solid #0078d4;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin: 10px;
-            display: inline-block;
-            min-width: 150px;
-        }
-
-        .metric-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #00bfff;
-        }
-
-        .metric-label {
-            color: #b0b0b0;
-            margin-top: 10px;
-            font-size: 0.9em;
-        }
-
-        .click-demo-shell {
-            display: grid;
-            grid-template-columns: minmax(260px, 1.15fr) minmax(300px, .85fr);
-            gap: 22px;
-            align-items: stretch;
-        }
-
-        .demo-stage,
-        .demo-sidecar {
-            background: linear-gradient(145deg, rgba(0, 120, 212, 0.18), rgba(45, 45, 61, 0.94));
-            border: 1px solid rgba(80, 230, 255, 0.42);
-            border-radius: 8px;
-            padding: 22px;
-            box-shadow: inset 0 0 24px rgba(0, 191, 255, 0.08), 0 18px 45px rgba(0, 0, 0, 0.35);
-        }
-
-        .demo-progress-track {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.09);
-            border-radius: 999px;
-            overflow: hidden;
-            margin: 14px 0 22px;
-        }
-
-        .demo-progress-bar {
-            width: 20%;
-            height: 100%;
-            background: linear-gradient(90deg, #00bfff, #7ce3ff);
-            border-radius: 999px;
-            transition: width 0.35s ease;
-        }
-
-        .demo-topology {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 14px;
-            position: relative;
-            margin-bottom: 22px;
-        }
-
-        .demo-node {
-            min-height: 148px;
-            background: rgba(10, 14, 39, 0.84);
-            border: 1px solid rgba(0, 191, 255, 0.32);
-            border-radius: 8px;
-            padding: 16px;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
-        }
-
-        .demo-node::after {
-            content: '';
-            position: absolute;
-            inset: auto 14px 14px 14px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 999px;
-        }
-
-        .demo-node.active {
-            transform: translateY(-6px);
-            border-color: #50e6ff;
-            box-shadow: 0 0 28px rgba(80, 230, 255, 0.24);
-        }
-
-        .demo-node.active::after {
-            background: linear-gradient(90deg, #00bfff, #00ff8a);
-        }
-
-        .demo-node i {
-            color: #50e6ff;
-            font-size: 2rem;
-        }
-
-        .demo-node h5 {
-            color: #fff;
-            margin: 12px 0 6px;
-            font-size: 1rem;
-        }
-
-        .demo-node p {
-            color: #b8d8e8;
-            font-size: 0.88rem;
-            margin: 0;
-        }
-
-        .demo-step-buttons {
-            display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-            gap: 8px;
-            margin-bottom: 20px;
-        }
-
-        .demo-step-button {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(80, 230, 255, 0.28);
-            color: #dff7ff;
-            border-radius: 8px;
-            padding: 10px 8px;
-            font-weight: 700;
-            transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
-        }
-
-        .demo-step-button:hover,
-        .demo-step-button.active {
-            background: rgba(0, 120, 212, 0.48);
-            border-color: #50e6ff;
-            transform: translateY(-2px);
-        }
-
-        .demo-live-card {
-            background: rgba(0, 0, 0, 0.36);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 8px;
-            padding: 18px;
-            min-height: 218px;
-        }
-
-        .demo-live-card h3 {
-            color: #50e6ff;
-            margin-bottom: 10px;
-        }
-
-        .demo-live-card p {
-            color: #c6d9e6;
-        }
-
-        .demo-metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .demo-live-metric {
-            background: rgba(16, 124, 16, 0.12);
-            border: 1px solid rgba(0, 255, 138, 0.25);
-            border-radius: 8px;
-            padding: 12px;
-        }
-
-        .demo-live-metric strong {
-            display: block;
-            color: #00ff8a;
-            font-size: 1.3rem;
-        }
-
-        .demo-live-metric span {
-            color: #b0b0b0;
-            font-size: 0.82rem;
-        }
-
-        .demo-help-panel {
-            background: rgba(255, 193, 7, 0.10);
-            border: 1px solid rgba(255, 193, 7, 0.36);
-            border-radius: 8px;
-            padding: 15px;
-            color: #ffe9a6;
-            margin-bottom: 14px;
-        }
-
-        .demo-command-panel {
-            background: #05070d;
-            border: 1px solid rgba(80, 230, 255, 0.32);
-            border-radius: 8px;
-            padding: 15px;
-            min-height: 230px;
-            font-family: Consolas, 'Courier New', monospace;
-            color: #8fffd2;
-            white-space: pre-wrap;
-        }
-
-        .demo-command-panel .prompt {
-            color: #50e6ff;
-        }
-
-        @media (max-width: 992px) {
-            .click-demo-shell,
-            .demo-topology,
-            .demo-step-buttons,
-            .demo-metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        footer {
-            background: #0a0a0a;
-            border-top: 2px solid #0078d4;
-            padding: 30px;
-            margin-top: 50px;
-            text-align: center;
-            color: #b0b0b0;
-        }
-
-        .scroll-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #0078d4;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 99;
-        }
-
-        .scroll-to-top.show {
-            opacity: 1;
-        }
-
-        .scroll-to-top:hover {
-            background: #00bfff;
-            transform: translateY(-5px);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pattern A: Core Demo — Azure Backup Live Demo</title>
+  <meta name="description" content="Business-focused Azure Backup Pattern A click-through for core recovery confidence, demo proof, costs, and artifacts." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    :root { --primary: #0078d4; --primary-dark: #005a9e; --ink: #172033; --muted: #5f6b7a; --line: #d9e6f5; --panel: #ffffff; --wash: #f4f8fd; --accent: #50e6ff; --success: #107c10; --warning: #ffc107; }
+    [data-bs-theme="dark"] { --ink: #f4f8ff; --muted: #b8c5d6; --line: #2d4764; --panel: #101826; --wash: #09111f; }
+    body { background: var(--wash); color: var(--ink); font-size: 0.95rem; }
+    .navbar { border-bottom: 1px solid var(--line); }
+    .hero { background: radial-gradient(circle at 18% 20%, rgba(80, 230, 255, 0.25), transparent 32%), linear-gradient(135deg, #003f7f 0%, #0078d4 52%, #005a9e 100%); color: #fff; padding: 3rem 0 2.5rem; }
+    .hero h1 { max-width: 920px; letter-spacing: 0; }
+    .hero .lead { max-width: 860px; color: rgba(255, 255, 255, 0.86); }
+    .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
+    .metric-tile { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 0.9rem; min-height: 82px; }
+    .metric-tile strong { display: block; font-size: 1.35rem; line-height: 1.1; }
+    .metric-tile span { color: rgba(255, 255, 255, 0.76); font-size: 0.86rem; }
+    .compact-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.25rem 0 0; }
+    .compact-nav a { color: #fff; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 999px; padding: 0.35rem 0.7rem; background: rgba(255, 255, 255, 0.1); font-size: 0.9rem; }
+    .hub-card, .demo-shell, .proof-card, .reference-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 30px rgba(0, 50, 100, 0.08); }
+    .hub-card, .proof-card { padding: 1.1rem; }
+    .section-title { color: var(--primary-dark); font-weight: 800; margin: 0 0 1rem; }
+    [data-bs-theme="dark"] .section-title { color: var(--accent); }
+    .demo-shell { padding: 1rem; display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.9fr); gap: 1rem; }
+    .status-row { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; justify-content: space-between; }
+    .pill { display: inline-flex; align-items: center; gap: 0.35rem; border-radius: 999px; border: 1px solid var(--line); background: rgba(0, 120, 212, 0.08); color: var(--primary-dark); font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.55rem; margin: 0.15rem 0.15rem 0.15rem 0; }
+    [data-bs-theme="dark"] .pill { color: var(--accent); }
+    .progress-track { height: 8px; border-radius: 999px; background: rgba(0, 120, 212, 0.14); overflow: hidden; margin: 1rem 0; }
+    .progress-bar-live { height: 100%; width: 20%; border-radius: inherit; background: linear-gradient(90deg, var(--success), var(--accent)); transition: width 0.25s ease; }
+    .topology { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 1rem; }
+    .demo-node { border: 1px solid var(--line); border-radius: 8px; padding: 1rem; background: rgba(0, 120, 212, 0.04); min-height: 142px; transition: border-color 0.2s ease, transform 0.2s ease; }
+    .demo-node.active { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0, 120, 212, 0.14); }
+    .demo-node i { color: var(--primary); font-size: 1.55rem; }
+    .demo-node h3 { font-size: 1rem; margin: 0.5rem 0 0.35rem; }
+    .demo-node p, .proof-card p, .hub-card p { color: var(--muted); }
+    .step-buttons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.45rem; }
+    .step-buttons button { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 8px; padding: 0.55rem 0.4rem; font-weight: 700; }
+    .step-buttons button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .live-card { border: 1px solid var(--line); border-radius: 8px; padding: 1rem; margin-top: 1rem; background: rgba(0, 120, 212, 0.05); }
+    .live-card h2 { font-size: 1.25rem; color: var(--primary-dark); }
+    [data-bs-theme="dark"] .live-card h2 { color: var(--accent); }
+    .demo-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+    .demo-metric { border: 1px solid var(--line); border-radius: 8px; padding: 0.75rem; background: var(--panel); }
+    .demo-metric strong { display: block; color: var(--success); font-size: 1.1rem; }
+    .demo-metric span { color: var(--muted); font-size: 0.8rem; }
+    .side-panel { display: grid; gap: 0.75rem; }
+    .help-panel, .console-panel { border: 1px solid var(--line); border-radius: 8px; padding: 1rem; }
+    .help-panel h3 { font-size: 1rem; color: var(--primary-dark); }
+    [data-bs-theme="dark"] .help-panel h3 { color: var(--accent); }
+    .console-panel { background: #07111f; color: #b9ffdc; font-family: Consolas, "Courier New", monospace; font-size: 0.86rem; white-space: pre-wrap; min-height: 226px; }
+    .console-panel .prompt { color: #50e6ff; }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
+    .proof-card h3 { font-size: 1rem; }
+    .artifact-table th, .artifact-table td { vertical-align: middle; font-size: 0.9rem; }
+    .reference-panel { overflow: hidden; }
+    .reference-panel summary { cursor: pointer; padding: 1rem 1.1rem; font-weight: 800; color: var(--primary-dark); }
+    [data-bs-theme="dark"] .reference-panel summary { color: var(--accent); }
+    .reference-panel .panel-body { border-top: 1px solid var(--line); padding: 1rem 1.1rem; }
+    .code-block { background: #07111f; color: #b9ffdc; border-radius: 8px; padding: 1rem; font-family: Consolas, "Courier New", monospace; font-size: 0.85rem; white-space: pre-wrap; overflow-x: auto; }
+    @media (max-width: 992px) { .metric-strip, .topology, .proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .demo-shell { grid-template-columns: 1fr; } .step-buttons { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .hero { padding: 2.3rem 0 2rem; } .metric-strip, .topology, .proof-grid, .demo-metrics, .step-buttons { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="nav-sticky">
-        <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center">
-                <div style="font-size: 1.3em; font-weight: bold; color: #00bfff;">
-                    <i class="bi bi-shield-check"></i> Azure Backup Pattern A Demo
-                </div>
-                <div class="d-flex gap-3">
-                    <a href="/" class="nav-link">AI Patterns</a>
-                    <a href="/azure-backup" class="nav-link">Backup Hub</a>
-                    <a href="/backup-pattern-b-demo" class="nav-link">Pattern B</a>
-                    <a href="/backup-pattern-c-demo" class="nav-link">Pattern C</a>
-                    <a href="/backup-pattern-d-demo" class="nav-link">Pattern D</a>
-                    <a href="#overview" class="nav-link">Overview</a>
-                    <a href="#click-demo" class="nav-link">Click Demo</a>
-                    <a href="#user" class="nav-link">Demo User</a>
-                    <a href="#deployment" class="nav-link">Deployment</a>
-                    <a href="#restore" class="nav-link">Restore Workflows</a>
-                    <a href="#cost" class="nav-link">Cost Analysis</a>
-                    <a href="#faq" class="nav-link">FAQ</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <h1><i class="bi bi-lightning-charge"></i> Pattern A: Core Demo</h1>
-        <p>30-45 minute Azure Backup demonstration for sales and customer engineering teams</p>
-        <div>
-            <div class="stat-box">
-                <div class="stat-number">1 VM</div>
-                <div class="stat-label">Protected Workload</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">1 File Share</div>
-                <div class="stat-label">Backed Up</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">7 Days</div>
-                <div class="stat-label">Retention</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-number">$47/day</div>
-                <div class="stat-label">Demo Cost</div>
-            </div>
-        </div>
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/"><i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/">AI Patterns</a></li>
+          <li class="nav-item"><a class="nav-link" href="/azure-backup">Azure Backup</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold active" href="/backup-pattern-a-demo">Pattern A</a></li>
+          <li class="nav-item"><a class="nav-link" href="/backup-pattern-b-demo">Pattern B</a></li>
+          <li class="nav-item"><a class="nav-link" href="/backup-pattern-c-demo">Pattern C</a></li>
+          <li class="nav-item"><a class="nav-link" href="/backup-pattern-d-demo">Pattern D</a></li>
+        </ul>
+        <button class="btn btn-outline-secondary ms-lg-3" onclick="toggleTheme()" title="Toggle dark mode"><i class="bi bi-moon-stars-fill"></i></button>
+      </div>
     </div>
+  </nav>
 
-    <div class="container-fluid" style="padding: 40px 20px;">
-        <!-- Overview -->
-        <div id="overview" class="section">
-            <div class="section-title">
-                <i class="bi bi-info-circle"></i> What Is Pattern A?
-            </div>
-            <p style="font-size: 1.1em; color: #b0b0b0; margin-bottom: 20px;">
-                Pattern A is a complete, rapid-deployment Azure Backup environment designed for <strong>sales demonstrations</strong>. 
-                It deploys in under 1 hour and demonstrates the core backup concepts: job scheduling, restore workflows, policy management, and costs.
-            </p>
-            <div class="alert-custom">
-                <i class="bi bi-star"></i> <strong>Best For:</strong> Sales engineering, customer engineering, solution architecture demos
-            </div>
-            <div class="alert-custom">
-                <i class="bi bi-clock"></i> <strong>Duration:</strong> 30-45 minutes demo time
-            </div>
-            <div class="alert-custom">
-                <i class="bi bi-lightning"></i> <strong>Key Message:</strong> "How do I backup a Windows VM and restore files quickly?"
-            </div>
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-end g-4">
+        <div class="col-lg-8">
+          <span class="badge text-bg-light text-primary mb-3"><i class="bi bi-lightning-charge me-1"></i>Pattern A: Core Demo</span>
+          <h1 class="display-5 fw-bold mb-3">Business Recovery Confidence in One Guided Demo</h1>
+          <p class="lead mb-0">A compact executive walkthrough that proves a simple business item can be protected, restored, validated, and turned into a clear go-forward decision.</p>
+          <div class="compact-nav">
+            <a href="#click-demo">Click Demo</a>
+            <a href="#proof">Proof</a>
+            <a href="#artifacts">Artifacts</a>
+            <a href="#references">References</a>
+          </div>
         </div>
+        <div class="col-lg-4">
+          <div class="metric-strip">
+            <div class="metric-tile"><strong>15 min</strong><span>Business story</span></div>
+            <div class="metric-tile"><strong>1 VM</strong><span>Protected workload</span></div>
+            <div class="metric-tile"><strong>7 days</strong><span>Retention</span></div>
+            <div class="metric-tile"><strong>Low</strong><span>Proof cost</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Business Click-through Demo -->
-        <div id="click-demo" class="section">
-            <div class="section-title">
-                <i class="bi bi-play-circle"></i> Business Value Click-through
+  <main class="container py-4 py-lg-5">
+    <section class="mb-4" id="summary">
+      <div class="hub-card">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-8">
+            <h2 class="section-title h4"><i class="bi bi-eye me-2"></i>What Pattern A Shows</h2>
+            <p class="mb-0">Pattern A answers the first sponsor question: when a file, report, or small team app disappears, can we prove recovery quickly without a full enterprise program? It is the fastest path from backup concept to visible recovery evidence.</p>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+              <a class="btn btn-primary" href="#click-demo"><i class="bi bi-play-circle me-1"></i>Start Demo</a>
+              <a class="btn btn-outline-primary" href="/azure-backup"><i class="bi bi-arrow-left-circle me-1"></i>Backup Hub</a>
             </div>
-            <p style="font-size: 1.05em; color: #b0b0b0; margin-bottom: 20px;">
-                Walk a business sponsor through a board-friendly recovery story: what is protected, what failure would cost, how fast the team can recover, and what decision comes next.
-            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <div class="click-demo-shell">
-                <div class="demo-stage">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <div>
-                            <span class="status-badge active"><i class="bi bi-broadcast"></i> Executive guided mode</span>
-                            <span class="status-badge protected"><i class="bi bi-clock-history"></i> 10 minute decision story</span>
-                        </div>
-                        <button class="btn-custom" type="button" id="patternAResetDemo"><i class="bi bi-arrow-clockwise"></i> Restart</button>
-                    </div>
-                    <div class="demo-progress-track" aria-label="Demo progress">
-                        <div class="demo-progress-bar" id="patternAProgress"></div>
-                    </div>
-
-                    <div class="demo-topology" aria-label="Pattern A live topology">
-                        <div class="demo-node active" data-node="workload">
-                            <i class="bi bi-pc-display-horizontal"></i>
-                            <h5>Critical Team App</h5>
-                            <p>A business file, report, or team application that leaders need back quickly.</p>
-                        </div>
-                        <div class="demo-node" data-node="vault">
-                            <i class="bi bi-shield-check"></i>
-                            <h5>Recovery Promise</h5>
-                            <p>The visible commitment for retention, recovery points, and restore ownership.</p>
-                        </div>
-                        <div class="demo-node" data-node="restore">
-                            <i class="bi bi-folder-symlink"></i>
-                            <h5>Business Recovery</h5>
-                            <p>Recover the missing item, validate it, and give the business a clear status.</p>
-                        </div>
-                    </div>
-
-                    <div class="demo-step-buttons" role="tablist" aria-label="Pattern A demo steps">
-                        <button class="demo-step-button active" type="button" data-demo-step="0">1. Risk</button>
-                        <button class="demo-step-button" type="button" data-demo-step="1">2. Promise</button>
-                        <button class="demo-step-button" type="button" data-demo-step="2">3. Confidence</button>
-                        <button class="demo-step-button" type="button" data-demo-step="3">4. Recovery</button>
-                        <button class="demo-step-button" type="button" data-demo-step="4">5. Decision</button>
-                    </div>
-
-                    <div class="demo-live-card">
-                        <h3 id="patternATitle">Business question: can we recover before the next meeting?</h3>
-                        <p id="patternANarrative">Start with a simple business event: a finance file or team document is missing and the owner needs a confident recovery answer today.</p>
-                        <div class="demo-metrics-grid">
-                            <div class="demo-live-metric"><strong id="patternAMetricOne">15 min</strong><span id="patternAMetricOneLabel">Business walkthrough</span></div>
-                            <div class="demo-live-metric"><strong id="patternAMetricTwo">Same day</strong><span id="patternAMetricTwoLabel">Recovery confidence</span></div>
-                            <div class="demo-live-metric"><strong id="patternAMetricThree">Low</strong><span id="patternAMetricThreeLabel">Proof cost</span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="demo-sidecar">
-                    <div class="demo-help-panel">
-                        <h5><i class="bi bi-question-circle"></i> Business guide</h5>
-                        <div id="patternAHelp">Ask: "If payroll, finance, or a customer report disappeared this morning, who can prove we can get it back?"</div>
-                    </div>
-                    <div class="demo-command-panel" id="patternAConsole"><span class="prompt">Decision board&gt;</span> Recovery proof session
+    <section class="mb-4" id="click-demo">
+      <h2 class="section-title h4"><i class="bi bi-play-circle me-2"></i>Business Value Click-through</h2>
+      <div class="demo-shell">
+        <div>
+          <div class="status-row">
+            <div><span class="pill"><i class="bi bi-broadcast"></i> Executive guided mode</span><span class="pill"><i class="bi bi-clock-history"></i> 10 minute decision story</span></div>
+            <button class="btn btn-outline-primary btn-sm" type="button" id="patternAResetDemo"><i class="bi bi-arrow-clockwise me-1"></i>Restart</button>
+          </div>
+          <div class="progress-track" aria-label="Demo progress"><div class="progress-bar-live" id="patternAProgress"></div></div>
+          <div class="topology" aria-label="Pattern A live topology">
+            <div class="demo-node active" data-node="workload"><i class="bi bi-pc-display-horizontal"></i><h3>Critical Team App</h3><p>A business file, report, or team application that leaders need back quickly.</p></div>
+            <div class="demo-node" data-node="vault"><i class="bi bi-shield-check"></i><h3>Recovery Promise</h3><p>The visible commitment for retention, recovery points, and restore ownership.</p></div>
+            <div class="demo-node" data-node="restore"><i class="bi bi-folder-symlink"></i><h3>Business Recovery</h3><p>Recover the missing item, validate it, and give the business a clear status.</p></div>
+          </div>
+          <div class="step-buttons" role="tablist" aria-label="Pattern A demo steps">
+            <button class="active" type="button" data-demo-step="0">1. Risk</button>
+            <button type="button" data-demo-step="1">2. Promise</button>
+            <button type="button" data-demo-step="2">3. Confidence</button>
+            <button type="button" data-demo-step="3">4. Recovery</button>
+            <button type="button" data-demo-step="4">5. Decision</button>
+          </div>
+          <div class="live-card">
+            <h2 id="patternATitle">Business question: can we recover before the next meeting?</h2>
+            <p id="patternANarrative">Start with a simple business event: a finance file or team document is missing and the owner needs a confident recovery answer today.</p>
+            <div class="demo-metrics">
+              <div class="demo-metric"><strong id="patternAMetricOne">15 min</strong><span id="patternAMetricOneLabel">Business walkthrough</span></div>
+              <div class="demo-metric"><strong id="patternAMetricTwo">Same day</strong><span id="patternAMetricTwoLabel">Recovery confidence</span></div>
+              <div class="demo-metric"><strong id="patternAMetricThree">Low</strong><span id="patternAMetricThreeLabel">Proof cost</span></div>
+            </div>
+          </div>
+        </div>
+        <aside class="side-panel">
+          <div class="help-panel">
+            <h3><i class="bi bi-question-circle me-1"></i>Business guide</h3>
+            <div id="patternAHelp">Ask: "If payroll, finance, or a customer report disappeared this morning, who can prove we can get it back?"</div>
+          </div>
+          <div class="console-panel" id="patternAConsole"><span class="prompt">Decision board&gt;</span> Recovery proof session
 
 What it means: backup is useful only when a real business item can be restored.
 Why it matters: leaders need a clear recovery answer before downtime becomes customer impact.
 Key takeaway: Pattern A proves the basic recovery promise quickly.</div>
-                </div>
-            </div>
-        </div>
+        </aside>
+      </div>
+    </section>
 
-        <!-- Demo User Profile -->
-        <div id="user" class="section">
-            <div class="section-title">
-                <i class="bi bi-person-circle"></i> Demo User Profile
-            </div>
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="bi bi-person-fill"></i>
-                </div>
-                <div class="user-info" style="flex-grow: 1;">
-                    <h3>demo-user@backup-demo.local</h3>
-                    <p><strong>Full Name:</strong> Azure Backup Demo</p>
-                    <p><strong>Role:</strong> Backup Administrator</p>
-                    <p><strong>Subscription:</strong> Demo Subscription</p>
-                </div>
-                <div>
-                    <span class="status-badge active"><i class="bi bi-check-circle"></i> Logged In</span>
-                    <span class="status-badge protected"><i class="bi bi-lock"></i> Admin Access</span>
-                </div>
-            </div>
+    <section class="mb-4" id="proof">
+      <h2 class="section-title h4"><i class="bi bi-check2-circle me-2"></i>Proof for the Conversation</h2>
+      <div class="proof-grid">
+        <article class="proof-card"><h3><i class="bi bi-person-badge text-primary me-1"></i>Business Owner</h3><p class="mb-0">Knows the app or file that matters, validates the restored item, and signs off that the recovery proof is meaningful.</p></article>
+        <article class="proof-card"><h3><i class="bi bi-cloud-check text-success me-1"></i>Recovery Evidence</h3><p class="mb-0">Shows the protected workload, recovery point, restore action, and status in a way a sponsor can understand.</p></article>
+        <article class="proof-card"><h3><i class="bi bi-cash-coin text-warning me-1"></i>Cost Boundary</h3><p class="mb-0">Keeps the proof intentionally small: one protected workload, short retention, and cleanup after the demo.</p></article>
+      </div>
+    </section>
 
-            <div style="background: #2d2d3d; border: 1px solid #0078d4; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #00bfff; margin-bottom: 15px;"><i class="bi bi-key"></i> Demo Credentials</h5>
-                <table style="width: 100%; color: #e0e0e0;">
-                    <tr style="border-bottom: 1px solid #404050;">
-                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Username:</td>
-                        <td style="padding: 10px;"><code>demo-user@backup-demo.local</code></td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #404050;">
-                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Password:</td>
-                        <td style="padding: 10px;"><code>[Pre-authenticated session]</code></td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid #404050;">
-                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Subscription ID:</td>
-                        <td style="padding: 10px;"><code>demo-sub-12345</code></td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Resource Group:</td>
-                        <td style="padding: 10px;"><code>rg-demo-backup-core</code></td>
-                    </tr>
-                </table>
-            </div>
+    <section class="mb-4" id="artifacts">
+      <h2 class="section-title h4"><i class="bi bi-folder-symlink me-2"></i>Pattern A Artifacts</h2>
+      <div class="hub-card table-responsive">
+        <table class="table table-sm table-bordered artifact-table mb-0">
+          <thead class="table-light"><tr><th>Artifact</th><th>Use It For</th><th>Link</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Deployment Guide</strong></td><td>Build the demo environment and restore story.</td><td><a href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" target="_blank">DEPLOYMENT_GUIDE.md</a></td></tr>
+            <tr><td><strong>Spec</strong></td><td>Review assumptions, resources, retention, and cleanup.</td><td><a href="/downloads/azure-backup/pattern-a/SPEC.md" target="_blank">SPEC.md</a></td></tr>
+            <tr><td><strong>KQL</strong></td><td>Show backup jobs, failed backups, and vault activity.</td><td><a href="/downloads/azure-backup/pattern-a/queries/backup-jobs.kql" target="_blank">backup-jobs</a> / <a href="/downloads/azure-backup/pattern-a/queries/failed-backups.kql" target="_blank">failed</a> / <a href="/downloads/azure-backup/pattern-a/queries/vault-activity.kql" target="_blank">vault</a></td></tr>
+            <tr><td><strong>Source</strong></td><td>Open the implementation package in GitHub.</td><td><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/tree/main/azure-backup-demo-spec" target="_blank">GitHub source</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-            <div style="background: #107c10; background: rgba(16, 124, 16, 0.1); border: 2px solid #107c10; border-radius: 8px; padding: 15px;">
-                <p style="margin: 0; color: #b0b0b0;">
-                    <i class="bi bi-check-circle" style="color: #107c10; font-weight: bold;"></i>
-                    This demo user has <strong>no login required</strong> — session is pre-authenticated for demonstration purposes.
-                </p>
-            </div>
-        </div>
+    <section class="mb-4" id="references">
+      <h2 class="section-title h4"><i class="bi bi-journal-text me-2"></i>Compact Technical Reference</h2>
+      <div class="d-grid gap-3">
+        <details class="reference-panel">
+          <summary><i class="bi bi-list-check me-2"></i>Runbook</summary>
+          <div class="panel-body"><ol class="mb-0"><li>Confirm the protected workload and business owner.</li><li>Verify a healthy recovery point exists.</li><li>Restore one file or folder into a safe location.</li><li>Ask the owner to validate the restored item.</li><li>Capture evidence and cost, then clean up resources.</li></ol></div>
+        </details>
+        <details class="reference-panel">
+          <summary><i class="bi bi-terminal me-2"></i>Deploy Command</summary>
+          <div class="panel-body"><div class="code-block">cd azure-backup-demo-spec
+az login
+az account set --subscription "&lt;subscription-name-or-id&gt;"
+./scripts/deploy.ps1 `
+  -Location canadacentral `
+  -EnvironmentName backup-demo `
+  -Owner &lt;owner-name&gt;</div></div>
+        </details>
+        <details class="reference-panel">
+          <summary><i class="bi bi-graph-up me-2"></i>Monitoring Query</summary>
+          <div class="panel-body"><div class="code-block">AzureDiagnostics
+| where Category has "AzureBackup"
+| project TimeGenerated, Resource, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc</div></div>
+        </details>
+      </div>
+    </section>
+  </main>
 
-        <!-- Architecture -->
-        <div class="section">
-            <div class="section-title">
-                <i class="bi bi-diagram-3"></i> Architecture Overview
-            </div>
-            <div class="architecture-diagram">
-<pre style="color: #00bfff; margin: 0;">
-┌─────────────────────────────────────────────────┐
-│  DEMO ENVIRONMENT                               │
-├─────────────────────────────────────────────────┤
-│                                                 │
-│  ┌──────────────────┐                          │
-│  │  Windows VM      │                          │
-│  │  demo-vm-prod    │                          │
-│  │  ┌────────────┐  │                          │
-│  │  │ C: OS Disk │  │                          │
-│  │  │ 30 GB      │  │                          │
-│  │  └────────────┘  │                          │
-│  │  ┌────────────┐  │                          │
-│  │  │ D: DataDsk │  │  Sample Files:           │
-│  │  │ 32 GB      │  │  ├─ budget.xlsx         │
-│  │  └────────────┘  │  ├─ reports.pdf         │
-│  │                  │  ├─ archive.zip         │
-│  │ Status: ✓ OK     │  └─ database.bak        │
-│  └──────────────────┘                          │
-│           ↓ (Backup Agent)                     │
-│           ↓ (Daily @ 11 PM UTC)                │
-│           ↓ (7-day retention)                  │
-│           ↓                                    │
-│  ┌──────────────────────────────────────────┐ │
-│  │ Recovery Services Vault                  │ │
-│  │ demo-vault-prod                          │ │
-│  │ ┌────────────────────────────────────┐   │ │
-│  │ │ Backup Storage (LRS)               │   │ │
-│  │ │ ├─ Today's backup (100% size)      │   │ │
-│  │ │ ├─ Yesterday's backup              │   │ │
-│  │ │ ├─ 2 days ago backup               │   │ │
-│  │ │ └─ ... (7 days total)              │   │ │
-│  │ │ Soft Delete: ✓ Enabled (14 days)   │   │ │
-│  │ │ Policies: ✓ Daily, 7-day retention │   │ │
-│  │ └────────────────────────────────────┘   │ │
-│  └──────────────────────────────────────────┘ │
-│           ↓ (Diagnostics)                     │
-│           ↓                                   │
-│  ┌──────────────────────────────────────────┐ │
-│  │ Log Analytics Workspace                  │ │
-│  │ demo-la-workspace                        │ │
-│  │ ├─ Backup job events                     │ │
-│  │ ├─ Restore operations                    │ │
-│  │ └─ Performance metrics                   │ │
-│  └──────────────────────────────────────────┘ │
-│                                                 │
-│  ┌──────────────────────────────────────────┐ │
-│  │ Azure Storage Account & File Share        │ │
-│  │ demostgacct / demo-shared-data           │ │
-│  │ ├─ Finance/budget.xlsx                   │ │
-│  │ ├─ Projects/archive.zip                  │ │
-│  │ └─ Archive/backup.bak                    │ │
-│  │ Status: ✓ Backed up daily                │ │
-│  └──────────────────────────────────────────┘ │
-│                                                 │
-└─────────────────────────────────────────────────┘
-</pre>
-            </div>
-        </div>
-
-        <!-- Deployment Timeline -->
-        <div id="deployment" class="section">
-            <div class="section-title">
-                <i class="bi bi-list-check"></i> Deployment Timeline
-            </div>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h4>Phase 1: Preparation</h4>
-                    <p><strong>Duration:</strong> 5 minutes</p>
-                    <p style="color: #00bfff;">Set up Azure subscription, resource group, register providers</p>
-                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
-                        <span class="success-check">✓</span> Create resource group with tags
-                        <br><span class="success-check">✓</span> Register Microsoft.RecoveryServices provider
-                        <br><span class="success-check">✓</span> Register Microsoft.Compute provider
-                    </p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Phase 2: Infrastructure Deployment</h4>
-                    <p><strong>Duration:</strong> 20 minutes</p>
-                    <p style="color: #00bfff;">Deploy VM, storage, vault, monitoring via Bicep</p>
-                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
-                        <span class="success-check">✓</span> Deploy Windows VM (B2s, 4GB RAM)
-                        <br><span class="success-check">✓</span> Create data disk (32 GB)
-                        <br><span class="success-check">✓</span> Deploy Recovery Services Vault
-                        <br><span class="success-check">✓</span> Create storage account & file share
-                        <br><span class="success-check">✓</span> Deploy Log Analytics workspace
-                    </p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Phase 3: Demo Data Seeding</h4>
-                    <p><strong>Duration:</strong> 10 minutes</p>
-                    <p style="color: #00bfff;">Populate VM with sample files and data</p>
-                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
-                        <span class="success-check">✓</span> Create C:\DemoData\ directory
-                        <br><span class="success-check">✓</span> Add Excel, PDF, Word, ZIP files
-                        <br><span class="success-check">✓</span> Upload files to Azure file share
-                        <br><span class="success-check">✓</span> Create total ~70 MB of demo data
-                    </p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Phase 4: Backup Job Trigger</h4>
-                    <p><strong>Duration:</strong> 5 minutes (automated)</p>
-                    <p style="color: #00bfff;">Execute first backup (don't wait for 11 PM schedule)</p>
-                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
-                        <span class="success-check">✓</span> Register VM with vault
-                        <br><span class="success-check">✓</span> Apply daily backup policy
-                        <br><span class="success-check">✓</span> Trigger on-demand backup
-                        <br><span class="success-check">✓</span> Monitor job progress in Log Analytics
-                    </p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Phase 5: Demo & Restore Walkthrough</h4>
-                    <p><strong>Duration:</strong> 15 minutes</p>
-                    <p style="color: #00bfff;">Demonstrate restore scenarios to customer</p>
-                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
-                        <span class="success-check">✓</span> File-level restore demo (fastest)
-                        <br><span class="success-check">✓</span> Full disk restore demo
-                        <br><span class="success-check">✓</span> Show backup job history
-                        <br><span class="success-check">✓</span> Explain 7-day retention
-                    </p>
-                </div>
-
-                <div class="timeline-item">
-                    <h4>Phase 6: Cleanup & Cost Review</h4>
-                    <p><strong>Duration:</strong> 5 minutes</p>
-                    <p style="color: #00bfff;">Delete resources and calculate total cost</p>
-                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
-                        <span class="success-check">✓</span> Delete resource group (all resources)
-                        <br><span class="success-check">✓</span> Verify cleanup complete
-                        <br><span class="success-check">✓</span> Document cost ($47/day × demo days)
-                        <br><span class="success-check">✓</span> Provide customer cost estimate
-                    </p>
-                </div>
-            </div>
-
-            <div style="background: rgba(16, 124, 16, 0.1); border: 2px solid #107c10; border-radius: 8px; padding: 20px; margin-top: 30px;">
-                <p style="margin: 0; color: #b0b0b0; font-size: 1.1em;">
-                    <i class="bi bi-check-circle-fill" style="color: #107c10; font-weight: bold; font-size: 1.3em;"></i>
-                    <strong> Total Time to Demo-Ready: 60 minutes</strong>
-                </p>
-            </div>
-        </div>
-
-        <!-- Restore Workflows -->
-        <div id="restore" class="section">
-            <div class="section-title">
-                <i class="bi bi-arrow-counterclockwise"></i> Restore Workflows (Demo Scenarios)
-            </div>
-
-            <div class="workflow-card">
-                <h5><i class="bi bi-file-earmark"></i> Scenario 1: File-Level Restore (Fastest)</h5>
-                <p style="color: #b0b0b0;"><strong>Use Case:</strong> "I accidentally deleted important Excel files"</p>
-                <p style="color: #b0b0b0;"><strong>Time:</strong> 3-5 minutes</p>
-                <h6 style="color: #00bfff; margin-top: 15px;">Steps:</h6>
-                <ol class="step-list">
-                    <li>Open Recovery Services Vault → demo-vault-prod</li>
-                    <li>Select "Protected Items" → demo-vm-prod</li>
-                    <li>Click "Recover Files" (from recovery point)</li>
-                    <li>Choose backup date (e.g., "2 days ago")</li>
-                    <li>Select files to restore: budget.xlsx, reports.pdf</li>
-                    <li>Download restore .iso file</li>
-                    <li>Mount .iso on VM, copy files to C:\</li>
-                </ol>
-                <div class="demo-output">
-                    <div class="line info">$ az backup recoverypoint list --vault-name demo-vault-prod --container-name demo-vm-prod</div>
-                    <div class="line success">[</div>
-                    <div class="line success">  {</div>
-                    <div class="line success">    "name": "recoverypoint-2026-06-23",</div>
-                    <div class="line success">    "timestamp": "2026-06-23T23:00:00Z",</div>
-                    <div class="line success">    "size_in_gb": 45,</div>
-                    <div class="line success">    "status": "Healthy"</div>
-                    <div class="line success">  }</div>
-                    <div class="line success">]</div>
-                    <div class="line info">$ File restore initiated - .iso ready for download</div>
-                </div>
-                <p style="color: #107c10; margin-top: 15px;"><i class="bi bi-check-circle"></i> <strong>Talking Point:</strong> "File restore is what 80% of customers use. It's fast, granular, and requires no full VM recovery."</p>
-            </div>
-
-            <div class="workflow-card">
-                <h5><i class="bi bi-hdd"></i> Scenario 2: Full Disk Restore (Complete Recovery)</h5>
-                <p style="color: #b0b0b0;"><strong>Use Case:</strong> "Data disk corruption, need to restore entire disk"</p>
-                <p style="color: #b0b0b0;"><strong>Time:</strong> 5-10 minutes</p>
-                <h6 style="color: #00bfff; margin-top: 15px;">Steps:</h6>
-                <ol class="step-list">
-                    <li>Open Recovery Services Vault → demo-vault-prod</li>
-                    <li>Select "Protected Items" → demo-vm-prod (data disk)</li>
-                    <li>Click "Restore Disk"</li>
-                    <li>Choose target resource group (demo-test-rg)</li>
-                    <li>Select recovery point (most recent)</li>
-                    <li>Wait 5 minutes for managed disk creation</li>
-                    <li>Attach managed disk to test VM for verification</li>
-                </ol>
-                <div class="demo-output">
-                    <div class="line info">$ az backup restore restore-disks --vault-name demo-vault-prod --restore-mode OriginalStorageAccount</div>
-                    <div class="line warning">Restore in progress...</div>
-                    <div class="line warning">Creating managed disk from recovery point...</div>
-                    <div class="line success">Restore job completed successfully</div>
-                    <div class="line success">Managed disk: disk-demo-vm-prod-restored (32 GB)</div>
-                    <div class="line success">Location: rg-demo-backup-core</div>
-                    <div class="line info">$ Disk ready for attachment to test VM</div>
-                </div>
-                <p style="color: #107c10; margin-top: 15px;"><i class="bi bi-check-circle"></i> <strong>Talking Point:</strong> "Full disk restore lets you test recovery in a separate environment before attaching to production. This is the safest approach for critical workloads."</p>
-            </div>
-
-            <div class="workflow-card">
-                <h5><i class="bi bi-cloud-download"></i> Scenario 3: View Backup Files in File Share</h5>
-                <p style="color: #b0b0b0;"><strong>Use Case:</strong> "View files in backed-up file share, restore specific items"</p>
-                <p style="color: #b0b0b0;"><strong>Time:</strong> 2-3 minutes</p>
-                <h6 style="color: #00bfff; margin-top: 15px;">Files Available in Backup:</h6>
-                <div class="file-list">
-                    <div class="file-item">
-                        <div class="file-icon"><i class="bi bi-file-earmark-excel"></i></div>
-                        <div class="file-info">
-                            <div class="file-name">Q2-Budget-2026.xlsx</div>
-                            <div class="file-size">1.2 MB • Protected</div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-icon"><i class="bi bi-file-earmark-pdf"></i></div>
-                        <div class="file-info">
-                            <div class="file-name">Financial-Report-Q2.pdf</div>
-                            <div class="file-size">2.8 MB • Protected</div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-icon"><i class="bi bi-file-earmark-word"></i></div>
-                        <div class="file-info">
-                            <div class="file-name">Employee-Records.csv</div>
-                            <div class="file-size">512 KB • Protected</div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-icon"><i class="bi bi-file-earmark-zip"></i></div>
-                        <div class="file-info">
-                            <div class="file-name">Project-Archive-2025.zip</div>
-                            <div class="file-size">45 MB • Protected</div>
-                        </div>
-                    </div>
-                    <div class="file-item">
-                        <div class="file-icon"><i class="bi bi-file-earmark"></i></div>
-                        <div class="file-info">
-                            <div class="file-name">Database-Backup-2026-06-23.bak</div>
-                            <div class="file-size">128 MB • Protected</div>
-                        </div>
-                    </div>
-                </div>
-                <p style="color: #107c10; margin-top: 15px;"><i class="bi bi-check-circle"></i> <strong>Talking Point:</strong> "Azure file shares are backed up daily with snapshots. You can restore any file from the last 7 days without impacting production."</p>
-            </div>
-        </div>
-
-        <!-- Cost Analysis -->
-        <div id="cost" class="section">
-            <div class="section-title">
-                <i class="bi bi-cash-coin"></i> Cost Analysis: Pattern A Demo
-            </div>
-
-            <div class="cost-table">
-                <table style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th>Service</th>
-                            <th>Size/Config</th>
-                            <th>24-Hour Cost</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><i class="bi bi-cpu"></i> Virtual Machine (B2s)</td>
-                            <td>2 vCPU, 4 GB RAM</td>
-                            <td>$0.052/hour = $1.25/day</td>
-                            <td>Cost-optimized for demo</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-hdd"></i> OS Disk (30 GB)</td>
-                            <td>Standard HDD</td>
-                            <td>$0.036/day</td>
-                            <td>Managed disk charges</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-hdd"></i> Data Disk (32 GB)</td>
-                            <td>Standard HDD</td>
-                            <td>$0.038/day</td>
-                            <td>Managed disk charges</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-storage"></i> Storage Account</td>
-                            <td>LRS, General-Purpose</td>
-                            <td>$0.021/day</td>
-                            <td>File share included</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-shield-check"></i> File Share (100 GB)</td>
-                            <td>SMB 3.0</td>
-                            <td>$0.163/day</td>
-                            <td>$1.69/GB/month</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-shield-lock"></i> Recovery Services Vault</td>
-                            <td>10 GB backup, 7-day retention</td>
-                            <td>$0.10/day</td>
-                            <td>$0.03/GB/month (LRS)</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-graph-up"></i> Log Analytics</td>
-                            <td>30-day retention</td>
-                            <td>$0.005/day</td>
-                            <td>Minimal ingestion</td>
-                        </tr>
-                        <tr>
-                            <td><i class="bi bi-cloud"></i> Data Egress</td>
-                            <td>Minimal</td>
-                            <td>$0 (free tier)</td>
-                            <td>First 1 TB free</td>
-                        </tr>
-                        <tr class="cost-total">
-                            <td colspan="3"><strong>Total 24-Hour Demo Cost</strong></td>
-                            <td><strong>~$3.65/day</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div style="background: #2d2d3d; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #ffc107; margin-bottom: 15px;"><i class="bi bi-exclamation-triangle"></i> Cost Optimization Tips</h5>
-                <ul style="color: #b0b0b0; margin: 0; padding-left: 25px;">
-                    <li><strong>Stop VM after demo</strong> — Pause compute costs while testing (~$30 saved per day)</li>
-                    <li><strong>Delete after demo</strong> — Don't leave resources running overnight</li>
-                    <li><strong>Use B-series for demos</strong> — Burstable VM size is 60% cheaper than D-series</li>
-                    <li><strong>7-day retention is enough</strong> — Don't increase retention (costs scale linearly)</li>
-                    <li><strong>LRS storage only</strong> — Demo doesn't need GRS (geo-redundancy costs 30% more)</li>
-                </ul>
-            </div>
-
-            <div class="metric-card">
-                <div class="metric-value">$47</div>
-                <div class="metric-label">Full Demo Cost (24 hrs)</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">$0.30/GB</div>
-                <div class="metric-label">Backup Storage (LRS)</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-value">$0.03/GB</div>
-                <div class="metric-label">Vault Management</div>
-            </div>
-        </div>
-
-        <!-- Success Checklist -->
-        <div class="section">
-            <div class="section-title">
-                <i class="bi bi-clipboard2-check"></i> Demo Success Checklist
-            </div>
-            <div style="background: #2d2d3d; border: 2px solid #0078d4; border-radius: 8px; padding: 20px;">
-                <p style="margin-bottom: 20px; color: #b0b0b0;">Before running demo with customer, verify:</p>
-                <ul style="color: #b0b0b0; margin: 0; padding-left: 25px;">
-                    <li><span class="success-check">✓</span> VM deployed and accessible (RDP working)</li>
-                    <li><span class="success-check">✓</span> Demo data seeded (files visible on C:\ and file share)</li>
-                    <li><span class="success-check">✓</span> Backup job completed (recovery point exists in vault)</li>
-                    <li><span class="success-check">✓</span> Log Analytics receiving diagnostics (queries return data)</li>
-                    <li><span class="success-check">✓</span> File-level restore works (can download and restore files)</li>
-                    <li><span class="success-check">✓</span> Full disk restore works (managed disk created successfully)</li>
-                    <li><span class="success-check">✓</span> Soft delete explained (can demonstrate delete recovery window)</li>
-                    <li><span class="success-check">✓</span> Cost calculated and reviewed (manager approval for demo spend)</li>
-                    <li><span class="success-check">✓</span> Cleanup script tested (can delete all resources in < 5 min)</li>
-                    <li><span class="success-check">✓</span> Presenter notes reviewed and practiced (timing, transitions)</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- FAQ -->
-        <div id="faq" class="section">
-            <div class="section-title">
-                <i class="bi bi-question-circle"></i> Frequently Asked Questions
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> How long does the demo take?</h5>
-                <p>Pattern A typically takes 30-45 minutes from start (showing vault) to finish (restore complete). Total setup (including data seeding) takes 60 minutes.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> Can I run this demo without login?</h5>
-                <p>Yes! This demo page is pre-authenticated with the demo-user account. No login required — all functionality is available immediately.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> What if the backup job hasn't completed yet?</h5>
-                <p>You can use the sample output shown in this demo page. The actual demo scripts include fallback sample data if backup is still in progress.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> How much will this cost my company?</h5>
-                <p>Pattern A costs ~$47/day while all resources are running. You should delete resources immediately after the demo (don't leave running overnight). Total cost is typically $47-95 per demo.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> Can I customize the demo data?</h5>
-                <p>Yes! The seed-demo-data.ps1 script is fully customizable. You can add customer-specific files, different sizes, or business-relevant documents.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> What if I need a Linux VM instead of Windows?</h5>
-                <p>The Bicep template supports both. Just change the parameter deployWindowsVm=false to deploy Ubuntu 22.04 instead. Backup workflows are identical.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> Can I extend retention beyond 7 days?</h5>
-                <p>Yes, change the retentionDays parameter in the Bicep template. Note: retention costs scale linearly. 30 days = 4x cost, 90 days = 12x cost.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> What's the difference between soft delete and immutable vault lock?</h5>
-                <p><strong>Soft delete:</strong> Allows you to undelete accidentally deleted backups for 14 days. <strong>Immutable vault lock:</strong> Prevents vault deletion permanently (useful for compliance). Pattern A uses soft delete; Pattern B adds immutable lock.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> How do I escalate to customer questions about RBAC or enterprise governance?</h5>
-                <p>Use Pattern B for ransomware resilience / RBAC questions, or Pattern D for enterprise governance / cost allocation questions. Each pattern targets specific stakeholders.</p>
-            </div>
-
-            <div class="faq-item">
-                <h5><i class="bi bi-question-circle"></i> Can I run multiple demos concurrently?</h5>
-                <p>Yes, each demo uses a unique resource group (rg-demo-backup-core-{random}). You can run multiple instances in parallel in the same subscription.</p>
-            </div>
-        </div>
-
-        <!-- Getting Started -->
-        <div class="section">
-            <div class="section-title">
-                <i class="bi bi-play-circle"></i> Getting Started with Pattern A
-            </div>
-            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 1: Review Documentation</h5>
-                <p style="color: #b0b0b0;">
-                    Read the full <a href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" target="_blank" style="color: #00bfff;">DEPLOYMENT_GUIDE.md</a> to understand architecture, costs, and demo scenarios.
-                </p>
-            </div>
-            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 2: Validate Prerequisites</h5>
-                <p style="color: #b0b0b0;">
-                    Ensure you have Azure CLI, PowerShell 7+, and Bicep CLI installed. User needs Subscription Contributor role.
-                </p>
-            </div>
-            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 3: Run Deployment Script</h5>
-                <p style="color: #b0b0b0;">
-                    Execute ./scripts/deploy.ps1 to provision all resources. Total time: 60 minutes.
-                </p>
-            </div>
-            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 4: Run Demo Script</h5>
-                <p style="color: #b0b0b0;">
-                    Execute ./scripts/demo-restore-scenarios.ps1 to walk through all restore workflows (15 minutes).
-                </p>
-            </div>
-            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
-                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 5: Clean Up</h5>
-                <p style="color: #b0b0b0;">
-                    Execute ./scripts/cleanup-demo.ps1 to delete all resources and stop billing.
-                </p>
-            </div>
-        </div>
+  <footer class="bg-body-tertiary py-4 border-top mt-4">
+    <div class="container text-center text-muted small">
+      <p class="mb-1">Azure Backup Pattern A: Core Demo Environment</p>
+      <p class="mb-0"><a href="/azure-backup" class="text-decoration-none">Azure Backup Hub</a> | <a href="/" class="text-decoration-none">Azure AI Patterns</a> | <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-decoration-none">GitHub Repository</a></p>
     </div>
+  </footer>
 
-    <!-- Footer -->
-    <footer>
-        <p>
-            <i class="bi bi-shield-check"></i> <strong>Azure Backup Pattern A: Core Demo Environment</strong>
-        </p>
-        <p style="margin-top: 10px;">
-            Repository: <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" style="color: #00bfff;">GitHub</a> | 
-            Deployment Guide: <a href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" target="_blank" style="color: #00bfff;">Markdown</a> |
-            Spec: <a href="/downloads/azure-backup/pattern-a/SPEC.md" target="_blank" style="color: #00bfff;">SPEC.md</a> |
-            KQL: <a href="/downloads/azure-backup/pattern-a/queries/backup-jobs.kql" target="_blank" style="color: #00bfff;">Queries</a> |
-            Backup Hub: <a href="https://ai.azuretools.wiki/azure-backup" target="_blank" style="color: #00bfff;">Azure Backup</a> |
-            Main Site: <a href="https://ai.azuretools.wiki/" target="_blank" style="color: #00bfff;">Azure AI Patterns</a>
-        </p>
-        <p style="margin-top: 15px; color: #808080; font-size: 0.9em;">
-            Last Updated: 2026-06-23 | Status: Production-Ready Demo | Documentation Version 1.0
-        </p>
-    </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const patternASteps = [
+      {
+        node: 'workload',
+        title: 'Business question: can we recover before the next meeting?',
+        narrative: 'Start with a simple business event: a finance file or team document is missing and the owner needs a confident recovery answer today.',
+        metricOne: '15 min', metricOneLabel: 'Business walkthrough', metricTwo: 'Same day', metricTwoLabel: 'Recovery confidence', metricThree: 'Low', metricThreeLabel: 'Proof cost',
+        help: 'Ask: "If payroll, finance, or a customer report disappeared this morning, who can prove we can get it back?"',
+        console: 'Decision board> Recovery proof session\n\nWhat it means: backup is useful only when a real business item can be restored.\nWhy it matters: leaders need a clear recovery answer before downtime becomes customer impact.\nKey takeaway: Pattern A proves the basic recovery promise quickly.'
+      },
+      {
+        node: 'vault',
+        title: 'Translate backup settings into a promise people understand',
+        narrative: 'Show that the protected workload has a policy, retention window, recent recovery point, and named owner for recovery decisions.',
+        metricOne: '7 days', metricOneLabel: 'Retention promise', metricTwo: 'Daily', metricTwoLabel: 'Recovery point rhythm', metricThree: '1 owner', metricThreeLabel: 'Decision path',
+        help: 'Keep the conversation out of tooling detail. Say what can be recovered, how far back, and who confirms business success.',
+        console: 'Decision board> Recovery promise\n\nProtected item: Critical Team App\nRetention: 7 days\nOwner: Business application owner\nEvidence: Recovery point visible and ready'
+      },
+      {
+        node: 'vault',
+        title: 'Give confidence before there is a crisis',
+        narrative: 'Use job status and recovery-point evidence to show leaders the organization is not waiting for an incident to learn whether backup works.',
+        metricOne: 'Healthy', metricOneLabel: 'Backup status', metricTwo: 'Visible', metricTwoLabel: 'Recovery evidence', metricThree: 'Fast', metricThreeLabel: 'Sponsor answer',
+        help: 'A useful proof is visible, recent, and owned. Avoid promising recovery until the business can see evidence.',
+        console: 'Decision board> Confidence check\n\nBackup job: Completed\nRecovery point: Available\nBusiness risk: Reduced\nNext step: Validate restore path'
+      },
+      {
+        node: 'restore',
+        title: 'Recover one real item and validate it',
+        narrative: 'Restore a file or folder into a safe location, then ask the business owner to confirm it is usable and complete.',
+        metricOne: 'Minutes', metricOneLabel: 'Restore action', metricTwo: 'Validated', metricTwoLabel: 'Owner proof', metricThree: 'Safe', metricThreeLabel: 'No production overwrite',
+        help: 'The moment that matters is not the restore button. It is the owner saying: yes, this is the file we needed.',
+        console: 'Decision board> Business recovery\n\nRestore target: Safe validation location\nOwner review: Complete\nEvidence captured: Yes\nProduction impact: None'
+      },
+      {
+        node: 'restore',
+        title: 'Make the next business decision',
+        narrative: 'End with the decision: keep Pattern A for demos, expand to ransomware controls with Pattern B, portfolio coverage with Pattern C, or governance with Pattern D.',
+        metricOne: 'Go/No-go', metricOneLabel: 'Sponsor decision', metricTwo: 'Next pattern', metricTwoLabel: 'Scale path', metricThree: 'Clean', metricThreeLabel: 'Demo teardown',
+        help: 'Close with a business action, not a technical recap. Ask which risk needs the next proof.',
+        console: 'Decision board> Next decision\n\nOption A: Keep core demo\nOption B: Add ransomware controls\nOption C: Expand app portfolio\nOption D: Add governance proof\nCleanup: Required after demo'
+      }
+    ];
 
-    <!-- Scroll to Top Button -->
-    <div class="scroll-to-top" id="scrollToTop">
-        <i class="bi bi-chevron-up"></i>
-    </div>
+    function renderPatternAStep(index) {
+      const step = patternASteps[index];
+      document.querySelectorAll('[data-demo-step]').forEach(button => button.classList.toggle('active', Number(button.dataset.demoStep) === index));
+      document.querySelectorAll('[data-node]').forEach(node => node.classList.toggle('active', node.dataset.node === step.node));
+      document.getElementById('patternAProgress').style.width = `${((index + 1) / patternASteps.length) * 100}%`;
+      document.getElementById('patternATitle').textContent = step.title;
+      document.getElementById('patternANarrative').textContent = step.narrative;
+      document.getElementById('patternAMetricOne').textContent = step.metricOne;
+      document.getElementById('patternAMetricOneLabel').textContent = step.metricOneLabel;
+      document.getElementById('patternAMetricTwo').textContent = step.metricTwo;
+      document.getElementById('patternAMetricTwoLabel').textContent = step.metricTwoLabel;
+      document.getElementById('patternAMetricThree').textContent = step.metricThree;
+      document.getElementById('patternAMetricThreeLabel').textContent = step.metricThreeLabel;
+      document.getElementById('patternAHelp').textContent = step.help;
+      document.getElementById('patternAConsole').innerHTML = `<span class="prompt">${step.console.split('\n')[0]}</span>${step.console.substring(step.console.indexOf('\n'))}`;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+    document.querySelectorAll('[data-demo-step]').forEach(button => button.addEventListener('click', () => renderPatternAStep(Number(button.dataset.demoStep))));
+    document.getElementById('patternAResetDemo').addEventListener('click', () => renderPatternAStep(0));
 
-        // Scroll to top button
-        const scrollToTopBtn = document.getElementById('scrollToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                scrollToTopBtn.classList.add('show');
-            } else {
-                scrollToTopBtn.classList.remove('show');
-            }
-        });
+    function toggleTheme() {
+      const html = document.documentElement;
+      const theme = html.getAttribute('data-bs-theme');
+      const nextTheme = theme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-bs-theme', nextTheme);
+      localStorage.setItem('theme', nextTheme);
+    }
 
-        scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
 
-        // Update active nav link based on scroll position
-        window.addEventListener('scroll', () => {
-            let current = '';
-            document.querySelectorAll('[id]').forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (window.scrollY >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + current) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
-            const patternASteps = [
-                {
-                    title: 'Business question: can we recover before the next meeting?',
-                    narrative: 'Start with a simple business event: a finance file or team document is missing and the owner needs a confident recovery answer today.',
-                    node: 'workload',
-                    progress: '20%',
-                    metrics: ['15 min', 'Same day', 'Low'],
-                    labels: ['Business walkthrough', 'Recovery confidence', 'Proof cost'],
-                    help: 'Ask: "If payroll, finance, or a customer report disappeared this morning, who can prove we can get it back?"',
-                    console: '<span class="prompt">Decision board&gt;</span> Recovery proof session\n\nWhat it means: backup is useful only when a real business item can be restored.\nWhy it matters: leaders need a clear recovery answer before downtime becomes customer impact.\nKey takeaway: Pattern A proves the basic recovery promise quickly.'
-                },
-                {
-                    title: 'Define the recovery promise',
-                    narrative: 'Translate backup settings into business language: which app or file is covered, how far back the business can go, and who owns recovery.',
-                    node: 'vault',
-                    progress: '40%',
-                    metrics: ['2 assets', 'Daily', '14 days'],
-                    labels: ['Protected priorities', 'Recovery rhythm', 'Safety window'],
-                    help: 'Use the phrase "recovery promise" instead of policy. It makes the conversation about service continuity, not configuration.',
-                    console: '<span class="prompt">What it means&gt;</span> The business can see which priority assets are protected.\n\nWhy it matters: no one has to guess whether the missing item is covered.\nHow it works: a simple recovery promise links assets, owners, and restore expectations.'
-                },
-                {
-                    title: 'Show recovery confidence, not tool noise',
-                    narrative: 'Turn health status into an executive signal: latest protection succeeded, no open failures, and the team has a recovery point available.',
-                    node: 'vault',
-                    progress: '60%',
-                    metrics: ['Green', '0 open', 'Visible'],
-                    labels: ['Readiness status', 'Business blockers', 'Owner evidence'],
-                    help: 'Answer the sponsor question: "How do we know this will work when we need it?" Focus on readiness, owner, and evidence.',
-                    console: '<span class="prompt">Signals to track&gt;</span> Recovery readiness\n\nLatest protection: healthy\nOpen blockers: none\nOwner view: available\nKey takeaway: backup health must be readable by business and operations leaders.'
-                },
-                {
-                    title: 'Recover the missing business item',
-                    narrative: 'Demonstrate the moment the sponsor cares about: the missing file comes back, the owner confirms it opens, and the business can continue.',
-                    node: 'restore',
-                    progress: '82%',
-                    metrics: ['4 min', '1 item', 'Confirmed'],
-                    labels: ['Recovery moment', 'Business impact', 'Owner validation'],
-                    help: 'Keep the story human: Finance gets the budget workbook back without waiting for a full server rebuild.',
-                    console: '<span class="prompt">Simple example&gt;</span> Finance budget workbook deleted\n\nAction: recover the latest good version.\nValidation: owner opens the workbook and confirms it is usable.\nBusiness result: meeting continues without recreating the work.'
-                },
-                {
-                    title: 'Make the next business decision',
-                    narrative: 'Close with a decision: Pattern A proves basic recovery confidence; the next investment is stronger ransomware resilience or enterprise governance.',
-                    node: 'restore',
-                    progress: '100%',
-                    metrics: ['Low', 'Clear', 'Pattern B'],
-                    labels: ['Proof investment', 'Sponsor decision', 'Next maturity step'],
-                    help: 'Give leaders a clean fork: accept the basic recovery model, or move to Pattern B when ransomware and privileged access are the bigger risk.',
-                    console: '<span class="prompt">Key takeaway&gt;</span> Pattern A answers the first executive question.\n\nCan we recover a critical item quickly? Yes.\nDo we have visible proof? Yes.\nNext decision: expand to ransomware resilience with Pattern B.'
-                }
-            ];
-
-            function renderPatternAStep(index) {
-                const step = patternASteps[index];
-                document.getElementById('patternATitle').textContent = step.title;
-                document.getElementById('patternANarrative').textContent = step.narrative;
-                document.getElementById('patternAProgress').style.width = step.progress;
-                document.getElementById('patternAMetricOne').textContent = step.metrics[0];
-                document.getElementById('patternAMetricTwo').textContent = step.metrics[1];
-                document.getElementById('patternAMetricThree').textContent = step.metrics[2];
-                document.getElementById('patternAMetricOneLabel').textContent = step.labels[0];
-                document.getElementById('patternAMetricTwoLabel').textContent = step.labels[1];
-                document.getElementById('patternAMetricThreeLabel').textContent = step.labels[2];
-                document.getElementById('patternAHelp').textContent = step.help;
-                document.getElementById('patternAConsole').innerHTML = step.console;
-
-                document.querySelectorAll('[data-demo-step]').forEach(button => {
-                    button.classList.toggle('active', Number(button.dataset.demoStep) === index);
-                });
-                document.querySelectorAll('.demo-node').forEach(node => {
-                    node.classList.toggle('active', node.dataset.node === step.node);
-                });
-            }
-
-            document.querySelectorAll('[data-demo-step]').forEach(button => {
-                button.addEventListener('click', () => renderPatternAStep(Number(button.dataset.demoStep)));
-            });
-
-            document.getElementById('patternAResetDemo').addEventListener('click', () => renderPatternAStep(0));
-    </script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (event) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          event.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
