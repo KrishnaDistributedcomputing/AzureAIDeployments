@@ -14,6 +14,7 @@
     { "route": "/azure-backup", "rewrite": "/azure-backup.html" },
     { "route": "/azure-backup/live", "rewrite": "/azure-backup-demo-live.html" },
     { "route": "/backup-pattern-a-demo", "rewrite": "/pattern-a-demo.html" },
+    { "route": "/backup-pattern-a-architecture", "rewrite": "/pattern-a-architecture.html" },
     { "route": "/backup-pattern-b-demo", "rewrite": "/pattern-b-demo.html" },
     { "route": "/backup-pattern-b-architecture", "rewrite": "/pattern-b-architecture.html" },
     { "route": "/backup-pattern-c-demo", "rewrite": "/pattern-c-demo.html" },
