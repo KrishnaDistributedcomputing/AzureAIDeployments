@@ -16,7 +16,7 @@
     .hero { background: radial-gradient(circle at 18% 20%, rgba(80, 230, 255, 0.25), transparent 32%), linear-gradient(135deg, #003f7f 0%, #0078d4 52%, #005a9e 100%); color: #fff; padding: 3rem 0 2.5rem; }
     .hero h1 { max-width: 920px; letter-spacing: 0; }
     .hero .lead { max-width: 860px; color: rgba(255, 255, 255, 0.86); }
-    .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
+    .metric-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
     .metric-tile { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 0.9rem; min-height: 82px; }
     .metric-tile strong { display: block; font-size: 1.35rem; line-height: 1.1; }
     .metric-tile span { color: rgba(255, 255, 255, 0.76); font-size: 0.86rem; }
@@ -57,6 +57,7 @@
     .proof-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
     .proof-card h3 { font-size: 1rem; }
     .artifact-table th, .artifact-table td { vertical-align: middle; font-size: 0.9rem; }
+    .artifact-table td a { word-break: break-word; overflow-wrap: anywhere; }
     .reference-panel { overflow: hidden; }
     .reference-panel summary { cursor: pointer; padding: 1rem 1.1rem; font-weight: 800; color: var(--primary-dark); }
     [data-bs-theme="dark"] .reference-panel summary { color: var(--accent); }
