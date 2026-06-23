@@ -1,4 +1,4 @@
-﻿{
+{
   "routes": [
     { "route": "/patterns/centralized-hub", "rewrite": "/pattern1.html" },
     { "route": "/patterns/decentralized-spoke", "rewrite": "/pattern2.html" },
@@ -11,13 +11,18 @@
     { "route": "/patterns/sql-migration", "rewrite": "/pattern9.html" },
     { "route": "/patterns/greenfield-azure", "rewrite": "/pattern10.html" },
     { "route": "/landing-zone", "rewrite": "/landing-zone.html" },
+    { "route": "/azure-backup", "rewrite": "/azure-backup.html" },
+    { "route": "/azure-backup/live", "rewrite": "/azure-backup-demo-live.html" },
+    { "route": "/backup-pattern-a-demo", "rewrite": "/pattern-a-demo.html" },
     { "route": "/sdd", "rewrite": "/sdd.html" },
     { "route": "/education", "rewrite": "/csi-education.html" },
     { "route": "/modules", "rewrite": "/modules.html" },
     { "route": "/module-specs", "rewrite": "/module-spec-guide.html" },
     { "route": "/quiz", "rewrite": "/quiz.html" },
     { "route": "/monitoring", "rewrite": "/monitoring.html" },
-    { "route": "/help", "rewrite": "/help.html" }
+    { "route": "/help", "rewrite": "/help.html" },
+    { "route": "/top3", "rewrite": "/top3.html" },
+    { "route": "/temporal", "rewrite": "/Temporal_pattern_June_2026.html" }
   ],
   "navigationFallback": {
     "rewrite": "/index.html",

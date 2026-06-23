@@ -229,7 +229,7 @@
       color: #07241a;
     }
     a.module-card:hover strong { color: var(--accent) !important; }
-    .nav-link.active { font-weight: 600; }
+    .nav-link.actaive { font-weight: 600; }
     footer a { color: var(--accent); }
     .search-box { max-width: 460px; }
 
@@ -297,6 +297,8 @@
             <a class="nav-link dropdown-toggle fw-semibold text-success" href="#" role="button" data-bs-toggle="dropdown"><i class="bi bi-book me-1"></i>Reference</a>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="/landing-zone"><i class="bi bi-building-fill-gear text-success me-2"></i>Landing Zone Architecture</a></li>
+              <li><a class="dropdown-item" href="/azure-backup"><i class="bi bi-shield-check text-primary me-2"></i>Azure Backup Patterns</a></li>
+              <li><a class="dropdown-item" href="/backup-pattern-a-demo"><i class="bi bi-lightning-charge text-warning me-2"></i>Pattern A Live Demo <span class="badge bg-info ms-1" style="font-size: 0.7em;">INTERACTIVE</span></a></li>
               <li><a class="dropdown-item" href="/education"><i class="bi bi-mortarboard-fill me-2" style="color:#6f42c1"></i>Education AI Platform</a></li>
               <li><a class="dropdown-item" href="/modules"><i class="bi bi-puzzle me-2"></i>Core Azure Modules</a></li>
               <li><a class="dropdown-item" href="/module-specs"><i class="bi bi-file-earmark-text me-2" style="color:#007acc"></i>Spec Writing Guide</a></li>
@@ -406,6 +408,18 @@
                 <div class="flex-grow-1">
                   <h6 class="fw-bold mb-1">Landing Zone Reference</h6>
                   <small class="opacity-75">CAF management groups, hub-spoke VNet, subnets</small>
+                </div>
+                <i class="bi bi-arrow-right fs-4 opacity-50"></i>
+              </div>
+            </a>
+            <a href="/azure-backup" class="text-decoration-none text-white">
+              <div class="hero-card d-flex align-items-center gap-3">
+                <div class="hero-card-icon d-flex align-items-center justify-content-center" style="background:linear-gradient(135deg,#004578,#40c4ff)">
+                  <i class="bi bi-shield-check fs-3 text-white"></i>
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="fw-bold mb-1">Azure Backup Patterns</h6>
+                  <small class="opacity-75">Spec-driven backup, restore, vault, and resilience use cases</small>
                 </div>
                 <i class="bi bi-arrow-right fs-4 opacity-50"></i>
               </div>

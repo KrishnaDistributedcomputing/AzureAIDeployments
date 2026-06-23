@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern A: Core Demo — Azure Backup Live Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --azure-blue: #0078d4;
+            --azure-light: #0099ff;
+            --success-green: #107c10;
+            --warning-orange: #ffc107;
+            --danger-red: #d83b01;
+            --dark-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #0078d4 0%, #0099ff 50%, #00bfff 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0,0,0,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-section h1 {
+            font-size: 3em;
+            font-weight: bold;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-section p {
+            font-size: 1.3em;
+            position: relative;
+            z-index: 1;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            display: inline-block;
+            min-width: 150px;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 120, 212, 0.2);
+            z-index: 100;
+            padding: 15px 0;
+        }
+
+        .nav-sticky .nav-link {
+            color: #e0e0e0;
+            margin: 0 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-sticky .nav-link:hover,
+        .nav-sticky .nav-link.active {
+            color: #00bfff;
+            border-bottom: 2px solid #00bfff;
+        }
+
+        .section {
+            background: #1a1a2e;
+            border: 1px solid #0078d4;
+            border-radius: 8px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title {
+            color: #00bfff;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title i {
+            font-size: 1.3em;
+        }
+
+        .user-profile {
+            background: linear-gradient(135deg, #2d2d3d 0%, #3d3d4d 100%);
+            border: 2px solid #0078d4;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0078d4 0%, #00bfff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .user-info h3 {
+            color: #00bfff;
+            margin: 0;
+        }
+
+        .user-info p {
+            color: #b0b0b0;
+            margin: 5px 0 0 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .status-badge.active {
+            background: #107c10;
+            color: white;
+        }
+
+        .status-badge.pending {
+            background: #ffc107;
+            color: black;
+        }
+
+        .status-badge.protected {
+            background: #0078d4;
+            color: white;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            margin-bottom: 30px;
+            padding-left: 50px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            background: #0078d4;
+            border-radius: 50%;
+            border: 3px solid #1a1a2e;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 25px;
+            width: 2px;
+            height: 30px;
+            background: #0078d4;
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-item h4 {
+            color: #00bfff;
+            margin-bottom: 10px;
+        }
+
+        .timeline-item p {
+            color: #b0b0b0;
+            margin: 5px 0;
+        }
+
+        .architecture-diagram {
+            background: #2d2d3d;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid #0078d4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #00bfff;
+            font-size: 0.9em;
+        }
+
+        .workflow-card {
+            background: #2d2d3d;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .workflow-card h5 {
+            color: #00bfff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #b0b0b0;
+        }
+
+        .step-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #00bfff;
+            font-weight: bold;
+        }
+
+        .cost-table {
+            background: #2d2d3d;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .cost-table table {
+            color: #e0e0e0;
+        }
+
+        .cost-table th {
+            background: #0078d4;
+            color: white;
+            padding: 15px;
+        }
+
+        .cost-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #404050;
+        }
+
+        .cost-total {
+            background: #107c10;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .demo-output {
+            background: #0a0a0a;
+            border: 2px solid #00bfff;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.85em;
+            color: #00ff00;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .demo-output .line {
+            margin: 3px 0;
+        }
+
+        .demo-output .success {
+            color: #00ff00;
+        }
+
+        .demo-output .info {
+            color: #00bfff;
+        }
+
+        .demo-output .warning {
+            color: #ffc107;
+        }
+
+        .demo-output .error {
+            color: #ff6b6b;
+        }
+
+        .file-list {
+            background: #2d2d3d;
+            border: 1px solid #0078d4;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #404050;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-icon {
+            color: #00bfff;
+            font-size: 1.2em;
+        }
+
+        .file-info {
+            flex-grow: 1;
+        }
+
+        .file-name {
+            color: #e0e0e0;
+            font-weight: bold;
+        }
+
+        .file-size {
+            color: #b0b0b0;
+            font-size: 0.9em;
+        }
+
+        .btn-custom {
+            background: #0078d4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-custom:hover {
+            background: #00bfff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 120, 212, 0.4);
+        }
+
+        .faq-item {
+            background: #2d2d3d;
+            border-left: 4px solid #0078d4;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .faq-item h5 {
+            color: #00bfff;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            color: #b0b0b0;
+        }
+
+        .success-check {
+            color: #107c10;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .alert-custom {
+            background: rgba(0, 120, 212, 0.1);
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #e0e0e0;
+        }
+
+        .alert-custom i {
+            color: #00bfff;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .metric-card {
+            background: #2d2d3d;
+            border: 2px solid #0078d4;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px;
+            display: inline-block;
+            min-width: 150px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00bfff;
+        }
+
+        .metric-label {
+            color: #b0b0b0;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        footer {
+            background: #0a0a0a;
+            border-top: 2px solid #0078d4;
+            padding: 30px;
+            margin-top: 50px;
+            text-align: center;
+            color: #b0b0b0;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #0078d4;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 99;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+        }
+
+        .scroll-to-top:hover {
+            background: #00bfff;
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav-sticky">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div style="font-size: 1.3em; font-weight: bold; color: #00bfff;">
+                    <i class="bi bi-shield-check"></i> Azure Backup Pattern A Demo
+                </div>
+                <div class="d-flex gap-3">
+                    <a href="#overview" class="nav-link">Overview</a>
+                    <a href="#user" class="nav-link">Demo User</a>
+                    <a href="#deployment" class="nav-link">Deployment</a>
+                    <a href="#restore" class="nav-link">Restore Workflows</a>
+                    <a href="#cost" class="nav-link">Cost Analysis</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1><i class="bi bi-lightning-charge"></i> Pattern A: Core Demo</h1>
+        <p>30-45 minute Azure Backup demonstration for sales and customer engineering teams</p>
+        <div>
+            <div class="stat-box">
+                <div class="stat-number">1 VM</div>
+                <div class="stat-label">Protected Workload</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">1 File Share</div>
+                <div class="stat-label">Backed Up</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">7 Days</div>
+                <div class="stat-label">Retention</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">$47/day</div>
+                <div class="stat-label">Demo Cost</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid" style="padding: 40px 20px;">
+        <!-- Overview -->
+        <div id="overview" class="section">
+            <div class="section-title">
+                <i class="bi bi-info-circle"></i> What Is Pattern A?
+            </div>
+            <p style="font-size: 1.1em; color: #b0b0b0; margin-bottom: 20px;">
+                Pattern A is a complete, rapid-deployment Azure Backup environment designed for <strong>sales demonstrations</strong>. 
+                It deploys in under 1 hour and demonstrates the core backup concepts: job scheduling, restore workflows, policy management, and costs.
+            </p>
+            <div class="alert-custom">
+                <i class="bi bi-star"></i> <strong>Best For:</strong> Sales engineering, customer engineering, solution architecture demos
+            </div>
+            <div class="alert-custom">
+                <i class="bi bi-clock"></i> <strong>Duration:</strong> 30-45 minutes demo time
+            </div>
+            <div class="alert-custom">
+                <i class="bi bi-lightning"></i> <strong>Key Message:</strong> "How do I backup a Windows VM and restore files quickly?"
+            </div>
+        </div>
+
+        <!-- Demo User Profile -->
+        <div id="user" class="section">
+            <div class="section-title">
+                <i class="bi bi-person-circle"></i> Demo User Profile
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h3>demo-user@backup-demo.local</h3>
+                    <p><strong>Full Name:</strong> Azure Backup Demo</p>
+                    <p><strong>Role:</strong> Backup Administrator</p>
+                    <p><strong>Subscription:</strong> Demo Subscription</p>
+                </div>
+                <div>
+                    <span class="status-badge active"><i class="bi bi-check-circle"></i> Logged In</span>
+                    <span class="status-badge protected"><i class="bi bi-lock"></i> Admin Access</span>
+                </div>
+            </div>
+
+            <div style="background: #2d2d3d; border: 1px solid #0078d4; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #00bfff; margin-bottom: 15px;"><i class="bi bi-key"></i> Demo Credentials</h5>
+                <table style="width: 100%; color: #e0e0e0;">
+                    <tr style="border-bottom: 1px solid #404050;">
+                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Username:</td>
+                        <td style="padding: 10px;"><code>demo-user@backup-demo.local</code></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #404050;">
+                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Password:</td>
+                        <td style="padding: 10px;"><code>[Pre-authenticated session]</code></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #404050;">
+                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Subscription ID:</td>
+                        <td style="padding: 10px;"><code>demo-sub-12345</code></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; font-weight: bold; color: #b0b0b0;">Resource Group:</td>
+                        <td style="padding: 10px;"><code>rg-demo-backup-core</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: #107c10; background: rgba(16, 124, 16, 0.1); border: 2px solid #107c10; border-radius: 8px; padding: 15px;">
+                <p style="margin: 0; color: #b0b0b0;">
+                    <i class="bi bi-check-circle" style="color: #107c10; font-weight: bold;"></i>
+                    This demo user has <strong>no login required</strong> — session is pre-authenticated for demonstration purposes.
+                </p>
+            </div>
+        </div>
+
+        <!-- Architecture -->
+        <div class="section">
+            <div class="section-title">
+                <i class="bi bi-diagram-3"></i> Architecture Overview
+            </div>
+            <div class="architecture-diagram">
+<pre style="color: #00bfff; margin: 0;">
+┌─────────────────────────────────────────────────┐
+│  DEMO ENVIRONMENT                               │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  ┌──────────────────┐                          │
+│  │  Windows VM      │                          │
+│  │  demo-vm-prod    │                          │
+│  │  ┌────────────┐  │                          │
+│  │  │ C: OS Disk │  │                          │
+│  │  │ 30 GB      │  │                          │
+│  │  └────────────┘  │                          │
+│  │  ┌────────────┐  │                          │
+│  │  │ D: DataDsk │  │  Sample Files:           │
+│  │  │ 32 GB      │  │  ├─ budget.xlsx         │
+│  │  └────────────┘  │  ├─ reports.pdf         │
+│  │                  │  ├─ archive.zip         │
+│  │ Status: ✓ OK     │  └─ database.bak        │
+│  └──────────────────┘                          │
+│           ↓ (Backup Agent)                     │
+│           ↓ (Daily @ 11 PM UTC)                │
+│           ↓ (7-day retention)                  │
+│           ↓                                    │
+│  ┌──────────────────────────────────────────┐ │
+│  │ Recovery Services Vault                  │ │
+│  │ demo-vault-prod                          │ │
+│  │ ┌────────────────────────────────────┐   │ │
+│  │ │ Backup Storage (LRS)               │   │ │
+│  │ │ ├─ Today's backup (100% size)      │   │ │
+│  │ │ ├─ Yesterday's backup              │   │ │
+│  │ │ ├─ 2 days ago backup               │   │ │
+│  │ │ └─ ... (7 days total)              │   │ │
+│  │ │ Soft Delete: ✓ Enabled (14 days)   │   │ │
+│  │ │ Policies: ✓ Daily, 7-day retention │   │ │
+│  │ └────────────────────────────────────┘   │ │
+│  └──────────────────────────────────────────┘ │
+│           ↓ (Diagnostics)                     │
+│           ↓                                   │
+│  ┌──────────────────────────────────────────┐ │
+│  │ Log Analytics Workspace                  │ │
+│  │ demo-la-workspace                        │ │
+│  │ ├─ Backup job events                     │ │
+│  │ ├─ Restore operations                    │ │
+│  │ └─ Performance metrics                   │ │
+│  └──────────────────────────────────────────┘ │
+│                                                 │
+│  ┌──────────────────────────────────────────┐ │
+│  │ Azure Storage Account & File Share        │ │
+│  │ demostgacct / demo-shared-data           │ │
+│  │ ├─ Finance/budget.xlsx                   │ │
+│  │ ├─ Projects/archive.zip                  │ │
+│  │ └─ Archive/backup.bak                    │ │
+│  │ Status: ✓ Backed up daily                │ │
+│  └──────────────────────────────────────────┘ │
+│                                                 │
+└─────────────────────────────────────────────────┘
+</pre>
+            </div>
+        </div>
+
+        <!-- Deployment Timeline -->
+        <div id="deployment" class="section">
+            <div class="section-title">
+                <i class="bi bi-list-check"></i> Deployment Timeline
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>Phase 1: Preparation</h4>
+                    <p><strong>Duration:</strong> 5 minutes</p>
+                    <p style="color: #00bfff;">Set up Azure subscription, resource group, register providers</p>
+                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
+                        <span class="success-check">✓</span> Create resource group with tags
+                        <br><span class="success-check">✓</span> Register Microsoft.RecoveryServices provider
+                        <br><span class="success-check">✓</span> Register Microsoft.Compute provider
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Phase 2: Infrastructure Deployment</h4>
+                    <p><strong>Duration:</strong> 20 minutes</p>
+                    <p style="color: #00bfff;">Deploy VM, storage, vault, monitoring via Bicep</p>
+                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
+                        <span class="success-check">✓</span> Deploy Windows VM (B2s, 4GB RAM)
+                        <br><span class="success-check">✓</span> Create data disk (32 GB)
+                        <br><span class="success-check">✓</span> Deploy Recovery Services Vault
+                        <br><span class="success-check">✓</span> Create storage account & file share
+                        <br><span class="success-check">✓</span> Deploy Log Analytics workspace
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Phase 3: Demo Data Seeding</h4>
+                    <p><strong>Duration:</strong> 10 minutes</p>
+                    <p style="color: #00bfff;">Populate VM with sample files and data</p>
+                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
+                        <span class="success-check">✓</span> Create C:\DemoData\ directory
+                        <br><span class="success-check">✓</span> Add Excel, PDF, Word, ZIP files
+                        <br><span class="success-check">✓</span> Upload files to Azure file share
+                        <br><span class="success-check">✓</span> Create total ~70 MB of demo data
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Phase 4: Backup Job Trigger</h4>
+                    <p><strong>Duration:</strong> 5 minutes (automated)</p>
+                    <p style="color: #00bfff;">Execute first backup (don't wait for 11 PM schedule)</p>
+                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
+                        <span class="success-check">✓</span> Register VM with vault
+                        <br><span class="success-check">✓</span> Apply daily backup policy
+                        <br><span class="success-check">✓</span> Trigger on-demand backup
+                        <br><span class="success-check">✓</span> Monitor job progress in Log Analytics
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Phase 5: Demo & Restore Walkthrough</h4>
+                    <p><strong>Duration:</strong> 15 minutes</p>
+                    <p style="color: #00bfff;">Demonstrate restore scenarios to customer</p>
+                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
+                        <span class="success-check">✓</span> File-level restore demo (fastest)
+                        <br><span class="success-check">✓</span> Full disk restore demo
+                        <br><span class="success-check">✓</span> Show backup job history
+                        <br><span class="success-check">✓</span> Explain 7-day retention
+                    </p>
+                </div>
+
+                <div class="timeline-item">
+                    <h4>Phase 6: Cleanup & Cost Review</h4>
+                    <p><strong>Duration:</strong> 5 minutes</p>
+                    <p style="color: #00bfff;">Delete resources and calculate total cost</p>
+                    <div style="background: #1a1a2e; padding: 10px; border-left: 3px solid #00bfff; margin-top: 10px; border-radius: 3px;">
+                        <span class="success-check">✓</span> Delete resource group (all resources)
+                        <br><span class="success-check">✓</span> Verify cleanup complete
+                        <br><span class="success-check">✓</span> Document cost ($47/day × demo days)
+                        <br><span class="success-check">✓</span> Provide customer cost estimate
+                    </p>
+                </div>
+            </div>
+
+            <div style="background: rgba(16, 124, 16, 0.1); border: 2px solid #107c10; border-radius: 8px; padding: 20px; margin-top: 30px;">
+                <p style="margin: 0; color: #b0b0b0; font-size: 1.1em;">
+                    <i class="bi bi-check-circle-fill" style="color: #107c10; font-weight: bold; font-size: 1.3em;"></i>
+                    <strong> Total Time to Demo-Ready: 60 minutes</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Restore Workflows -->
+        <div id="restore" class="section">
+            <div class="section-title">
+                <i class="bi bi-arrow-counterclockwise"></i> Restore Workflows (Demo Scenarios)
+            </div>
+
+            <div class="workflow-card">
+                <h5><i class="bi bi-file-earmark"></i> Scenario 1: File-Level Restore (Fastest)</h5>
+                <p style="color: #b0b0b0;"><strong>Use Case:</strong> "I accidentally deleted important Excel files"</p>
+                <p style="color: #b0b0b0;"><strong>Time:</strong> 3-5 minutes</p>
+                <h6 style="color: #00bfff; margin-top: 15px;">Steps:</h6>
+                <ol class="step-list">
+                    <li>Open Recovery Services Vault → demo-vault-prod</li>
+                    <li>Select "Protected Items" → demo-vm-prod</li>
+                    <li>Click "Recover Files" (from recovery point)</li>
+                    <li>Choose backup date (e.g., "2 days ago")</li>
+                    <li>Select files to restore: budget.xlsx, reports.pdf</li>
+                    <li>Download restore .iso file</li>
+                    <li>Mount .iso on VM, copy files to C:\</li>
+                </ol>
+                <div class="demo-output">
+                    <div class="line info">$ az backup recoverypoint list --vault-name demo-vault-prod --container-name demo-vm-prod</div>
+                    <div class="line success">[</div>
+                    <div class="line success">  {</div>
+                    <div class="line success">    "name": "recoverypoint-2026-06-23",</div>
+                    <div class="line success">    "timestamp": "2026-06-23T23:00:00Z",</div>
+                    <div class="line success">    "size_in_gb": 45,</div>
+                    <div class="line success">    "status": "Healthy"</div>
+                    <div class="line success">  }</div>
+                    <div class="line success">]</div>
+                    <div class="line info">$ File restore initiated - .iso ready for download</div>
+                </div>
+                <p style="color: #107c10; margin-top: 15px;"><i class="bi bi-check-circle"></i> <strong>Talking Point:</strong> "File restore is what 80% of customers use. It's fast, granular, and requires no full VM recovery."</p>
+            </div>
+
+            <div class="workflow-card">
+                <h5><i class="bi bi-hdd"></i> Scenario 2: Full Disk Restore (Complete Recovery)</h5>
+                <p style="color: #b0b0b0;"><strong>Use Case:</strong> "Data disk corruption, need to restore entire disk"</p>
+                <p style="color: #b0b0b0;"><strong>Time:</strong> 5-10 minutes</p>
+                <h6 style="color: #00bfff; margin-top: 15px;">Steps:</h6>
+                <ol class="step-list">
+                    <li>Open Recovery Services Vault → demo-vault-prod</li>
+                    <li>Select "Protected Items" → demo-vm-prod (data disk)</li>
+                    <li>Click "Restore Disk"</li>
+                    <li>Choose target resource group (demo-test-rg)</li>
+                    <li>Select recovery point (most recent)</li>
+                    <li>Wait 5 minutes for managed disk creation</li>
+                    <li>Attach managed disk to test VM for verification</li>
+                </ol>
+                <div class="demo-output">
+                    <div class="line info">$ az backup restore restore-disks --vault-name demo-vault-prod --restore-mode OriginalStorageAccount</div>
+                    <div class="line warning">Restore in progress...</div>
+                    <div class="line warning">Creating managed disk from recovery point...</div>
+                    <div class="line success">Restore job completed successfully</div>
+                    <div class="line success">Managed disk: disk-demo-vm-prod-restored (32 GB)</div>
+                    <div class="line success">Location: rg-demo-backup-core</div>
+                    <div class="line info">$ Disk ready for attachment to test VM</div>
+                </div>
+                <p style="color: #107c10; margin-top: 15px;"><i class="bi bi-check-circle"></i> <strong>Talking Point:</strong> "Full disk restore lets you test recovery in a separate environment before attaching to production. This is the safest approach for critical workloads."</p>
+            </div>
+
+            <div class="workflow-card">
+                <h5><i class="bi bi-cloud-download"></i> Scenario 3: View Backup Files in File Share</h5>
+                <p style="color: #b0b0b0;"><strong>Use Case:</strong> "View files in backed-up file share, restore specific items"</p>
+                <p style="color: #b0b0b0;"><strong>Time:</strong> 2-3 minutes</p>
+                <h6 style="color: #00bfff; margin-top: 15px;">Files Available in Backup:</h6>
+                <div class="file-list">
+                    <div class="file-item">
+                        <div class="file-icon"><i class="bi bi-file-earmark-excel"></i></div>
+                        <div class="file-info">
+                            <div class="file-name">Q2-Budget-2026.xlsx</div>
+                            <div class="file-size">1.2 MB • Protected</div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon"><i class="bi bi-file-earmark-pdf"></i></div>
+                        <div class="file-info">
+                            <div class="file-name">Financial-Report-Q2.pdf</div>
+                            <div class="file-size">2.8 MB • Protected</div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon"><i class="bi bi-file-earmark-word"></i></div>
+                        <div class="file-info">
+                            <div class="file-name">Employee-Records.csv</div>
+                            <div class="file-size">512 KB • Protected</div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon"><i class="bi bi-file-earmark-zip"></i></div>
+                        <div class="file-info">
+                            <div class="file-name">Project-Archive-2025.zip</div>
+                            <div class="file-size">45 MB • Protected</div>
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        <div class="file-icon"><i class="bi bi-file-earmark"></i></div>
+                        <div class="file-info">
+                            <div class="file-name">Database-Backup-2026-06-23.bak</div>
+                            <div class="file-size">128 MB • Protected</div>
+                        </div>
+                    </div>
+                </div>
+                <p style="color: #107c10; margin-top: 15px;"><i class="bi bi-check-circle"></i> <strong>Talking Point:</strong> "Azure file shares are backed up daily with snapshots. You can restore any file from the last 7 days without impacting production."</p>
+            </div>
+        </div>
+
+        <!-- Cost Analysis -->
+        <div id="cost" class="section">
+            <div class="section-title">
+                <i class="bi bi-cash-coin"></i> Cost Analysis: Pattern A Demo
+            </div>
+
+            <div class="cost-table">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Size/Config</th>
+                            <th>24-Hour Cost</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="bi bi-cpu"></i> Virtual Machine (B2s)</td>
+                            <td>2 vCPU, 4 GB RAM</td>
+                            <td>$0.052/hour = $1.25/day</td>
+                            <td>Cost-optimized for demo</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-hdd"></i> OS Disk (30 GB)</td>
+                            <td>Standard HDD</td>
+                            <td>$0.036/day</td>
+                            <td>Managed disk charges</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-hdd"></i> Data Disk (32 GB)</td>
+                            <td>Standard HDD</td>
+                            <td>$0.038/day</td>
+                            <td>Managed disk charges</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-storage"></i> Storage Account</td>
+                            <td>LRS, General-Purpose</td>
+                            <td>$0.021/day</td>
+                            <td>File share included</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-shield-check"></i> File Share (100 GB)</td>
+                            <td>SMB 3.0</td>
+                            <td>$0.163/day</td>
+                            <td>$1.69/GB/month</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-shield-lock"></i> Recovery Services Vault</td>
+                            <td>10 GB backup, 7-day retention</td>
+                            <td>$0.10/day</td>
+                            <td>$0.03/GB/month (LRS)</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-graph-up"></i> Log Analytics</td>
+                            <td>30-day retention</td>
+                            <td>$0.005/day</td>
+                            <td>Minimal ingestion</td>
+                        </tr>
+                        <tr>
+                            <td><i class="bi bi-cloud"></i> Data Egress</td>
+                            <td>Minimal</td>
+                            <td>$0 (free tier)</td>
+                            <td>First 1 TB free</td>
+                        </tr>
+                        <tr class="cost-total">
+                            <td colspan="3"><strong>Total 24-Hour Demo Cost</strong></td>
+                            <td><strong>~$3.65/day</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="background: #2d2d3d; border: 2px solid #ffc107; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #ffc107; margin-bottom: 15px;"><i class="bi bi-exclamation-triangle"></i> Cost Optimization Tips</h5>
+                <ul style="color: #b0b0b0; margin: 0; padding-left: 25px;">
+                    <li><strong>Stop VM after demo</strong> — Pause compute costs while testing (~$30 saved per day)</li>
+                    <li><strong>Delete after demo</strong> — Don't leave resources running overnight</li>
+                    <li><strong>Use B-series for demos</strong> — Burstable VM size is 60% cheaper than D-series</li>
+                    <li><strong>7-day retention is enough</strong> — Don't increase retention (costs scale linearly)</li>
+                    <li><strong>LRS storage only</strong> — Demo doesn't need GRS (geo-redundancy costs 30% more)</li>
+                </ul>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-value">$47</div>
+                <div class="metric-label">Full Demo Cost (24 hrs)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$0.30/GB</div>
+                <div class="metric-label">Backup Storage (LRS)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">$0.03/GB</div>
+                <div class="metric-label">Vault Management</div>
+            </div>
+        </div>
+
+        <!-- Success Checklist -->
+        <div class="section">
+            <div class="section-title">
+                <i class="bi bi-clipboard2-check"></i> Demo Success Checklist
+            </div>
+            <div style="background: #2d2d3d; border: 2px solid #0078d4; border-radius: 8px; padding: 20px;">
+                <p style="margin-bottom: 20px; color: #b0b0b0;">Before running demo with customer, verify:</p>
+                <ul style="color: #b0b0b0; margin: 0; padding-left: 25px;">
+                    <li><span class="success-check">✓</span> VM deployed and accessible (RDP working)</li>
+                    <li><span class="success-check">✓</span> Demo data seeded (files visible on C:\ and file share)</li>
+                    <li><span class="success-check">✓</span> Backup job completed (recovery point exists in vault)</li>
+                    <li><span class="success-check">✓</span> Log Analytics receiving diagnostics (queries return data)</li>
+                    <li><span class="success-check">✓</span> File-level restore works (can download and restore files)</li>
+                    <li><span class="success-check">✓</span> Full disk restore works (managed disk created successfully)</li>
+                    <li><span class="success-check">✓</span> Soft delete explained (can demonstrate delete recovery window)</li>
+                    <li><span class="success-check">✓</span> Cost calculated and reviewed (manager approval for demo spend)</li>
+                    <li><span class="success-check">✓</span> Cleanup script tested (can delete all resources in < 5 min)</li>
+                    <li><span class="success-check">✓</span> Presenter notes reviewed and practiced (timing, transitions)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div id="faq" class="section">
+            <div class="section-title">
+                <i class="bi bi-question-circle"></i> Frequently Asked Questions
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> How long does the demo take?</h5>
+                <p>Pattern A typically takes 30-45 minutes from start (showing vault) to finish (restore complete). Total setup (including data seeding) takes 60 minutes.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> Can I run this demo without login?</h5>
+                <p>Yes! This demo page is pre-authenticated with the demo-user account. No login required — all functionality is available immediately.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> What if the backup job hasn't completed yet?</h5>
+                <p>You can use the sample output shown in this demo page. The actual demo scripts include fallback sample data if backup is still in progress.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> How much will this cost my company?</h5>
+                <p>Pattern A costs ~$47/day while all resources are running. You should delete resources immediately after the demo (don't leave running overnight). Total cost is typically $47-95 per demo.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> Can I customize the demo data?</h5>
+                <p>Yes! The seed-demo-data.ps1 script is fully customizable. You can add customer-specific files, different sizes, or business-relevant documents.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> What if I need a Linux VM instead of Windows?</h5>
+                <p>The Bicep template supports both. Just change the parameter deployWindowsVm=false to deploy Ubuntu 22.04 instead. Backup workflows are identical.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> Can I extend retention beyond 7 days?</h5>
+                <p>Yes, change the retentionDays parameter in the Bicep template. Note: retention costs scale linearly. 30 days = 4x cost, 90 days = 12x cost.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> What's the difference between soft delete and immutable vault lock?</h5>
+                <p><strong>Soft delete:</strong> Allows you to undelete accidentally deleted backups for 14 days. <strong>Immutable vault lock:</strong> Prevents vault deletion permanently (useful for compliance). Pattern A uses soft delete; Pattern B adds immutable lock.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> How do I escalate to customer questions about RBAC or enterprise governance?</h5>
+                <p>Use Pattern B for ransomware resilience / RBAC questions, or Pattern D for enterprise governance / cost allocation questions. Each pattern targets specific stakeholders.</p>
+            </div>
+
+            <div class="faq-item">
+                <h5><i class="bi bi-question-circle"></i> Can I run multiple demos concurrently?</h5>
+                <p>Yes, each demo uses a unique resource group (rg-demo-backup-core-{random}). You can run multiple instances in parallel in the same subscription.</p>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="section">
+            <div class="section-title">
+                <i class="bi bi-play-circle"></i> Getting Started with Pattern A
+            </div>
+            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 1: Review Documentation</h5>
+                <p style="color: #b0b0b0;">
+                    Read the full DEPLOYMENT_GUIDE.md to understand architecture, costs, and demo scenarios.
+                </p>
+            </div>
+            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 2: Validate Prerequisites</h5>
+                <p style="color: #b0b0b0;">
+                    Ensure you have Azure CLI, PowerShell 7+, and Bicep CLI installed. User needs Subscription Contributor role.
+                </p>
+            </div>
+            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 3: Run Deployment Script</h5>
+                <p style="color: #b0b0b0;">
+                    Execute ./scripts/deploy.ps1 to provision all resources. Total time: 60 minutes.
+                </p>
+            </div>
+            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 4: Run Demo Script</h5>
+                <p style="color: #b0b0b0;">
+                    Execute ./scripts/demo-restore-scenarios.ps1 to walk through all restore workflows (15 minutes).
+                </p>
+            </div>
+            <div style="background: #2d2d3d; border: 2px solid #00bfff; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                <h5 style="color: #00bfff; margin-bottom: 15px;">Step 5: Clean Up</h5>
+                <p style="color: #b0b0b0;">
+                    Execute ./scripts/cleanup-demo.ps1 to delete all resources and stop billing.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            <i class="bi bi-shield-check"></i> <strong>Azure Backup Pattern A: Core Demo Environment</strong>
+        </p>
+        <p style="margin-top: 10px;">
+            Repository: <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" style="color: #00bfff;">GitHub</a> | 
+            Live Demo: <a href="https://calm-ocean-0e8faaa10.4.azurestaticapps.net/azure-backup" target="_blank" style="color: #00bfff;">Landing Page</a>
+        </p>
+        <p style="margin-top: 15px; color: #808080; font-size: 0.9em;">
+            Last Updated: 2026-06-23 | Status: Production-Ready Demo | Documentation Version 1.0
+        </p>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="bi bi-chevron-up"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll to top button
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Update active nav link based on scroll position
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('[id]').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
