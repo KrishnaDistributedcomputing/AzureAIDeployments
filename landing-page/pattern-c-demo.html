@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern C: Modern Workloads — Azure Backup Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --azure-blue: #0078d4;
+            --light-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-dark: #333333;
+            --border-light: #e0e0e0;
+            --success-green: #107c10;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #107c10 0%, #1a9e2e 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 0;
+            opacity: 0.95;
+        }
+
+        .navbar-light {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .section-title {
+            color: var(--azure-blue);
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--azure-blue);
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f9f9f9;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--success-green);
+            font-weight: 600;
+        }
+
+        .badge-cloud {
+            background-color: var(--success-green);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .mermaid {
+            background-color: #fafafa;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
+            border-left: 4px solid var(--success-green);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .feature-box strong {
+            color: var(--success-green);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .vault-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .vault-card {
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .vault-card.rsv {
+            border-left: 4px solid #0078d4;
+        }
+
+        .vault-card.backup {
+            border-left: 4px solid #107c10;
+        }
+
+        .vault-card h5 {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .vault-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .vault-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .vault-card li:last-child {
+            border-bottom: none;
+        }
+
+        .vault-card li:before {
+            content: "✓ ";
+            color: var(--success-green);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .demo-step {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--success-green);
+        }
+
+        .demo-step h5 {
+            color: var(--success-green);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f5f5f5;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .alert-success {
+            background-color: #e6f6e6;
+            border-left: 4px solid var(--success-green);
+            color: #2d5016;
+        }
+
+        .table-light {
+            background-color: var(--card-bg);
+        }
+
+        .table-light thead {
+            background-color: #f9f9f9;
+        }
+
+        .table-light th {
+            color: var(--success-green);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .workload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .workload-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .workload-item strong {
+            color: var(--success-green);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 0;
+        }
+
+        .faq-question {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--success-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .faq-question:hover {
+            background-color: #f0f0f0;
+        }
+
+        .faq-answer {
+            padding: 15px;
+            display: none;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid var(--border-light);
+            padding: 30px 0;
+            margin-top: 60px;
+            color: #666;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-green);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .vault-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-cloud-check"></i> Azure Backup Patterns
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1><i class="bi bi-cloud-upload"></i> Pattern C: Modern Workloads</h1>
+            <p>Vault Differentiation, Cloud-Native Architectures & Workload Placement</p>
+            <span class="badge-cloud"><i class="bi bi-lightning"></i> Cloud-Native First Pattern</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- Overview Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-info-circle"></i> Pattern Overview</h2>
+            <p class="lead">Pattern C demonstrates how to select the right vault type for different workload families. Recovery Services Vault (RSV) for traditional IaaS, Backup Vault for cloud-native.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <strong>🎯 Target Audience</strong>
+                        Platform teams, DevOps engineers, cloud architects, CCoE (Cloud Center of Excellence)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <strong>⏱️ Deployment Time</strong>
+                        30-35 minutes (varies based on optional workloads)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vault Comparison Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-diagram-3"></i> Vault Differentiation Model</h2>
+            <p>Pattern C demonstrates when to use each vault type. The choice depends on workload characteristics, not personal preference.</p>
+
+            <div class="mermaid">
+                graph LR
+                    subgraph RSV["Recovery Services Vault<br/>(Traditional IaaS)"]
+                        VM["Azure VMs"]
+                        FileShare["Azure Files"]
+                        SQL["SQL Server"]
+                        OnPrem["On-Premises"]
+                    end
+                    
+                    subgraph BV["Backup Vault<br/>(Cloud-Native)"]
+                        Disk["Managed Disks"]
+                        Blob["Blob Storage"]
+                        AKS["AKS Clusters"]
+                        App["App Services"]
+                    end
+                    
+                    RSV -->|File/Disk/Full| RestoreRSV["RSV Restore Options"]
+                    BV -->|Snapshot/PITR| RestoreBV["Backup Vault Restore Options"]
+                    
+                    style RSV fill:#e7f3ff
+                    style BV fill:#e6f6e6
+            </div>
+
+            <div class="vault-comparison">
+                <div class="vault-card rsv">
+                    <h5><i class="bi bi-box"></i> Recovery Services Vault (RSV)</h5>
+                    <p><strong>Best For:</strong> Traditional IaaS workloads</p>
+                    <ul>
+                        <li>Azure VMs (Windows/Linux)</li>
+                        <li>Azure Files (SMB/NFS)</li>
+                        <li>SQL Server in VM</li>
+                        <li>SAP HANA</li>
+                        <li>On-Premises Servers</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #666;">
+                        <strong>Retention:</strong> 1-9999 days<br>
+                        <strong>Redundancy:</strong> LRS, GRS, RA-GRS<br>
+                        <strong>Restore:</strong> File, Disk, Full VM
+                    </p>
+                </div>
+
+                <div class="vault-card backup">
+                    <h5><i class="bi bi-cloud-upload"></i> Backup Vault (New)</h5>
+                    <p><strong>Best For:</strong> Cloud-native workloads</p>
+                    <ul>
+                        <li>Managed Disks (Premium/Standard)</li>
+                        <li>Azure Blob (Operational backup)</li>
+                        <li>AKS Clusters</li>
+                        <li>App Services (preview)</li>
+                        <li>Database backups</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #666;">
+                        <strong>Retention:</strong> SLA-driven (1-35 days)<br>
+                        <strong>Redundancy:</strong> LRS (immutable)<br>
+                        <strong>Restore:</strong> Granular snapshots
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Workload Placement Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-collection"></i> Workload Placement Matrix</h2>
+            <p>Use this matrix to decide which vault to use for each workload type:</p>
+
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>Workload</th>
+                        <th>Vault Type</th>
+                        <th>Why</th>
+                        <th>Restore Strategy</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Azure VM</strong></td>
+                        <td><span class="badge bg-info">RSV</span></td>
+                        <td>Flexible restore options (file/disk/full VM)</td>
+                        <td>File-level, Disk, Full VM</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Azure Files</strong></td>
+                        <td><span class="badge bg-info">RSV</span></td>
+                        <td>Snapshot-based point-in-time recovery</td>
+                        <td>Item-level or full share</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SQL Server in VM</strong></td>
+                        <td><span class="badge bg-info">RSV</span></td>
+                        <td>Transaction log chain, crash-consistent</td>
+                        <td>Database-aware restore</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Managed Disk</strong></td>
+                        <td><span class="badge bg-success">Backup Vault</span></td>
+                        <td>Cloud-first, snapshot-based, cheaper</td>
+                        <td>Disk snapshot restore</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Azure Blob</strong></td>
+                        <td><span class="badge bg-success">Backup Vault</span></td>
+                        <td>Continuous operational backup, PITR</td>
+                        <td>Block blob version restore</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AKS Cluster</strong></td>
+                        <td><span class="badge bg-success">Backup Vault</span></td>
+                        <td>Etcd + PV backup, cluster-level restore</td>
+                        <td>Cluster-level restore</td>
+                    </tr>
+                    <tr>
+                        <td><strong>App Service</strong></td>
+                        <td><span class="badge bg-success">Backup Vault</span></td>
+                        <td>Code + config backup (preview)</td>
+                        <td>Application artifact restore</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Key Features Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-star"></i> Key Differentiators</h2>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">💰 Cost Optimization</div>
+                        <div class="card-body">
+                            <p>Backup Vault is cheaper for short-retention cloud-native workloads. Managed disk snapshots cost less than RSV monthly charges.</p>
+                            <p><strong>Example:</strong> 500GB disk backup: Backup Vault ~$15/month vs RSV ~$50/month</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">⚡ Simplicity</div>
+                        <div class="card-body">
+                            <p>Backup Vault is purpose-built for cloud-native. Simpler UI, fewer configuration options, SLA-driven retention.</p>
+                            <p><strong>Result:</strong> Faster onboarding, fewer operational decisions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🔄 Flexibility</div>
+                        <div class="card-body">
+                            <p>Recovery Services Vault supports 1-9999 day retention. Backup Vault enforces SLA-based retention (1-35 days).</p>
+                            <p><strong>Tradeoff:</strong> Less flexibility, but better compliance alignment</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🎯 Future-Proof</div>
+                        <div class="card-body">
+                            <p>Backup Vault is Microsoft's strategic direction for cloud backup. New features and workloads prioritize Backup Vault.</p>
+                            <p><strong>Strategy:</strong> Adopt Backup Vault early for greenfield projects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-diagram-2"></i> Architecture</h2>
+            <p>Pattern C deploys both vault types to demonstrate their unique capabilities:</p>
+
+            <div class="mermaid">
+                graph TB
+                    subgraph Workload["Workload Resource Group"]
+                        VM["Azure VM<br/>(IaaS)"]
+                        Disk["Managed Disk<br/>(Premium SSD)"]
+                        Blob["Blob Storage<br/>(Data lake)"]
+                        AKS["AKS Cluster<br/>(Microservices)"]
+                    end
+                    
+                    subgraph Protection["Protection Resource Group"]
+                        RSV["Recovery Services Vault<br/>↓<br/>VM Backups"]
+                        BV["Backup Vault<br/>↓<br/>Disk/Blob/AKS"]
+                        Monitor["Log Analytics<br/>Workspace"]
+                    end
+                    
+                    VM -->|Daily 11pm| RSV
+                    Disk -->|Daily snapshot| BV
+                    Blob -->|Continuous PITR| BV
+                    AKS -->|Weekly| BV
+                    
+                    RSV -->|Logs| Monitor
+                    BV -->|Logs| Monitor
+                    
+                    style Workload fill:#f0f7ff
+                    style Protection fill:#e6f6e6
+                    style RSV fill:#0078d4,stroke:#333,color:#fff
+                    style BV fill:#107c10,stroke:#333,color:#fff
+            </div>
+        </section>
+
+        <!-- Demo Scenarios Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Demo Scenarios</h2>
+
+            <div class="demo-step">
+                <h5>Scenario 1: Vault Comparison & Selection (5 minutes)</h5>
+                <p><strong>Objective:</strong> Show vault features and help select appropriate vault for workload</p>
+                <div class="code-block">
+# 1. Show Recovery Services Vault features
+az backup vault show -g protection-rg -n rsv-backup-modern
+
+# 2. Show Backup Vault features
+az dataprotection backup-vault show -g protection-rg -n bkpvault-backup-modern
+
+# 3. Present workload placement decision matrix
+echo "Use RSV for: VMs, Files, SQL Server, On-Premises
+Use Backup Vault for: Managed Disks, Blob, AKS, App Services"
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"RSV is mature and flexible, Backup Vault is cloud-native and simpler"</li>
+                    <li>"Disk snapshots are cheaper than RSV monthly charges"</li>
+                    <li>"Choose based on workload type, not personal preference"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 2: Managed Disk Backup & Restore (10 minutes)</h5>
+                <p><strong>Objective:</strong> Show snapshot-based disk backup and restore</p>
+                <div class="code-block">
+# 1. Enable backup for managed disk
+az dataprotection backup-instance create \
+  --datasource-id /subscriptions/.../disks/managed-disk \
+  --backup-vault-name bkpvault-backup-modern \
+  -g protection-rg
+
+# 2. Trigger immediate snapshot
+az dataprotection backup-instance adhoc-backup \
+  --backup-instance-name disk-backup \
+  --backup-vault-name bkpvault-backup-modern
+
+# 3. List created snapshots
+az snapshot list -g protection-rg \
+  --query "[].{name:name, size:diskSizeGb}"
+
+# 4. Restore from snapshot (create disk)
+az disk create --name restored-disk \
+  -g workload-rg --source /subscriptions/.../snapshots/backup-snapshot
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Snapshots are instant and immutable"</li>
+                    <li>"No monthly vault charge for disk backups"</li>
+                    <li>"Restore is faster than RSV disk recovery"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 3: Blob Operational Backup & PITR (8 minutes)</h5>
+                <p><strong>Objective:</strong> Show continuous point-in-time restore (PITR)</p>
+                <div class="code-block">
+# 1. Enable operational backup for blobs
+az dataprotection backup-policy create \
+  --policy-name blob-operational \
+  --datasource-type AzureBlob \
+  --backup-vault-name bkpvault-backup-modern
+
+# 2. Upload files
+az storage blob upload -c backup-demo \
+  -n "file-$(date +%s).txt" --account-name storage
+
+# 3. Delete a file (accidental deletion)
+az storage blob delete -c backup-demo \
+  -n "file-*.txt" --account-name storage
+
+# 4. Restore to point-in-time (before deletion)
+az dataprotection backup-instance restore trigger \
+  --restore-to-timestamp "2026-06-23T14:30:00Z"
+
+# 5. Verify file restored
+az storage blob list -c backup-demo --account-name storage
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Blob backup is continuous, no job scheduling needed"</li>
+                    <li>"7-day PITR window (shorter, cheaper than RSV)"</li>
+                    <li>"Perfect for data lakes and unstructured data"</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Workload Coverage Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-pie-chart"></i> Workload Coverage & Cost Tracking</h2>
+            <p>Log Analytics queries show protected workloads and cost breakdown by vault type:</p>
+
+            <div class="workload-grid">
+                <div class="workload-item">
+                    <strong>Protected Workloads by Vault</strong>
+                    <p>
+                        RSV: 3 VMs + 2 File Shares<br>
+                        Backup Vault: 5 Disks + 1 Blob Storage<br>
+                        <span style="color: var(--success-green); font-weight: bold;">Total: 11 protected resources</span>
+                    </p>
+                </div>
+
+                <div class="workload-item">
+                    <strong>Storage Redundancy Distribution</strong>
+                    <p>
+                        RSV GRS: 3 items<br>
+                        RSV LRS: 2 items<br>
+                        Backup Vault LRS: 6 items<br>
+                        <span style="color: var(--success-green); font-weight: bold;">LRS saves 30% vs GRS</span>
+                    </p>
+                </div>
+
+                <div class="workload-item">
+                    <strong>Restore Performance (SLA)</strong>
+                    <p>
+                        VM File Restore: 3-5 min (P95)<br>
+                        Disk Restore: 8-12 min (P95)<br>
+                        Blob PITR: < 1 min (instant)<br>
+                        <span style="color: var(--success-green); font-weight: bold;">All meet 4-hour SLA</span>
+                    </p>
+                </div>
+
+                <div class="workload-item">
+                    <strong>Monthly Cost Estimate</strong>
+                    <p>
+                        RSV charges: ~$50/month<br>
+                        Backup Vault charges: ~$18/month<br>
+                        Storage (Azure Files): $5/month<br>
+                        <span style="color: var(--success-green); font-weight: bold;">Total: ~$73/month</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="alert alert-success">
+                <strong><i class="bi bi-info-circle"></i> Cost Insight:</strong> By using Backup Vault for cloud-native workloads, you save 30-50% vs. using RSV for everything.
+            </div>
+        </section>
+
+        <!-- Deployment Checklist -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-check-square"></i> Pre-Deployment Checklist</h2>
+            <p>Verify all items before starting the demo:</p>
+
+            <table class="table table-light">
+                <tbody>
+                    <tr>
+                        <td><strong>✓</strong> RSV deployed</td>
+                        <td><strong>✓</strong> Backup Vault deployed</td>
+                        <td><strong>✓</strong> Log Analytics connected</td>
+                    </tr>
+                    <tr>
+                        <td><strong>✓</strong> Managed disk created</td>
+                        <td><strong>✓</strong> Blob storage created</td>
+                        <td><strong>✓</strong> Backup policies active</td>
+                    </tr>
+                    <tr>
+                        <td><strong>✓</strong> Recovery points visible</td>
+                        <td><strong>✓</strong> KQL queries saved</td>
+                        <td><strong>✓</strong> No backup errors</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Why are there two vault types?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>RSV was built for traditional IaaS workloads with flexible retention. Backup Vault is purpose-built for cloud-native with SLA-driven retention and lower cost.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I use Backup Vault for VMs?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Backup Vault doesn't currently support VM backup. Use RSV for VMs, Backup Vault for disks/blobs/AKS/app services.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What's the restore time difference?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>RSV file restore: 3-5 minutes, Disk restore: 5-15 minutes, Backup Vault disk snapshot restore: < 1 minute, Blob PITR: < 1 minute</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is Backup Vault production-ready?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, Backup Vault is generally available (GA) for Managed Disks, Blob, and AKS. App Service backup is in preview.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I migrate from RSV to Backup Vault?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>For managed disks, create new backup policies in Backup Vault. For blob storage, enable operational backup and disable RSV backup.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-arrow-right"></i> Next Steps</h2>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5>1. Review Workload Placement</h5>
+                    <p>Audit your current workloads and map each to the appropriate vault type using the placement matrix</p>
+
+                    <h5>2. Deploy Pattern C</h5>
+                    <p>Follow <code>INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</code> to deploy both vaults in your subscription</p>
+
+                    <h5>3. Run Demo Scenarios</h5>
+                    <p>Execute the 3 scenarios to showcase vault differentiation and cost optimization</p>
+
+                    <h5>4. Plan Migration</h5>
+                    <p>Identify existing workloads in RSV that can move to Backup Vault for cost savings</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6>Documentation</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none">SPEC.md</a></li>
+                        <li><a href="#" class="text-decoration-none">Infrastructure Guide</a></li>
+                        <li><a href="#" class="text-decoration-none">KQL Queries</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Patterns</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/backup-pattern-a-demo" class="text-decoration-none">Pattern A: Core Demo</a></li>
+                        <li><a href="#" class="text-decoration-none">Pattern B: Ransomware Resilience</a></li>
+                        <li><a href="#" class="text-decoration-none">Pattern D: Enterprise</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/issues" class="text-decoration-none">GitHub Issues</a></li>
+                        <li><a href="mailto:backup-team@company.com" class="text-decoration-none">Email Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">© 2026 Azure Backup Patterns. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="bi bi-chevron-up"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Scroll to Top Button
+        const scrollToTop = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            scrollToTop.classList.toggle('show', window.scrollY > 300);
+        });
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                document.querySelectorAll('.faq-answer').forEach(a => {
+                    if (a !== answer) a.classList.remove('show');
+                });
+                answer.classList.toggle('show');
+            });
+        });
+    </script>
+</body>
+</html>

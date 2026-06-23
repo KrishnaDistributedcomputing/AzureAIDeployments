@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Top 3 Patterns &mdash; Azure AI Deployment Patterns</title>
+  <meta name="description" content="Our top 3 recommended Azure AI deployment patterns: Centralized Hub AI, Hybrid Central-Spoke, and Greenfield Azure Deployment."/>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+  <style>
+    /* === Foundation === */
+    :root{--accent:#0078d4;--accent-dark:#50e6ff;--glass-bg:rgba(255,255,255,.72);--glass-border:rgba(255,255,255,.25)}
+    [data-bs-theme="dark"]{--accent:#50e6ff;--glass-bg:rgba(33,37,41,.72);--glass-border:rgba(255,255,255,.08)}
+    html{scroll-behavior:smooth}
+    body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;letter-spacing:.01em}
+
+    /* === Hero with animated gradient === */
+    .hero-top3{min-height:320px;background:linear-gradient(-45deg,#6610f2,#0d6efd,#0dcaf0,#198754);background-size:300% 300%;animation:heroShift 12s ease infinite;position:relative;overflow:hidden}
+    .hero-top3::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(255,255,255,.12) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(255,255,255,.08) 0%,transparent 40%);pointer-events:none}
+    [data-bs-theme="dark"] .hero-top3{background:linear-gradient(-45deg,#3d0a91,#052c65,#055160,#0a3622);background-size:300% 300%}
+    @keyframes heroShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    /* === Glassmorphism Navbar + Page Nav === */
+    .navbar{backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);background:var(--glass-bg) !important;border-bottom:1px solid var(--glass-border)}
+    .page-nav{position:sticky;top:56px;z-index:1040;backdrop-filter:blur(16px) saturate(180%);-webkit-backdrop-filter:blur(16px) saturate(180%);background:var(--glass-bg) !important;border-bottom:1px solid var(--glass-border)}
+    .page-nav .nav-link{font-size:.85rem;padding:.5rem .85rem;white-space:nowrap;color:var(--bs-body-color);opacity:.65;transition:all .3s ease;border-bottom:2.5px solid transparent;border-radius:0;font-weight:500}
+    .page-nav .nav-link:hover{opacity:1;color:var(--bs-primary);transform:translateY(-1px)}
+    .page-nav .nav-link.active{opacity:1;color:var(--bs-primary);border-bottom-color:var(--bs-primary);font-weight:600}
+    .page-nav .nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+    .page-nav .nav::-webkit-scrollbar{display:none}
+
+    /* === Pattern Sections === */
+    .pattern-section{border-left:5px solid var(--section-color,var(--accent));border-radius:0 1rem 1rem 0;transition:box-shadow .3s ease,transform .2s ease}
+    .pattern-section:hover{box-shadow:0 8px 32px rgba(0,0,0,.1) !important;transform:translateY(-2px)}
+    [data-bs-theme="dark"] .pattern-section:hover{box-shadow:0 8px 32px rgba(0,0,0,.35) !important}
+
+    /* === Cards with hover lift === */
+    .stat-card{border:none;border-radius:1rem;transition:transform .25s ease,box-shadow .25s ease}
+    .stat-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,.08)}
+    [data-bs-theme="dark"] .stat-card:hover{box-shadow:0 12px 24px rgba(0,0,0,.3)}
+    .card{transition:transform .25s ease,box-shadow .25s ease;border-radius:.75rem}
+    .card:hover{transform:translateY(-2px)}
+    .service-card:hover,.phase-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.1)}
+
+    /* === Rank Badges with glow === */
+    .rank-badge{width:52px;height:52px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-size:1.4rem;font-weight:800;box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .2s ease}
+    .rank-badge:hover{transform:scale(1.1)}
+
+    /* === Comparison Table polish === */
+    .compare-table{border-radius:.75rem;overflow:hidden}
+    .compare-table th{position:sticky;top:0;z-index:2;background:var(--bs-body-bg)}
+    .compare-table tbody tr{transition:background .2s ease}
+    .compare-table tbody tr:hover{background:rgba(13,110,253,.04)}
+    [data-bs-theme="dark"] .compare-table tbody tr:hover{background:rgba(80,230,255,.04)}
+
+    /* === Scroll Reveal Animation === */
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.2s}
+    .reveal-delay-3{transition-delay:.3s}
+
+    /* === Section Headings === */
+    section h2{position:relative}
+    section h2 i{transition:transform .3s ease}
+    section h2:hover i{transform:scale(1.15)}
+
+    /* === Diagrams === */
+    .mermaid{background:transparent}
+    .mermaid svg{min-height:300px;shape-rendering:crispEdges}
+    .mermaid svg text{text-rendering:optimizeLegibility !important}
+    .mermaid .node rect,.mermaid .node circle,.mermaid .node polygon{stroke-width:2px !important}
+    .mermaid .edgePath path{stroke-width:2px !important}
+    .diagram-wrapper{position:relative;overflow-x:auto;overflow-y:hidden;padding:1.5rem;background:var(--bs-body-bg);border-radius:12px;border:1px solid var(--glass-border)}
+    .diagram-wrapper .mermaid svg{font-size:16px !important}
+    .diagram-wrapper .mermaid .nodeLabel{font-size:14px !important;font-weight:600 !important}
+    .diagram-wrapper .mermaid .edgeLabel{font-size:12px !important;font-weight:600 !important;background-color:rgba(255,255,255,.92) !important;padding:3px 8px !important;border-radius:6px !important;border:1px solid rgba(0,0,0,.1) !important}
+    .diagram-wrapper .mermaid .cluster-label .nodeLabel{font-size:15px !important;font-weight:700 !important}
+    [data-bs-theme="dark"] .diagram-wrapper .mermaid .edgeLabel{background-color:rgba(33,37,41,.92) !important;color:#dee2e6 !important;border-color:rgba(255,255,255,.15) !important}
+    .btn-enlarge{position:absolute;top:.75rem;right:.75rem;z-index:10;opacity:.6;transition:all .25s ease}
+    .btn-enlarge:hover{opacity:1;transform:scale(1.05)}
+    .diagram-fullscreen{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:2rem;cursor:zoom-out;animation:fadeIn .3s ease}
+    .diagram-fullscreen .diagram-inner{background:var(--bs-body-bg);border-radius:1rem;padding:2rem;max-width:95vw;max-height:92vh;overflow:auto;position:relative;cursor:default;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+    .diagram-fullscreen .diagram-inner svg{min-height:auto;width:100%;height:auto}
+    .diagram-fullscreen .btn-close-fs{position:absolute;top:1rem;right:1rem;z-index:1}
+
+    /* === Back to Top === */
+    #backToTop{position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none;width:44px;height:44px;border-radius:50%;padding:0;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s ease,box-shadow .2s ease}
+    #backToTop:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+
+    /* === Anchor Links === */
+    .anchor-link{opacity:0;transition:opacity .25s ease;text-decoration:none;margin-left:.4rem;font-size:.75em;color:var(--bs-primary)}
+    h2:hover .anchor-link,h3:hover .anchor-link,h4:hover .anchor-link{opacity:.7}
+    .anchor-link:hover{opacity:1 !important}
+
+    /* === Alert polish === */
+    .alert{border-radius:.75rem}
+
+    /* === Footer === */
+    footer{border-top:1px solid var(--glass-border)}
+
+    /* === Subtle divider between sections === */
+    section+section{border-top:1px solid rgba(0,0,0,.04)}
+    [data-bs-theme="dark"] section+section{border-top:1px solid rgba(255,255,255,.04)}
+
+    /* === Utility animations === */
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(13,110,253,.25)}50%{box-shadow:0 0 0 8px rgba(13,110,253,0)}}
+
+    /* === Badge improvements === */
+    .badge{letter-spacing:.02em}
+
+    /* === Case study cards === */
+    .border-start.border-4{transition:border-color .3s ease,box-shadow .3s ease}
+    .border-start.border-4:hover{box-shadow:0 6px 20px rgba(0,0,0,.08)}
+    [data-bs-theme="dark"] .border-start.border-4:hover{box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+    /* === Decision guide card highlight on hover === */
+    #decision .card{transition:transform .3s ease,box-shadow .3s ease}
+    #decision .card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.12)}
+    [data-bs-theme="dark"] #decision .card:hover{box-shadow:0 16px 40px rgba(0,0,0,.4)}
+
+    /* === ROI metric cards === */
+    #business-value .display-6{transition:transform .3s ease}
+    #business-value .card:hover .display-6{transform:scale(1.08)}
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="index.html"><i class="bi bi-grid-3x3-gap-fill me-1 text-primary"></i>AI Patterns</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-info active" href="top3.html"><i class="bi bi-trophy-fill me-1"></i>Top 3</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-success" href="landing-zone.html"><i class="bi bi-building-fill-gear me-1"></i>Landing Zone</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="csi-education.html" style="color:#6f42c1"><i class="bi bi-mortarboard-fill me-1"></i>Education AI</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="Temporal_pattern_June_2026.html" style="color:#444ce7"><i class="bi bi-infinity me-1"></i>Temporal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold text-warning" href="help.html"><i class="bi bi-question-circle-fill me-1"></i>Help</a>
+          </li>
+        </ul>
+        <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" title="Toggle dark mode">
+          <i class="bi bi-moon-stars-fill"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-top3 text-white d-flex align-items-center">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <p class="text-uppercase fw-semibold mb-2 small" style="letter-spacing:.15em;opacity:.8"><i class="bi bi-stars me-1"></i>Curated by Azure Architects</p>
+          <h1 class="display-4 fw-bold mb-3"><i class="bi bi-trophy-fill me-3"></i>Top 3 Recommended Patterns</h1>
+          <p class="lead mb-4" style="opacity:.92">Our most recommended Azure AI deployment architectures for enterprises. From shared platforms to full greenfield builds &mdash; these three patterns cover the majority of real-world scenarios.</p>
+          <div class="d-flex gap-2 flex-wrap">
+            <a href="#compare" class="btn btn-light btn-lg fw-semibold px-4"><i class="bi bi-table me-2"></i>Compare Patterns</a>
+            <a href="#decision" class="btn btn-outline-light btn-lg fw-semibold px-4"><i class="bi bi-signpost-split-fill me-2"></i>Decision Guide</a>
+          </div>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+          <div class="d-inline-flex flex-column gap-2">
+            <span class="badge bg-white bg-opacity-25 fs-6 px-3 py-2" style="backdrop-filter:blur(8px)"><i class="bi bi-star-fill text-warning me-1"></i>3 Enterprise-Ready Patterns</span>
+            <span class="badge bg-white bg-opacity-25 fs-6 px-3 py-2" style="backdrop-filter:blur(8px)"><i class="bi bi-shield-check me-1"></i>Private &amp; Secure by Default</span>
+            <span class="badge bg-white bg-opacity-25 fs-6 px-3 py-2" style="backdrop-filter:blur(8px)"><i class="bi bi-file-earmark-code me-1"></i>Bicep IaC Templates</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page Navigation -->
+  <div class="page-nav bg-body-tertiary border-bottom shadow-sm">
+    <div class="container">
+      <ul class="nav nav-pills justify-content-center py-1">
+        <li class="nav-item"><a class="nav-link" href="#compare"><i class="bi bi-table me-1"></i>Comparison</a></li>
+        <li class="nav-item"><a class="nav-link" href="#centralized-hub"><i class="bi bi-diagram-3-fill me-1"></i>Centralized Hub</a></li>
+        <li class="nav-item"><a class="nav-link" href="#hybrid-spoke"><i class="bi bi-share-fill me-1"></i>Hybrid Spoke</a></li>
+        <li class="nav-item"><a class="nav-link" href="#greenfield"><i class="bi bi-rocket-takeoff-fill me-1"></i>Greenfield</a></li>
+        <li class="nav-item"><a class="nav-link" href="#business-value"><i class="bi bi-graph-up-arrow me-1"></i>Business Value</a></li>
+        <li class="nav-item"><a class="nav-link" href="#case-studies"><i class="bi bi-journal-richtext me-1"></i>Case Studies</a></li>
+        <li class="nav-item"><a class="nav-link" href="#iq-engines"><i class="bi bi-grid-3x3-gap-fill me-1"></i>IQ Engines</a></li>
+        <li class="nav-item"><a class="nav-link" href="#decision"><i class="bi bi-signpost-split-fill me-1"></i>Decision Guide</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Quick Comparison Table -->
+  <section class="bg-body-secondary py-4" id="compare">
+    <div class="container">
+      <h2 class="fw-bold mb-4 text-center" id="compare-heading"><i class="bi bi-table me-2"></i>Side-by-Side Comparison<a href="#compare" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle compare-table shadow-sm rounded overflow-hidden">
+          <thead class="table-dark">
+            <tr>
+              <th>Attribute</th>
+              <th class="text-center"><span class="rank-badge bg-primary text-white">1</span><br/>Centralized Hub AI</th>
+              <th class="text-center"><span class="rank-badge bg-success text-white">2</span><br/>Hybrid Central-Spoke</th>
+              <th class="text-center"><span class="rank-badge bg-info text-white">3</span><br/>Greenfield Azure</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fw-semibold">Pattern</td>
+              <td class="text-center">1</td>
+              <td class="text-center">3</td>
+              <td class="text-center">10</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Azure Services</td>
+              <td class="text-center"><span class="badge bg-primary-subtle text-primary-emphasis">13</span></td>
+              <td class="text-center"><span class="badge bg-success-subtle text-success-emphasis">15</span></td>
+              <td class="text-center"><span class="badge bg-info-subtle text-info-emphasis">14</span></td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Monthly Cost Est.*</td>
+              <td class="text-center fw-bold text-success">$10,000 &ndash; $15,000</td>
+              <td class="text-center fw-bold">$15,000 &ndash; $22,000</td>
+              <td class="text-center fw-bold">$18,000 &ndash; $28,000</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Composite SLA</td>
+              <td class="text-center">99.9%</td>
+              <td class="text-center">99.9%</td>
+              <td class="text-center">99.95%</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Network</td>
+              <td class="text-center"><span class="badge bg-danger">Private</span></td>
+              <td class="text-center"><span class="badge bg-danger">Private</span></td>
+              <td class="text-center"><span class="badge bg-danger">Private + Firewall</span></td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Best For</td>
+              <td class="text-center"><small>Shared AI platform across BUs</small></td>
+              <td class="text-center"><small>Per-team RAG with shared LLM</small></td>
+              <td class="text-center"><small>New-to-Azure, full CAF build</small></td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">OpenAI TPM</td>
+              <td class="text-center">30K</td>
+              <td class="text-center">50K</td>
+              <td class="text-center">30K+</td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Complexity</td>
+              <td class="text-center"><span class="badge bg-success">Medium</span></td>
+              <td class="text-center"><span class="badge bg-warning text-dark">Medium-High</span></td>
+              <td class="text-center"><span class="badge bg-danger">High</span></td>
+            </tr>
+            <tr>
+              <td class="fw-semibold">Detail Page</td>
+              <td class="text-center"><a href="pattern1.html" class="btn btn-sm btn-outline-primary">View Pattern 1</a></td>
+              <td class="text-center"><a href="pattern3.html" class="btn btn-sm btn-outline-success">View Pattern 3</a></td>
+              <td class="text-center"><a href="pattern10.html" class="btn btn-sm btn-outline-info">View Pattern 10</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert alert-warning bg-warning-subtle border-warning mt-3 mb-0 py-2 px-3 small" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i><strong>* Pricing Disclaimer:</strong> All estimates start from a <strong>$10,000&ndash;$15,000/mo base</strong> (Azure OpenAI, AI Search, AML, networking, monitoring, Key Vault, and platform operations). Incremental costs include: <strong>+$5,000/spoke</strong> for Hybrid patterns (per-spoke AI Search, storage, compute, Private Endpoints), <strong>+$8,000&ndash;$13,000</strong> for Greenfield CAF infrastructure (Firewall, Bastion, VPN Gateway, SQL MI, Defender for Cloud, Policy governance). Costs are approximate based on US East region list pricing as of May 2026. Actual costs will vary based on Azure region, reserved instance commitments, Enterprise Agreement discounts, consumption volume, and selected SKU tiers. Use the <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank" rel="noopener" class="alert-link">Azure Pricing Calculator</a> for your specific configuration.
+      </div>
+    </div>
+  </section>
+
+  <!-- Pattern 1: Centralized Hub AI -->
+  <section class="py-5" id="centralized-hub">
+    <div class="container">
+      <div class="pattern-section bg-body-tertiary p-4 rounded shadow-sm mb-4" style="--section-color:#0d6efd">
+        <div class="d-flex align-items-center mb-3">
+          <span class="rank-badge bg-primary text-white me-3">1</span>
+          <div>
+            <h2 class="fw-bold mb-0"><i class="bi bi-diagram-3-fill text-primary me-2"></i>Centralized Hub AI<a href="#centralized-hub" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+            <p class="text-body-secondary mb-0">Pattern 1 &mdash; Shared AI platform in the Hub, consumed by multiple spokes</p>
+          </div>
+          <a href="pattern1.html" class="btn btn-primary ms-auto">Full Details <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <p>All AI services &mdash; Azure OpenAI, AI Search, Machine Learning, and supporting data/security services &mdash; deployed in a single Hub VNet. Application spokes connect via VNet Peering to consume shared services through Private Endpoints.</p>
+
+        <!-- Detailed Explanation -->
+        <div class="card border-0 bg-body shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="fw-bold text-primary mb-3"><i class="bi bi-info-circle-fill me-2"></i>How This Pattern Works</h5>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <h6 class="fw-bold text-primary mb-2"><i class="bi bi-diagram-3 me-1"></i>Architecture Concept</h6>
+                <p>The <strong>Centralized Hub AI</strong> pattern follows the classic enterprise hub-and-spoke network topology, placing all AI services in a single, well-governed Hub VNet. Think of the Hub as your organization&rsquo;s <em>&ldquo;AI control tower&rdquo;</em> &mdash; it hosts Azure OpenAI (GPT-4o at 30K tokens-per-minute plus embedding models at 120K TPM), Azure AI Search with vector and semantic indexes, Azure Machine Learning for model management, and all supporting infrastructure (Key Vault, ADLS Gen2, Log Analytics).</p>
+                <p>Application teams deploy their workloads (AKS clusters, App Services, Container Apps) in <strong>spoke VNets</strong> that peer back to the Hub. When a spoke application needs to call GPT-4o or query AI Search, traffic flows over VNet Peering through Private Endpoints &mdash; never touching the public internet. Every API call is private, auditable, and secured by NSG rules.</p>
+                <h6 class="fw-bold text-primary mb-2"><i class="bi bi-arrow-right-circle me-1"></i>Typical Data Flow</h6>
+                <ol class="small mb-0">
+                  <li class="mb-1">User request &rarr; Spoke App Service</li>
+                  <li class="mb-1">VNet Peering &rarr; Hub Private Endpoint</li>
+                  <li class="mb-1">Azure OpenAI (with RAG retrieval from AI Search)</li>
+                  <li class="mb-1">Response returns via same private path</li>
+                  <li>All activity logged to central Log Analytics workspace</li>
+                </ol>
+              </div>
+              <div class="col-md-6">
+                <h6 class="fw-bold text-primary mb-2"><i class="bi bi-cash-stack me-1"></i>Why Centralize?</h6>
+                <p>Azure OpenAI deployments are expensive (GPU-backed, TPM-metered). When each team provisions its own instance, you pay N times for underutilized quota. A centralized deployment lets you pool quota across all consumers, achieving <strong>40&ndash;60% cost savings</strong> while maintaining a single governance layer &mdash; one place to manage model versions, prompt templates, content filters, and usage policies.</p>
+                <h6 class="fw-bold text-primary mb-2"><i class="bi bi-exclamation-diamond me-1"></i>Trade-offs</h6>
+                <ul class="small mb-0">
+                  <li class="mb-1">Works best when teams share similar AI needs and don&rsquo;t require isolated data stores</li>
+                  <li class="mb-1">If departments need separate vector databases with strict data boundaries (FERPA, HIPAA), consider the <strong>Hybrid</strong> pattern instead</li>
+                  <li class="mb-1">Hub is a single point of management (advantage) but also a shared dependency</li>
+                  <li>Teams share TPM quota and must coordinate on model upgrades</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-cloud-fill text-primary fs-3"></i>
+              <div class="fw-bold fs-5">13</div>
+              <small class="text-body-secondary">Azure Services</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-currency-dollar text-success fs-3"></i>
+              <div class="fw-bold fs-5">$10K&ndash;$15K</div>
+              <small class="text-body-secondary">Monthly Est.*</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-shield-check text-warning fs-3"></i>
+              <div class="fw-bold fs-5">99.9%</div>
+              <small class="text-body-secondary">Composite SLA</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-lock-fill text-danger fs-3"></i>
+              <div class="fw-bold fs-5">Private</div>
+              <small class="text-body-secondary">Network Access</small>
+            </div>
+          </div>
+        </div>
+        <h5 class="fw-bold"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Key Design Principles</h5>
+        <ul>
+          <li><strong>Hub-and-Spoke Topology</strong> &mdash; Shared AI platform in the hub, application workloads in spokes</li>
+          <li><strong>Private Endpoints</strong> &mdash; All AI services accessible only via private network</li>
+          <li><strong>Centralized Governance</strong> &mdash; Single point of management for models, data, secrets</li>
+          <li><strong>VNet Peering</strong> &mdash; Low-latency, private connectivity between hub and spokes</li>
+          <li><strong>Shared Quota</strong> &mdash; GPT-4o (30K TPM) + Embeddings (120K TPM) shared across spokes</li>
+        </ul>
+        <h5 class="fw-bold mt-4"><i class="bi bi-diagram-2-fill text-primary me-1"></i>Architecture Diagram</h5>
+        <div class="card shadow">
+          <div class="card-body text-center p-3">
+            <div class="diagram-wrapper">
+              <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+              <pre class="mermaid">
+graph TB
+    subgraph Spokes["Application Spokes"]
+        S1["Spoke 1&lt;br/&gt;AKS / App Service"]
+        S2["Spoke 2&lt;br/&gt;AKS / App Service"]
+        SN["Spoke N&lt;br/&gt;AKS / App Service"]
+    end
+    subgraph Hub["Hub VNet - Platform Landing Zone"]
+        AOAI["Azure OpenAI&lt;br/&gt;GPT-4o + Embeddings"]
+        AIS["Azure AI Search&lt;br/&gt;Vector + Semantic"]
+        AML["Azure Machine Learning&lt;br/&gt;Model Registry"]
+        ADLS["ADLS Gen2&lt;br/&gt;Data Lake"]
+        KV["Azure Key Vault&lt;br/&gt;Secrets"]
+        MON["Log Analytics +&lt;br/&gt;App Insights"]
+    end
+    subgraph Security["Network Security"]
+        PE["Private Endpoints"]
+        DNS["Private DNS Zones"]
+        NSG["NSG - DenyAllInbound"]
+    end
+    S1 -->|"VNet Peering"| AOAI
+    S2 -->|"VNet Peering"| AIS
+    SN -->|"VNet Peering"| AOAI
+    AOAI --> AIS
+    AML --> ADLS
+    AML --> KV
+    AOAI --> MON
+    AIS --> MON
+    PE --- AOAI
+    PE --- AIS
+    PE --- KV
+    DNS --- PE
+    NSG --- Hub
+              </pre>
+            </div>
+          </div>
+        </div>
+        <h5 class="fw-bold mt-4"><i class="bi bi-bullseye text-danger me-1"></i>Best For</h5>
+        <div class="row g-3">
+          <div class="col-md-6"><div class="card border-0 bg-body shadow-sm p-3 h-100"><strong>Enterprise Copilots</strong><br/><small class="text-body-secondary">Shared GPT-4o across multiple applications &mdash; internal knowledge assistants, document Q&amp;A, code review bots.</small></div></div>
+          <div class="col-md-6"><div class="card border-0 bg-body shadow-sm p-3 h-100"><strong>Centralized AI Governance</strong><br/><small class="text-body-secondary">Single point of management for AI models, usage quotas, cost tracking, and compliance across business units.</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pattern 3: Hybrid Central-Spoke -->
+  <section class="py-5 bg-body-secondary" id="hybrid-spoke">
+    <div class="container">
+      <div class="pattern-section bg-body p-4 rounded shadow-sm mb-4" style="--section-color:#198754">
+        <div class="d-flex align-items-center mb-3">
+          <span class="rank-badge bg-success text-white me-3">2</span>
+          <div>
+            <h2 class="fw-bold mb-0"><i class="bi bi-share-fill text-success me-2"></i>Hybrid Central-Spoke AI<a href="#hybrid-spoke" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+            <p class="text-body-secondary mb-0">Pattern 3 &mdash; Shared LLM in Hub + per-spoke RAG components</p>
+          </div>
+          <a href="pattern3.html" class="btn btn-success ms-auto">Full Details <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <p>Core AI services centralized in the Hub (base models, model registry) while inference, customization, and RAG components are deployed in application spokes. Balances cost efficiency with workload autonomy.</p>
+
+        <!-- Detailed Explanation -->
+        <div class="card border-0 bg-body-tertiary shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="fw-bold text-success mb-3"><i class="bi bi-info-circle-fill me-2"></i>How This Pattern Works</h5>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <h6 class="fw-bold text-success mb-2"><i class="bi bi-diagram-3 me-1"></i>Architecture Concept</h6>
+                <p>The <strong>Hybrid Central-Spoke</strong> pattern splits the AI stack across two layers:</p>
+                <div class="mb-3">
+                  <p class="fw-semibold mb-1"><i class="bi bi-building me-1 text-success"></i> Hub (Shared, Expensive)</p>
+                  <ul class="small mb-2">
+                    <li>Azure OpenAI &mdash; GPT-4o at 50K TPM, embeddings at 120K TPM</li>
+                    <li>AML Model Registry &mdash; versioning and staged rollouts</li>
+                    <li>Central Key Vault &mdash; shared API keys</li>
+                    <li>Log Analytics &mdash; cross-spoke observability</li>
+                  </ul>
+                  <p class="fw-semibold mb-1"><i class="bi bi-hdd-rack me-1 text-success"></i> Spoke (Local, Data-Adjacent)</p>
+                  <ul class="small mb-0">
+                    <li>Azure AI Search &mdash; local vector DB for RAG</li>
+                    <li>ADLS Gen2 &mdash; source documents per team</li>
+                    <li>App Service / AKS / Container Apps &mdash; compute</li>
+                  </ul>
+                </div>
+                <p class="small mb-0">When a spoke app receives a query, it retrieves context from its <em>local</em> AI Search index, then sends the enriched prompt to the <em>shared</em> GPT-4o in the Hub via VNet Peering. The LLM never sees raw documents from other spokes.</p>
+              </div>
+              <div class="col-md-6">
+                <h6 class="fw-bold text-success mb-2"><i class="bi bi-shield-lock me-1"></i>Why Hybrid?</h6>
+                <p>Many organizations need the cost efficiency of shared LLM quota but can&rsquo;t co-mingle data across departments, campuses, or business units. FERPA, HIPAA, PCI-DSS, and data residency laws often mandate that documents and indexes stay within a team&rsquo;s own network boundary. The Hybrid pattern solves this by keeping <strong>data local</strong> while sharing the most expensive resource (the LLM).</p>
+                <h6 class="fw-bold text-success mb-2"><i class="bi bi-exclamation-diamond me-1"></i>Trade-offs</h6>
+                <ul class="small mb-3">
+                  <li class="mb-1">Per-spoke AI Search + storage costs ~$250/mo (relatively cheap)</li>
+                  <li class="mb-1">Save <strong>60%+</strong> on LLM costs by sharing one OpenAI deployment</li>
+                  <li class="mb-1">Adding a new spoke is incremental &mdash; deploy, peer to Hub, done in <strong>1&ndash;2 weeks</strong></li>
+                  <li>Hub team manages model versions centrally via AML Model Registry</li>
+                </ul>
+                <h6 class="fw-bold text-success mb-2"><i class="bi bi-arrow-right-circle me-1"></i>Typical Data Flow</h6>
+                <ol class="small mb-0">
+                  <li class="mb-1">User query &rarr; Spoke App Service</li>
+                  <li class="mb-1">Spoke AI Search (vector retrieval from local docs)</li>
+                  <li class="mb-1">Enriched prompt &rarr; VNet Peering &rarr; Hub Azure OpenAI</li>
+                  <li class="mb-1">GPT-4o inference &rarr; response returns to spoke</li>
+                  <li>Both spoke and hub logs &rarr; central Log Analytics</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-cloud-fill text-success fs-3"></i>
+              <div class="fw-bold fs-5">15</div>
+              <small class="text-body-secondary">Azure Services</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-currency-dollar text-success fs-3"></i>
+              <div class="fw-bold fs-5">$15K&ndash;$22K</div>
+              <small class="text-body-secondary">Monthly Est.*</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-shield-check text-warning fs-3"></i>
+              <div class="fw-bold fs-5">99.9%</div>
+              <small class="text-body-secondary">Composite SLA</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-diagram-3-fill text-info fs-3"></i>
+              <div class="fw-bold fs-5">Hybrid</div>
+              <small class="text-body-secondary">Hub + Spoke</small>
+            </div>
+          </div>
+        </div>
+        <h5 class="fw-bold"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Key Design Principles</h5>
+        <ul>
+          <li><strong>Shared Base Models</strong> &mdash; Hub owns GPT-4o (50K TPM) + embeddings (120K TPM)</li>
+          <li><strong>Spoke RAG Components</strong> &mdash; Each spoke has its own AI Search + ADLS for documents</li>
+          <li><strong>VNet Peering</strong> &mdash; Bidirectional hub-to-spoke connectivity</li>
+          <li><strong>AML Model Registry</strong> &mdash; Centralized model versioning and staged deployment</li>
+          <li><strong>Cost Efficient</strong> &mdash; Share expensive AOAI; duplicate cheap spoke services</li>
+        </ul>
+        <h5 class="fw-bold mt-4"><i class="bi bi-diagram-2-fill text-success me-1"></i>Architecture Diagram</h5>
+        <div class="card shadow">
+          <div class="card-body text-center p-3">
+            <div class="diagram-wrapper">
+              <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+              <pre class="mermaid">
+graph TB
+    subgraph Hub["Hub VNet - Central AI Platform"]
+        AOAI["Azure OpenAI&lt;br/&gt;GPT-4o 50K TPM"]
+        AML["Azure ML&lt;br/&gt;Model Registry"]
+        HKV["Key Vault"]
+        HADLS["ADLS Gen2&lt;br/&gt;Models and Datasets"]
+        HMON["Log Analytics"]
+    end
+    subgraph Spoke["Spoke VNet - App Workload"]
+        AIS["Azure AI Search&lt;br/&gt;Vector DB / RAG"]
+        APP["App Service or AKS&lt;br/&gt;Application Compute"]
+        SADLS["ADLS Gen2&lt;br/&gt;Documents"]
+    end
+    subgraph Security["Network Layer"]
+        PE1["Hub Private Endpoints"]
+        PE2["Spoke Private Endpoints"]
+        PEER["VNet Peering&lt;br/&gt;Bidirectional"]
+    end
+    APP -->|"VNet Peering"| AOAI
+    APP --> AIS
+    AIS --> SADLS
+    AML --> HADLS
+    AML --> HKV
+    AOAI --> HMON
+    AIS --> HMON
+    APP --> HMON
+    PE1 --- AOAI
+    PE1 --- HKV
+    PE2 --- AIS
+    PE2 --- SADLS
+    PEER --- Hub
+    PEER --- Spoke
+              </pre>
+            </div>
+          </div>
+        </div>
+        <h5 class="fw-bold mt-4"><i class="bi bi-bullseye text-danger me-1"></i>Best For</h5>
+        <div class="row g-3">
+          <div class="col-md-6"><div class="card border-0 bg-body-tertiary shadow-sm p-3 h-100"><strong>RAG Applications</strong><br/><small class="text-body-secondary">Spoke owns the vector DB + documents, hub owns the LLM. Efficient for knowledge-base-per-department patterns.</small></div></div>
+          <div class="col-md-6"><div class="card border-0 bg-body-tertiary shadow-sm p-3 h-100"><strong>Cost-Efficient Multi-App</strong><br/><small class="text-body-secondary">Single OpenAI deployment, per-spoke search indexes. Save 60%+ on LLM costs vs. full decentralization.</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pattern 10: Greenfield Azure Deployment -->
+  <section class="py-5" id="greenfield">
+    <div class="container">
+      <div class="pattern-section bg-body-tertiary p-4 rounded shadow-sm mb-4" style="--section-color:#0dcaf0">
+        <div class="d-flex align-items-center mb-3">
+          <span class="rank-badge bg-info text-white me-3">3</span>
+          <div>
+            <h2 class="fw-bold mb-0"><i class="bi bi-rocket-takeoff-fill text-info me-2"></i>Greenfield Azure Deployment<a href="#greenfield" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+            <p class="text-body-secondary mb-0">Pattern 10 &mdash; Zero to Hero with Cloud Adoption Framework</p>
+          </div>
+          <a href="pattern10.html" class="btn btn-info ms-auto text-white">Full Details <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <p>Build a brand-new Azure environment from zero using Cloud Adoption Framework best practices. Complete landing zone setup with management groups, networking, identity, governance, and AI-ready infrastructure.</p>
+
+        <!-- Detailed Explanation -->
+        <div class="card border-0 bg-body shadow-sm mb-4">
+          <div class="card-body">
+            <h5 class="fw-bold text-info mb-3"><i class="bi bi-info-circle-fill me-2"></i>How This Pattern Works</h5>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <p>The <strong>Greenfield Azure Deployment</strong> pattern is for organizations starting from zero on Azure &mdash; no existing subscriptions, no VNets, no identity configuration. Instead of organically building infrastructure and accumulating technical debt, this pattern deploys the full <strong>Cloud Adoption Framework (CAF) Enterprise-Scale Landing Zone</strong> in one coordinated effort, then layers AI services on top.</p>
+                <h6 class="fw-bold text-info mt-3 mb-2"><i class="bi bi-list-ol me-1"></i>6 CAF Phases</h6>
+                <ol class="mb-0 small">
+                  <li class="mb-2"><strong>Strategy</strong> &mdash; Define AI workloads, business outcomes, and compliance requirements (FERPA, SOC 2, HIPAA)</li>
+                  <li class="mb-2"><strong>Plan</strong> &mdash; Design subscription topology and management group hierarchy</li>
+                  <li class="mb-2"><strong>Ready</strong> &mdash; Deploy Platform subscriptions (Management, Connectivity, Identity) and Landing Zone subscriptions</li>
+                  <li class="mb-2"><strong>Adopt</strong> &mdash; Build hub-spoke networking with Azure Firewall, Bastion, VPN Gateway, and Private DNS Zones</li>
+                  <li class="mb-2"><strong>Govern</strong> &mdash; Apply Azure Policy initiatives, enable Defender for Cloud, and configure cost management budgets</li>
+                  <li><strong>Manage</strong> &mdash; Set up Log Analytics, monitoring alerts, and operational runbooks</li>
+                </ol>
+              </div>
+              <div class="col-md-6">
+                <h6 class="fw-bold text-info mb-2"><i class="bi bi-question-circle me-1"></i>Why Greenfield?</h6>
+                <p>Organizations in regulated industries (healthcare, education, government, financial services) need audit-ready governance from day one. Retro-fitting management groups, policies, and network security onto an organically grown Azure environment typically costs <strong>6&ndash;12 months of rework</strong> and significant re-architecture. The greenfield approach eliminates this by building the foundation correctly from the start.</p>
+                <h6 class="fw-bold text-info mb-2"><i class="bi bi-box-seam me-1"></i>What&rsquo;s Included</h6>
+                <ul class="small mb-3">
+                  <li class="mb-1">Management group hierarchy (Tenant Root &rarr; Organization &rarr; Platform + Landing Zones)</li>
+                  <li class="mb-1">Hub VNet with Azure Firewall (egress filtering + TLS inspection)</li>
+                  <li class="mb-1">Azure Bastion for secure admin access</li>
+                  <li class="mb-1">Entra ID with Conditional Access policies</li>
+                  <li class="mb-1">Azure Policy initiatives (deny public endpoints, enforce tagging, require encryption)</li>
+                  <li class="mb-1">Defender for Cloud (security posture management)</li>
+                  <li>Cost Management with pre-configured budgets and alerts</li>
+                </ul>
+                <h6 class="fw-bold text-info mb-2"><i class="bi bi-cpu me-1"></i>AI-Ready from Day One</h6>
+                <p class="mb-0">The AI spoke is pre-provisioned with Azure OpenAI, AI Search, Key Vault, ADLS Gen2, and App Service &mdash; all connected via Private Endpoints through the Hub firewall. New AI workloads deploy into the existing landing zone structure without any infrastructure changes. The environment scales from <strong>1 to 100+ subscriptions</strong> using the same management group and policy framework.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-cloud-fill text-info fs-3"></i>
+              <div class="fw-bold fs-5">14</div>
+              <small class="text-body-secondary">Azure Services</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-currency-dollar text-success fs-3"></i>
+              <div class="fw-bold fs-5">$18K&ndash;$28K</div>
+              <small class="text-body-secondary">Monthly Est.*</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-shield-check text-warning fs-3"></i>
+              <div class="fw-bold fs-5">99.95%</div>
+              <small class="text-body-secondary">Composite SLA</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="card stat-card h-100 shadow-sm p-3 text-center">
+              <i class="bi bi-signpost-2-fill text-primary fs-3"></i>
+              <div class="fw-bold fs-5">6 Phases</div>
+              <small class="text-body-secondary">CAF Lifecycle</small>
+            </div>
+          </div>
+        </div>
+        <h5 class="fw-bold"><i class="bi bi-lightbulb-fill text-warning me-1"></i>Key Design Principles</h5>
+        <ul>
+          <li><strong>CAF Enterprise-Scale Landing Zone</strong> &mdash; Full Cloud Adoption Framework architecture</li>
+          <li><strong>Management Group Hierarchy</strong> &mdash; Platform + Landing Zones organizational structure</li>
+          <li><strong>Hub-Spoke Networking</strong> &mdash; Azure Firewall controlling all egress traffic</li>
+          <li><strong>Centralized Identity</strong> &mdash; Entra ID with Conditional Access policies</li>
+          <li><strong>Policy-as-Code Governance</strong> &mdash; Azure Policy initiatives enforced from day one</li>
+          <li><strong>Cost Management</strong> &mdash; Budgets, alerts, and tagging from the start</li>
+          <li><strong>AI-Ready Spoke</strong> &mdash; Azure OpenAI, AI Search, and Key Vault pre-provisioned</li>
+        </ul>
+        <h5 class="fw-bold mt-4"><i class="bi bi-diagram-2-fill text-info me-1"></i>Architecture Diagram</h5>
+        <div class="card shadow">
+          <div class="card-body text-center p-3">
+            <div class="diagram-wrapper">
+              <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
+              <pre class="mermaid">
+graph TB
+    subgraph MG["Management Group Hierarchy"]
+        ROOT["Tenant Root Group"]
+        ORG["Organization MG"]
+        PLAT["Platform MG"]
+        LZ["Landing Zones MG"]
+        MGMT["Management Sub"]
+        CONN["Connectivity Sub"]
+        IDENT["Identity Sub"]
+        CORP["Corp LZ Sub"]
+        ONLINE["Online LZ Sub"]
+    end
+    subgraph Hub["Hub VNet 10.0.0.0/16"]
+        FW["Azure Firewall&lt;br/&gt;Standard"]
+        BASTION["Azure Bastion&lt;br/&gt;Secure Access"]
+        VGW["VPN Gateway&lt;br/&gt;or ExpressRoute"]
+        HDNS["Private DNS Zones&lt;br/&gt;Centralized"]
+    end
+    subgraph Spoke["Spoke VNet 10.1.0.0/16"]
+        APP["App Service&lt;br/&gt;or Container Apps"]
+        AOAI["Azure OpenAI&lt;br/&gt;GPT-4o"]
+        SEARCH["AI Search&lt;br/&gt;Standard S1"]
+        SQL["Azure SQL&lt;br/&gt;Managed Instance"]
+        STOR["Storage Account&lt;br/&gt;ADLS Gen2"]
+        PE["Private Endpoints&lt;br/&gt;All PaaS Services"]
+    end
+    subgraph SharedSvc["Shared Services"]
+        LAW["Log Analytics&lt;br/&gt;Central Workspace"]
+        POLICY["Azure Policy&lt;br/&gt;Governance"]
+        COST["Cost Management&lt;br/&gt;Budgets and Alerts"]
+        DEFENDER["Defender for Cloud"]
+    end
+    ROOT --> ORG
+    ORG --> PLAT
+    ORG --> LZ
+    PLAT --> MGMT
+    PLAT --> CONN
+    PLAT --> IDENT
+    LZ --> CORP
+    LZ --> ONLINE
+    Hub -->|"Peering"| Spoke
+    FW -->|"Egress Filter"| Spoke
+    APP --> PE
+    PE --> AOAI
+    PE --> SEARCH
+    PE --> SQL
+    PE --> STOR
+    AOAI --> LAW
+    SEARCH --> LAW
+    SQL --> LAW
+    POLICY --> CORP
+              </pre>
+            </div>
+          </div>
+        </div>
+        <h5 class="fw-bold mt-4"><i class="bi bi-bullseye text-danger me-1"></i>Best For</h5>
+        <div class="row g-3">
+          <div class="col-md-6"><div class="card border-0 bg-body shadow-sm p-3 h-100"><strong>Cloud-First Startup</strong><br/><small class="text-body-secondary">Start on Azure with enterprise-grade governance from day one. No technical debt. Scale from 1 to 100 workloads.</small></div></div>
+          <div class="col-md-6"><div class="card border-0 bg-body shadow-sm p-3 h-100"><strong>Regulated Industry Entry</strong><br/><small class="text-body-secondary">Healthcare, financial services, or government deploying to Azure with built-in compliance (HIPAA, SOC 2, FedRAMP).</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Value & Justification -->
+  <section class="py-5" id="business-value">
+    <div class="container">
+      <h2 class="fw-bold text-center mb-2"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Business Value &amp; Justification<a href="#business-value" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+      <p class="text-center text-body-secondary mb-5">Why these patterns deliver measurable ROI, reduce risk, and accelerate time-to-value for enterprise AI initiatives.</p>
+
+      <!-- ROI Metrics -->
+      <div class="row g-4 mb-5">
+        <div class="col-md-3 col-6">
+          <div class="card text-center border-0 shadow h-100 p-4">
+            <i class="bi bi-cash-stack text-success fs-1 mb-2"></i>
+            <div class="display-6 fw-bold text-success">40-60%</div>
+            <p class="text-body-secondary mb-0">Cost reduction vs. per-team siloed deployments</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="card text-center border-0 shadow h-100 p-4">
+            <i class="bi bi-clock-history text-primary fs-1 mb-2"></i>
+            <div class="display-6 fw-bold text-primary">3-6x</div>
+            <p class="text-body-secondary mb-0">Faster time-to-production for new AI workloads</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="card text-center border-0 shadow h-100 p-4">
+            <i class="bi bi-shield-fill-check text-danger fs-1 mb-2"></i>
+            <div class="display-6 fw-bold text-danger">99.9%+</div>
+            <p class="text-body-secondary mb-0">Composite SLA with private networking</p>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div class="card text-center border-0 shadow h-100 p-4">
+            <i class="bi bi-bar-chart-fill text-warning fs-1 mb-2"></i>
+            <div class="display-6 fw-bold text-warning">Day 1</div>
+            <p class="text-body-secondary mb-0">Governance, compliance &amp; cost controls from the start</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Value by Pattern -->
+      <div class="row g-4 mb-5">
+        <!-- Centralized Hub Value -->
+        <div class="col-lg-4">
+          <div class="card h-100 shadow-sm border-top border-primary border-4">
+            <div class="card-body">
+              <h5 class="fw-bold text-primary"><i class="bi bi-diagram-3-fill me-2"></i>Centralized Hub AI</h5>
+              <h6 class="text-body-secondary mb-3">Financial Impact</h6>
+              <table class="table table-sm mb-3">
+                <tr><td class="fw-semibold">Shared OpenAI cost</td><td class="text-end text-success fw-bold">-60%</td></tr>
+                <tr><td class="fw-semibold">Eliminated duplicate services</td><td class="text-end text-success fw-bold">-$15K/yr</td></tr>
+                <tr><td class="fw-semibold">Central ops team savings</td><td class="text-end text-success fw-bold">2-3 FTEs</td></tr>
+                <tr><td class="fw-semibold">Compliance audit prep</td><td class="text-end text-success fw-bold">-70% effort</td></tr>
+              </table>
+              <h6 class="text-body-secondary mb-2">Strategic Justification</h6>
+              <ul class="small mb-0">
+                <li><strong>Cost consolidation</strong> &mdash; One GPT-4o deployment serves all BUs instead of N separate instances</li>
+                <li><strong>Faster onboarding</strong> &mdash; New teams consume existing AI platform in days, not months</li>
+                <li><strong>Unified governance</strong> &mdash; Single pane for token usage, model versions, and security policies</li>
+                <li><strong>Reduced blast radius</strong> &mdash; Centralized patching, key rotation, and access control</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Hybrid Value -->
+        <div class="col-lg-4">
+          <div class="card h-100 shadow-sm border-top border-success border-4">
+            <div class="card-body">
+              <h5 class="fw-bold text-success"><i class="bi bi-share-fill me-2"></i>Hybrid Central-Spoke</h5>
+              <h6 class="text-body-secondary mb-3">Financial Impact</h6>
+              <table class="table table-sm mb-3">
+                <tr><td class="fw-semibold">LLM cost sharing</td><td class="text-end text-success fw-bold">-60%</td></tr>
+                <tr><td class="fw-semibold">Per-team data autonomy</td><td class="text-end text-primary fw-bold">Full</td></tr>
+                <tr><td class="fw-semibold">RAG deployment time</td><td class="text-end text-success fw-bold">2 weeks</td></tr>
+                <tr><td class="fw-semibold">Data sovereignty compliance</td><td class="text-end text-success fw-bold">Built-in</td></tr>
+              </table>
+              <h6 class="text-body-secondary mb-2">Strategic Justification</h6>
+              <ul class="small mb-0">
+                <li><strong>Balance of control &amp; autonomy</strong> &mdash; Central team owns LLM, BUs own their data and search indexes</li>
+                <li><strong>Data isolation</strong> &mdash; Each spoke's documents never leave its VNet; meets data residency requirements</li>
+                <li><strong>Incremental scaling</strong> &mdash; Add new spokes without impacting existing workloads or re-architecting</li>
+                <li><strong>Model consistency</strong> &mdash; All spokes use the same GPT-4o version via AML Model Registry</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Greenfield Value -->
+        <div class="col-lg-4">
+          <div class="card h-100 shadow-sm border-top border-info border-4">
+            <div class="card-body">
+              <h5 class="fw-bold text-info"><i class="bi bi-rocket-takeoff-fill me-2"></i>Greenfield Azure</h5>
+              <h6 class="text-body-secondary mb-3">Financial Impact</h6>
+              <table class="table table-sm mb-3">
+                <tr><td class="fw-semibold">Technical debt avoided</td><td class="text-end text-success fw-bold">$0</td></tr>
+                <tr><td class="fw-semibold">Compliance from day 1</td><td class="text-end text-success fw-bold">HIPAA/SOC2</td></tr>
+                <tr><td class="fw-semibold">Landing zone re-work</td><td class="text-end text-success fw-bold">Eliminated</td></tr>
+                <tr><td class="fw-semibold">Scale capacity</td><td class="text-end text-success fw-bold">1-100 workloads</td></tr>
+              </table>
+              <h6 class="text-body-secondary mb-2">Strategic Justification</h6>
+              <ul class="small mb-0">
+                <li><strong>Zero technical debt</strong> &mdash; Built right from the start with CAF best practices and policy guardrails</li>
+                <li><strong>Regulatory readiness</strong> &mdash; Management groups, Defender for Cloud, and audit logging from day one</li>
+                <li><strong>Future-proof</strong> &mdash; Landing zone scales to hundreds of subscriptions without re-architecture</li>
+                <li><strong>Accelerated cloud journey</strong> &mdash; Skip 6-12 months of organic growth mistakes and rework</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Executive Summary -->
+      <div class="card shadow border-0 bg-body-tertiary">
+        <div class="card-body p-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-briefcase-fill text-primary me-2"></i>Executive Summary</h5>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-1-circle-fill text-primary fs-4 me-3 mt-1"></i>
+                <div>
+                  <strong>Reduce AI Infrastructure Costs</strong>
+                  <p class="text-body-secondary small mb-0">Shared AI platforms eliminate per-team duplication of expensive services like Azure OpenAI and AI Search. Organizations typically see 40-60% cost savings by consolidating LLM deployments while maintaining workload isolation.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-2-circle-fill text-success fs-4 me-3 mt-1"></i>
+                <div>
+                  <strong>Accelerate Time-to-Value</strong>
+                  <p class="text-body-secondary small mb-0">Pre-built landing zones with Bicep IaC templates reduce deployment from months to days. New teams onboard to existing AI platforms without provisioning infrastructure, enabling 3-6x faster delivery of AI use cases.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-3-circle-fill text-danger fs-4 me-3 mt-1"></i>
+                <div>
+                  <strong>Mitigate Security &amp; Compliance Risk</strong>
+                  <p class="text-body-secondary small mb-0">Private endpoints, Azure Firewall, NSGs, and Defender for Cloud are embedded in every pattern. Zero public endpoints for AI services, full audit trails, and policy-as-code governance satisfy SOC 2, HIPAA, and PCI-DSS requirements.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="my-4"/>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-people-fill text-warning fs-4 me-3 mt-1"></i>
+                <div>
+                  <strong>Optimize Team Productivity</strong>
+                  <p class="text-body-secondary small mb-0">Central platform teams manage shared infrastructure (2-3 FTEs) while application teams focus on building AI features. Eliminates redundant ops work across business units and reduces mean-time-to-resolution for AI service issues.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex align-items-start">
+                <i class="bi bi-arrow-repeat text-info fs-4 me-3 mt-1"></i>
+                <div>
+                  <strong>Enable Scalable Growth</strong>
+                  <p class="text-body-secondary small mb-0">All three patterns are designed to scale from 1 to 100+ workloads without re-architecture. Management group hierarchies, hub-spoke networking, and IaC templates ensure consistent, repeatable deployments as the organization grows.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case Studies & Sample Use Cases -->
+  <section class="py-5 bg-body-secondary" id="case-studies">
+    <div class="container">
+      <h2 class="fw-bold text-center mb-2"><i class="bi bi-journal-richtext me-2 text-primary"></i>CSI Case Studies &amp; Use Cases<a href="#case-studies" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+      <p class="text-center text-body-secondary mb-5">How CSI's AI Education Platform leverages each pattern to deliver intelligent student insights powered by Work IQ, Foundry IQ, and Fabric IQ engines.</p>
+
+      <!-- Case Study 1: Centralized Hub -->
+      <div class="card shadow-sm mb-4 border-start border-primary border-4">
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary fs-6 me-3 px-3 py-2">Case Study 1</span>
+                <h4 class="fw-bold mb-0">CSI &mdash; Centralized IQ Engine Platform</h4>
+              </div>
+              <p class="text-body-secondary"><strong>Industry:</strong> Higher Education &nbsp;|&nbsp; <strong>Institutions:</strong> Single Large University (35K students) &nbsp;|&nbsp; <strong>Pattern:</strong> Centralized Hub AI</p>
+              <h6 class="fw-bold">Challenge</h6>
+              <p>A large public research university with 35,000 students had fragmented data across its LMS (Canvas), Student Information System (SIS), advising tools, and career services. Academic advisors manually cross-referenced 5+ systems to assess student progress. Dropout prediction relied on outdated batch reports, and the AI initiatives from IT, Academic Affairs, and Institutional Research were each provisioning separate Azure OpenAI instances with no shared governance.</p>
+              <h6 class="fw-bold">Solution</h6>
+              <p>Deployed CSI's <strong>Centralized Hub AI</strong> platform with all three IQ engines in a single Hub VNet. <strong>Work IQ</strong> crawls LMS activity data (login frequency, assignment velocity, discussion engagement). <strong>Foundry IQ</strong> indexes academic catalogs, policy handbooks, and accreditation documents. <strong>Fabric IQ</strong> processes GPA trends, credit velocity, and DFW rates. A shared GPT-4o instance (30K TPM) serves the AI Academic Advisor, Dropout Risk Predictor, and Personalized Learning Planner through Private Endpoints.</p>
+              <h6 class="fw-bold">Results</h6>
+              <div class="row g-3">
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-success fs-5">$140K/yr</div><small class="text-body-secondary">Saved vs. 3 separate AI deployments</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-primary fs-5">23%</div><small class="text-body-secondary">Reduction in student dropout rate</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-warning fs-5">4 weeks</div><small class="text-body-secondary">All 3 IQ engines deployed</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-danger fs-5">FERPA</div><small class="text-body-secondary">Full compliance maintained</small></div></div>
+              </div>
+            </div>
+            <div class="col-lg-4 mt-3 mt-lg-0">
+              <div class="bg-body rounded p-3 h-100">
+                <h6 class="fw-bold text-primary"><i class="bi bi-list-check me-1"></i>CSI Use Cases Enabled</h6>
+                <ul class="small mb-0">
+                  <li class="mb-2"><i class="bi bi-mortarboard-fill text-primary me-1"></i><strong>AI Academic Advisor</strong> &mdash; Students ask natural language questions about courses, prerequisites, and degree pathways; GPT-4o retrieves from Foundry IQ's catalog index via RAG</li>
+                  <li class="mb-2"><i class="bi bi-exclamation-triangle-fill text-danger me-1"></i><strong>Dropout Risk Predictor</strong> &mdash; ML model combines Work IQ behavioral signals (login gaps, late submissions) with Fabric IQ performance data (GPA decline, credit shortfall) to flag at-risk students</li>
+                  <li class="mb-2"><i class="bi bi-calendar-check-fill text-success me-1"></i><strong>Personalized Learning Planner</strong> &mdash; Generates semester-by-semester plans with course load balancing, skill gap analysis, and prerequisite sequencing from all 3 IQ engines</li>
+                  <li class="mb-2"><i class="bi bi-clipboard-data-fill text-warning me-1"></i><strong>Advisor Dashboard</strong> &mdash; Real-time caseload view for academic advisors showing each student's engagement score (Work IQ), policy status (Foundry IQ), and performance trajectory (Fabric IQ)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case Study 2: Hybrid Central-Spoke -->
+      <div class="card shadow-sm mb-4 border-start border-success border-4">
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-success fs-6 me-3 px-3 py-2">Case Study 2</span>
+                <h4 class="fw-bold mb-0">CSI &mdash; Multi-Campus University System</h4>
+              </div>
+              <p class="text-body-secondary"><strong>Industry:</strong> Higher Education &nbsp;|&nbsp; <strong>Campuses:</strong> 8 institutions, 120K students &nbsp;|&nbsp; <strong>Pattern:</strong> Hybrid Central-Spoke</p>
+              <h6 class="fw-bold">Challenge</h6>
+              <p>A state university system with 8 campuses needed CSI's AI platform deployed across all institutions. Each campus had its own LMS (mix of Canvas, Blackboard, and Moodle), its own SIS, and different academic catalogs. FERPA regulations prohibit sharing student records across campuses. A single centralized deployment would violate data governance policies; deploying 8 complete platforms would cost 4x the budget.</p>
+              <h6 class="fw-bold">Solution</h6>
+              <p>Deployed <strong>Hybrid Central-Spoke</strong> with shared GPT-4o (50K TPM) and the AML Model Registry in the Hub. Each campus spoke runs its own <strong>Work IQ</strong> crawler (connected to its local LMS), its own <strong>Fabric IQ</strong> pipeline (connected to its SIS), and its own AI Search indexes. <strong>Foundry IQ</strong> runs in both Hub (shared accreditation standards, state policies) and spokes (campus-specific catalogs, local policies). Student data never crosses campus VNet boundaries.</p>
+              <h6 class="fw-bold">Results</h6>
+              <div class="row g-3">
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-success fs-5">65%</div><small class="text-body-secondary">LLM cost savings vs. 8 instances</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-primary fs-5">FERPA</div><small class="text-body-secondary">Per-campus data isolation</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-warning fs-5">10 days</div><small class="text-body-secondary">Per-campus spoke deployment</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-danger fs-5">120K</div><small class="text-body-secondary">Students served across 8 campuses</small></div></div>
+              </div>
+            </div>
+            <div class="col-lg-4 mt-3 mt-lg-0">
+              <div class="bg-body rounded p-3 h-100">
+                <h6 class="fw-bold text-success"><i class="bi bi-list-check me-1"></i>CSI Use Cases Enabled</h6>
+                <ul class="small mb-0">
+                  <li class="mb-2"><i class="bi bi-building text-success me-1"></i><strong>Campus-Specific Advising</strong> &mdash; Each campus AI Advisor understands its own catalog, prerequisites, and policies via local Foundry IQ &mdash; no cross-campus data leakage</li>
+                  <li class="mb-2"><i class="bi bi-bar-chart-fill text-primary me-1"></i><strong>System-Wide Analytics</strong> &mdash; Aggregated, de-identified metrics from Fabric IQ across all 8 campuses for the Board of Regents retention dashboard</li>
+                  <li class="mb-2"><i class="bi bi-arrow-left-right text-warning me-1"></i><strong>Transfer Credit Evaluator</strong> &mdash; Students transferring between campuses get AI-powered equivalency mapping using both source and destination Foundry IQ indexes</li>
+                  <li class="mb-2"><i class="bi bi-person-lines-fill text-danger me-1"></i><strong>Multi-LMS Work IQ</strong> &mdash; Each spoke's Work IQ crawler adapts to the local LMS (Canvas, Blackboard, Moodle) while feeding a unified engagement scoring model</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Case Study 3: Greenfield -->
+      <div class="card shadow-sm mb-4 border-start border-info border-4">
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-info fs-6 me-3 px-3 py-2 text-white">Case Study 3</span>
+                <h4 class="fw-bold mb-0">CSI &mdash; New Community College Cloud Build</h4>
+              </div>
+              <p class="text-body-secondary"><strong>Industry:</strong> Higher Education &nbsp;|&nbsp; <strong>Stage:</strong> New-to-Azure institution &nbsp;|&nbsp; <strong>Pattern:</strong> Greenfield Azure</p>
+              <h6 class="fw-bold">Challenge</h6>
+              <p>A community college district with 15,000 students had no existing Azure infrastructure. They wanted to deploy CSI's AI Education Platform but needed to establish their entire cloud foundation first. The district was pursuing accreditation renewal and needed audit-ready governance, FERPA compliance, and SOC 2 Type II certification to satisfy their accrediting body and state education department requirements.</p>
+              <h6 class="fw-bold">Solution</h6>
+              <p>Deployed <strong>Greenfield Azure</strong> using the full CAF framework: management group hierarchy for the district (Platform MG for shared IT, Landing Zones MG for academic departments), hub-spoke networking with Azure Firewall, Entra ID with student/staff Conditional Access policies, and Azure Policy initiatives enforcing FERPA data handling. The AI spoke hosts all three CSI IQ engines with Cosmos DB for student profiles and 7-year audit log retention.</p>
+              <h6 class="fw-bold">Results</h6>
+              <div class="row g-3">
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-success fs-5">6 weeks</div><small class="text-body-secondary">Zero to AI production</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-primary fs-5">SOC 2</div><small class="text-body-secondary">Audit-ready from day 1</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-warning fs-5">18%</div><small class="text-body-secondary">Improvement in course completion</small></div></div>
+                <div class="col-6 col-md-3"><div class="bg-body rounded p-3 text-center"><div class="fw-bold text-danger fs-5">$0</div><small class="text-body-secondary">Re-architecture needed</small></div></div>
+              </div>
+            </div>
+            <div class="col-lg-4 mt-3 mt-lg-0">
+              <div class="bg-body rounded p-3 h-100">
+                <h6 class="fw-bold text-info"><i class="bi bi-list-check me-1"></i>CSI Use Cases Enabled</h6>
+                <ul class="small mb-0">
+                  <li class="mb-2"><i class="bi bi-person-raised-hand text-info me-1"></i><strong>First-Gen Student Navigator</strong> &mdash; AI Advisor tuned for first-generation college students with simplified language, financial aid guidance, and step-by-step enrollment support via Foundry IQ</li>
+                  <li class="mb-2"><i class="bi bi-cash-stack text-success me-1"></i><strong>Financial Aid Risk Alerts</strong> &mdash; Fabric IQ monitors credit pace and GPA thresholds; alerts students before they lose Pell Grant or state aid eligibility</li>
+                  <li class="mb-2"><i class="bi bi-journal-text text-warning me-1"></i><strong>Accreditation Evidence Generator</strong> &mdash; Foundry IQ automatically compiles student outcome data, curriculum maps, and assessment results into accreditation-ready reports</li>
+                  <li class="mb-2"><i class="bi bi-people-fill text-primary me-1"></i><strong>Workforce Alignment Tracker</strong> &mdash; Fabric IQ maps graduate employment outcomes to program curricula, helping deans align courses with regional labor market demand</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSI IQ Engine Use Cases Grid -->
+      <h3 class="fw-bold text-center mt-5 mb-4" id="iq-engines"><i class="bi bi-grid-3x3-gap-fill me-2"></i>CSI IQ Engine Use Cases by Persona<a href="#iq-engines" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h3>
+      <div class="row g-3">
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-primary bg-opacity-10 fw-bold"><i class="bi bi-activity me-2 text-primary"></i>Work IQ &mdash; Student Engagement</div>
+            <div class="card-body">
+              <p class="small text-body-secondary mb-3">Behavioral intelligence from LMS activity, collaboration platforms, attendance, and communication patterns.</p>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>Early Warning System</strong> &mdash; Detect disengagement signals (login gaps &gt;5 days, late assignments, dropped discussion participation) and trigger advisor outreach</li>
+                <li class="mb-2"><strong>Engagement Scoring</strong> &mdash; Real-time per-student engagement score (0-100) combining LMS activity, peer collaboration, library access, and office hours attendance</li>
+                <li class="mb-2"><strong>Study Pattern Analysis</strong> &mdash; Identify optimal study habits from top performers and recommend behavioral adjustments to struggling students</li>
+                <li><strong>Peer Network Mapping</strong> &mdash; Visualize student collaboration networks to identify isolated students who may benefit from study groups or mentoring</li>
+              </ul>
+            </div>
+            <div class="card-footer"><small class="text-body-secondary">Data: <strong>Canvas, Blackboard, Moodle, Teams, Attendance APIs</strong></small></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-success bg-opacity-10 fw-bold"><i class="bi bi-book-half me-2 text-success"></i>Foundry IQ &mdash; Curriculum &amp; Policy</div>
+            <div class="card-body">
+              <p class="small text-body-secondary mb-3">Institutional knowledge from academic catalogs, policy handbooks, research publications, and accreditation documents.</p>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>Policy Q&amp;A Copilot</strong> &mdash; Students and advisors ask natural language questions about academic policies, withdrawal deadlines, and graduation requirements</li>
+                <li class="mb-2"><strong>Prerequisite Chain Resolver</strong> &mdash; Automatically map multi-semester prerequisite sequences and flag scheduling conflicts for degree completion</li>
+                <li class="mb-2"><strong>Catalog Change Impact Analysis</strong> &mdash; When curricula change, identify all affected students and generate transition plans with substitution recommendations</li>
+                <li><strong>Research Discovery Engine</strong> &mdash; Faculty and grad students search across departmental publications, grant databases, and cross-disciplinary expertise maps</li>
+              </ul>
+            </div>
+            <div class="card-footer"><small class="text-body-secondary">Data: <strong>Catalogs, Policy Docs, Accreditation Matrices, Faculty Pubs</strong></small></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-warning bg-opacity-10 fw-bold"><i class="bi bi-bar-chart-line-fill me-2 text-warning"></i>Fabric IQ &mdash; Performance Analytics</div>
+            <div class="card-body">
+              <p class="small text-body-secondary mb-3">Quantitative analytics from SIS grade data, retention metrics, graduation rates, and post-graduation outcomes.</p>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>Retention Risk Dashboard</strong> &mdash; Dean-level view of DFW rates, semester-over-semester GPA trends, and credit velocity by program, cohort, and demographics</li>
+                <li class="mb-2"><strong>Graduation Pathway Optimizer</strong> &mdash; For each student, calculate fastest and most affordable paths to graduation considering current credits, schedule, and financial constraints</li>
+                <li class="mb-2"><strong>Program Health Scorecard</strong> &mdash; Aggregate metrics per academic program: enrollment trends, completion rates, time-to-degree, and employment outcomes</li>
+                <li><strong>Equity Gap Analyzer</strong> &mdash; Identify achievement gaps across demographic groups with AI-generated root cause hypotheses and intervention recommendations</li>
+              </ul>
+            </div>
+            <div class="card-footer"><small class="text-body-secondary">Data: <strong>SIS, Grade Books, IR Data Warehouse, Career Outcomes</strong></small></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-danger bg-opacity-10 fw-bold"><i class="bi bi-person-fill-gear me-2 text-danger"></i>For Academic Advisors</div>
+            <div class="card-body">
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>Caseload Prioritization</strong> &mdash; AI ranks advisor's student caseload by urgency combining all 3 IQ signals: engagement drop (Work), policy holds (Foundry), GPA decline (Fabric)</li>
+                <li class="mb-2"><strong>Meeting Prep Brief</strong> &mdash; Auto-generated 1-page student summary before each advising session with talking points, risks, and recommended actions</li>
+                <li class="mb-2"><strong>Intervention Tracker</strong> &mdash; Log outreach attempts and track outcomes; AI suggests escalation when interventions aren't improving engagement scores</li>
+                <li><strong>Course Recommendation Engine</strong> &mdash; Suggest courses based on student's degree audit, schedule availability, professor ratings, and historical success patterns</li>
+              </ul>
+            </div>
+            <div class="card-footer"><small class="text-body-secondary">IQ Engines: <strong class="text-primary">Work</strong> + <strong class="text-success">Foundry</strong> + <strong class="text-warning">Fabric</strong> (all 3)</small></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-info bg-opacity-10 fw-bold"><i class="bi bi-person-workspace me-2 text-info"></i>For Deans &amp; Administrators</div>
+            <div class="card-body">
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>Enrollment Forecasting</strong> &mdash; Predict next-semester enrollment by program using historical Fabric IQ trends, demographic shifts, and application pipeline data</li>
+                <li class="mb-2"><strong>Budget Justification Reports</strong> &mdash; AI-generated narratives explaining resource allocation needs backed by student outcome data and program performance metrics</li>
+                <li class="mb-2"><strong>Accreditation Self-Study Compiler</strong> &mdash; Automatically assemble accreditation evidence from Foundry IQ (curriculum) + Fabric IQ (outcomes) into required reporting formats</li>
+                <li><strong>Strategic Initiative ROI</strong> &mdash; Measure impact of tutoring programs, mentorship initiatives, and technology investments on retention and completion metrics</li>
+              </ul>
+            </div>
+            <div class="card-footer"><small class="text-body-secondary">IQ Engines: <strong class="text-success">Foundry</strong> + <strong class="text-warning">Fabric</strong></small></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-secondary bg-opacity-10 fw-bold"><i class="bi bi-person-badge-fill me-2 text-secondary"></i>For Students</div>
+            <div class="card-body">
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>24/7 AI Academic Advisor</strong> &mdash; Ask questions anytime: &ldquo;What classes do I need for Spring?&rdquo;, &ldquo;Can I drop this course without penalty?&rdquo;, &ldquo;What's the fastest path to my degree?&rdquo;</li>
+                <li class="mb-2"><strong>Career Path Explorer</strong> &mdash; Based on current major, skills, and interests, see potential career paths with salary data, job demand, and recommended electives</li>
+                <li class="mb-2"><strong>Study Plan Generator</strong> &mdash; Weekly study schedule recommendations based on upcoming deadlines, exam difficulty, and personal engagement patterns from Work IQ</li>
+                <li><strong>Financial Health Monitor</strong> &mdash; Track progress toward credit thresholds required for financial aid, scholarships, and grant eligibility with proactive alerts</li>
+              </ul>
+            </div>
+            <div class="card-footer"><small class="text-body-secondary">IQ Engines: <strong class="text-primary">Work</strong> + <strong class="text-success">Foundry</strong> + <strong class="text-warning">Fabric</strong> (all 3)</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Decision Guide -->
+  <section class="py-5" id="decision">
+    <div class="container">
+      <h2 class="fw-bold text-center mb-4"><i class="bi bi-signpost-split-fill me-2"></i>Which Pattern Should You Choose?<a href="#decision" class="anchor-link" title="Link to this section"><i class="bi bi-link-45deg"></i></a></h2>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-primary border-2 shadow">
+            <div class="card-header bg-primary text-white text-center fw-bold fs-5">
+              <i class="bi bi-diagram-3-fill me-2"></i>Centralized Hub AI
+            </div>
+            <div class="card-body">
+              <p class="fw-semibold text-primary">Choose this if you:</p>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Have multiple teams consuming AI</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Want centralized cost control</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Need shared model governance</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Prefer lowest cost option</li>
+                <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Don't need per-team customization</li>
+              </ul>
+            </div>
+            <div class="card-footer text-center">
+              <a href="pattern1.html" class="btn btn-primary w-100">Explore Pattern 1</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-success border-2 shadow">
+            <div class="card-header bg-success text-white text-center fw-bold fs-5">
+              <i class="bi bi-share-fill me-2"></i>Hybrid Central-Spoke
+            </div>
+            <div class="card-body">
+              <p class="fw-semibold text-success">Choose this if you:</p>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Need per-team RAG / search indexes</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Want shared LLM but local data</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Have data sovereignty requirements</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Want 60%+ savings vs. decentralized</li>
+                <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Don't need fully isolated AI stacks</li>
+              </ul>
+            </div>
+            <div class="card-footer text-center">
+              <a href="pattern3.html" class="btn btn-success w-100">Explore Pattern 3</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-info border-2 shadow">
+            <div class="card-header bg-info text-white text-center fw-bold fs-5">
+              <i class="bi bi-rocket-takeoff-fill me-2"></i>Greenfield Azure
+            </div>
+            <div class="card-body">
+              <p class="fw-semibold text-info">Choose this if you:</p>
+              <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Are starting fresh on Azure</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Need full CAF landing zone</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Require enterprise governance</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Want AI-ready from day one</li>
+                <li class="mb-2"><i class="bi bi-x-circle-fill text-danger me-2"></i>Already have Azure infrastructure</li>
+              </ul>
+            </div>
+            <div class="card-footer text-center">
+              <a href="pattern10.html" class="btn btn-info w-100 text-white">Explore Pattern 10</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-4 bg-body-tertiary text-center">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Azure AI Deployment Patterns &copy; 2026</p>
+      <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-body-secondary"><i class="bi bi-github me-1"></i>GitHub Repository</a>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="btn btn-primary rounded-circle shadow d-flex align-items-center justify-content-center" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up fs-5"></i></button>
+
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js' integrity='sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF' crossorigin='anonymous'></script>
+  <script>
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'strict',flowchart:{htmlLabels:false,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'16px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
+    function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
+    const toggle=document.getElementById('themeToggle');
+    toggle.addEventListener('click',()=>{
+      const html=document.documentElement;
+      const isDark=html.getAttribute('data-bs-theme')==='dark';
+      html.setAttribute('data-bs-theme',isDark?'light':'dark');
+      toggle.querySelector('i').className=isDark?'bi bi-moon-stars-fill':'bi bi-sun-fill';
+    });
+    window.addEventListener('scroll',()=>{
+      document.getElementById('backToTop').style.display=window.scrollY>300?'block':'none';
+      // Highlight active nav link based on scroll position
+      const sections=document.querySelectorAll('section[id]');
+      const navLinks=document.querySelectorAll('.page-nav .nav-link');
+      let current='';
+      sections.forEach(s=>{
+        const top=s.offsetTop-120;
+        if(window.scrollY>=top)current=s.getAttribute('id');
+      });
+      // Also check iq-engines (h3 inside case-studies section)
+      const iqEl=document.getElementById('iq-engines');
+      if(iqEl&&window.scrollY>=iqEl.offsetTop-120)current='iq-engines';
+      navLinks.forEach(l=>{
+        l.classList.remove('active');
+        if(l.getAttribute('href')==='#'+current)l.classList.add('active');
+      });
+    });
+
+    // Scroll-reveal animation using IntersectionObserver
+    const revealObserver=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target);}
+      });
+    },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.pattern-section, #business-value .card, #case-studies .card, #decision .card, .stat-card, #compare .table-responsive, #iq-engines ~ .row .card').forEach((el,i)=>{
+      el.classList.add('reveal');
+      if(i%3===1)el.classList.add('reveal-delay-1');
+      if(i%3===2)el.classList.add('reveal-delay-2');
+      revealObserver.observe(el);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+// Query 3: Restore Time by Workload (SLA tracking)
+// Pattern C - Modern Workloads Pattern
+// Purpose: Track restore performance by workload type to ensure SLA compliance (target: < 4 hours)
+// Frequency: Daily SLA reporting
+
+AzureDiagnostics
+| where OperationName == "Restore"
+| extend 
+    StartTime = todatetime(parse_json(Details)["StartTime"]),
+    EndTime = TimeGenerated,
+    DurationMins = (TimeGenerated - todatetime(parse_json(Details)["StartTime"])) / 1m
+| summarize 
+    AvgDurationMins = avg(DurationMins),
+    P50DurationMins = percentile(DurationMins, 50),
+    P95DurationMins = percentile(DurationMins, 95),
+    P99DurationMins = percentile(DurationMins, 99),
+    RestoreCount = count()
+    by BackupItemType
+| extend 
+    SLAStatus = iff(P95DurationMins < 240, "✓ PASS (< 4h)", "✗ FAIL (> 4h)")
+| order by AvgDurationMins desc

@@ -1,0 +1,14 @@
+// Query 1: Backup Coverage by Vault Type
+// Pattern C - Modern Workloads Pattern
+// Purpose: Show which workloads are protected in each vault type
+// Frequency: Weekly report by platform team
+
+AzureDiagnostics
+| where ResourceType in ("VAULTS", "BACKUPVAULTS")
+| where OperationName == "BackupItem"
+| summarize 
+    ItemCount = count(),
+    BackupItemTypes = make_set(BackupItemType)
+    by VaultType = tostring(ResourceType), 
+       ResourceName
+| order by ItemCount desc

@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern B: Ransomware Resilience — Azure Backup Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --azure-blue: #0078d4;
+            --light-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-dark: #333333;
+            --border-light: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #0078d4 0%, #0099ff 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 0;
+            opacity: 0.95;
+        }
+
+        .navbar-light {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .section-title {
+            color: var(--azure-blue);
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--azure-blue);
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f9f9f9;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--azure-blue);
+            font-weight: 600;
+        }
+
+        .badge-security {
+            background-color: #d83b01;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .mermaid {
+            background-color: #fafafa;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+            border-left: 4px solid var(--azure-blue);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .feature-box strong {
+            color: var(--azure-blue);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .demo-step {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--azure-blue);
+        }
+
+        .demo-step h5 {
+            color: var(--azure-blue);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f5f5f5;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .alert-info {
+            background-color: #e7f3ff;
+            border-left: 4px solid var(--azure-blue);
+            color: #0078d4;
+        }
+
+        .table-light {
+            background-color: var(--card-bg);
+        }
+
+        .table-light thead {
+            background-color: #f9f9f9;
+        }
+
+        .table-light th {
+            color: var(--azure-blue);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin: 5px 5px 5px 0;
+            font-weight: 600;
+        }
+
+        .role-operator {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .role-admin {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .role-restore {
+            background-color: #cfe2ff;
+            color: #084298;
+        }
+
+        .role-audit {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 0;
+        }
+
+        .faq-question {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--azure-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .faq-question:hover {
+            background-color: #f0f0f0;
+        }
+
+        .faq-answer {
+            padding: 15px;
+            display: none;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .icon-check {
+            color: #107c10;
+            font-weight: bold;
+        }
+
+        .icon-fail {
+            color: #d83b01;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid var(--border-light);
+            padding: 30px 0;
+            margin-top: 60px;
+            color: #666;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--azure-blue);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-cloud-check"></i> Azure Backup Patterns
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1><i class="bi bi-shield-lock"></i> Pattern B: Ransomware Resilience</h1>
+            <p>Role-Based Access Control, Soft Delete, & Immutable Vault Lock</p>
+            <span class="badge-security"><i class="bi bi-exclamation-triangle"></i> Security-First Pattern</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- Overview Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-info-circle"></i> Pattern Overview</h2>
+            <p class="lead">Pattern B demonstrates how to protect Azure workloads from ransomware attacks using role-based access control (RBAC) separation, soft delete recovery windows, and immutable vault locks.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <strong>🎯 Target Audience</strong>
+                        Security stakeholders, CISOs, backup administrators, business continuity teams
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <strong>⏱️ Deployment Time</strong>
+                        25-30 minutes automated deployment
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-diagram-3"></i> Architecture</h2>
+            <p>Pattern B separates workload (application VMs, storage) from protection infrastructure (vaults, monitoring). This isolation prevents ransomware from disabling backups.</p>
+            
+            <div class="mermaid">
+                graph TB
+                    subgraph Workload["Workload Resource Group"]
+                        VM["Windows VM<br/>(Encrypted)"]
+                        Storage["Azure Storage<br/>(File Share)"]
+                        Disk["Data Disk<br/>(D: Drive)"]
+                    end
+                    
+                    subgraph Protection["Protection Resource Group"]
+                        Vault["Recovery Services Vault<br/>✓ Soft Delete 14d<br/>✓ Immutable Lock"]
+                        Monitor["Log Analytics<br/>Workspace"]
+                        Alerts["Azure Monitor<br/>Alerts"]
+                    end
+                    
+                    subgraph Network["Network"]
+                        Agent["Backup<br/>Agent"]
+                    end
+                    
+                    VM -->|Backup Agent| Agent
+                    Storage -->|Backup Agent| Agent
+                    Disk -->|Backup Agent| Agent
+                    Agent -->|Protected| Vault
+                    Vault -->|Logs| Monitor
+                    Monitor -->|Triggers| Alerts
+                    
+                    style Workload fill:#f0f7ff
+                    style Protection fill:#ffe7e7
+                    style Vault fill:#d83b01,stroke:#333,color:#fff
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-star"></i> Key Security Features</h2>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🔐 Soft Delete (14-day recovery)</div>
+                        <div class="card-body">
+                            <p>Even if ransomware deletes backups, they remain recoverable for 14 days. This provides a critical recovery window for incident response.</p>
+                            <div class="alert alert-info" role="alert">
+                                <strong>Ransomware Protection:</strong> Attacker deletes backups → Backups enter soft-delete state → Undelete within 14 days
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🔒 Immutable Vault Lock</div>
+                        <div class="card-body">
+                            <p>Once enabled, the vault cannot be deleted or modified. This provides permanent protection against ransomware and insider threats.</p>
+                            <div class="alert alert-info" role="alert">
+                                <strong>Permanent Protection:</strong> Lock prevents vault deletion, policy modification, and downgrade of retention
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">👥 RBAC Separation</div>
+                        <div class="card-body">
+                            <p>Different roles have different permissions. The operator who triggers backups cannot modify vault settings, preventing insider attacks.</p>
+                            <p>
+                                <span class="role-badge role-operator">Backup Operator</span>
+                                <span class="role-badge role-admin">Admin</span>
+                                <span class="role-badge role-restore">Restore Op</span>
+                                <span class="role-badge role-audit">Audit Reader</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">📊 Audit Trail</div>
+                        <div class="card-body">
+                            <p>All vault operations logged and queryable in Log Analytics. Track who accessed backups, when, and from where.</p>
+                            <div class="alert alert-info" role="alert">
+                                <strong>Compliance Proof:</strong> Immutable audit log demonstrates backup integrity for regulatory audits
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RBAC Model Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-shield-check"></i> Role-Based Access Control Model</h2>
+            <p>Pattern B implements 4 security roles with clear separation of duties. This prevents any single person from both backing up and disabling protections.</p>
+            
+            <table class="table table-light">
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Permissions</th>
+                        <th>Use Case</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Backup Operator</strong></td>
+                        <td>Trigger backups, initiate restores (no config)</td>
+                        <td>Daily backup operations, incident response</td>
+                        <td><span class="icon-check">LOW</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backup Administrator</strong></td>
+                        <td>Full vault management, policy creation, retention</td>
+                        <td>Vault design, policy tuning, retention decisions</td>
+                        <td><span class="icon-fail">HIGH</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Restore Operator</strong></td>
+                        <td>Restore workflows only, view recovery points</td>
+                        <td>File recovery, incident response, testing</td>
+                        <td><span class="icon-check">MEDIUM</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Audit Reader</strong></td>
+                        <td>Read-only access to vault, logs, policies</td>
+                        <td>SOC teams, compliance audits, CIO office</td>
+                        <td><span class="icon-check">LOW</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-warning" role="alert">
+                <strong><i class="bi bi-lightning-charge"></i> Key Principle:</strong> The account that triggers backups <strong>cannot</strong> modify vault settings. This prevents ransomware from disabling backups after compromising a machine.
+            </div>
+        </section>
+
+        <!-- Demo Scenarios Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Demo Scenarios</h2>
+
+            <div class="demo-step">
+                <h5>Scenario 1: RBAC Role Separation (5 minutes)</h5>
+                <p><strong>Objective:</strong> Show that RBAC prevents unauthorized backup policy modifications</p>
+                <div class="code-block">
+# Backup Operator CAN trigger restore but CANNOT modify policy
+az backup protection update-for-vm ... --as-user "backup-operator@company.com"
+# Result: Permission denied ✗
+
+# Backup Administrator CAN modify policy
+az backup protection update-for-vm ... --as-user "backup-admin@company.com"
+# Result: Policy updated ✓
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"The operator who triggers backups cannot disable protections"</li>
+                    <li>"This prevents ransomware from disabling backups after VM compromise"</li>
+                    <li>"Different teams have different levels of trust"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 2: Soft Delete Recovery (Ransomware Simulation) (8 minutes)</h5>
+                <p><strong>Objective:</strong> Show 14-day recovery window for "deleted" backups</p>
+                <div class="code-block">
+# 1. "Delete" a recovery point (soft delete, not permanent)
+az backup recoverypoint delete --vault-name ... --recovery-point-id ...
+
+# 2. Show it's in soft-delete state (still recoverable)
+az backup recoverypoint list --query "[].{state:state, deleteState:deleteState}"
+
+# 3. Undelete within 14-day window
+az backup recoverypoint undelete --vault-name ... --recovery-point-id ...
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Even if attacker deletes our backups, we have 14 days to recover them"</li>
+                    <li>"This 14-day window is the critical incident response period"</li>
+                    <li>"Immutable lock ensures we can't 'accidentally' disable soft delete"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 3: Monitoring & Real-Time Alerts (6 minutes)</h5>
+                <p><strong>Objective:</strong> Show security alerts triggered on suspicious activity</p>
+                <div class="code-block">
+# Alert 1: Backup job failures (3+ failures in 1 hour)
+# Alert 2: Vault deletion attempts
+# Alert 3: Soft delete operations
+# Alert 4: Unauthorized restore attempts
+
+# View alerts in real-time
+az monitor alert list --query "[?contains(name, 'backup')]"
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Multiple failed backups often indicate ransomware"</li>
+                    <li>"Real-time alerts enable faster incident response"</li>
+                    <li>"SOC team notified immediately of suspicious activity"</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Restore Workflows Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-arrow-counterclockwise"></i> Restore Workflows</h2>
+            <p>Pattern B supports 3 restore strategies, each optimized for different scenarios:</p>
+
+            <div class="row mt-4">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">📁 File-Level Restore (Fastest)</div>
+                        <div class="card-body">
+                            <p><strong>Typical Time:</strong> 3-5 minutes</p>
+                            <p>Browse and restore individual files from a backup without restoring the entire disk.</p>
+                            <p><strong>Use Case:</strong> Accidental file deletion, ransomware infected specific files</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">💾 Disk Restore (Full Recovery)</div>
+                        <div class="card-body">
+                            <p><strong>Typical Time:</strong> 5-15 minutes</p>
+                            <p>Restore entire encrypted data disk to alternate VM for testing or recovery.</p>
+                            <p><strong>Use Case:</strong> Complete disk corruption, full system recovery</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🔓 Soft Delete Recovery (Ransomware Specific)</div>
+                        <div class="card-body">
+                            <p><strong>Typical Time:</strong> < 1 minute</p>
+                            <p>Undelete backup recovery points that were deleted during ransomware attack.</p>
+                            <p><strong>Use Case:</strong> Ransomware deleted backups, need to recover from soft-deleted backup</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Deployment Checklist Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-check-square"></i> Pre-Deployment Checklist</h2>
+            <p>Before running the demo, verify all 10 items are in place:</p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><span class="icon-check">✓</span> Soft Delete Enabled</p>
+                            <p><span class="icon-check">✓</span> Immutable Lock Active</p>
+                            <p><span class="icon-check">✓</span> RBAC Roles Assigned</p>
+                            <p><span class="icon-check">✓</span> Windows VM Running</p>
+                            <p><span class="icon-check">✓</span> Backup Policy Active</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <p><span class="icon-check">✓</span> Alert Rules Created</p>
+                            <p><span class="icon-check">✓</span> Log Analytics Connected</p>
+                            <p><span class="icon-check">✓</span> File Share Accessible</p>
+                            <p><span class="icon-check">✓</span> Recovery Point Visible</p>
+                            <p><span class="icon-check">✓</span> No Backup Errors</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                <strong><i class="bi bi-info-circle"></i> Validation Command:</strong><br>
+                Run <code>INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</code> validation section to auto-check all 10 items
+            </div>
+        </section>
+
+        <!-- Cost Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-currency-dollar"></i> Cost Breakdown</h2>
+            <p>Pattern B deployment costs depend on workload size. Here's a sample 24-hour cost estimate:</p>
+
+            <table class="table table-light">
+                <thead>
+                    <tr>
+                        <th>Resource</th>
+                        <th>Configuration</th>
+                        <th>24h Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Windows VM</td>
+                        <td>2 cores, 8GB RAM, encrypted</td>
+                        <td>$1.25</td>
+                    </tr>
+                    <tr>
+                        <td>Data Disk</td>
+                        <td>64GB Premium SSD</td>
+                        <td>$0.074</td>
+                    </tr>
+                    <tr>
+                        <td>Azure Storage</td>
+                        <td>File share (50GB used)</td>
+                        <td>$0.184</td>
+                    </tr>
+                    <tr>
+                        <td>Recovery Services Vault</td>
+                        <td>GRS replication, soft delete</td>
+                        <td>$0.10</td>
+                    </tr>
+                    <tr>
+                        <td>Log Analytics</td>
+                        <td>Diagnostics & queries</td>
+                        <td>$0.005</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><strong>Total 24h Cost</strong></td>
+                        <td><strong>$1.61</strong></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><strong>Estimated 30-day Cost</strong></td>
+                        <td><strong>$48.30</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-warning">
+                <strong>💡 Cost Optimization:</strong> Delete resource groups after demo to stop incurring costs
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What's the difference between soft delete and immutable lock?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Soft Delete:</strong> Allows undeletion for 14 days. Can still be permanently deleted by administrator with permission.</p>
+                    <p><strong>Immutable Lock:</strong> Permanent protection. Vault cannot be deleted, modified, or downgraded. Requires Microsoft intervention to remove.</p>
+                    <p><strong>Together:</strong> Soft delete provides short-term ransomware recovery; immutable lock provides permanent protection.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can ransomware still attack if soft delete is enabled?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, ransomware can still try to delete backups. But with soft delete, even if deleted, backups remain in a soft-delete state for 14 days and can be recovered.</p>
+                    <p>This 14-day window is the critical period for incident response. Immutable lock adds permanent protection.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Why separate Workload RG and Protection RG?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Separation provides defense in depth. Even if ransomware compromises the application VM, it cannot access the backup vault (in a different RG with different permissions).</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What happens if I delete a vault by mistake?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>With immutable lock enabled, deletion is blocked. You'll get an error: "Vault is locked and cannot be deleted." To permanently remove the vault, you must first disable immutable lock (requires Microsoft support in some cases).</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I restore individual files without restoring the entire disk?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! File-level restore (Scenario 1) allows browsing and restoring individual files. This is the fastest and most granular recovery option.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How long does it take to restore from a backup?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Restore times vary: File-level restores: 3-5 minutes, Disk restores: 5-15 minutes, Soft delete recovery: < 1 minute</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is this pattern compliant with HIPAA/PCI-DSS/SOX?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Pattern B includes features that support compliance (RBAC separation, audit trail, immutable lock), but full compliance requires additional controls like network isolation, encryption, and documentation. Use Pattern D (Enterprise Landing Zone) for full CAF-aligned compliance setup.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-arrow-right"></i> Next Steps</h2>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5>1. Deploy Infrastructure</h5>
+                    <p>Follow <code>INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</code> to deploy Pattern B in your Azure subscription (25-30 minutes)</p>
+
+                    <h5>2. Run Demo Scenarios</h5>
+                    <p>Execute the 3 demo scenarios in sequence to showcase RBAC, soft delete, and alerting</p>
+
+                    <h5>3. Connect to Production</h5>
+                    <p>Enroll production VMs in backup policies, configure retention, and validate RTO/RPO targets</p>
+
+                    <h5>4. Extend to Enterprise Pattern</h5>
+                    <p>Ready to scale? Move to Pattern D (Enterprise Landing Zone) for multi-team governance and cost control</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6>Documentation</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none">SPEC.md</a></li>
+                        <li><a href="#" class="text-decoration-none">Infrastructure Guide</a></li>
+                        <li><a href="#" class="text-decoration-none">KQL Queries</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Patterns</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/backup-pattern-a-demo" class="text-decoration-none">Pattern A: Core Demo</a></li>
+                        <li><a href="#" class="text-decoration-none">Pattern C: Modern Workloads</a></li>
+                        <li><a href="#" class="text-decoration-none">Pattern D: Enterprise</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/issues" class="text-decoration-none">GitHub Issues</a></li>
+                        <li><a href="mailto:backup-team@company.com" class="text-decoration-none">Email Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">© 2026 Azure Backup Patterns. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="bi bi-chevron-up"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Scroll to Top Button
+        const scrollToTop = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            scrollToTop.classList.toggle('show', window.scrollY > 300);
+        });
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                document.querySelectorAll('.faq-answer').forEach(a => {
+                    if (a !== answer) a.classList.remove('show');
+                });
+                answer.classList.toggle('show');
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

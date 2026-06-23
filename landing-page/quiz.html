@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Knowledge Check Quiz | Azure AI Deployment Patterns</title>
-  <meta name="description" content="Interactive Spec-Driven Development knowledge check with instant scoring and explanations." />
+  <title>SDD Assessment | Azure AI Deployment Patterns</title>
+  <meta name="description" content="Professional Spec-Driven Development assessment with section scoring and detailed answer explanations." />
   <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -94,8 +94,7 @@
     }
 
     .quiz-card,
-    .faq-card,
-    .download-card {
+    .faq-card {
       background: rgba(255,255,255,.82);
       backdrop-filter: blur(10px);
       border: 1px solid rgba(124, 58, 237, .08);
@@ -324,23 +323,9 @@
       border-left-color: var(--quiz-pink);
     }
 
-    .download-card,
     .faq-card {
       padding: 24px;
       margin-top: 24px;
-    }
-
-    .download-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      border-radius: 14px;
-      text-decoration: none;
-      color: var(--quiz-ink);
-      background: linear-gradient(135deg, rgba(255,77,184,.12), rgba(53,224,255,.12));
-      border: 1px solid rgba(124,58,237,.12);
-      font-weight: 700;
     }
 
     .faq-item + .faq-item {
@@ -374,27 +359,31 @@
     </a>
 
     <section class="hero">
-      <div class="hero-chip"><i class="bi bi-stars"></i> Interactive Assessment</div>
-      <h1>Knowledge Check Quiz</h1>
-      <p>Select one answer per question, then click Check Score for instant results. This quiz focuses on clear specifications, acceptance criteria, traceability, release gates, and common spec anti-patterns.</p>
+      <div class="hero-chip"><i class="bi bi-stars"></i> SDD Competency Assessment</div>
+      <h1>Spec-Driven Development Assessment</h1>
+      <p>Answer one option per question and submit to receive section-level scoring with detailed rationale. This assessment evaluates requirement clarity, acceptance criteria quality, traceability discipline, release governance, and spec writing standards.</p>
     </section>
 
     <section class="quiz-card">
-      <h2 class="section-title">Knowledge Check (Real Quiz)</h2>
-      <p class="section-subtitle">Five practical questions organized into themed sections with immediate scoring and answer explanations.</p>
+      <h2 class="section-title">Assessment Overview</h2>
+      <p class="section-subtitle">Ten scenario-based questions organized into four focus areas with immediate scoring and evidence-based explanations.</p>
 
       <div class="quiz-map">
         <a class="map-chip" href="#section-foundations">
           <strong>Section 1</strong>
-          <span>Requirements and acceptance criteria</span>
+          <span>Requirements and Acceptance Criteria</span>
         </a>
         <a class="map-chip" href="#section-delivery">
           <strong>Section 2</strong>
-          <span>Traceability and release controls</span>
+          <span>Traceability and Release Controls</span>
         </a>
         <a class="map-chip" href="#section-quality">
           <strong>Section 3</strong>
-          <span>Spec writing quality and anti-patterns</span>
+          <span>Spec Writing Quality and Anti-Patterns</span>
+        </a>
+        <a class="map-chip" href="#section-verification">
+          <strong>Section 4</strong>
+          <span>Verification, Risk, and Change Control</span>
         </a>
       </div>
 
@@ -404,25 +393,33 @@
             <div>
               <div class="quiz-section-kicker">Section 1</div>
               <h3 class="quiz-section-heading">Requirements and Acceptance Criteria</h3>
-              <p class="quiz-section-text">Focus on measurable requirements, precision, and testable acceptance rules.</p>
+              <p class="quiz-section-text">Evaluate whether requirements are measurable, precise, and testable.</p>
             </div>
-            <div class="quiz-section-badge">2 questions</div>
+            <div class="quiz-section-badge">3 questions</div>
           </div>
 
           <div class="question-block">
-            <div class="question-title">1. Requirement ambiguity detection</div>
-            <div class="question-prompt">Which requirement is least ambiguous?</div>
+            <div class="question-title">1. Requirement Clarity</div>
+            <div class="question-prompt">Which requirement is written in the most testable way?</div>
             <label class="option"><input type="radio" name="q1" value="A">A. System must respond quickly during peak traffic.</label>
-            <label class="option"><input type="radio" name="q1" value="B">B. API response time must stay under 300 ms at p95 for 200 RPS for 15 minutes.</label>
-            <label class="option"><input type="radio" name="q1" value="C">C. Service should scale if users increase.</label>
+            <label class="option"><input type="radio" name="q1" value="B">B. API response time must remain under 300 ms at p95 while handling 200 requests per second for 15 continuous minutes.</label>
+            <label class="option"><input type="radio" name="q1" value="C">C. Service should scale if usage increases significantly.</label>
+          </div>
+
+            <div class="question-block">
+            <div class="question-title">2. Acceptance Criteria Strength</div>
+            <div class="question-prompt">For an input validation feature, which acceptance criterion is strongest?</div>
+            <label class="option"><input type="radio" name="q2" value="A">A. Validation should pass in most cases.</label>
+            <label class="option"><input type="radio" name="q2" value="B">B. Requests missing required fields are rejected with HTTP 400 and field-level error messages.</label>
+            <label class="option"><input type="radio" name="q2" value="C">C. Validation behavior should be user friendly.</label>
           </div>
 
           <div class="question-block mb-0">
-            <div class="question-title">2. Strong vs weak acceptance criteria</div>
-            <div class="question-prompt">Which acceptance criterion is stronger?</div>
-            <label class="option"><input type="radio" name="q2" value="A">A. Deployment validation should pass for most cases.</label>
-            <label class="option"><input type="radio" name="q2" value="B">B. Validation rejects payloads missing required fields and returns HTTP 400 with field-level error messages.</label>
-            <label class="option"><input type="radio" name="q2" value="C">C. Validation behavior should be user friendly.</label>
+            <div class="question-title">3. Boundary Coverage</div>
+            <div class="question-prompt">A field allows 1 to 50 characters. Which acceptance criterion best covers the boundary?</div>
+            <label class="option"><input type="radio" name="q3" value="A">A. The field should usually accept valid values.</label>
+            <label class="option"><input type="radio" name="q3" value="B">B. Inputs of 0 and 51 characters are rejected, while inputs of 1 and 50 characters are accepted.</label>
+            <label class="option"><input type="radio" name="q3" value="C">C. The field length should be checked before saving.</label>
           </div>
         </div>
 
@@ -431,25 +428,33 @@
             <div>
               <div class="quiz-section-kicker">Section 2</div>
               <h3 class="quiz-section-heading">Traceability and Release Controls</h3>
-              <p class="quiz-section-text">Check whether the spec is linked to tests and whether release gates are enforced correctly.</p>
+              <p class="quiz-section-text">Assess traceability coverage and release governance decisions.</p>
             </div>
-            <div class="quiz-section-badge">2 questions</div>
+            <div class="quiz-section-badge">3 questions</div>
           </div>
 
           <div class="question-block">
-            <div class="question-title">3. Traceability mapping</div>
-            <div class="question-prompt">What is missing if requirement FR-03 has code changes but no linked test case?</div>
-            <label class="option"><input type="radio" name="q3" value="A">A. Better commit message</label>
-            <label class="option"><input type="radio" name="q3" value="B">B. Requirement-to-test traceability</label>
-            <label class="option"><input type="radio" name="q3" value="C">C. More architecture diagrams</label>
+            <div class="question-title">4. Traceability Mapping</div>
+            <div class="question-prompt">If requirement FR-03 has implementation changes but no linked test case, which practice is missing?</div>
+            <label class="option"><input type="radio" name="q4" value="A">A. Better commit message</label>
+            <label class="option"><input type="radio" name="q4" value="B">B. Requirement-to-test traceability</label>
+            <label class="option"><input type="radio" name="q4" value="C">C. More architecture diagrams</label>
+          </div>
+
+          <div class="question-block">
+            <div class="question-title">5. Gate-Based Release Decisions</div>
+            <div class="question-prompt">A release gate fails because rollback steps are missing. What is the correct next action?</div>
+            <label class="option"><input type="radio" name="q5" value="A">A. Proceed and document rollback after release</label>
+            <label class="option"><input type="radio" name="q5" value="B">B. Treat the gate as informational and proceed without approval</label>
+            <label class="option"><input type="radio" name="q5" value="C">C. Stop the release until rollback steps are documented and reviewed</label>
           </div>
 
           <div class="question-block mb-0">
-            <div class="question-title">4. Gate-based release decisions</div>
-            <div class="question-prompt">A release gate fails because rollback steps are not defined. What is the best action?</div>
-            <label class="option"><input type="radio" name="q4" value="A">A. Proceed and document rollback later</label>
-            <label class="option"><input type="radio" name="q4" value="B">B. Mark risk accepted without approver</label>
-            <label class="option"><input type="radio" name="q4" value="C">C. Block release until rollback plan is documented and reviewed</label>
+            <div class="question-title">6. Release Readiness Evidence</div>
+            <div class="question-prompt">Which artifact best supports a claim that a feature is ready to release?</div>
+            <label class="option"><input type="radio" name="q6" value="A">A. A message saying the team feels confident</label>
+            <label class="option"><input type="radio" name="q6" value="B">B. A checklist showing tests passed, approvals completed, and rollback steps reviewed</label>
+            <label class="option"><input type="radio" name="q6" value="C">C. A slide deck summarizing the sprint</label>
           </div>
         </div>
 
@@ -458,23 +463,58 @@
             <div>
               <div class="quiz-section-kicker">Section 3</div>
               <h3 class="quiz-section-heading">Spec Writing Quality</h3>
-              <p class="quiz-section-text">Identify subjective wording and anti-patterns that weaken a spec.</p>
+              <p class="quiz-section-text">Identify subjective language and anti-patterns that reduce specification quality.</p>
+            </div>
+            <div class="quiz-section-badge">3 questions</div>
+          </div>
+
+          <div class="question-block mb-0">
+            <div class="question-title">7. Anti-Pattern Diagnosis</div>
+            <div class="question-prompt">Which line is the clearest example of a spec anti-pattern because it is subjective?</div>
+            <label class="option"><input type="radio" name="q7" value="A">A. "System must feel fast and stable."</label>
+            <label class="option"><input type="radio" name="q7" value="B">B. "Error rate must remain below 0.5% over a 24-hour window."</label>
+            <label class="option"><input type="radio" name="q7" value="C">C. "All required fields are validated before deployment trigger."</label>
+          </div>
+
+          <div class="question-block">
+            <div class="question-title">8. Implementation Leakage</div>
+            <div class="question-prompt">Which line is least appropriate in a high-level feature spec because it over-prescribes implementation?</div>
+            <label class="option"><input type="radio" name="q8" value="A">A. "The service exposes a searchable document catalog to authenticated users."</label>
+            <label class="option"><input type="radio" name="q8" value="B">B. "The handler must use a for-loop with exactly three retries and a 250 ms sleep call."</label>
+            <label class="option"><input type="radio" name="q8" value="C">C. "Failed requests are logged with correlation IDs for investigation."</label>
+          </div>
+
+          <div class="question-block mb-0">
+            <div class="question-title">9. Non-Functional Requirement Quality</div>
+            <div class="question-prompt">Which statement is the best non-functional requirement?</div>
+            <label class="option"><input type="radio" name="q9" value="A">A. "The application should be reliable."</label>
+            <label class="option"><input type="radio" name="q9" value="B">B. "The service should avoid downtime whenever possible."</label>
+            <label class="option"><input type="radio" name="q9" value="C">C. "Monthly uptime must be at least 99.9%, excluding approved maintenance windows."</label>
+          </div>
+        </div>
+
+        <div class="quiz-section" id="section-verification">
+          <div class="quiz-section-header">
+            <div>
+              <div class="quiz-section-kicker">Section 4</div>
+              <h3 class="quiz-section-heading">Verification, Risk, and Change Control</h3>
+              <p class="quiz-section-text">Confirm that changes and release decisions remain evidence-driven and formally controlled.</p>
             </div>
             <div class="quiz-section-badge">1 question</div>
           </div>
 
           <div class="question-block mb-0">
-            <div class="question-title">5. Spec anti-pattern diagnosis</div>
-            <div class="question-prompt">Which line is a spec anti-pattern?</div>
-            <label class="option"><input type="radio" name="q5" value="A">A. "System must feel fast and stable."</label>
-            <label class="option"><input type="radio" name="q5" value="B">B. "Error rate must remain below 0.5% over a 24-hour window."</label>
-            <label class="option"><input type="radio" name="q5" value="C">C. "All required fields are validated before deployment trigger."</label>
+            <div class="question-title">10. Controlled Scope Change</div>
+            <div class="question-prompt">During implementation, the team wants to add behavior that is not in the approved spec. What should happen first?</div>
+            <label class="option"><input type="radio" name="q10" value="A">A. Add the change immediately and update the spec after release</label>
+            <label class="option"><input type="radio" name="q10" value="B">B. Update the spec, review the impact, and get approval before treating the change as in scope</label>
+            <label class="option"><input type="radio" name="q10" value="C">C. Reject the request entirely because an approved spec can never change</label>
           </div>
         </div>
 
         <div class="quiz-actions">
           <button type="button" class="btn btn-quiz-primary" id="checkScoreBtn">
-            <i class="bi bi-clipboard-check me-1"></i>Check Score
+            <i class="bi bi-clipboard-check me-1"></i>Submit Assessment
           </button>
           <button type="button" class="btn btn-quiz-secondary" id="resetQuizBtn">
             <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
@@ -482,7 +522,7 @@
         </div>
 
         <div class="warning-panel" id="warningPanel">
-          <strong><i class="bi bi-exclamation-circle me-1"></i>Complete all 5 questions.</strong> Answer every question before scoring.
+          <strong><i class="bi bi-exclamation-circle me-1"></i>Complete all 10 questions.</strong> Select one response for each question before submitting.
         </div>
 
         <div class="result-panel" id="resultPanel">
@@ -494,48 +534,97 @@
       </form>
     </section>
 
-    <section class="download-card">
-      <h3 class="section-title">Downloadable full quiz</h3>
-      <p class="section-subtitle">The complete quiz and answer key are included in the downloadable course pack below.</p>
-      <a class="download-link" href="/specs/sdd-quiz-answer-key.md">
-        <i class="bi bi-download"></i>
-        Open full quiz and answer key
-      </a>
-    </section>
-
     <section class="faq-card">
       <h3 class="section-title">Frequently Asked Questions</h3>
 
       <div class="faq-item">
-        <strong>Do we need special tooling to use SDD?</strong>
-        <p class="mb-0 mt-2">No. Start with a Markdown spec, issue tracker IDs, and your existing test pipeline.</p>
+        <strong>Do teams need specialized tools to adopt SDD?</strong>
+        <p class="mb-0 mt-2">No. A structured specification template, traceable work items, and your current test pipeline are enough to start.</p>
       </div>
 
       <div class="faq-item">
-        <strong>How detailed should one spec be?</strong>
-        <p class="mb-0 mt-2">Keep it feature-sized. One spec should usually map to one pull request or one sprint deliverable.</p>
+        <strong>How detailed should a single specification be?</strong>
+        <p class="mb-0 mt-2">Keep it feature-scoped. One specification should typically map to one pull request or one sprint-level deliverable.</p>
       </div>
 
       <div class="faq-item">
-        <strong>What is the most common beginner mistake?</strong>
-        <p class="mb-0 mt-2">Using subjective language in acceptance criteria without measurable pass/fail thresholds.</p>
+        <strong>What is the most common early-stage quality issue?</strong>
+        <p class="mb-0 mt-2">Using subjective acceptance criteria that do not include measurable pass/fail thresholds.</p>
       </div>
     </section>
   </div>
 
   <script>
-    const answerKey = { q1: 'B', q2: 'B', q3: 'B', q4: 'C', q5: 'A' };
+    const answerKey = { q1: 'B', q2: 'B', q3: 'B', q4: 'B', q5: 'C', q6: 'B', q7: 'A', q8: 'B', q9: 'C', q10: 'B' };
     const quizSections = [
-      { title: 'Section 1: Requirements and Acceptance Criteria', questions: ['q1', 'q2'] },
-      { title: 'Section 2: Traceability and Release Controls', questions: ['q3', 'q4'] },
-      { title: 'Section 3: Spec Writing Quality', questions: ['q5'] }
+      { title: 'Section 1: Requirements and Acceptance Criteria', questions: ['q1', 'q2', 'q3'] },
+      { title: 'Section 2: Traceability and Release Controls', questions: ['q4', 'q5', 'q6'] },
+      { title: 'Section 3: Spec Writing Quality', questions: ['q7', 'q8', 'q9'] },
+      { title: 'Section 4: Verification, Risk, and Change Control', questions: ['q10'] }
     ];
+    const optionText = {
+      q1: {
+        A: 'System must respond quickly during peak traffic.',
+        B: 'API response time must remain under 300 ms at p95 while handling 200 requests per second for 15 continuous minutes.',
+        C: 'Service should scale if usage increases significantly.'
+      },
+      q2: {
+        A: 'Validation should pass for most cases.',
+        B: 'Requests missing required fields are rejected with HTTP 400 and field-level error messages.',
+        C: 'Validation behavior should be user friendly.'
+      },
+      q3: {
+        A: 'The field should usually accept valid values.',
+        B: 'Inputs of 0 and 51 characters are rejected, while inputs of 1 and 50 characters are accepted.',
+        C: 'The field length should be checked before saving.'
+      },
+      q4: {
+        A: 'Better commit message',
+        B: 'Requirement-to-test traceability',
+        C: 'More architecture diagrams'
+      },
+      q5: {
+        A: 'Proceed and document rollback after release',
+        B: 'Treat the gate as informational and continue without approval',
+        C: 'Stop the release until rollback steps are documented and reviewed'
+      },
+      q6: {
+        A: 'A message saying the team feels confident',
+        B: 'A checklist showing tests passed, approvals completed, and rollback steps reviewed',
+        C: 'A slide deck summarizing the sprint'
+      },
+      q7: {
+        A: '"System must feel fast and stable."',
+        B: '"Error rate must remain below 0.5% over a 24-hour window."',
+        C: '"All required fields are validated before deployment trigger."'
+      },
+      q8: {
+        A: 'The service exposes a searchable document catalog to authenticated users.',
+        B: 'The handler must use a for-loop with exactly three retries and a 250 ms sleep call.',
+        C: 'Failed requests are logged with correlation IDs for investigation.'
+      },
+      q9: {
+        A: '"The application should be reliable."',
+        B: '"The service should avoid downtime whenever possible."',
+        C: '"Monthly uptime must be at least 99.9%, excluding approved maintenance windows."'
+      },
+      q10: {
+        A: 'Add the change immediately and update the spec after release',
+        B: 'Update the spec, review the impact, and get approval before treating the change as in scope',
+        C: 'Ignore the change request completely because the original spec can never change'
+      }
+    };
     const explanations = {
-      q1: 'B is measurable and testable with a clear threshold and workload envelope.',
-      q2: 'B describes an exact failure mode, response code, and required error detail.',
-      q3: 'Without a linked test, the requirement is not traceable through validation.',
-      q4: 'A failed release gate should block the release until rollback is documented and reviewed.',
-      q5: '"Feel fast and stable" is subjective and not objectively testable.'
+      q1: 'B is the strongest requirement because it defines a metric, a percentile target, a workload, and a duration that can all be tested.',
+      q2: 'B is strongest because it states the trigger condition, the expected system response, and the exact output the team can verify.',
+      q3: 'B is strongest because it explicitly tests both invalid and valid boundary values rather than describing the behavior vaguely.',
+      q4: 'B is correct because the missing practice is requirement-to-test traceability, which links implementation back to verification evidence.',
+      q5: 'A failed release gate is a stop condition. The release should wait until rollback steps are documented and reviewed.',
+      q6: 'B provides concrete release evidence. It ties readiness to completed checks rather than opinions or summary material.',
+      q7: '"Feel fast and stable" is subjective language, so different reviewers could interpret it differently and test it inconsistently.',
+      q8: 'B leaks low-level implementation details into a high-level spec. The spec should define expected behavior and constraints, not force a specific loop structure.',
+      q9: 'C is measurable and reviewable because it defines a target and a clear reporting window.',
+      q10: 'Spec-driven work allows changes, but they should be reviewed and approved through the spec before the team treats them as committed scope.'
     };
 
     function scoreQuiz() {
@@ -564,14 +653,15 @@
 
       warningPanel.classList.remove('show');
 
-      const percent = Math.round((correct / 5) * 100);
-      let rating = 'Needs review';
+      const totalQuestions = Object.keys(answerKey).length;
+      const percent = Math.round((correct / totalQuestions) * 100);
+      let rating = 'Requires improvement';
       if (percent === 100) rating = 'Excellent';
-      else if (percent >= 80) rating = 'Strong';
-      else if (percent >= 60) rating = 'Good start';
+      else if (percent >= 80) rating = 'Proficient';
+      else if (percent >= 60) rating = 'Developing';
 
-      document.getElementById('scoreText').textContent = `${correct}/5 (${percent}%)`;
-      document.getElementById('ratingText').innerHTML = `<strong>${rating}</strong> — review the explanations below.`;
+      document.getElementById('scoreText').textContent = `${correct}/${totalQuestions} (${percent}%)`;
+      document.getElementById('ratingText').innerHTML = `<strong>${rating}</strong> - review the rationale for each question below.`;
 
       const sectionScores = quizSections.map((section) => {
         const sectionCorrect = section.questions.filter((question) => {
@@ -590,10 +680,13 @@
       const feedback = Object.keys(answerKey).map((question, index) => {
         const selected = document.querySelector(`input[name="${question}"]:checked`).value;
         const isCorrect = selected === answerKey[question];
+        const selectedText = optionText[question][selected];
+        const correctText = optionText[question][answerKey[question]];
         return `
           <div class="feedback-item ${isCorrect ? '' : 'incorrect'}">
             <strong>Q${index + 1}: ${isCorrect ? 'Correct' : 'Incorrect'}</strong><br>
-            Your answer: ${selected} | Correct answer: ${answerKey[question]}<br>
+            Your answer: ${selected}. ${selectedText}<br>
+            Correct answer: ${answerKey[question]}. ${correctText}<br>
             ${explanations[question]}
           </div>
         `;

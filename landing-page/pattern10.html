@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Pattern 10: Greenfield Azure Deployment — Azure AI Patterns</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root{--accent:#0078d4;--accent-dark:#50e6ff}
     [data-bs-theme="dark"]{--accent:#50e6ff}
@@ -75,7 +75,7 @@
           <p class="lead mb-0">Build a brand-new Azure environment from zero using Cloud Adoption Framework best practices. Complete landing zone setup with management groups, networking, identity, governance, and AI-ready infrastructure — the "Zero to Hero" approach.</p>
         </div>
         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-          <span class="badge bg-light text-dark fs-5 px-4 py-2">~$5,500/mo</span>
+          <span class="badge bg-light text-dark fs-5 px-4 py-2">$18,000 &ndash; $28,000/mo*</span>
         </div>
       </div>
     </div>
@@ -94,8 +94,8 @@
         <div class="col-6 col-md-3">
           <div class="card stat-card h-100 shadow-sm p-3">
             <i class="bi bi-currency-dollar text-success fs-3"></i>
-            <div class="fw-bold fs-5">~$5,500</div>
-            <small class="text-body-secondary">Monthly Cost</small>
+            <div class="fw-bold fs-5">$18K&ndash;$28K</div>
+            <small class="text-body-secondary">Monthly Est.*</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
@@ -178,7 +178,7 @@
                   <li>Basic NSGs, no Firewall</li>
                 </ul>
               </div>
-              <span class="badge bg-success fs-6 px-3 py-2">~$1,200/mo</span>
+              <span class="badge bg-success fs-6 px-3 py-2">$10,000 &ndash; $15,000/mo</span>
             </div>
           </div>
         </div>
@@ -196,7 +196,7 @@
                   <li>Azure Policy baseline, Cost Management</li>
                 </ul>
               </div>
-              <span class="badge bg-primary fs-6 px-3 py-2">~$5,500/mo</span>
+              <span class="badge bg-primary fs-6 px-3 py-2">$18,000 &ndash; $28,000/mo</span>
             </div>
           </div>
         </div>
@@ -214,7 +214,7 @@
                   <li>Full Azure Policy initiatives, Sentinel SIEM</li>
                 </ul>
               </div>
-              <span class="badge bg-warning text-dark fs-6 px-3 py-2">~$18,000/mo</span>
+              <span class="badge bg-warning text-dark fs-6 px-3 py-2">$35,000 &ndash; $50,000/mo</span>
             </div>
           </div>
         </div>
@@ -385,9 +385,12 @@ graph TB
             <tr><td>14</td><td><i class="bi bi-diagram-2 me-1" style="color:#198754"></i>VNet + NSGs + PE</td><td>—</td><td>Hub + Spoke + 6 endpoints</td><td class="text-end">~$48</td></tr>
           </tbody>
           <tfoot class="table-dark">
-            <tr><td colspan="4" class="fw-bold">Estimated Total (Medium Production)</td><td class="text-end fw-bold">~$5,500/mo</td></tr>
+            <tr><td colspan="4" class="fw-bold">Estimated Range (Medium Production)</td><td class="text-end fw-bold">$18,000 &ndash; $28,000/mo</td></tr>
           </tfoot>
         </table>
+      </div>
+      <div class="alert alert-warning bg-warning-subtle border-warning mt-3 mb-0 py-2 px-3 small" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i><strong>Pricing Disclaimer:</strong> Estimates start from a <strong>$10,000&ndash;$15,000/mo base</strong> (Azure OpenAI, AI Search, AML, networking, monitoring) <strong>+$8,000&ndash;$13,000</strong> for full CAF infrastructure (Firewall, Bastion, VPN Gateway, SQL MI, Defender for Cloud, Policy governance). Actual costs will vary based on Azure region, reserved instance commitments, Enterprise Agreement discounts, consumption volume, and selected SKU tiers. Use the <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank" rel="noopener" class="alert-link">Azure Pricing Calculator</a> for your specific configuration. These figures are provided for planning purposes only and do not constitute a pricing guarantee.
       </div>
     </div>
   </section>
@@ -546,10 +549,10 @@ graph TB
 
   <button id="backToTop" class="btn btn-sm rounded-circle shadow" style="position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none;background:#198754;color:#fff" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js' integrity='sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF' crossorigin='anonymous'></script>
   <script>
-    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'strict',flowchart:{htmlLabels:false,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
     function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
     const toggle=document.getElementById('themeToggle');
     toggle.addEventListener('click',()=>{
@@ -564,3 +567,4 @@ graph TB
   </script>
 </body>
 </html>
+

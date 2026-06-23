@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Pattern 2: Decentralized Spoke AI — Azure AI Patterns</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root{--accent:#0078d4;--accent-dark:#50e6ff}
     [data-bs-theme="dark"]{--accent:#50e6ff}
@@ -132,7 +132,7 @@
             <li><strong>Full Isolation</strong> — Each workload has its own VNet, AI services, and compute</li>
             <li><strong>Independent Scaling</strong> — Right-size each spoke independently</li>
             <li><strong>Dedicated Quotas</strong> — No shared OpenAI TPM limits</li>
-            <li><strong>AKS per Spoke</strong> — System pool (D4s_v5 × 3) + optional GPU pool</li>
+            <li><strong>AKS per Spoke</strong> — System pool (D4s_v5 Ã- 3) + optional GPU pool</li>
             <li><strong>Shared Monitoring</strong> — Centralized Log Analytics + optional Azure Firewall</li>
           </ul>
         </div>
@@ -146,7 +146,7 @@
               </table>
               <h6 class="card-title fw-bold mt-3">AKS Configuration</h6>
               <table class="table table-sm mb-0">
-                <tr><td>System Pool</td><td>D4s_v5 × 3</td></tr>
+                <tr><td>System Pool</td><td>D4s_v5 Ã- 3</td></tr>
                 <tr><td>GPU Pool</td><td>NC6s_v3 (optional)</td></tr>
               </table>
               <h6 class="card-title fw-bold mt-3">Storage Containers</h6>
@@ -171,7 +171,7 @@
         </div>
       </div>
       <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
-        <strong>📌 Architecture Overview:</strong> Three independent workload teams (Green/Orange/Purple) each run isolated Azure AI services. All outbound traffic routes through a central Azure Firewall. Monitoring is centralized in Log Analytics.
+        <strong> Architecture Overview:</strong> Three independent workload teams (Green/Orange/Purple) each run isolated Azure AI services. All outbound traffic routes through a central Azure Firewall. Monitoring is centralized in Log Analytics.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
       </div>
       <div class="card shadow">
@@ -179,26 +179,26 @@
           <div class="diagram-wrapper" style="min-height:1400px;display:flex;align-items:center;justify-content:center;overflow:auto">
             <pre class="mermaid" style="font-size:20px">
 graph LR
-    subgraph Mgmt["🔧 Shared Management<br/>(Centralized)"]
-        FW["🔥 Azure<br/>Firewall<br/><br/>Control all<br/>outbound traffic"]
-        MON["📊 Log Analytics<br/><br/>Monitor metrics<br/>from all spokes"]
+    subgraph Mgmt[" Shared Management<br/>(Centralized)"]
+        FW[" Azure<br/>Firewall<br/><br/>Control all<br/>outbound traffic"]
+        MON[" Log Analytics<br/><br/>Monitor metrics<br/>from all spokes"]
     end
     
-    subgraph SP1["🟢 SPOKE 1<br/>(Team A)<br/>VNet 10.10.0.0/16"]
+    subgraph SP1[" SPOKE 1<br/>(Team A)<br/>VNet 10.10.0.0/16"]
         AKS1["<b>AKS Cluster</b><br/>D4s_v5 x 3 nodes<br/><br/>Runs AI apps"]
         AOAI1["<b>Azure OpenAI</b><br/>S0 Tier<br/><br/>LLM models"]
         AIS1["<b>AI Search</b><br/>Basic Tier<br/><br/>Vector DB"]
         ADLS1["<b>Data Lake</b><br/>Gen2 Storage<br/><br/>Datasets"]
     end
     
-    subgraph SP2["🟠 SPOKE 2<br/>(Team B)<br/>VNet 10.20.0.0/16"]
+    subgraph SP2[" SPOKE 2<br/>(Team B)<br/>VNet 10.20.0.0/16"]
         AKS2["<b>AKS Cluster</b><br/>D4s_v5 x 3 nodes<br/><br/>Runs AI apps"]
         AOAI2["<b>Azure OpenAI</b><br/>S0 Tier<br/><br/>LLM models"]
         AIS2["<b>AI Search</b><br/>Basic Tier<br/><br/>Vector DB"]
         ADLS2["<b>Data Lake</b><br/>Gen2 Storage<br/><br/>Datasets"]
     end
     
-    subgraph SP3["🟣 SPOKE 3<br/>(Team C)<br/>VNet 10.30.0.0/16"]
+    subgraph SP3[" SPOKE 3<br/>(Team C)<br/>VNet 10.30.0.0/16"]
         AKS3["<b>AKS Cluster</b><br/>D4s_v5 x 3 nodes<br/><br/>Runs AI apps"]
         AOAI3["<b>Azure OpenAI</b><br/>S0 Tier<br/><br/>LLM models"]
         AIS3["<b>AI Search</b><br/>Basic Tier<br/><br/>Vector DB"]
@@ -239,13 +239,13 @@ graph LR
           <h6 class="card-title fw-bold mb-3"><i class="bi bi-info-circle me-2"></i>Key Benefits</h6>
           <div class="row g-2">
             <div class="col-md-4">
-              <div class="small"><strong>🔐 Isolated Workloads:</strong> Each team has dedicated resources—no cross-team access</div>
+              <div class="small"><strong> Isolated Workloads:</strong> Each team has dedicated resources—no cross-team access</div>
             </div>
             <div class="col-md-4">
-              <div class="small"><strong>🛡️ Centralized Security:</strong> All egress through firewall for compliance</div>
+              <div class="small"><strong> Centralized Security:</strong> All egress through firewall for compliance</div>
             </div>
             <div class="col-md-4">
-              <div class="small"><strong>📊 Unified Monitoring:</strong> Single Log Analytics workspace for all spokes</div>
+              <div class="small"><strong> Unified Monitoring:</strong> Single Log Analytics workspace for all spokes</div>
             </div>
           </div>
         </div>
@@ -267,7 +267,7 @@ graph LR
             <tr><td>2</td><td><i class="bi bi-search text-info me-1"></i>Azure AI Search</td><td>3</td><td>Basic</td><td>Workload-specific vector search</td><td class="text-end">$73.73</td><td class="text-end fw-bold">$221.19</td></tr>
             <tr><td>3</td><td><i class="bi bi-database text-info me-1"></i>ADLS Gen2</td><td>3</td><td>Standard LRS, HNS</td><td>Workload datasets &amp; embeddings</td><td class="text-end">~$30</td><td class="text-end fw-bold">~$90</td></tr>
             <tr><td>4</td><td><i class="bi bi-key-fill text-info me-1"></i>Azure Key Vault</td><td>3</td><td>Standard</td><td>Per-spoke secrets management</td><td class="text-end">~$5</td><td class="text-end fw-bold">~$15</td></tr>
-            <tr><td>5</td><td><i class="bi bi-pc-display text-info me-1"></i>AKS</td><td>3</td><td>D4s_v5 × 3 nodes</td><td>Container compute per workload</td><td class="text-end">~$420</td><td class="text-end fw-bold">~$1,260</td></tr>
+            <tr><td>5</td><td><i class="bi bi-pc-display text-info me-1"></i>AKS</td><td>3</td><td>D4s_v5 Ã- 3 nodes</td><td>Container compute per workload</td><td class="text-end">~$420</td><td class="text-end fw-bold">~$1,260</td></tr>
             <tr><td>6</td><td><i class="bi bi-graph-up text-info me-1"></i>Log Analytics</td><td>1</td><td>PerGB2018</td><td>Centralized monitoring (shared)</td><td class="text-end">~$35</td><td class="text-end fw-bold">~$35</td></tr>
             <tr><td>7</td><td><i class="bi bi-speedometer2 text-info me-1"></i>Application Insights</td><td>3</td><td>Workspace-based</td><td>Per-spoke APM telemetry</td><td class="text-end">Incl.</td><td class="text-end">Incl.</td></tr>
             <tr><td>8</td><td><i class="bi bi-fire text-info me-1"></i>Azure Firewall</td><td>1</td><td>Standard</td><td>Centralized egress control</td><td class="text-end">$912</td><td class="text-end fw-bold">$912</td></tr>
@@ -292,7 +292,7 @@ graph LR
       <div class="row g-4">
         <div class="col-md-6 col-lg-4">
           <div class="card service-card h-100"><div class="card-body">
-            <h5 class="card-title"><i class="bi bi-cpu text-info me-2"></i>Azure OpenAI (×3)</h5>
+            <h5 class="card-title"><i class="bi bi-cpu text-info me-2"></i>Azure OpenAI (Ã-3)</h5>
             <span class="badge bg-info mb-2">S0</span><span class="badge bg-success mb-2 ms-1">~$1,100/spoke</span>
             <p>Dedicated LLM per workload with 20K TPM GPT-4o and 80K TPM embeddings. Full quota isolation ensures no cross-workload throttling.</p>
             <ul class="list-unstyled small">
@@ -304,8 +304,8 @@ graph LR
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="card service-card h-100"><div class="card-body">
-            <h5 class="card-title"><i class="bi bi-pc-display text-info me-2"></i>AKS Clusters (×3)</h5>
-            <span class="badge bg-info mb-2">D4s_v5 × 3</span><span class="badge bg-success mb-2 ms-1">~$420/spoke</span>
+            <h5 class="card-title"><i class="bi bi-pc-display text-info me-2"></i>AKS Clusters (Ã-3)</h5>
+            <span class="badge bg-info mb-2">D4s_v5 Ã- 3</span><span class="badge bg-success mb-2 ms-1">~$420/spoke</span>
             <p>Kubernetes compute for each workload with system pool and optional GPU pool (NC6s_v3) for inference. Azure RBAC and Calico network policies.</p>
             <ul class="list-unstyled small">
               <li><i class="bi bi-check-circle text-success me-1"></i>Azure RBAC for Kubernetes</li>
@@ -316,7 +316,7 @@ graph LR
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="card service-card h-100"><div class="card-body">
-            <h5 class="card-title"><i class="bi bi-search text-info me-2"></i>Azure AI Search (×3)</h5>
+            <h5 class="card-title"><i class="bi bi-search text-info me-2"></i>Azure AI Search (Ã-3)</h5>
             <span class="badge bg-info mb-2">Basic</span><span class="badge bg-success mb-2 ms-1">$73.73/spoke</span>
             <p>Workload-specific vector and keyword search. Each spoke maintains independent indexes, avoiding cross-workload data exposure.</p>
             <ul class="list-unstyled small">
@@ -340,7 +340,7 @@ graph LR
         </div>
         <div class="col-md-6 col-lg-4">
           <div class="card service-card h-100"><div class="card-body">
-            <h5 class="card-title"><i class="bi bi-database text-info me-2"></i>ADLS Gen2 (×3)</h5>
+            <h5 class="card-title"><i class="bi bi-database text-info me-2"></i>ADLS Gen2 (Ã-3)</h5>
             <span class="badge bg-info mb-2">Standard LRS</span><span class="badge bg-success mb-2 ms-1">~$30/spoke</span>
             <p>Per-workload data lake with hierarchical namespace. Stores datasets, embeddings, and model artifacts in isolated storage boundary.</p>
             <ul class="list-unstyled small">
@@ -472,16 +472,16 @@ graph LR
 
   <button id="backToTop" class="btn btn-info btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js' integrity='sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF' crossorigin='anonymous'></script>
   <script>
     // Initialize Mermaid
     mermaid.initialize({
       startOnLoad: true,
       theme: 'default',
-      securityLevel: 'loose',
+      securityLevel:'strict',
       flowchart: {
-        htmlLabels: true,
+        htmlLabels:false,
         curve: 'linear',
         nodeSpacing: 80,
         rankSpacing: 100,
@@ -562,3 +562,4 @@ graph LR
   </script>
 </body>
 </html>
+

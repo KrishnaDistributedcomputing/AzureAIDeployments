@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Pattern 8: Lift &amp; Shift Migration — Azure AI Patterns</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root{--accent:#0078d4;--accent-dark:#50e6ff}
     [data-bs-theme="dark"]{--accent:#50e6ff}
@@ -231,24 +231,24 @@
             <button class="btn btn-sm btn-outline-secondary btn-enlarge" onclick="enlargeDiagram(this)" title="Enlarge diagram"><i class="bi bi-arrows-fullscreen me-1"></i>Enlarge</button>
           <pre class="mermaid">
 graph LR
-    subgraph OnPrem["🏢 On-Premises Data Center"]
+    subgraph OnPrem[" On-Premises Data Center"]
         direction TB
         LEGACY["Legacy VMs&lt;br/&gt;Windows / Linux"]
         LEGDB["SQL Server on VM&lt;br/&gt;File Servers"]
         LEGAPP["Legacy Apps&lt;br/&gt;IIS / Apache / Tomcat"]
     end
 
-    subgraph Phase1["📋 Phase 1 — Assess"]
+    subgraph Phase1["Phase 1 - Assess"]
         MIGRATE["Azure Migrate&lt;br/&gt;Discovery &amp;&lt;br/&gt;Assessment"]
     end
 
-    subgraph Phase2["🔄 Phase 2 — Migrate"]
+    subgraph Phase2["Phase 2 - Migrate"]
         direction TB
         ASR["Azure Site Recovery&lt;br/&gt;Replication Engine"]
         DMS["Database Migration&lt;br/&gt;Service"]
     end
 
-    subgraph Phase3["☁️ Phase 3 — Azure Target"]
+    subgraph Phase3[" Phase 3 — Azure Target"]
         direction TB
         subgraph Compute["Compute Subnet /24"]
             VM1["Azure VM D4s_v5&lt;br/&gt;Windows Server"]
@@ -309,7 +309,7 @@ graph LR
           <tbody>
             <tr><td>1</td><td><i class="bi bi-search me-1" style="color:#e67e22"></i>Azure Migrate</td><td>Free</td><td>Discovery &amp; assessment</td><td class="text-end fw-bold">Free</td></tr>
             <tr><td>2</td><td><i class="bi bi-arrow-repeat me-1" style="color:#e67e22"></i>Azure Site Recovery</td><td>Per-instance</td><td>VM replication &amp; failover</td><td class="text-end fw-bold">~$25/VM</td></tr>
-            <tr><td>3</td><td><i class="bi bi-pc-display me-1" style="color:#e67e22"></i>Azure VM × 2</td><td>D4s_v5</td><td>Application compute (Windows + Linux)</td><td class="text-end fw-bold">~$560</td></tr>
+            <tr><td>3</td><td><i class="bi bi-pc-display me-1" style="color:#e67e22"></i>Azure VM Ã- 2</td><td>D4s_v5</td><td>Application compute (Windows + Linux)</td><td class="text-end fw-bold">~$560</td></tr>
             <tr><td>4</td><td><i class="bi bi-database me-1" style="color:#e67e22"></i>SQL Server on VM</td><td>D4s_v5 + SQL Std</td><td>Database server</td><td class="text-end fw-bold">~$620</td></tr>
             <tr><td>5</td><td><i class="bi bi-shield-lock me-1" style="color:#e67e22"></i>Azure Bastion</td><td>Standard</td><td>Secure VM access (no public IPs)</td><td class="text-end fw-bold">~$330</td></tr>
             <tr><td>6</td><td><i class="bi bi-cloud-arrow-up me-1" style="color:#e67e22"></i>Azure Backup</td><td>Vault</td><td>VM &amp; SQL backup, 30-day retention</td><td class="text-end fw-bold">~$120</td></tr>
@@ -479,10 +479,10 @@ graph LR
 
   <button id="backToTop" class="btn btn-sm rounded-circle shadow" style="position:fixed;bottom:2rem;right:2rem;z-index:1050;display:none;background:#e67e22;color:#fff" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js' integrity='sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF' crossorigin='anonymous'></script>
   <script>
-    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'strict',flowchart:{htmlLabels:false,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
     function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
     function enlargeDrawio(btn){const wrapper=btn.parentElement;const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner" style="max-width:98vw;padding:1.5rem"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
 
@@ -644,3 +644,4 @@ graph LR
   </script>
 </body>
 </html>
+

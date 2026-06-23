@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern D: Enterprise Landing Zone — Azure Backup Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --azure-blue: #0078d4;
+            --light-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-dark: #333333;
+            --border-light: #e0e0e0;
+            --orange: #ffc107;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #7f3ff2 0%, #a855f7 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 0;
+            opacity: 0.95;
+        }
+
+        .navbar-light {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .section-title {
+            color: var(--azure-blue);
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--azure-blue);
+            padding-bottom: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #f9f9f9;
+            border-bottom: 1px solid var(--border-light);
+            color: #7f3ff2;
+            font-weight: 600;
+        }
+
+        .badge-enterprise {
+            background-color: #7f3ff2;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .mermaid {
+            background-color: #fafafa;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #f0e7ff 0%, #ffffff 100%);
+            border-left: 4px solid #7f3ff2;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .feature-box strong {
+            color: #7f3ff2;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .rg-card {
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .rg-card.workload {
+            border-left: 4px solid #0078d4;
+        }
+
+        .rg-card.protection {
+            border-left: 4px solid #d83b01;
+        }
+
+        .rg-card.operations {
+            border-left: 4px solid #7f3ff2;
+        }
+
+        .rg-card h5 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .demo-step {
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #7f3ff2;
+        }
+
+        .demo-step h5 {
+            color: #7f3ff2;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .code-block {
+            background-color: #f5f5f5;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .rbac-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .rbac-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+            border-top: 4px solid #7f3ff2;
+        }
+
+        .rbac-item strong {
+            color: #7f3ff2;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            border-left: 4px solid var(--orange);
+            color: #856404;
+        }
+
+        .table-light {
+            background-color: var(--card-bg);
+        }
+
+        .table-light thead {
+            background-color: #f9f9f9;
+        }
+
+        .table-light th {
+            color: #7f3ff2;
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 0;
+        }
+
+        .faq-question {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #7f3ff2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f9f9f9;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .faq-question:hover {
+            background-color: #f0f0f0;
+        }
+
+        .faq-answer {
+            padding: 15px;
+            display: none;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid var(--border-light);
+            padding: 30px 0;
+            margin-top: 60px;
+            color: #666;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #7f3ff2;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-to-top.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .rg-card {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-cloud-check"></i> Azure Backup Patterns
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1><i class="bi bi-building"></i> Pattern D: Enterprise Landing Zone</h1>
+            <p>CAF-Aligned Governance, Zero-Trust Security & FinOps Cost Control</p>
+            <span class="badge-enterprise"><i class="bi bi-shield-lock"></i> Enterprise Production Pattern</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- Overview Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-info-circle"></i> Pattern Overview</h2>
+            <p class="lead">Pattern D demonstrates enterprise-grade Azure Backup governance aligned with Microsoft Cloud Adoption Framework (CAF). Covers three-tier resource separation, zero-trust networking, policy-driven compliance, FinOps cost controls, and operational runbooks.</p>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <strong>🎯 Target Audience</strong>
+                        Enterprise architects, CIOs, governance officers, CAF practitioners, operations teams
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="feature-box">
+                        <strong>⏱️ Deployment Time</strong>
+                        40-50 minutes automated deployment
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAF Governance Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-diagram-3"></i> CAF Governance Model</h2>
+            <p>Pattern D implements the Microsoft Cloud Adoption Framework (CAF) governance model with three-tier resource group separation and tag-driven policies.</p>
+
+            <div class="mermaid">
+                graph TB
+                    subgraph MG["Management Group<br/>(Policy & Governance)"]
+                        Policy["Azure Policy<br/>- Tag enforcement<br/>- Soft delete required<br/>- Private endpoint required"]
+                    end
+                    
+                    subgraph Sub["Subscription"]
+                        subgraph Workload["Workload RG<br/>(App Owners)"]
+                            VM["VMs"]
+                            DB["Databases"]
+                            Files["Azure Files"]
+                        end
+                        
+                        subgraph Protection["Protection RG<br/>(Backup/Security)"]
+                            Vault["Vaults<br/>(RSV + Backup)"]
+                            PE["Private Endpoints"]
+                            NSG["NSGs"]
+                        end
+                        
+                        subgraph Operations["Operations RG<br/>(SOC/FinOps)"]
+                            LA["Log Analytics"]
+                            Bastion["Azure Bastion"]
+                            Monitor["Azure Monitor"]
+                        end
+                    end
+                    
+                    MG -->|Applies| Sub
+                    Workload -->|Protected by| Protection
+                    Protection -->|Monitored by| Operations
+                    
+                    style MG fill:#f0e7ff
+                    style Workload fill:#e7f3ff
+                    style Protection fill:#ffe7e7
+                    style Operations fill:#e7ffe7
+            </div>
+
+            <p class="mt-3"><strong>Three-Tier Resource Group Separation:</strong></p>
+
+            <div class="rg-card workload">
+                <h5><i class="bi bi-app"></i> Workload RG (App Owners)</h5>
+                <p><strong>Owner:</strong> Application teams</p>
+                <p><strong>Contents:</strong> Production VMs, databases, application storage</p>
+                <p><strong>Backup Policy:</strong> Daily, retention by compliance level</p>
+            </div>
+
+            <div class="rg-card protection">
+                <h5><i class="bi bi-shield-check"></i> Protection RG (Backup/Security)</h5>
+                <p><strong>Owner:</strong> Backup and security teams</p>
+                <p><strong>Contents:</strong> Recovery Services Vault, Backup Vault, private endpoints, NSGs</p>
+                <p><strong>Access:</strong> Limited to backup operators and security staff</p>
+            </div>
+
+            <div class="rg-card operations">
+                <h5><i class="bi bi-graph-up"></i> Operations RG (SOC/FinOps)</h5>
+                <p><strong>Owner:</strong> Security Operations and FinOps teams</p>
+                <p><strong>Contents:</strong> Log Analytics workspace, storage account (audit logs), Azure Bastion, Azure Monitor</p>
+                <p><strong>Access:</strong> Limited to compliance and finance teams</p>
+            </div>
+        </section>
+
+        <!-- RBAC & Governance Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-shield-lock"></i> Role-Based Access Control (RBAC)</h2>
+            <p>Pattern D implements 5 roles with clear separation of duties across backup, security, and finance teams:</p>
+
+            <div class="rbac-grid">
+                <div class="rbac-item">
+                    <strong>Backup Administrator</strong>
+                    <p>Full vault management, policy creation, retention decisions</p>
+                    <p style="color: #666; font-size: 0.9em;">2-3 people, high trust</p>
+                </div>
+
+                <div class="rbac-item">
+                    <strong>Backup Operator</strong>
+                    <p>Trigger backups, view recovery points, no policy changes</p>
+                    <p style="color: #666; font-size: 0.9em;">App teams, limited permissions</p>
+                </div>
+
+                <div class="rbac-item">
+                    <strong>Restore Operator</strong>
+                    <p>Restore workflows only, no backup configuration</p>
+                    <p style="color: #666; font-size: 0.9em;">Incident response teams</p>
+                </div>
+
+                <div class="rbac-item">
+                    <strong>Vault Reader</strong>
+                    <p>Read-only access to vault status, logs, policies</p>
+                    <p style="color: #666; font-size: 0.9em;">SOC, audit teams, CIO office</p>
+                </div>
+
+                <div class="rbac-item">
+                    <strong>Cost Analyst</strong>
+                    <p>Query Log Analytics for cost tracking and budget alerts</p>
+                    <p style="color: #666; font-size: 0.9em;">FinOps team</p>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong><i class="bi bi-lightning-charge"></i> Separation of Duties:</strong> Each team can perform their role without interfering with other teams' responsibilities. This prevents unauthorized changes and supports compliance audits.
+            </div>
+        </section>
+
+        <!-- Tagging Strategy Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-tag"></i> Tagging Strategy (CAF-Aligned)</h2>
+            <p>Mandatory tags enforced via Azure Policy enable cost allocation, compliance tracking, and automated operations:</p>
+
+            <table class="table table-light table-striped">
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th>Purpose</th>
+                        <th>Example Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>environment</strong></td>
+                        <td>Controls retention and redundancy</td>
+                        <td>production, staging, development</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cost-center</strong></td>
+                        <td>Chargeback and budget tracking</td>
+                        <td>IT-001, IT-002, Finance-001</td>
+                    </tr>
+                    <tr>
+                        <td><strong>backup-policy</strong></td>
+                        <td>Auto-enrollment to backup policies</td>
+                        <td>daily-7, daily-30, weekly-90</td>
+                    </tr>
+                    <tr>
+                        <td><strong>compliance-level</strong></td>
+                        <td>Retention tier: 7/30/90 days</td>
+                        <td>INTERNAL, CONFIDENTIAL, RESTRICTED</td>
+                    </tr>
+                    <tr>
+                        <td><strong>owner</strong></td>
+                        <td>Team responsible, alert routing</td>
+                        <td>database-team@company.com</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p style="margin-top: 20px;"><strong>Example VM Tags (RESTRICTED):</strong></p>
+            <div class="code-block">
+environment: production
+cost-center: IT-001
+backup-policy: daily-30
+compliance-level: RESTRICTED
+owner: database-team@company.com
+            </div>
+        </section>
+
+        <!-- Zero-Trust Security Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-lock"></i> Zero-Trust Network Security</h2>
+            <p>Pattern D eliminates internet-exposed backup infrastructure using private endpoints and Azure Bastion:</p>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🔒 Private Endpoints</div>
+                        <div class="card-body">
+                            <p>Vaults accessible only via private network. No public IP, no internet exposure.</p>
+                            <p><strong>Benefit:</strong> DDoS protected, compliance-aligned, ransomware can't reach vault</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🖥️ Azure Bastion</div>
+                        <div class="card-body">
+                            <p>SSH/RDP access to VMs without public IPs or jump boxes.</p>
+                            <p><strong>Benefit:</strong> Secure admin access, audit logging, no credential exposure</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p><strong>Result:</strong> Backup infrastructure has zero internet exposure while maintaining full operational access.</p>
+        </section>
+
+        <!-- Demo Scenarios Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Demo Scenarios</h2>
+
+            <div class="demo-step">
+                <h5>Scenario 1: CAF Three-Tier Governance (8 minutes)</h5>
+                <p><strong>Objective:</strong> Show separation of duties and tag-driven policies</p>
+                <div class="code-block">
+# 1. Show three resource groups with different owners
+az group list -q "[?tags.owner == 'workload-team' || tags.owner == 'security-team' || tags.owner == 'finops-team']"
+
+# 2. Show mandatory tags enforced
+az group show -n rg-backup-enterprise-workload --query tags
+
+# 3. Show RBAC role assignments (5 distinct roles)
+az role assignment list --scope /subscriptions/$(az account show -q id -o tsv)
+
+# 4. Show Azure Policy definitions (tag enforcement)
+az policy definition list --query "[?contains(displayName, 'require-tag')]"
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Three teams own their resource groups: no single point of failure"</li>
+                    <li>"Tags drive backup policies automatically"</li>
+                    <li>"Azure Policy prevents tag deletion, ensuring compliance"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 2: Zero-Trust Network & Bastion (6 minutes)</h5>
+                <p><strong>Objective:</strong> Show private endpoints and Bastion access</p>
+                <div class="code-block">
+# 1. Show private endpoints (vaults not public)
+az network private-endpoint list -g rg-backup-enterprise-protection
+
+# 2. Show Azure Bastion host
+az network bastion list -g rg-backup-enterprise-operations
+
+# 3. Demonstrate Bastion RDP to VM (no RDP on public internet)
+# In Azure Portal: Bastion → Connect → VM Name → RDP
+
+# 4. Verify NSGs block unapproved traffic
+az network nsg list -g rg-backup-enterprise-protection
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Vault has no public IP address"</li>
+                    <li>"All traffic flows through private network"</li>
+                    <li>"Bastion provides secure admin access without exposing VMs"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 3: FinOps & Cost Control (8 minutes)</h5>
+                <p><strong>Objective:</strong> Show cost tracking and budget alerts</p>
+                <div class="code-block">
+# 1. Run cost-by-cost-center query
+az monitor log-analytics query \
+  --workspace law-backup-enterprise \
+  --analytics-query "@queries/cost-by-cost-center.kql"
+
+# 2. Show budget alert rules
+az monitor metrics alert list -g rg-backup-enterprise-operations
+
+# 3. Estimate monthly costs by compliance level
+# Query: Show daily costs × 30 days
+
+# 4. Show chargeback allocation
+echo "INTERNAL (7d): $20/month per 100GB
+CONFIDENTIAL (30d): $70/month per 100GB
+RESTRICTED (90d): $180/month per 100GB"
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Different compliance levels have different retention costs"</li>
+                    <li>"Chargeback by cost center prevents central IT from absorbing all costs"</li>
+                    <li>"Budget alerts prevent runaway spending"</li>
+                </ul>
+            </div>
+
+            <div class="demo-step">
+                <h5>Scenario 4: Compliance Audit Trail (6 minutes)</h5>
+                <p><strong>Objective:</strong> Show immutable audit logs and compliance proof</p>
+                <div class="code-block">
+# 1. Show compliance audit query (RESTRICTED workloads)
+az monitor log-analytics query \
+  --workspace law-backup-enterprise \
+  --analytics-query "@queries/compliance-audit-trail.kql"
+
+# 2. Show immutable vault lock (permanent protection)
+az backup vault get -g rg-backup-enterprise-protection \
+  -n rsv-backup-enterprise-cc | jq '.properties.immutabilitySettings.state'
+
+# 3. Show storage account with immutable blobs (audit logs)
+az storage account show \
+  -g rg-backup-enterprise-operations \
+  -n storageaudit... | jq '.properties.immutableStorageWithVersioning'
+
+# 4. Show soft delete enabled (14-day recovery)
+az backup vault backup-properties show \
+  -g rg-backup-enterprise-protection \
+  -n rsv-backup-enterprise-cc | jq '.softDeleteFeatureState'
+                </div>
+                <p><strong>Talking Points:</strong></p>
+                <ul>
+                    <li>"Immutable lock proves backups can't be deleted (compliance proof)"</li>
+                    <li>"Audit logs are immutable for regulatory audits (HIPAA, PCI-DSS, SOX)"</li>
+                    <li>"Soft delete provides 14-day ransomware recovery window"</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Operational Runbooks Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-book"></i> Operational Runbooks</h2>
+            <p>Pattern D includes 4 complete operational runbooks (detailed in SPEC.md):</p>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">📋 Deployment Runbook</div>
+                        <div class="card-body">
+                            <p><strong>When:</strong> Day 1 setup</p>
+                            <p>12 steps covering validation, RG creation, vault deployment, RBAC assignment, policy configuration, and handoff documentation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">⚙️ Operational Management</div>
+                        <div class="card-body">
+                            <p><strong>When:</strong> Weekly/Monthly checks</p>
+                            <p>Daily backup status review, monthly cost analysis, retention optimization, disaster recovery documentation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">🚨 Incident Response</div>
+                        <div class="card-body">
+                            <p><strong>When:</strong> Ransomware detected</p>
+                            <p>Detect, respond, investigate, recover, harden, document RCA</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">♻️ Decommissioning</div>
+                        <div class="card-body">
+                            <p><strong>When:</strong> End-of-life (3-6 month notice)</p>
+                            <p>Archive data, move to long-term storage, cleanup, decommission certificate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong><i class="bi bi-info-circle"></i> Runbook Usage:</strong> These runbooks are templates. Customize for your organization's policies, escalation procedures, and support model.
+            </div>
+        </section>
+
+        <!-- Deployment Checklist -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-check-square"></i> Post-Deployment Validation</h2>
+            <p>Verify all 10 items before starting demo:</p>
+
+            <table class="table table-light">
+                <tbody>
+                    <tr>
+                        <td>✓ 3 RGs with correct tags</td>
+                        <td>✓ RSV + Backup Vault deployed</td>
+                        <td>✓ Soft delete + immutable lock</td>
+                    </tr>
+                    <tr>
+                        <td>✓ Private endpoints created</td>
+                        <td>✓ Bastion host deployed</td>
+                        <td>✓ 5 RBAC roles assigned</td>
+                    </tr>
+                    <tr>
+                        <td>✓ Azure Policy active</td>
+                        <td>✓ Log Analytics connected</td>
+                        <td>✓ 4 KQL queries saved</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Why three resource groups?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Separation of duties. Different teams manage different layers. If one team's account is compromised, attackers can't access other RGs.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do I need all 5 RBAC roles?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>No. Start with Backup Admin, Operator, and Restore Operator. Add Vault Reader and Cost Analyst as your organization grows.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I use Backup Vault instead of RSV?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Partially. Use Backup Vault for managed disks, blobs, and AKS. Use RSV for VMs and file shares. Both are deployed in Pattern D.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How much does this cost?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Depends on workload size. Estimate: $60-80/day for the infrastructure (2 vaults, 3 RGs, private endpoints, Bastion) + data backup costs.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is this CAF compliant?</span>
+                    <i class="bi bi-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes. Pattern D implements CAF governance model: resource group separation, tagging strategy, RBAC separation, policy-driven compliance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps Section -->
+        <section class="mb-5">
+            <h2 class="section-title"><i class="bi bi-arrow-right"></i> Next Steps</h2>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5>1. Deploy Infrastructure</h5>
+                    <p>Follow <code>INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</code> to deploy all three RGs (40-50 minutes)</p>
+
+                    <h5>2. Run Demo Scenarios</h5>
+                    <p>Execute 4 scenarios to showcase governance, security, cost control, and compliance</p>
+
+                    <h5>3. Customize for Your Organization</h5>
+                    <p>Update tags, RBAC roles, retention policies, and operational runbooks for your teams</p>
+
+                    <h5>4. Onboard Production Workloads</h5>
+                    <p>Enroll actual production VMs, databases, and storage accounts</p>
+
+                    <h5>5. Establish Support Model</h5>
+                    <p>Define escalation procedures, SLAs, and 24/7 on-call support</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6>Documentation</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-decoration-none">SPEC.md</a></li>
+                        <li><a href="#" class="text-decoration-none">Infrastructure Guide</a></li>
+                        <li><a href="#" class="text-decoration-none">KQL Queries (4)</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Patterns</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/backup-pattern-a-demo" class="text-decoration-none">Pattern A: Core Demo</a></li>
+                        <li><a href="#" class="text-decoration-none">Pattern B: Ransomware Resilience</a></li>
+                        <li><a href="#" class="text-decoration-none">Pattern C: Modern Workloads</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/issues" class="text-decoration-none">GitHub Issues</a></li>
+                        <li><a href="mailto:backup-team@company.com" class="text-decoration-none">Email Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <p class="text-center mb-0">© 2026 Azure Backup Patterns. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop">
+        <i class="bi bi-chevron-up"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        // Scroll to Top Button
+        const scrollToTop = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            scrollToTop.classList.toggle('show', window.scrollY > 300);
+        });
+        scrollToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                document.querySelectorAll('.faq-answer').forEach(a => {
+                    if (a !== answer) a.classList.remove('show');
+                });
+                answer.classList.toggle('show');
+            });
+        });
+    </script>
+</body>
+</html>

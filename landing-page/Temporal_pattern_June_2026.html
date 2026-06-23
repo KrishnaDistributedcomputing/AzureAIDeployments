@@ -1,0 +1,2145 @@
+  <!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://images.ctfassets.net" rel="preconnect"/>
+<title>Azure-Core Durable Intelligent Workflows | Azure Services BOM, Build 2026 MAI Model, Landing Zone, API Layer &amp; Deployment Plan</title>
+<style>
+ :root {
+ --azure: #0078d4;
+ --azure-dark: #004578;
+ --azure-soft: #e6f2fb;
+ --ink: #111827;
+ --muted: #5f6b7a;
+ --line: #d8dee9;
+ --bg: #f6f8fb;
+ --card: #ffffff;
+ --green: #107c10;
+ --amber: #986f0b;
+ --red: #a4262c;
+ --violet: #5c2d91;
+ --shadow: 0 14px 35px rgba(17, 24, 39, 0.08);
+ --radius: 18px;
+ }
+ * { box-sizing: border-box; }
+ html { scroll-behavior: smooth; }
+ body {
+ margin: 0;
+ font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+ color: var(--ink);
+ background: linear-gradient(180deg, #eef6fc 0%, var(--bg) 430px, var(--bg) 100%);
+ line-height: 1.55;
+ }
+ a { color: var(--azure-dark); }
+ .hero {
+ color: #fff;
+ background:
+ radial-gradient(circle at top right, rgba(255,255,255,0.22), transparent 26rem),
+ linear-gradient(135deg, #004578 0%, #0078d4 48%, #4f6bed 100%);
+ padding: 48px 28px 40px;
+ border-bottom-left-radius: 36px;
+ border-bottom-right-radius: 36px;
+ box-shadow: var(--shadow);
+ }
+ .hero-inner { max-width: 1200px; margin: 0 auto; }
+ .eyebrow {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ padding: 6px 12px;
+ border: 1px solid rgba(255,255,255,0.35);
+ border-radius: 999px;
+ background: rgba(255,255,255,0.12);
+ font-size: 13px;
+ font-weight: 700;
+ letter-spacing: .03em;
+ text-transform: uppercase;
+ }
+ h1 {
+ margin: 22px 0 12px;
+ max-width: 1080px;
+ font-size: clamp(34px, 5.2vw, 64px);
+ line-height: 1.02;
+ letter-spacing: -0.045em;
+ }
+ .hero p {
+ max-width: 980px;
+ margin: 0;
+ color: rgba(255,255,255,0.9);
+ font-size: clamp(17px, 2vw, 21px);
+ }
+ .hero-meta {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 10px;
+ margin-top: 22px;
+ }
+ .pill {
+ padding: 8px 12px;
+ border-radius: 999px;
+ background: rgba(255,255,255,0.14);
+ border: 1px solid rgba(255,255,255,0.28);
+ color: #fff;
+ font-weight: 650;
+ font-size: 13px;
+ }
+ main { max-width: 1200px; margin: -24px auto 64px; padding: 0 24px; }
+ .toc {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 12px;
+ margin-bottom: 22px;
+ }
+ .toc a {
+ display: block;
+ padding: 13px 14px;
+ background: var(--card);
+ border: 1px solid var(--line);
+ border-radius: 14px;
+ box-shadow: 0 6px 18px rgba(17, 24, 39, 0.05);
+ font-weight: 700;
+ text-decoration: none;
+ }
+ section {
+ background: var(--card);
+ border: 1px solid var(--line);
+ border-radius: var(--radius);
+ box-shadow: var(--shadow);
+ padding: 28px;
+ margin: 24px 0;
+ }
+ h2 {
+ margin: 0 0 14px;
+ color: var(--azure-dark);
+ font-size: clamp(26px, 3vw, 38px);
+ line-height: 1.12;
+ letter-spacing: -0.03em;
+ }
+ h3 {
+ margin: 22px 0 10px;
+ color: #14213d;
+ font-size: 21px;
+ letter-spacing: -0.015em;
+ }
+ h4 { margin: 14px 0 8px; }
+ .lead { font-size: 18px; color: #253041; max-width: 1020px; }
+ .muted { color: var(--muted); }
+ .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+ .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+ .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+ @media (max-width: 920px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+ .card {
+ border: 1px solid var(--line);
+ background: #fff;
+ border-radius: 16px;
+ padding: 18px;
+ box-shadow: 0 8px 22px rgba(17, 24, 39, 0.04);
+ }
+ .card h3, .card h4 { margin-top: 0; }
+ .metric {
+ padding: 16px;
+ border-radius: 16px;
+ background: linear-gradient(180deg, #ffffff, #f7fbff);
+ border: 1px solid #cfe4f6;
+ }
+ .metric .label { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+ .metric .value { font-size: 28px; font-weight: 800; color: var(--azure-dark); margin-top: 4px; }
+ .metric .note { color: var(--muted); font-size: 13px; margin-top: 6px; }
+ .callout {
+ border-left: 5px solid var(--azure);
+ background: var(--azure-soft);
+ padding: 16px 18px;
+ border-radius: 14px;
+ margin: 18px 0;
+ }
+ .warning { border-left-color: var(--amber); background: #fff8e5; }
+ .success { border-left-color: var(--green); background: #edf7ed; }
+ .danger { border-left-color: var(--red); background: #fdecee; }
+ .tag {
+ display: inline-flex;
+ align-items: center;
+ padding: 4px 8px;
+ border-radius: 999px;
+ font-size: 12px;
+ font-weight: 750;
+ background: #eef6fc;
+ color: var(--azure-dark);
+ border: 1px solid #c8e1f4;
+ margin: 2px 4px 2px 0;
+ white-space: nowrap;
+ }
+ .tag.green { background: #edf7ed; border-color: #cce8cc; color: #0b5d0b; }
+ .tag.amber { background: #fff8e5; border-color: #f1dd9c; color: #684b00; }
+ .tag.red { background: #fdecee; border-color: #f2c4c8; color: #7f1d1d; }
+ .tag.violet { background: #f3ecfb; border-color: #d9c8ef; color: #4c1d95; }
+ table {
+ width: 100%;
+ border-collapse: separate;
+ border-spacing: 0;
+ margin: 14px 0 8px;
+ overflow: hidden;
+ border: 1px solid var(--line);
+ border-radius: 14px;
+ font-size: 14px;
+ }
+ th, td {
+ text-align: left;
+ vertical-align: top;
+ padding: 12px 13px;
+ border-bottom: 1px solid var(--line);
+ border-right: 1px solid var(--line);
+ }
+ th:last-child, td:last-child { border-right: 0; }
+ tr:last-child td { border-bottom: 0; }
+ th {
+ background: #f0f6fb;
+ color: #0f3554;
+ font-size: 12px;
+ text-transform: uppercase;
+ letter-spacing: .045em;
+ font-weight: 800;
+ }
+ tbody tr:nth-child(even) td { background: #fcfdff; }
+ code {
+ background: #f2f4f8;
+ border: 1px solid #e1e7ef;
+ border-radius: 6px;
+ padding: 1px 5px;
+ font-family: Consolas, Monaco, "Courier New", monospace;
+ font-size: 0.92em;
+ }
+ pre {
+ overflow: auto;
+ background: #0b1220;
+ color: #e5edf8;
+ border-radius: 14px;
+ padding: 16px;
+ font-size: 13px;
+ line-height: 1.5;
+ }
+ .pattern-card {
+ border: 1px solid #cfe4f6;
+ border-radius: 18px;
+ overflow: hidden;
+ margin: 20px 0;
+ background: #fff;
+ }
+ .pattern-head {
+ padding: 18px;
+ background: linear-gradient(135deg, #f2f9ff, #ffffff);
+ border-bottom: 1px solid #cfe4f6;
+ }
+ .pattern-head h3 { margin: 0 0 8px; color: var(--azure-dark); }
+ .pattern-body { padding: 18px; }
+.mermaidish {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+ gap: 10px;
+ align-items: stretch;
+ margin: 18px 0;
+ }
+ .node {
+ border: 1px solid #cfe4f6;
+ background: #fff;
+ padding: 13px;
+ border-radius: 14px;
+ text-align: center;
+ font-weight: 800;
+ color: var(--azure-dark);
+ position: relative;
+ min-height: 74px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 4px;
+ }
+ .node small { color: var(--muted); font-weight: 600; }
+ .node:not(:last-child)::after {
+ content: "→";
+ position: absolute;
+ right: -14px;
+ top: 50%;
+ transform: translateY(-50%);
+ color: var(--azure);
+ font-size: 22px;
+ font-weight: 900;
+ z-index: 2;
+ }
+ @media (max-width: 900px) {
+ .mermaidish { grid-template-columns: 1fr; }
+ .node:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -21px; transform: translateX(50%); }
+ }
+ .footer {
+ max-width: 1200px;
+ margin: 0 auto 48px;
+ padding: 0 24px;
+ color: var(--muted);
+ font-size: 13px;
+ }
+ .small { font-size: 13px; }
+ .nowrap { white-space: nowrap; }
+
+ .hero-brand-row {
+ display: flex;
+ align-items: center;
+ flex-wrap: wrap;
+ gap: 14px;
+ margin-bottom: 18px;
+ }
+ .temporal-logo-lockup {
+ display: inline-block;
+ height: 34px;
+ width: auto;
+ max-width: 220px;
+ object-fit: contain;
+ }
+ .hero-brand-row .temporal-logo-lockup {
+ padding: 4px 0;
+ }
+ .brand-divider {
+ width: 1px;
+ align-self: stretch;
+ min-height: 32px;
+ background: rgba(255,255,255,0.38);
+ }
+ .temporal-brand-note {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ margin-top: 22px;
+ padding: 12px 14px;
+ max-width: 620px;
+ border-radius: 16px;
+ background: rgba(255,255,255,0.12);
+ border: 1px solid rgba(255,255,255,0.24);
+ color: rgba(255,255,255,0.92);
+ font-weight: 650;
+ }
+ .temporal-brand-note img { height: 22px; width: auto; }
+ .node-logo {
+ height: 25px;
+ width: auto;
+ margin-bottom: 4px;
+ }
+ .title-logo {
+ height: 24px;
+ width: auto;
+ flex: 0 0 auto;
+ }
+ .with-logo {
+ display: flex;
+ align-items: center;
+ gap: 9px;
+ flex-wrap: wrap;
+ }
+ .temporal-node {
+ border-color: rgba(68, 76, 231, 0.38);
+ background: linear-gradient(180deg, #ffffff, #f8faff);
+ }
+ .temporal-node strong,
+ .temporal-node span { color: #141414; }
+ .pattern-head.temporal-branded {
+ border-bottom-color: rgba(68, 76, 231, 0.26);
+ background: linear-gradient(135deg, #f8faff 0%, #ffffff 68%);
+ }
+ .inline-logo {
+ display: inline-flex;
+ align-items: center;
+ gap: 7px;
+ }
+ .inline-logo img {
+ height: 19px;
+ width: auto;
+ }
+ .source-logo {
+ display: inline-flex;
+ align-items: center;
+ gap: 7px;
+ }
+ .source-logo img {
+ height: 18px;
+ width: auto;
+ }
+
+ 
+
+/* Layered solution stack */
+:root {
+ --layer-foundation: #0078d4;
+ --layer-foundation-soft: #e6f2fb;
+ --layer-api: #7f56d9;
+ --layer-api-soft: #f3edff;
+ --layer-compute: #2b7a78;
+ --layer-compute-soft: #e7f5f4;
+ --layer-workflow: #444ce7;
+ --layer-workflow-soft: #eef0ff;
+ --layer-data: #107c10;
+ --layer-data-soft: #edf7ed;
+ --layer-ai: #c25a00;
+ --layer-ai-soft: #fff4e6;
+ --layer-event: #986f0b;
+ --layer-event-soft: #fff8e5;
+ --layer-security: #a4262c;
+ --layer-security-soft: #fdecee;
+ --layer-observe: #0f6cbd;
+ --layer-observe-soft: #e8f3ff;
+}
+.color-legend {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+ gap: 12px;
+ margin: 18px 0;
+}
+.legend-tile {
+ border: 1px solid var(--line);
+ border-left-width: 8px;
+ border-radius: 16px;
+ padding: 14px;
+ background: #fff;
+ box-shadow: 0 8px 18px rgba(17, 24, 39, 0.04);
+}
+.legend-tile strong { display: block; margin-bottom: 4px; color: #101828; }
+.legend-tile small { color: var(--muted); display: block; }
+.legend-foundation { border-left-color: var(--layer-foundation); background: linear-gradient(180deg, #fff, var(--layer-foundation-soft)); }
+.legend-api { border-left-color: var(--layer-api); background: linear-gradient(180deg, #fff, var(--layer-api-soft)); }
+.legend-compute { border-left-color: var(--layer-compute); background: linear-gradient(180deg, #fff, var(--layer-compute-soft)); }
+.legend-workflow { border-left-color: var(--layer-workflow); background: linear-gradient(180deg, #fff, var(--layer-workflow-soft)); }
+.legend-data { border-left-color: var(--layer-data); background: linear-gradient(180deg, #fff, var(--layer-data-soft)); }
+.legend-ai { border-left-color: var(--layer-ai); background: linear-gradient(180deg, #fff, var(--layer-ai-soft)); }
+.legend-event { border-left-color: var(--layer-event); background: linear-gradient(180deg, #fff, var(--layer-event-soft)); }
+.legend-security { border-left-color: var(--layer-security); background: linear-gradient(180deg, #fff, var(--layer-security-soft)); }
+.legend-observe { border-left-color: var(--layer-observe); background: linear-gradient(180deg, #fff, var(--layer-observe-soft)); }
+.layer-chip {
+ display: inline-flex;
+ align-items: center;
+ gap: 6px;
+ padding: 4px 9px;
+ border-radius: 999px;
+ font-size: 12px;
+ font-weight: 800;
+ border: 1px solid currentColor;
+ margin: 2px 4px 2px 0;
+ white-space: nowrap;
+}
+.chip-foundation { color: var(--layer-foundation); background: var(--layer-foundation-soft); }
+.chip-api { color: var(--layer-api); background: var(--layer-api-soft); }
+.chip-compute { color: var(--layer-compute); background: var(--layer-compute-soft); }
+.chip-workflow { color: var(--layer-workflow); background: var(--layer-workflow-soft); }
+.chip-data { color: var(--layer-data); background: var(--layer-data-soft); }
+.chip-ai { color: var(--layer-ai); background: var(--layer-ai-soft); }
+.chip-event { color: var(--layer-event); background: var(--layer-event-soft); }
+.chip-security { color: var(--layer-security); background: var(--layer-security-soft); }
+.chip-observe { color: var(--layer-observe); background: var(--layer-observe-soft); }
+.node.layer-foundation { border-color: var(--layer-foundation); background: var(--layer-foundation-soft); color: #004578; }
+.node.layer-api { border-color: var(--layer-api); background: var(--layer-api-soft); color: #4c1d95; }
+.node.layer-event { border-color: var(--layer-event); background: var(--layer-event-soft); color: #684b00; }
+.node.layer-workflow { border-color: var(--layer-workflow); background: var(--layer-workflow-soft); color: #2c2f9d; }
+.node.layer-compute { border-color: var(--layer-compute); background: var(--layer-compute-soft); color: #205c5a; }
+.node.layer-data { border-color: var(--layer-data); background: var(--layer-data-soft); color: #0b5d0b; }
+.node.layer-ai { border-color: var(--layer-ai); background: var(--layer-ai-soft); color: #8a3f00; }
+.node.layer-observe { border-color: var(--layer-observe); background: var(--layer-observe-soft); color: #0f4f88; }
+.layer-row-foundation td:first-child { border-left: 8px solid var(--layer-foundation); background: var(--layer-foundation-soft); }
+.layer-row-api td:first-child { border-left: 8px solid var(--layer-api); background: var(--layer-api-soft); }
+.layer-row-compute td:first-child { border-left: 8px solid var(--layer-compute); background: var(--layer-compute-soft); }
+.layer-row-workflow td:first-child { border-left: 8px solid var(--layer-workflow); background: var(--layer-workflow-soft); }
+.layer-row-data td:first-child { border-left: 8px solid var(--layer-data); background: var(--layer-data-soft); }
+.layer-row-ai td:first-child { border-left: 8px solid var(--layer-ai); background: var(--layer-ai-soft); }
+.layer-row-event td:first-child { border-left: 8px solid var(--layer-event); background: var(--layer-event-soft); }
+.layer-row-security td:first-child { border-left: 8px solid var(--layer-security); background: var(--layer-security-soft); }
+.layer-row-observe td:first-child { border-left: 8px solid var(--layer-observe); background: var(--layer-observe-soft); }
+.layer-card {
+ border: 1px solid var(--line);
+ border-left-width: 8px;
+ border-radius: 18px;
+ background: #fff;
+ padding: 18px;
+ margin: 18px 0;
+ box-shadow: 0 8px 22px rgba(17, 24, 39, 0.04);
+}
+.layer-card.ai { border-left-color: var(--layer-ai); background: linear-gradient(180deg, #fff, var(--layer-ai-soft)); }
+.layer-card.foundation { border-left-color: var(--layer-foundation); }
+.layer-card.workflow { border-left-color: var(--layer-workflow); }
+.layer-card.data { border-left-color: var(--layer-data); }
+.layer-card.api { border-left-color: var(--layer-api); }
+.layer-card.observe { border-left-color: var(--layer-observe); }
+.table-caption-note { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+/* Left navigation and review-friendly page flow */
+.skip-link {
+ position: fixed;
+ top: 10px;
+ left: 10px;
+ z-index: 1100;
+ transform: translateY(-160%);
+ background: #ffffff;
+ color: var(--azure-dark);
+ padding: 10px 14px;
+ border-radius: 12px;
+ border: 2px solid var(--azure);
+ font-weight: 800;
+ text-decoration: none;
+ box-shadow: var(--shadow);
+}
+.skip-link:focus { transform: translateY(0); }
+.scroll-progress {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 5px;
+ background: rgba(0, 69, 120, 0.12);
+ z-index: 1050;
+}
+.scroll-progress span {
+ display: block;
+ height: 100%;
+ width: 0%;
+ background: linear-gradient(90deg, var(--azure), #4f6bed, var(--green));
+ transition: width .12s linear;
+}
+.page-shell {
+ max-width: 1520px;
+ margin: -24px auto 64px;
+ padding: 0 24px;
+ display: grid;
+ grid-template-columns: 300px minmax(0, 1fr);
+ gap: 24px;
+ align-items: start;
+}
+main#main-content {
+ max-width: none;
+ margin: 0;
+ padding: 0;
+ min-width: 0;
+}
+.left-nav {
+ position: sticky;
+ top: 22px;
+ z-index: 30;
+ align-self: start;
+}
+.nav-card {
+ background: rgba(255, 255, 255, 0.96);
+ border: 1px solid var(--line);
+ border-radius: 22px;
+ box-shadow: var(--shadow);
+ padding: 18px;
+ max-height: calc(100vh - 44px);
+ overflow: auto;
+ backdrop-filter: blur(10px);
+}
+.nav-kicker {
+ color: var(--azure);
+ font-size: 12px;
+ font-weight: 850;
+ letter-spacing: .08em;
+ text-transform: uppercase;
+ margin-bottom: 4px;
+}
+.nav-title {
+ color: var(--azure-dark);
+ font-size: 24px;
+ font-weight: 850;
+ letter-spacing: -0.03em;
+ line-height: 1.1;
+}
+.nav-help {
+ margin: 8px 0 14px;
+ color: var(--muted);
+ font-size: 13px;
+ line-height: 1.45;
+}
+.nav-links {
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
+}
+.nav-links a {
+ display: grid;
+ grid-template-columns: 34px 1fr;
+ align-items: center;
+ gap: 9px;
+ padding: 10px 10px;
+ color: #253041;
+ border: 1px solid transparent;
+ border-radius: 14px;
+ text-decoration: none;
+ font-size: 14px;
+ font-weight: 750;
+ line-height: 1.2;
+ transition: background .16s ease, color .16s ease, border-color .16s ease, transform .16s ease;
+}
+.nav-links a span {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ width: 28px;
+ height: 24px;
+ border-radius: 999px;
+ color: var(--azure-dark);
+ background: var(--azure-soft);
+ font-size: 11px;
+ font-weight: 850;
+}
+.nav-links a:hover,
+.nav-links a:focus {
+ background: var(--azure-soft);
+ color: var(--azure-dark);
+ border-color: #c8e1f4;
+ transform: translateX(2px);
+ outline: none;
+}
+.nav-links a.active {
+ background: linear-gradient(135deg, var(--azure-dark), var(--azure));
+ color: #ffffff;
+ border-color: rgba(255, 255, 255, 0.22);
+ box-shadow: 0 10px 20px rgba(0, 120, 212, 0.18);
+}
+.nav-links a.active span {
+ color: #ffffff;
+ background: rgba(255, 255, 255, 0.18);
+}
+.review-summary {
+ display: flex;
+ justify-content: space-between;
+ gap: 16px;
+ align-items: center;
+ padding: 16px 18px;
+ margin-bottom: 18px;
+ background: #ffffff;
+ border: 1px solid var(--line);
+ border-left: 8px solid var(--azure);
+ border-radius: 18px;
+ box-shadow: var(--shadow);
+ color: #253041;
+}
+.review-jump {
+ white-space: nowrap;
+ border-radius: 999px;
+ padding: 9px 13px;
+ text-decoration: none;
+ color: #ffffff;
+ background: var(--azure-dark);
+ font-weight: 800;
+}
+section {
+ scroll-margin-top: 24px;
+ transition: box-shadow .2s ease, transform .2s ease;
+}
+section:target {
+ box-shadow: 0 18px 42px rgba(0, 120, 212, 0.14);
+}
+.back-to-top {
+ position: fixed;
+ right: 22px;
+ bottom: 22px;
+ z-index: 1000;
+ width: 46px;
+ height: 46px;
+ border: 0;
+ border-radius: 999px;
+ background: var(--azure-dark);
+ color: #ffffff;
+ font-size: 22px;
+ font-weight: 900;
+ box-shadow: var(--shadow);
+ cursor: pointer;
+ opacity: 0;
+ transform: translateY(14px);
+ pointer-events: none;
+ transition: opacity .18s ease, transform .18s ease;
+}
+.back-to-top.visible {
+ opacity: 1;
+ transform: translateY(0);
+ pointer-events: auto;
+}
+@media (max-width: 1100px) {
+ .page-shell {
+  display: block;
+  max-width: 1200px;
+  margin: -24px auto 64px;
+ }
+ .left-nav {
+  position: sticky;
+  top: 6px;
+  margin-bottom: 18px;
+ }
+ .nav-card {
+  max-height: none;
+ }
+ .nav-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+ }
+ .nav-links a:hover,
+ .nav-links a:focus {
+  transform: none;
+ }
+}
+@media (max-width: 720px) {
+ .page-shell { padding: 0 16px; }
+ .nav-card { padding: 14px; border-radius: 18px; }
+ .nav-title { font-size: 21px; }
+ .nav-links { grid-template-columns: 1fr; }
+ .review-summary { display: block; }
+ .review-jump { display: inline-flex; margin-top: 12px; }
+ .back-to-top { right: 14px; bottom: 14px; }
+ section { padding: 20px; }
+}
+@media print {
+ .scroll-progress, .skip-link, .left-nav, .back-to-top, .review-summary { display: none !important; }
+ .page-shell { display: block; margin: 0; padding: 0; max-width: none; }
+ main#main-content { margin: 0; padding: 0; }
+ section { box-shadow: none; break-inside: avoid; }
+}
+
+</style>
+</head>
+<body>
+<div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="hero">
+<div class="hero-inner">
+<div class="hero-brand-row">
+<img alt="Temporal logo" class="temporal-logo-lockup" src="https://images.ctfassets.net/0uuz8ydxyd9p/PxaOnuShCYwyX58rxnhrj/ac10c21a73d4f35f9c852348581dd9f1/Temporal_LogoLockup_Horizontal_light_1.svg"/>
+<span aria-hidden="true" class="brand-divider"></span>
+<div class="eyebrow">Azure-core architecture patterns</div>
+</div>
+<h1>Durable Intelligent Workflows: Azure Services BOM, Build 2026 MAI Model, Landing Zone, API Layer &amp; Deployment Plan</h1>
+<p>A workflow-first Azure strategy that ties every architecture layer to business value: faster modernization, safer high-security deployments, durable workflow execution, cleaner customer integrations, Postgres-first operational data, bounded AI decision steps, and a Build 2026 MAI-Thinking-1 model path without adding unnecessary platform complexity.</p>
+<div class="hero-meta">
+<span class="pill">Azure Landing Zone foundation</span>
+<span class="pill">Temporal as durable execution layer</span>
+<span class="pill">API Layer for integrations</span><span class="pill">Business value by solution layer</span><span class="pill">Azure services bill of materials</span>
+<span class="pill">AKS where Kubernetes is justified</span>
+<span class="pill">Postgres-first operational data</span>
+<span class="pill">AI as bounded workflow activities</span>
+<span class="pill">Trace → evaluate → tune readiness</span>
+<span class="pill">Layered stack view</span><span class="pill">Build 2026 MAI-Thinking-1 path</span></div>
+<div class="temporal-brand-note"><img alt="Temporal logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/PxaOnuShCYwyX58rxnhrj/ac10c21a73d4f35f9c852348581dd9f1/Temporal_LogoLockup_Horizontal_light_1.svg"/> <span>Durable execution layer for the workflow-first architecture.</span></div>
+</div>
+</header>
+
+<div class="page-shell">
+<aside aria-label="Page navigation" class="left-nav">
+  <div class="nav-card">
+    <div class="nav-kicker">Review menu</div>
+    <div class="nav-title">Solution stack</div>
+    <p class="nav-help">Use the section links to review the architecture from foundation through deployment readiness.</p>
+    <nav class="nav-links" aria-label="Document sections">
+      <a href="#color-map" data-section="color-map"><span>01</span>Layered stack</a>
+      <a href="#landing-zone" data-section="landing-zone"><span>02</span>Azure Landing Zone</a>
+      <a href="#business-value" data-section="business-value"><span>03</span>Business value</a>
+      <a href="#summary" data-section="summary"><span>04</span>Pattern summary</a>
+      <a href="#temporal-advantages" data-section="temporal-advantages"><span>05</span>Temporal advantages</a>
+      <a href="#api-layer" data-section="api-layer"><span>06</span>API Layer</a>
+      <a href="#model-build2026" data-section="model-build2026"><span>07</span>Build 2026 AI model</a>
+      <a href="#reference" data-section="reference"><span>08</span>Reference architecture</a>
+      <a href="#patterns" data-section="patterns"><span>09</span>Architecture patterns</a>
+      <a href="#service-bom" data-section="service-bom"><span>10</span>Azure services BOM</a>
+      <a href="#bom" data-section="bom"><span>11</span>Azure resource map</a>
+      <a href="#deployment" data-section="deployment"><span>12</span>Deployment plan</a>
+      <a href="#value-measurement" data-section="value-measurement"><span>13</span>Value measurement</a>
+      <a href="#azure-backup-demo" data-section="azure-backup-demo"><span>14</span>Azure Backup demo</a>
+      <a href="#sources" data-section="sources"><span>15</span>Source notes</a>
+    </nav>
+  </div>
+</aside>
+<main id="main-content" tabindex="-1">
+<div class="review-summary">
+  <div>
+    <strong>Review path:</strong> Start with the layered stack view, validate the Azure Landing Zone and API Layer, then review Temporal workflow patterns, Azure services BOM, and deployment plan.
+  </div>
+  <a href="#deployment" class="review-jump">Jump to deployment plan</a>
+</div>
+<section id="color-map">
+<h2>Layered solution stack</h2>
+<p class="lead">Use this layer key across the architecture, service BOM, deployment plan, and resource map so teams can quickly see which layer owns each decision.</p>
+<div class="color-legend">
+<div class="legend-tile legend-foundation"><strong>Foundation</strong><small>Azure Landing Zone, subscriptions, policy, identity baseline.</small></div>
+<div class="legend-tile legend-api"><strong>API Layer</strong><small>Contracts, gateway policy, workflow commands, callbacks.</small></div>
+<div class="legend-tile legend-compute"><strong>Runtime</strong><small>AKS, containers, image promotion, worker pools.</small></div>
+<div class="legend-tile legend-workflow"><strong>Workflow</strong><small>Temporal durable execution, retries, state, history.</small></div>
+<div class="legend-tile legend-data"><strong>Data</strong><small>Azure Database for PostgreSQL, vectors, HorizonDB path.</small></div>
+<div class="legend-tile legend-ai"><strong>Intelligence</strong><small>Bounded AI activities, model routing, MAI-Thinking-1 path.</small></div>
+<div class="legend-tile legend-event"><strong>Events</strong><small>Service Bus, Event Grid, async integration.</small></div>
+<div class="legend-tile legend-security"><strong>Security</strong><small>Key Vault, private access, Defender posture, RBAC.</small></div>
+<div class="legend-tile legend-observe"><strong>Observability</strong><small>Azure Monitor, Application Insights, evaluation signals.</small></div>
+</div>
+<table>
+<thead><tr><th>Layer color</th><th>Primary services</th><th>Business value</th><th>Delivery evidence</th></tr></thead>
+<tbody>
+<tr class="layer-row-foundation"><td><span class="layer-chip chip-foundation">Foundation</span></td><td>Azure Landing Zone, Azure Policy, Entra ID, RBAC.</td><td>Creates a repeatable governed launchpad for SaaS-hosted and customer-hosted Azure deployments.</td><td>Management group map, subscription map, policy baseline, owner model.</td></tr>
+<tr class="layer-row-api"><td><span class="layer-chip chip-api">API Layer</span></td><td>Azure API Management, API adapters, callback contracts.</td><td>Gives customers and internal systems a stable integration boundary without exposing workers or data stores directly.</td><td>OpenAPI catalog, versioning policy, idempotency rules, correlation standard.</td></tr>
+<tr class="layer-row-compute"><td><span class="layer-chip chip-compute">Runtime</span></td><td>AKS, ACR, node pools, namespaces.</td><td>Supports the Kubernetes foundation the customer teaches while keeping deployments portable.</td><td>Cluster design, namespace map, image promotion flow, worker scaling rules.</td></tr>
+<tr class="layer-row-workflow"><td><span class="layer-chip chip-workflow">Workflow</span></td><td>Temporal server, workers, namespaces, workflow history.</td><td>Replaces fragile custom orchestration with durable execution, retries, and recoverable business processes.</td><td>Workflow registry, retry policy, compensation policy, recovery demo.</td></tr>
+<tr class="layer-row-data"><td><span class="layer-chip chip-data">Data</span></td><td>Azure Database for PostgreSQL, vector tables, HorizonDB path.</td><td>Keeps operational data close to the workflow and avoids unnecessary data movement.</td><td>Schema ownership, restore test, vector table design, data-retention rule.</td></tr>
+<tr class="layer-row-ai"><td><span class="layer-chip chip-ai">Intelligence</span></td><td>Azure model endpoints, Azure OpenAI Service, MAI-Thinking-1 where available.</td><td>Turns AI into a controlled workflow decision step with measurable outcomes.</td><td>Model-use register, prompt versions, schema tests, evaluation set, approval rule.</td></tr>
+<tr class="layer-row-event"><td><span class="layer-chip chip-event">Events</span></td><td>Service Bus, Event Grid.</td><td>Lets long-running workflows absorb slow systems, retries, callbacks, and asynchronous events.</td><td>Queue/topic map, event schema, dead-letter policy, back-pressure rule.</td></tr>
+<tr class="layer-row-security"><td><span class="layer-chip chip-security">Security</span></td><td>Key Vault, Private Link, Private DNS, Defender for Cloud.</td><td>Improves trust for high-security customer deployments and regulated environments.</td><td>Access review, private endpoint inventory, secret rotation plan, security review.</td></tr>
+<tr class="layer-row-observe"><td><span class="layer-chip chip-observe">Observe</span></td><td>Azure Monitor, Log Analytics, Application Insights.</td><td>Connects workflow execution to reliability, AI usefulness, and business outcome measurement.</td><td>Dashboards, SLOs, trace sample, evaluation signal report.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="landing-zone">
+<h2>Azure Landing Zone foundation</h2>
+<p class="lead">Azure Landing Zone becomes the foundation layer for the workflow platform. It establishes the subscription model, management group hierarchy, policy baseline, identity controls, network topology, observability boundary, and governance model before the API Layer, Temporal, AKS, PostgreSQL, HorizonDB, or AI workflow activities are deployed.</p>
+<div class="callout">
+<strong>Strategy:</strong> treat Azure Landing Zone as the platform contract. The application team owns API contracts, workflow logic, and bounded AI behavior; the platform team owns reusable controls for identity, policy, network, security posture, logging, naming, tagging, and subscription vending.
+ </div>
+<div class="grid-2">
+<div class="card">
+<h3>Platform landing zone</h3>
+<p>Centralized shared services and guardrails used by all workload environments: management groups, policies, identity patterns, connectivity, security monitoring, platform logs, and standard deployment controls.</p>
+<span class="tag">Shared services</span><span class="tag">Governance</span><span class="tag">Connectivity</span>
+</div>
+<div class="card">
+<h3>Application landing zones</h3>
+<p>Workload subscriptions or resource groups that host the API Layer, AKS, Temporal workers, PostgreSQL, Key Vault, messaging, AI model endpoint integrations, and observability resources for each environment.</p>
+<span class="tag green">Workload-owned</span><span class="tag green">Environment-specific</span><span class="tag green">Tagged ownership</span>
+</div>
+</div>
+<h3>Landing zone pattern decisions</h3>
+<table>
+<thead>
+<tr>
+<th>Design area</th>
+<th>Recommended pattern</th>
+<th>Why it matters for durable intelligent workflows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Management groups</strong></td>
+<td>Separate platform, non-production, production, and sandbox management scopes.</td>
+<td>Lets policy, access, and governance controls vary by environment without changing application code.</td>
+</tr>
+<tr>
+<td><strong>Subscription vending</strong></td>
+<td>Create repeatable workload subscriptions for sandbox, non-production, and production.</td>
+<td>Prevents every workflow team from inventing its own resource boundaries.</td>
+</tr>
+<tr>
+<td><strong>Policy baseline</strong></td>
+<td>Require tags, allowed regions, diagnostic settings, private access where required, and approved service configurations.</td>
+<td>Stops uncontrolled resource drift, unapproved exposure, and inconsistent telemetry before production.</td>
+</tr>
+<tr>
+<td><strong>Identity baseline</strong></td>
+<td>Use Entra ID, managed identities, workload identity for AKS pods, and role assignments by service boundary.</td>
+<td>Allows Temporal workers and AI activity services to access dependencies without embedded secrets.</td>
+</tr>
+<tr>
+<td><strong>Network topology</strong></td>
+<td>Start with simple private networking; use hub-and-spoke or Virtual WAN only when shared connectivity and routing justify it.</td>
+<td>Keeps the early platform simple while leaving a path to enterprise connectivity.</td>
+</tr>
+<tr>
+<td><strong>Observability baseline</strong></td>
+<td>Standardize Log Analytics workspaces, Application Insights, diagnostic settings, retention, and data collection rules.</td>
+<td>Workflow replay, AI decisions, retries, token usage and failure analysis need consistent telemetry.</td>
+</tr>
+<tr>
+<td><strong>Resource governance</strong></td>
+<td>Use usage guardrails, alerts, tags, resource locks for critical resources, and environment expiration policy for sandboxes.</td>
+<td>Prevents idle clusters, verbose logs, and unmanaged model-call volume from becoming operational risk.</td>
+</tr>
+</tbody>
+</table>
+<h3>Recommended subscription and resource-group map</h3>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Purpose</th>
+<th>Typical resources</th>
+<th>Governance rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Platform subscription</strong></td>
+<td>Shared control plane and environment guardrails.</td>
+<td>Central monitoring workspace, connectivity resources where required, policy assignments, security posture configuration.</td>
+<td>Owned by platform team; owned by the shared cloud foundation operating model.</td>
+</tr>
+<tr>
+<td><strong>Sandbox subscription</strong></td>
+<td>Training, demos, and short-lived experiments.</td>
+<td>Small AKS clusters, temporary PostgreSQL, test Key Vault, low-volume model calls.</td>
+<td>Expiration tags required; idle environments should be stopped or deleted.</td>
+</tr>
+<tr>
+<td><strong>Non-production workload subscription</strong></td>
+<td>Integration, staging, load testing, and release validation.</td>
+<td>AKS non-prod, PostgreSQL non-prod, ACR references, messaging, dashboards.</td>
+<td>Lower capacity than production; scheduled scale-down where possible.</td>
+</tr>
+<tr>
+<td><strong>Production workload subscription</strong></td>
+<td>Customer or business-critical durable intelligent workflows.</td>
+<td>AKS production, Temporal, PostgreSQL, Key Vault, Service Bus/Event Grid, Application Insights.</td>
+<td>Usage alerts, SLO ownership, capacity planning review, and monthly operational review required.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="business-value">
+<h2>Business value across the solution stack</h2>
+<p class="lead">The architecture should be presented as a business acceleration pattern, not only a technology pattern. Each layer exists to reduce implementation friction, make customer-hosted and SaaS-hosted deployments more repeatable, keep operational data close to the workflow, and make AI useful inside real business processes.</p>
+<div class="callout success">
+<strong>Business thesis:</strong> start with the smallest reliable platform that can support regulated deployments, workflow-heavy SaaS, customer integrations, Postgres-first data ownership, and measurable AI improvement. Add sophistication only when the business process proves the need.
+</div>
+<div class="grid-4">
+<div class="metric"><div class="label">Modernization value</div><div class="value">Faster</div><div class="note">Reusable patterns help teams move beyond custom workflow engines without reinventing the platform each time.</div></div>
+<div class="metric"><div class="label">Reliability value</div><div class="value">Durable</div><div class="note">Long-running processes survive restarts, retries, timeouts, and third-party API failures.</div></div>
+<div class="metric"><div class="label">Integration value</div><div class="value">Cleaner</div><div class="note">The API Layer lets customer systems integrate through governed contracts instead of direct worker or database access.</div></div>
+<div class="metric"><div class="label">AI value</div><div class="value">Bounded</div><div class="note">AI improves specific workflow steps while policy, validation, and human review preserve control.</div></div>
+</div>
+<h3>Business value by solution layer</h3>
+<table>
+<thead>
+<tr><th>Solution layer</th><th>Business value</th><th>Why it matters for the customer note</th><th>Evidence to track</th></tr>
+</thead>
+<tbody>
+<tr class="layer-row-foundation"><td><strong>Azure Landing Zone</strong></td><td>Creates a repeatable foundation for high-security, customer-hosted, and SaaS-hosted deployments.</td><td>The customer has diverse companies across regulated, on-premises-adjacent, and SaaS scenarios. A landing zone avoids one-off Azure setup for each engagement.</td><td>Policy compliance, subscription readiness, tagging coverage, private access posture, ownership mapped before workload deployment.</td></tr>
+<tr class="layer-row-api"><td><strong>API Layer</strong></td><td>Provides a stable integration boundary for customer systems, internal applications, callbacks, approvals, and workflow commands.</td><td>The customer’s workflows often touch tens or hundreds of existing systems. A governed API surface keeps integrations simple and avoids direct coupling to workers or operational databases.</td><td>Versioned OpenAPI contracts, idempotency keys, correlation IDs, callback reliability, integration onboarding time, fewer breaking changes.</td></tr>
+<tr><td><strong>AKS / Kubernetes foundation</strong></td><td>Gives teams a portable deployment model across sandbox, production, customer-hosted Azure, and SaaS-hosted Azure environments.</td><td>The customer already teaches a Kubernetes foundation because it keeps deployment flexible while preserving a common operating model.</td><td>Same container pattern promoted across environments, independent worker scaling, namespace isolation, release repeatability.</td></tr>
+<tr><td><strong>Temporal workflow layer</strong></td><td>Replaces fragile home-grown workflow logic with durable execution, retries, timers, recovery, and auditable workflow history.</td><td>The customer’s companies are workflow-heavy and need to move beyond custom engines into a reliable off-the-shelf workflow foundation.</td><td>Workflow completion rate, retry success, reduced manual recovery, replay/versioning coverage, recovery demo after worker failure.</td></tr>
+<tr><td><strong>PostgreSQL / HorizonDB path</strong></td><td>Keeps operational data close to the application and workflow while preserving a future scale path for PostgreSQL-compatible workloads.</td><td>The customer wants Postgres-first operational data and semantic lookup inside the database where practical, avoiding unnecessary data movement.</td><td>Operational data ownership, vector lookup benchmarks, query latency, data-quality workflow outcomes, HorizonDB readiness review when scale requires it.</td></tr>
+<tr><td><strong>Bounded AI activities</strong></td><td>Turns AI into a practical accelerator for validation, enrichment, classification, routing, cleanup, and decision support inside known workflows.</td><td>The customer sees the major value in inserting intelligence into workflows rather than standing up a separate AI-centric architecture first.</td><td>Decision quality, approval rate, exception rate, human override reasons, workflow step time, validation pass/fail trend.</td></tr>
+<tr><td><strong>Messaging and events</strong></td><td>Decouples external requests from long-running workflow execution and improves resilience when systems are slow or temporarily unavailable.</td><td>Customer and third-party systems will not all behave reliably. Commands, events, and callbacks protect the workflow from brittle synchronous dependencies.</td><td>Queue age, dead-letter trend, duplicate handling, callback success rate, retry recovery rate.</td></tr>
+<tr><td><strong>Observability and evaluation readiness</strong></td><td>Creates the evidence trail required to improve workflow quality, AI behavior, reliability, and future tuning readiness.</td><td>The customer is interested in future tuning paths, but only after traces, labels, feedback, and evaluation loops exist.</td><td>Trace coverage, labeled outcomes, evaluation pass rate, model-call failure rate, workflow-to-outcome traceability.</td></tr>
+</tbody>
+</table>
+<h3>Business-value narrative by stakeholder</h3>
+<table>
+<thead><tr><th>Stakeholder</th><th>Message</th><th>What they should see in a demo</th></tr></thead>
+<tbody>
+<tr><td><strong>Business leader</strong></td><td>A reusable modernization pattern that improves delivery speed and operational consistency across many companies without forcing every team into unnecessary platform complexity.</td><td>A workflow that starts from an API call, survives failure, uses AI in one bounded step, and finishes with a traceable business outcome.</td></tr>
+<tr><td><strong>CTO / platform leader</strong></td><td>A governed Azure foundation with portable workload deployment, clear API boundaries, durable workflows, and Postgres-first data ownership.</td><td>Landing zone guardrails, AKS deployment, API contract, Temporal workflow history, and PostgreSQL records connected by correlation ID.</td></tr>
+<tr><td><strong>Security / compliance</strong></td><td>Identity, policy, secrets, private access, observability, and human approval points are designed into the pattern before production usage.</td><td>Managed identity access, Key Vault boundary, private integration route, audit trail, and approval event recorded in workflow history.</td></tr>
+<tr><td><strong>Engineering team</strong></td><td>The pattern gives a concrete way to build reliable workflow software without hand-rolling state machines, retries, compensation, and integration glue.</td><td>Code-first workflow definition, typed activities, workflow-start API, retry policy, worker scaling, and replay-safe versioning approach.</td></tr>
+<tr><td><strong>Customer implementation team</strong></td><td>The same pattern adapts to customer-hosted Azure and SaaS-hosted deployments while integrating with existing APIs just in time.</td><td>API adapter, callback flow, private route option, and a workflow that calls an external system without copying all customer data first.</td></tr>
+</tbody>
+</table>
+</section>
+<section id="summary">
+<h2>Pattern summary</h2>
+<p class="lead">
+ The design starts with a small durable workflow foundation and a clear API boundary, then expands only when evidence demands it: more throughput, stronger availability, stricter compliance, richer integrations, or better evaluation data.
+ </p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Primary use case</th><th>Business value</th>
+<th>Default Azure services</th>
+<th>Next-stage readiness signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P1. Learning / sandbox</strong></td>
+<td>Teaching, prototypes, internal demos, low-risk experimentation.</td><td>Lets teams learn the workflow-first architecture safely before involving customer or production workloads.</td>
+<td>Azure Landing Zone LZ1, a simple API adapter, AKS, Temporal, Azure Database for PostgreSQL, ACR, Key Vault, and low-volume bounded model calls.</td>
+<td>Move to P2 when multiple users depend on the workflow or uptime matters.</td>
+</tr>
+<tr>
+<td><strong>P2. Production MVP</strong></td>
+<td>First production workload with bounded AI steps and operational reporting.</td><td>Creates the first repeatable production shape for governed APIs, durable execution, Postgres-first data, and bounded AI steps.</td>
+<td>Azure Landing Zone LZ2, API Management or a governed API gateway pattern, production AKS, three-node worker pool, production PostgreSQL configuration, ACR, Service Bus, Event Grid, and Azure Monitor.</td>
+<td>Move to P3 when downtime, recovery, or cross-zone resilience becomes unacceptable.</td>
+</tr>
+<tr>
+<td><strong>P3. HA production</strong></td>
+<td>Customer-facing or business-critical workflows.</td><td>Supports business-critical workflows with stronger resilience, private access, operational reviews, and recovery practice.</td>
+<td>Azure Landing Zone LZ3, hardened API Layer, zone-aware AKS, multiple node pools, PostgreSQL high-availability posture, private networking, and scaled observability.</td>
+<td>Move to P4 when workflow volume, vector lookup, or database throughput becomes the bottleneck.</td>
+</tr>
+<tr>
+<td><strong>P4. High-throughput workflow + Postgres scale</strong></td>
+<td>Large workflow volumes, high concurrency, heavier semantic lookup, or database-bound AI applications.</td><td>Keeps scale decisions tied to measured workflow, database, and vector-lookup bottlenecks rather than speculative platform choices.</td>
+<td>Azure Landing Zone LZ3, larger AKS pools, API contract governance, Postgres read replicas/partitioning, HorizonDB evaluation path, tighter model-operational controls.</td>
+<td>Separate work queues, storage, and compute domains; validate HorizonDB readiness before production cutover.</td>
+</tr>
+<tr>
+<td><strong>P5. Trace/evaluation readiness</strong></td>
+<td>Preparing workflow data for quality measurement and future tuning.</td><td>Turns workflow history and human feedback into measurable quality signals before future optimization or tuning.</td>
+<td>Workflow history, model-call traces, outcome labels, eval workers, storage, dashboards.</td>
+<td>Proceed only after evaluation datasets, labels, and feedback loops are stable.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="temporal-advantages">
+<h2><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/> Temporal advantages for the customer pattern</h2>
+<p class="lead">Temporal is the preferred teaching and implementation pattern for workflow-heavy Azure solutions because it gives teams a durable, portable, code-first foundation for business processes. It should be presented as the recommended default for complex workflows, not as a mandatory product choice for every workload.</p>
+<div class="callout success">
+<strong>Customer-aligned position:</strong> teach a Kubernetes-ready foundation, keep the workflow engine explicit, and add intelligence inside Temporal activities as bounded decision or action steps. This keeps the architecture simple enough to teach while preserving room for regulated deployments, SaaS deployments, and future evaluation-driven improvement.
+</div>
+<div class="grid-3">
+<div class="metric"><div class="label">Primary fit</div><div class="value">Workflow-heavy SaaS</div><div class="note">Replace fragile home-grown workflow logic with a durable execution layer.</div></div>
+<div class="metric"><div class="label">Deployment posture</div><div class="value">AKS-ready</div><div class="note">Runs cleanly in a Kubernetes foundation across sandbox, non-production, and production.</div></div>
+<div class="metric"><div class="label">AI pattern</div><div class="value">Bounded steps</div><div class="note">AI is inserted into known workflow activities, not allowed to own the entire process.</div></div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Temporal advantage</th>
+<th>Why it matters to this customer</th>
+<th>Azure implementation implication</th>
+<th>Proof point to show in the accelerator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Durable execution by default</strong></td>
+<td>Workflow-heavy companies need processes that survive worker crashes, infrastructure restarts, timeouts, and third-party API failures without losing progress.</td>
+<td>Run Temporal on AKS with PostgreSQL persistence, clear namespace boundaries, retry policies, and worker autoscaling.</td>
+<td>Kill a worker during a running workflow and show the workflow completing after recovery.</td>
+</tr>
+<tr>
+<td><strong>Code-first workflow model</strong></td>
+<td>Teams can express real business processes in application code instead of stitching together opaque process logic across scripts, queues, and manual handoffs.</td>
+<td>Use typed workflow definitions, typed activities, versioned workers, and release promotion through the container supply chain.</td>
+<td>Show a workflow definition that maps directly to a business process: intake, validate, enrich, decide, approve, act, and record outcome.</td>
+</tr>
+<tr>
+<td><strong>Clear place to insert intelligence</strong></td>
+<td>The customer wants intelligence inside existing workflows, not a separate AI layer that hides process ownership.</td>
+<td>Call AI from Temporal activities with strict schemas, timeouts, retries, validation gates, and human review for high-impact decisions.</td>
+<td>Show one bounded AI activity that classifies, extracts, or recommends, then demonstrate that application policy controls the final state change.</td>
+</tr>
+<tr>
+<td><strong>Kubernetes foundation fit</strong></td>
+<td>The customer teaches Kubernetes because it keeps deployment flexible across customer-hosted Azure environments and SaaS-hosted deployments.</td>
+<td>Package Temporal workers and workflow services as containers on AKS; use namespaces, node pools, managed identity, private networking, and observability standards from the landing zone.</td>
+<td>Deploy the same workflow worker pattern to sandbox and production-style environments with environment-specific configuration only.</td>
+</tr>
+<tr>
+<td><strong>Portable operating model</strong></td>
+<td>Companies vary widely: some need high-security customer environments, while others need scalable SaaS patterns. Temporal supports a common workflow mental model across both.</td>
+<td>Keep workflow code, domain APIs, Postgres data, and AI activity services decoupled so teams can adapt the hosting model without redesigning the process.</td>
+<td>Use the same workflow design with different connectivity patterns: private customer APIs, SaaS APIs, and internal operational APIs.</td>
+</tr>
+<tr>
+<td><strong>Good licensing posture</strong></td>
+<td>The customer explicitly values a useful workflow engine with a favorable open-source license, reducing friction for teaching and adoption.</td>
+<td>Document Temporal as the default recommended engine while leaving room for exceptions when a workload does not need durable orchestration.</td>
+<td>Include a simple adoption rubric: use Temporal for long-running, retry-heavy, stateful, or human-in-the-loop workflows; avoid it for simple stateless calls.</td>
+</tr>
+<tr>
+<td><strong>Operational history for improvement</strong></td>
+<td>Workflow histories, decisions, corrections, and outcomes become the raw material for evaluation, quality review, and future tuning readiness.</td>
+<td>Persist model-call metadata, validation results, workflow outcomes, human corrections, and evaluation labels alongside workflow telemetry.</td>
+<td>Show a trace from trigger to outcome, then show how the same trace feeds an evaluation dataset.</td>
+</tr>
+<tr>
+<td><strong>Pragmatic alternative to premature platform expansion</strong></td>
+<td>The customer wants teams to do the important foundational work first: workflow boundaries, data ownership, reliability, and observability.</td>
+<td>Use Temporal, AKS, PostgreSQL, Key Vault, messaging, and Azure Monitor as the core platform before adding additional specialized services.</td>
+<td>Present a small end-to-end workflow that is production-shaped before introducing any extra platform layer.</td>
+</tr>
+</tbody>
+</table>
+<h3>Temporal adoption guardrails</h3>
+<table>
+<thead>
+<tr>
+<th>Use Temporal when...</th>
+<th>Do not force Temporal when...</th>
+<th>Teaching message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The process is long-running, stateful, retry-heavy, approval-based, or touches multiple systems.</td>
+<td>The task is a simple stateless API call, short background job, or one-off script with no durable business state.</td>
+<td>Temporal is the durable workflow foundation for real business processes, not a blanket requirement for every small task.</td>
+</tr>
+<tr>
+<td>AI decisions must be bounded, audited, retried, validated, and connected to a business outcome.</td>
+<td>The AI use case is exploratory, ad hoc, or does not yet have a stable business process around it.</td>
+<td>First define the workflow boundary; then insert intelligence where it improves a specific step.</td>
+</tr>
+<tr>
+<td>The company needs a common pattern across customer-hosted and SaaS-hosted Azure deployments.</td>
+<td>The environment cannot support a Kubernetes or containerized operating model yet.</td>
+<td>Teach the pattern as portable architecture, then adapt the deployment shape to the customer environment.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="api-layer">
+<h2>API Layer for component integration</h2>
+<p class="lead">The API Layer is the controlled integration surface between customer systems, SaaS applications, Temporal workflows, AKS services, PostgreSQL, bounded AI activity services, and observability. It keeps external systems from directly invoking workers or reaching into operational data stores.</p>
+<div class="callout">
+<strong>Strategy:</strong> keep the API Layer thin and governed. It should authenticate, authorize, validate, route, apply policy, emit telemetry, and translate requests into workflow commands or domain-service calls. Temporal owns long-running process state; PostgreSQL owns operational data; workers own business execution.
+</div>
+<div class="grid-2">
+<div class="card">
+<h3>North-south API boundary</h3>
+<p>Use Azure API Management or a governed API gateway pattern to expose workflow start, status, callback, approval, and domain APIs to customer systems, partners, internal applications, and SaaS tenants.</p>
+<span class="tag">OpenAPI-first</span><span class="tag">Versioned contracts</span><span class="tag">Policy-driven</span>
+</div>
+<div class="card">
+<h3>Workflow command adapter</h3>
+<p>Route API requests to a small command service that starts Temporal workflows, sends workflow signals, performs workflow queries, and returns durable workflow identifiers to callers.</p>
+<span class="tag green">Start</span><span class="tag green">Signal</span><span class="tag green">Query</span>
+</div>
+<div class="card">
+<h3>Integration adapters</h3>
+<p>Use adapters for customer and third-party systems so workflows can call existing APIs just in time, without copying data unnecessarily or forcing a new data platform first.</p>
+<span class="tag violet">Existing APIs</span><span class="tag violet">Just-in-time access</span><span class="tag violet">Loose coupling</span>
+</div>
+<div class="card">
+<h3>Async bridge</h3>
+<p>Use Service Bus for reliable commands and Event Grid for event notifications when API calls should not block on long-running workflow execution.</p>
+<span class="tag amber">Commands</span><span class="tag amber">Events</span><span class="tag amber">Callbacks</span>
+</div>
+</div>
+<h3>API-to-workflow contract map</h3>
+<table>
+<thead>
+<tr><th>Integration need</th><th>API contract</th><th>Downstream component</th><th>Design rule</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Start a business process</strong></td>
+<td><code>POST /workflows/{type}</code></td>
+<td>Workflow command service → Temporal start workflow</td>
+<td>Require idempotency key, correlation ID, tenant/customer scope, and validated request schema.</td>
+</tr>
+<tr>
+<td><strong>Check process state</strong></td>
+<td><code>GET /workflows/{id}</code></td>
+<td>Workflow query adapter → Temporal query or PostgreSQL read model</td>
+<td>Expose business status, not internal worker state. Do not expose database internals.</td>
+</tr>
+<tr>
+<td><strong>Send approval or callback</strong></td>
+<td><code>POST /workflows/{id}/signals/{name}</code></td>
+<td>Signal adapter → Temporal signal</td>
+<td>Validate caller identity, allowed signal type, payload schema, and workflow ownership.</td>
+</tr>
+<tr>
+<td><strong>Read or update operational data</strong></td>
+<td>Domain API, not direct database access</td>
+<td>AKS service → PostgreSQL</td>
+<td>Keep data access behind business APIs; use managed identity and least-privilege role assignments.</td>
+</tr>
+<tr>
+<td><strong>Call external systems</strong></td>
+<td>Connector API or adapter contract</td>
+<td>Workflow activity → customer or third-party API</td>
+<td>Call systems just in time, capture response metadata, and keep retry behavior inside activities.</td>
+</tr>
+</tbody>
+</table>
+<h3>API Layer guardrails</h3>
+<ul>
+<li><strong>OpenAPI-first:</strong> define request and response contracts before wiring workflows to external systems.</li>
+<li><strong>Explicit versioning:</strong> preserve older contract versions until dependent customers or systems have migrated.</li>
+<li><strong>Idempotency:</strong> every workflow-starting API should tolerate retries without duplicating business processes.</li>
+<li><strong>Correlation:</strong> pass a correlation ID from API entry through Temporal, worker logs, model calls, PostgreSQL writes, and observability.</li>
+<li><strong>Least privilege:</strong> API services should call only the workflow commands and domain services they require.</li>
+<li><strong>Private integration path:</strong> use private networking, private endpoints, or self-hosted gateway patterns where customer or regulated deployments require the API surface to remain inside controlled network boundaries.</li>
+</ul>
+</section>
+
+<section id="model-build2026">
+<h2>Build 2026 AI model path: MAI-Thinking-1</h2>
+<p class="lead">Add MAI-Thinking-1 as a candidate Azure model endpoint for bounded Temporal activities when a workflow needs deeper reasoning, long-context analysis, or code-oriented reasoning. The model should remain a replaceable decision service; Temporal still owns workflow state, retries, timers, approvals, and recovery.</p>
+<div class="layer-card ai">
+<h3>How the model fits the customer-aligned pattern</h3>
+<p>MAI-Thinking-1 is useful as a specialized reasoning option inside the existing workflow-first architecture. It should be called from a Temporal activity with a typed input contract, typed output schema, timeout, retry policy, validation step, and trace record.</p>
+<span class="layer-chip chip-ai">Build 2026 model path</span><span class="layer-chip chip-workflow">Temporal-owned state</span><span class="layer-chip chip-observe">Trace and evaluate</span>
+</div>
+<table>
+<thead><tr><th>Use in workflow</th><th>Recommended bounded activity pattern</th><th>Readiness evidence</th></tr></thead>
+<tbody>
+<tr class="layer-row-ai"><td><strong>Multi-step reasoning</strong></td><td>Call MAI-Thinking-1 only after the workflow gathers the required operational context from APIs and PostgreSQL.</td><td>Input context contract, output schema, validation result, trace sample.</td></tr>
+<tr class="layer-row-ai"><td><strong>Long-context review</strong></td><td>Use for policy review, workflow analysis, data-cleanup reasoning, or complex customer-specific rules where smaller models underperform.</td><td>Evaluation examples, comparison notes, human review rule.</td></tr>
+<tr class="layer-row-ai"><td><strong>Code-oriented reasoning</strong></td><td>Use for modernization planning, migration analysis, test generation, or workflow-code review, with human approval before changes move forward.</td><td>Review checklist, approved output record, rollback path.</td></tr>
+<tr class="layer-row-ai"><td><strong>Future tuning readiness</strong></td><td>Persist workflow traces, model-call metadata, corrections, outcomes, and evaluation labels so the team can decide when tuning is justified.</td><td>Trace-to-outcome dataset, labeled correction set, evaluation dashboard.</td></tr>
+</tbody>
+</table>
+<div class="callout warning"><strong>Governance note:</strong> MAI-Thinking-1 should be added only where tenant access, private-preview eligibility, data-handling requirements, and review controls are approved. Keep the workflow implementation model-agnostic so the team can route tasks to the right model over time.</div>
+<p class="small"><a href="https://build.microsoft.com/en-US/home">Microsoft Build 2026</a> · <a href="https://blogs.microsoft.com/blog/2026/06/02/microsoft-build-2026-be-yourself-at-work/">Official Build 2026 announcement</a> · <a href="https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/">Microsoft AI MAI model announcement</a></p>
+</section>
+<section id="reference">
+<h2>Reference architecture</h2>
+<p class="lead">
+ The Azure Landing Zone supplies the governance foundation. The API Layer supplies the integration boundary. The workflow remains the system of record. AI is called from bounded activities, validated by application policy, and traced for audit and improvement.
+ </p>
+<div aria-label="Architecture flow diagram" class="mermaidish">
+<div class="node layer-foundation">Landing Zone<small>policy / identity / network</small></div>
+<div class="node layer-api">API Layer<small>APIM / contracts / gateway</small></div>
+<div class="node layer-event">Events &amp; commands<small>queue / topic / notification</small></div>
+<div class="node temporal-node layer-workflow"><img alt="Temporal logomark" class="node-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/><span>Temporal</span><small>durable workflow state</small></div>
+<div class="node layer-compute">AKS workers<small>business logic + AI activity</small></div>
+<div class="node layer-data">Postgres<small>operational data + vectors</small></div>
+<div class="node layer-ai">MAI-Thinking-1<small>bounded model option</small></div><div class="node layer-observe">Observe<small>logs, traces, evals</small></div>
+</div>
+<div class="grid-2">
+<div class="card">
+<h3>Control plane</h3>
+<p>Use Azure Landing Zone conventions for management groups, subscriptions, resource groups, Entra ID, managed identities, Azure Policy, Key Vault, and network boundaries to govern the environment.</p>
+<span class="tag">Identity-first</span><span class="tag">Policy-driven</span><span class="tag">Secrets externalized</span>
+</div>
+<div class="card">
+<h3>API Layer</h3>
+<p>Use a governed API boundary for workflow starts, status queries, approvals, callbacks, and domain APIs. Route external calls to workflow command services, AKS services, or async messaging without exposing workers or databases directly.</p>
+<span class="tag">OpenAPI</span><span class="tag">Gateway policy</span><span class="tag">Customer integration</span>
+</div>
+<div class="card">
+<h3 class="with-logo"><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>Workflow plane</h3>
+<p>Run Temporal server and workers on AKS. Keep deterministic workflow state in Temporal and isolate nondeterministic calls inside activities.</p>
+<span class="tag green">Durable</span><span class="tag green">Retryable</span><span class="tag green">Auditable</span>
+</div>
+<div class="card">
+<h3>Data plane</h3>
+<p>Start with Azure Database for PostgreSQL. Use separate databases or schemas for Temporal persistence, workflow app data, vector tables, and evaluation records.</p>
+<span class="tag violet">Postgres-first</span><span class="tag violet">Data-close</span><span class="tag violet">HorizonDB path</span>
+</div>
+<div class="card">
+<h3>Intelligence plane</h3>
+<p>Call models through bounded activities with schemas, timeouts, retry rules, prompt versioning, output validation, and human approval for high-risk decisions.</p>
+<span class="tag amber">Bounded AI</span><span class="tag amber">Policy gate</span><span class="tag amber">Feedback loop</span>
+</div>
+</div>
+</section>
+<section id="patterns">
+<h2>Architecture patterns</h2>
+<div class="data layer-card pattern-card">
+<div class="pattern-head temporal-branded">
+<h3 class="with-logo"><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>P1. Learning / sandbox pattern</h3>
+<span class="tag green">Best for teaching</span><span class="tag">Low risk</span><span class="tag">Low volume</span>
+<p class="muted">A minimal end-to-end environment for proving the workflow-first pattern without committing to production-grade availability.</p>
+</div>
+<div class="pattern-body">
+<div class="grid-2">
+<div>
+<h4>Topology</h4>
+<ul>
+<li>Azure Landing Zone LZ1 governance-only foundation.</li>
+<li>Small AKS cluster configured for sandbox use.</li>
+<li>Small Linux node pool, usually 1–2 nodes.</li>
+<li>Temporal server, UI, and workers in one namespace.</li>
+<li>Simple workflow command API for starting and querying demo workflows.</li>
+<li>One PostgreSQL Flexible Server with separate databases/schemas.</li>
+<li>ACR, Key Vault, and Azure Monitor with strict log limits.</li>
+</ul>
+</div>
+<div>
+<h4>Bounded AI design</h4>
+<ul>
+<li>Use a small model for extraction, routing, and summarization.</li>
+<li>Store prompt version and output schema with each workflow decision.</li>
+<li>Disable autonomous side effects; require explicit workflow action code.</li>
+</ul>
+</div>
+</div>
+<div class="callout success"><strong>Business value: </strong>gives teams a low-risk place to learn durable workflows, API contracts, Postgres-first data, and bounded AI steps before production commitments.</div></div>
+</div>
+<div class="layer-card pattern-card api">
+<div class="pattern-head temporal-branded">
+<h3 class="with-logo"><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>P2. Production MVP pattern</h3>
+<span class="tag green">Default production start</span><span class="tag">Bounded AI</span><span class="tag">Operationally simple</span>
+<p class="muted">A practical first production deployment for one or two durable intelligent workflows.</p>
+</div>
+<div class="pattern-body">
+<div class="grid-2">
+<div>
+<h4>Topology</h4>
+<ul>
+<li>Azure Landing Zone LZ2 production foundation.</li>
+<li>Production AKS cluster management.</li>
+<li>Three-node system/application pool, with autoscaling boundaries.</li>
+<li>Temporal server separated from workflow workers by namespace and RBAC.</li>
+<li>API Layer for workflow start/status/callback contracts and AKS ingress routing.</li>
+<li>Production PostgreSQL configuration for persistence and app data, preferably separated by database.</li>
+<li>ACR, Service Bus, Event Grid, Key Vault, and Application Insights.</li>
+</ul>
+</div>
+<div>
+<h4>Bounded AI design</h4>
+<ul>
+<li>Each AI activity has timeout, retry policy, schema validation, and fallback path.</li>
+<li>Human approval is required for irreversible business actions.</li>
+<li>Usage is tracked by workflow type, tenant/customer, model, and prompt version.</li>
+</ul>
+</div>
+</div>
+<div class="callout success"><strong>Business value: </strong>converts the learning pattern into a repeatable production workflow system with governed integrations, auditable AI decisions, and operational ownership.</div></div>
+</div>
+<div class="layer-card pattern-card api">
+<div class="pattern-head temporal-branded">
+<h3 class="with-logo"><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>P3. HA production pattern</h3>
+<span class="tag amber">Business critical</span><span class="tag">Zone-aware</span><span class="tag">Private networking</span>
+<p class="muted">A production-ready baseline for customer-facing workflows where downtime, recovery, and auditability matter.</p>
+</div>
+<div class="pattern-body">
+<div class="grid-2">
+<div>
+<h4>Topology</h4>
+<ul>
+<li>Azure Landing Zone LZ3 enterprise foundation.</li>
+<li>Zone-aware AKS node pools.</li>
+<li>Separate node pools for Temporal server, workflow workers, and burstable task workers.</li>
+<li>Hardened API Layer with private integration path where required.</li>
+<li>PostgreSQL high-availability posture appropriate to the deployment environment.</li>
+<li>Private endpoints for database, registry, and Key Vault where required.</li>
+<li>Separate staging and production environments.</li>
+</ul>
+</div>
+<div>
+<h4>Operational rules</h4>
+<ul>
+<li>Backups tested monthly with restore drills.</li>
+<li>Workflow replay/versioning strategy defined before production changes.</li>
+<li>SLOs cover workflow latency, retry count, completion rate, model-call error rate, and queue age.</li>
+</ul>
+</div>
+</div>
+<div class="callout success"><strong>Business value: </strong>protects customer-facing and business-critical processes with resilience, private access options, restore practice, and clear service ownership.</div></div>
+</div>
+<div class="layer-card pattern-card observe">
+<div class="pattern-head temporal-branded">
+<h3 class="with-logo"><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>P4. High-throughput workflow + Postgres scale pattern</h3>
+<span class="tag red">Scale gate</span><span class="tag">Database bound</span><span class="tag">HorizonDB evaluation</span>
+<p class="muted">Used when the bottleneck is workflow concurrency, database throughput, vector lookup performance, or operational data scale.</p>
+</div>
+<div class="pattern-body">
+<div class="grid-2">
+<div>
+<h4>Topology</h4>
+<ul>
+<li>Azure Landing Zone LZ3 with production subscription, private routing, and centralized monitoring patterns.</li>
+<li>Dedicated AKS pools by workload class: workflow server, online workers, batch/eval workers.</li>
+<li>API contracts partitioned by workflow domain, tenant, and integration type.</li>
+<li>PostgreSQL read replicas, partitioning, connection pooling, and separate eval/history stores.</li>
+<li>Vector tables remain close to operational data unless benchmark data proves otherwise.</li>
+<li>HorizonDB proof-of-value path for scale-out PostgreSQL-compatible workloads.</li>
+</ul>
+</div>
+<div>
+<h4>Scale controls</h4>
+<ul>
+<li>Queue partitions by tenant, workflow type, or priority.</li>
+<li>Rate-limit model calls at the activity boundary.</li>
+<li>Use replay-safe versioning and shard large workflows into child workflows.</li>
+</ul>
+</div>
+</div>
+<div class="callout success"><strong>Business value: </strong>lets the platform grow only where telemetry proves the bottleneck, preserving simplicity while supporting higher workflow volume and data intensity.</div></div>
+</div>
+<div class="layer-card pattern-card observe">
+<div class="pattern-head temporal-branded">
+<h3 class="with-logo"><img alt="Temporal logomark" class="title-logo" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>P5. Trace/evaluation readiness pattern</h3>
+<span class="tag violet">Quality loop</span><span class="tag">Tuning prerequisite</span><span class="tag">Evidence first</span>
+<p class="muted">Adds the data discipline needed before advanced optimization or tuning should be considered.</p>
+</div>
+<div class="pattern-body">
+<div class="grid-2">
+<div>
+<h4>Topology</h4>
+<ul>
+<li>Persist workflow outcome, model input hash, output, validation result, and human correction.</li>
+<li>Store eval datasets separately from production workflow tables.</li>
+<li>Run scheduled eval workers on AKS with controlled model-call limits.</li>
+</ul>
+</div>
+<div>
+<h4>Readiness gates</h4>
+<ul>
+<li>At least one stable eval set per workflow type.</li>
+<li>Clear success/failure rubric and owner.</li>
+<li>Feedback labels collected from real workflow outcomes.</li>
+</ul>
+</div>
+</div>
+<div class="callout success"><strong>Business value: </strong>turns workflow execution into a measurable improvement loop by capturing outcomes, corrections, labels, and evaluation signals.</div></div>
+</div>
+<div class="layer-card pattern-card api">
+<div class="pattern-head">
+<h3>P6. API Layer integration pattern</h3>
+<span class="tag">API-first</span><span class="tag green">Customer integrations</span><span class="tag amber">Workflow commands</span>
+<p class="muted">A stable API boundary for starting workflows, querying state, receiving callbacks, and integrating with customer systems without exposing Temporal internals or operational databases.</p>
+</div>
+<div class="pattern-body">
+<div class="grid-2">
+<div>
+<h4>Topology</h4>
+<ul>
+<li>API Management or governed API gateway pattern as the north-south boundary.</li>
+<li>AKS ingress routes to workflow command services and domain APIs.</li>
+<li>Workflow command service maps HTTP requests to Temporal starts, signals, and queries.</li>
+<li>Service Bus and Event Grid bridge synchronous APIs to asynchronous workflow execution.</li>
+<li>Private integration path for customer-hosted, regulated, or network-isolated deployments.</li>
+</ul>
+</div>
+<div>
+<h4>Contract rules</h4>
+<ul>
+<li>OpenAPI contracts for workflow commands, status, callbacks, approvals, and domain APIs.</li>
+<li>Idempotency keys for workflow-starting APIs.</li>
+<li>Correlation IDs propagated through API Layer, Temporal, workers, PostgreSQL, model calls, and logs.</li>
+<li>Tenant/customer authorization before workflow start, signal, query, or callback handling.</li>
+<li>No direct database access from external systems.</li>
+</ul>
+</div>
+</div>
+<div class="callout success"><strong>Business value: </strong>shortens customer and partner integration work by providing stable contracts, callback rules, idempotency, and a safe boundary around workflow execution.</div></div>
+</div>
+</section>
+<section id="service-bom">
+<h2>Focused Bill of Materials: Azure services</h2>
+<p class="lead">This bill of materials is the Azure services checklist for the customer-aligned pattern. It keeps the stack centered on Azure Landing Zone, API Layer, AKS, Temporal, PostgreSQL/HorizonDB, bounded AI workflow activities, private integration paths, and observable operations.</p>
+<div class="callout">
+<strong>How to use this section:</strong> treat the table as the service inclusion checklist for architecture reviews, implementation planning, and accelerator reuse. Each row names the Azure service or resource family, the role it plays, the required deployment posture, and the evidence the team should produce before the service is treated as ready.
+</div>
+<h3>Core Azure services BOM</h3>
+<table>
+<thead>
+<tr>
+<th>Stack layer</th>
+<th>Azure service / resource family</th>
+<th>Role in the solution</th>
+<th>Deployment posture</th>
+<th>Readiness evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="layer-row-foundation">
+<td><strong>Landing-zone structure</strong></td>
+<td>Management groups, subscriptions, resource groups</td>
+<td>Creates the platform and application boundaries for sandbox, production, customer-hosted, and high-security deployment models.</td>
+<td>Define the management group hierarchy, subscription vending pattern, environment separation, naming, tagging, and ownership model before workload deployment.</td>
+<td>Subscription map, resource-group map, tag standard, owner map, region decision, environment boundary diagram.</td>
+</tr>
+<tr class="layer-row-foundation">
+<td><strong>Governance</strong></td>
+<td>Azure Policy, Azure Resource Graph, diagnostic settings</td>
+<td>Applies repeatable guardrails for allowed regions, required tags, diagnostic logging, private access posture, and approved resource configurations.</td>
+<td>Use policy initiatives at the landing-zone scope; use Resource Graph to review compliance and inventory across subscriptions.</td>
+<td>Policy assignment list, compliance dashboard, exception process, diagnostic settings baseline.</td>
+</tr>
+<tr class="layer-row-security">
+<td><strong>Identity and access</strong></td>
+<td>Microsoft Entra ID, Azure RBAC, managed identities, workload identity</td>
+<td>Provides least-privilege access for platform operators, application teams, AKS workloads, workflow workers, API components, database access, and Key Vault access.</td>
+<td>Use group-based RBAC for humans and managed identity patterns for workloads. Avoid embedding long-lived credentials in services, containers, or workflow history.</td>
+<td>Role assignment matrix, privileged access review, managed identity inventory, service-to-service access map.</td>
+</tr>
+<tr class="layer-row-security">
+<td><strong>Secrets, keys, certificates</strong></td>
+<td>Azure Key Vault</td>
+<td>Stores API secrets, certificates, connection values, encryption keys, and integration credentials that cannot be replaced by managed identity.</td>
+<td>Use private access where required, restricted RBAC, diagnostic logging, certificate lifecycle management, and explicit secret ownership.</td>
+<td>Key Vault access policy/RBAC review, secret naming standard, rotation plan, diagnostic log evidence.</td>
+</tr>
+<tr class="layer-row-security">
+<td><strong>Network foundation</strong></td>
+<td>Azure Virtual Network, subnets, network security groups, route tables</td>
+<td>Hosts AKS, API Layer connectivity, private database access, and controlled integration paths to customer or internal systems.</td>
+<td>Start with a simple network layout; move to hub-and-spoke or Virtual WAN only when shared routing, inspection, or cross-subscription connectivity requires it.</td>
+<td>Network topology, subnet plan, route plan, ingress/egress rules, customer connectivity notes.</td>
+</tr>
+<tr class="layer-row-security">
+<td><strong>Private access</strong></td>
+<td>Azure Private Link, private endpoints, Azure Private DNS, Azure DNS Private Resolver</td>
+<td>Keeps database, registry, Key Vault, and selected APIs reachable through private network paths where required by the customer environment.</td>
+<td>Use private endpoints for sensitive platform services; use Private DNS zones and DNS Private Resolver when hybrid name resolution is required.</td>
+<td>Private endpoint inventory, DNS zone map, resolver rules, public exposure review.</td>
+</tr>
+<tr class="layer-row-api">
+<td><strong>API boundary</strong></td>
+<td>Azure API Management</td>
+<td>Provides the governed API front door for workflow starts, workflow status, callbacks, approvals, domain APIs, and partner/customer integrations.</td>
+<td>Define OpenAPI contracts, auth policy, rate controls, correlation IDs, versioning, backend routing, request validation, and telemetry before exposing APIs.</td>
+<td>OpenAPI catalog, policy set, auth design, idempotency rules, callback contract, API telemetry dashboard.</td>
+</tr>
+<tr>
+<td><strong>External ingress protection</strong></td>
+<td>Azure Application Gateway with Web Application Firewall, where required</td>
+<td>Protects internet-facing web/API entry points that need layer-7 routing and web-application protection before requests reach the application or API boundary.</td>
+<td>Use when public ingress, path-based routing, TLS termination, or WAF rules are required by the deployment model.</td>
+<td>Ingress diagram, TLS/certificate plan, WAF mode/rule review, backend routing map.</td>
+</tr>
+<tr>
+<td><strong>Container platform</strong></td>
+<td>Azure Kubernetes Service</td>
+<td>Runs Temporal workers, workflow-supporting APIs, integration adapters, AI activity services, and operational sidecars where Kubernetes is justified.</td>
+<td>Use namespaces, node pools, workload identity, autoscaling, pod disruption budgets, network policy, and platform observability standards.</td>
+<td>Cluster design, namespace map, node-pool plan, workload identity map, health dashboards, runbook.</td>
+</tr>
+<tr>
+<td><strong>Container supply chain</strong></td>
+<td>Azure Container Registry</td>
+<td>Stores the container images and related artifacts for Temporal workers, API services, adapters, and AI activity services.</td>
+<td>Use image promotion, vulnerability scanning integration, retention rules, private access where required, and environment-specific deployment gates.</td>
+<td>Image naming standard, promotion flow, retention policy, registry access review.</td>
+</tr>
+<tr>
+<td><strong>Workflow data and operational store</strong></td>
+<td>Azure Database for PostgreSQL Flexible Server</td>
+<td>Serves as the operational source of truth for application data, workflow-adjacent records, vector embeddings where appropriate, and Temporal persistence where selected.</td>
+<td>Separate databases or schemas for application data, Temporal persistence, operational records, vector data, and evaluation records. Enable backups, monitoring, connection pooling, and restore practice.</td>
+<td>Database ownership map, schema boundary, backup policy, restore-drill result, connection-pooling plan, pgvector enablement record.</td>
+</tr>
+<tr>
+<td><strong>Future PostgreSQL-compatible scale path</strong></td>
+<td>Azure HorizonDB</td>
+<td>Provides the future data path for higher-throughput, low-latency, PostgreSQL-compatible workloads when the current workload proves the need.</td>
+<td>Evaluate only when measured data volume, latency, read scale, or AI-native database requirements justify the move from the default PostgreSQL foundation.</td>
+<td>Performance baseline, query profile, latency target, compatibility check, migration decision record.</td>
+</tr>
+<tr class="layer-row-event">
+<td><strong>Messaging and eventing</strong></td>
+<td>Azure Service Bus, Azure Event Grid</td>
+<td>Decouples workflow commands, async callbacks, external events, status notifications, and slow third-party integrations.</td>
+<td>Use Service Bus for reliable commands, queues, topics, dead-letter handling, and back-pressure. Use Event Grid for event notification and event distribution.</td>
+<td>Queue/topic map, event schema catalog, retry and dead-letter policy, correlation ID standard.</td>
+</tr>
+<tr class="layer-row-ai">
+<td><strong>AI model calls</strong></td>
+<td>Azure OpenAI Service / Azure model endpoint access / MAI-Thinking-1 where available</td>
+<td>Supplies the model endpoint used by bounded Temporal activities for classification, extraction, summarization, validation, routing, cleanup, reasoning, and decision support.</td>
+<td>Call models from controlled activities with typed inputs, typed outputs, prompt/version tracking, validation, rate controls, and human approval where required.</td>
+<td>Model-use register, prompt/version register, schema validation test, MAI-Thinking-1 access decision, approval rule, output-quality review.</td>
+</tr>
+<tr class="layer-row-observe">
+<td><strong>Observability</strong></td>
+<td>Azure Monitor, Log Analytics workspace, Application Insights</td>
+<td>Traces API requests, workflow execution, activity failures, database health, container health, model calls, integration callbacks, and business outcomes.</td>
+<td>Use OpenTelemetry where possible, consistent correlation IDs, dashboard templates, SLO alerts, log retention rules, sampling, and payload redaction.</td>
+<td>Dashboard set, alert rules, trace sample, SLO definition, redaction review, retention policy.</td>
+</tr>
+<tr class="layer-row-security">
+<td><strong>Security posture</strong></td>
+<td>Microsoft Defender for Cloud</td>
+<td>Provides security posture visibility and workload protection recommendations across subscriptions, containers, databases, and related services.</td>
+<td>Enable the relevant plans for the workload scope; review recommendations during operational reviews and accelerator handoffs.</td>
+<td>Security posture dashboard, recommendation triage, owner assignment, remediation record.</td>
+</tr>
+<tr class="layer-row-data">
+<td><strong>Supporting storage</strong></td>
+<td>Azure Storage accounts</td>
+<td>Supports diagnostic archive, controlled payload staging, temporary integration files, exports, and operational artifacts when required by the workflow design.</td>
+<td>Use private access where required, lifecycle management, encryption, restricted RBAC, and clear retention boundaries.</td>
+<td>Storage use-case register, lifecycle rule, access review, retention decision.</td>
+</tr>
+</tbody>
+</table>
+<h3>Service inclusion by deployment shape</h3>
+<table>
+<thead>
+<tr>
+<th>Deployment shape</th>
+<th>Required Azure services</th>
+<th>Conditional Azure services</th>
+<th>Primary implementation focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Learning / sandbox</strong></td>
+<td>Resource group, Azure Policy baseline, Key Vault, AKS, ACR, PostgreSQL, Azure Monitor, API adapter or lightweight API gateway pattern.</td>
+<td>API Management, Event Grid, Service Bus, Azure OpenAI Service.</td>
+<td>Teach durable workflows, API-to-workflow contracts, Postgres-first storage, and bounded AI activity design with minimal platform surface area.</td>
+</tr>
+<tr>
+<td><strong>Production MVP</strong></td>
+<td>Application landing zone, Azure Policy, Entra ID/RBAC, managed identities, Key Vault, Virtual Network, API Management, AKS, ACR, PostgreSQL, Service Bus/Event Grid, Azure Monitor/Application Insights.</td>
+<td>Private Link, Application Gateway WAF, Azure OpenAI Service, Defender for Cloud.</td>
+<td>Establish repeatable production controls, observable workflows, governed APIs, and a clean operational data boundary.</td>
+</tr>
+<tr>
+<td><strong>HA / scale production</strong></td>
+<td>Production application landing zone, private networking, API Management, AKS with multiple node pools, ACR, PostgreSQL high-availability posture, Service Bus/Event Grid, Azure Monitor, Key Vault, Defender for Cloud.</td>
+<td>Private DNS Resolver, Application Gateway WAF, HorizonDB evaluation path, Azure Storage for operational artifacts.</td>
+<td>Protect customer-facing and business-critical workflows with resilience, controlled connectivity, restore practice, and operational reviews.</td>
+</tr>
+<tr>
+<td><strong>Customer-hosted / regulated</strong></td>
+<td>Customer-aligned application landing zone, Azure Policy, Entra ID/RBAC, Key Vault, private networking, API Management or self-hosted gateway pattern, AKS, ACR, PostgreSQL, Azure Monitor.</td>
+<td>Private Link, DNS Private Resolver, Application Gateway WAF, Defender for Cloud, Azure Arc-enabled Kubernetes where hybrid operation is required.</td>
+<td>Deploy the same architecture into the customer’s Azure environment while respecting their identity, network, security, and operational controls.</td>
+</tr>
+</tbody>
+</table>
+<h3>BOM ownership model</h3>
+<table>
+<thead>
+<tr>
+<th>Owner</th>
+<th>Owns</th>
+<th>Handoff artifact</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>Platform team</strong></td><td>Landing zone, subscription vending, policy baseline, network pattern, identity guardrails, observability foundation.</td><td>Landing-zone implementation record, policy assignment list, network diagram, logging baseline.</td></tr>
+<tr><td><strong>Application team</strong></td><td>API contracts, Temporal workflow code, integration adapters, bounded AI activities, domain schema, operational dashboards.</td><td>OpenAPI catalog, workflow registry, adapter inventory, schema map, runbook.</td></tr>
+<tr><td><strong>Data owner</strong></td><td>PostgreSQL data boundaries, vector data ownership, retention rules, data quality workflow, HorizonDB readiness review.</td><td>Data contract, retention decision, restore result, query/performance evidence.</td></tr>
+<tr><td><strong>Security / compliance owner</strong></td><td>RBAC model, private access requirements, Key Vault review, security posture review, audit evidence, human approval requirements.</td><td>Access matrix, private endpoint inventory, security review, approval policy, audit checklist.</td></tr>
+<tr><td><strong>Operations owner</strong></td><td>Health dashboards, SLO alerts, incident runbooks, restore drills, workflow failure triage, release readiness.</td><td>Dashboard links, alert rule list, runbook, restore-drill result, release checklist.</td></tr>
+</tbody>
+</table>
+</section>
+<section id="bom">
+<h2>Azure resource map by environment</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Dev / sandbox</th>
+<th>Production MVP</th>
+<th>HA / scale production</th>
+<th>Business value signal</th><th>Operational control</th>
+</tr>
+</thead>
+<tbody>
+<tr class="layer-row-foundation">
+<td><strong>Azure Landing Zone</strong></td>
+<td>LZ1 governance-only foundation.</td>
+<td>LZ2 production foundation with centralized monitoring and policy baseline.</td>
+<td>LZ3 enterprise foundation with hub-and-spoke or Virtual WAN option, stricter isolation, and platform runbooks.</td>
+<td>Repeatable governed launchpad for every accelerator, customer-hosted deployment, and SaaS deployment.</td><td>Choose the smallest landing zone level that meets governance, network, and audit requirements.</td>
+</tr>
+<tr class="layer-row-foundation">
+<td><strong>Subscription/resource groups</strong></td>
+<td>Single sandbox resource group under sandbox scope.</td>
+<td>Separate app, data, platform, and observability groups under workload subscription.</td>
+<td>Separate production and non-production subscriptions under application landing zone scopes.</td>
+<td>Clear ownership and environment boundaries reduce confusion during implementation and operations.</td><td>Tag everything: owner, environment, workload, business owner, expiration.</td>
+</tr>
+<tr class="layer-row-compute">
+<td><strong>AKS</strong></td>
+<td>Sandbox AKS; 1–2 small nodes.</td>
+<td>Production AKS; 3 small/medium nodes.</td>
+<td>Production AKS; multiple pools, zones, and autoscaling.</td>
+<td>Portable compute foundation for Temporal workers, APIs, and AI activity services.</td><td>Cluster autoscaler, node right-sizing, reserved compute for steady workloads.</td>
+</tr>
+<tr class="layer-row-api">
+<td><strong>API Layer</strong></td>
+<td>Simple API adapter or gateway pattern for demo workflow start/status endpoints.</td>
+<td>API Management or governed API gateway pattern for workflow commands, callbacks, and domain APIs.</td>
+<td>Hardened API boundary with private routing, regional design, and customer-specific integration controls.</td>
+<td>Stable integration surface for workflow starts, status, approvals, callbacks, and domain APIs.</td><td>OpenAPI versioning, idempotency, correlation IDs, auth policy, tenant scope, and telemetry standards.</td>
+</tr>
+<tr class="layer-row-workflow">
+<td><strong class="inline-logo"><img alt="Temporal logomark" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>Temporal</strong></td>
+<td>Single namespace; shared persistence.</td>
+<td>Separate namespaces for server and workers; production Helm values.</td>
+<td>Dedicated pools and persistence; backup/replay/version policy.</td>
+<td>Durable workflow execution replaces fragile custom orchestration and manual recovery.</td><td>Cap workflow history growth; use child workflows for large processes.</td>
+</tr>
+<tr class="layer-row-data">
+<td><strong>PostgreSQL</strong></td>
+<td>Small non-production PostgreSQL configuration.</td>
+<td>Production PostgreSQL configuration; separate DBs for Temporal, app, vectors, and evaluation records.</td>
+<td>Zone-redundant HA, read replicas where needed, HorizonDB evaluation path.</td>
+<td>Operational source of truth remains close to the application and workflow logic.</td><td>Stop/start non-prod, capacity planning, connection pooling, storage alerts.</td>
+</tr>
+<tr class="layer-row-compute">
+<td><strong>Container registry</strong></td>
+<td>ACR for sandbox images.</td>
+<td>ACR for production image promotion.</td>
+<td>ACR configured with private endpoints or replication where required.</td>
+<td>Traceable image promotion supports repeatable releases across environments.</td><td>Lifecycle policies; delete unused images/tags.</td>
+</tr>
+<tr class="layer-row-event">
+<td><strong>Messaging/eventing</strong></td>
+<td>Light Event Grid or Service Bus usage.</td>
+<td>Service Bus for workflow commands; Event Grid for event notifications.</td>
+<td>Queue/topic partitioning, dead-letter handling, regional DR pattern.</td>
+<td>Long-running workflows can absorb slow systems, retries, and asynchronous callbacks.</td><td>Monitor operation count, queue age, duplicate messages, and dead-letter growth.</td>
+</tr>
+<tr class="layer-row-security">
+<td><strong>Secrets/identity</strong></td>
+<td>Key Vault + managed identities.</td>
+<td>Workload identity, RBAC, secret rotation.</td>
+<td>Private endpoints, stricter access reviews, customer-managed keys if required.</td>
+<td>Least-privilege access improves trust in high-security deployments.</td><td>Reduce secret reads with safe caching; avoid secret polling loops.</td>
+</tr>
+<tr class="layer-row-observe">
+<td><strong>Observability</strong></td>
+<td>Basic dashboards and low ingestion cap.</td>
+<td>Application Insights, workflow dashboards, model-call dashboards.</td>
+<td>Production SLOs, alert routing, retention rules.</td>
+<td>Business processes can be traced from request to outcome.</td><td>Sampling, table-specific retention, payload redaction, daily ingestion caps.</td>
+</tr>
+<tr class="layer-row-ai">
+<td><strong>AI model calls</strong></td>
+<td>Small model, low token cap, MAI-Thinking-1 disabled unless explicitly approved.</td>
+<td>Model mix by task type; per-workflow usage limits; MAI-Thinking-1 for approved reasoning workflows.</td>
+<td>Task-specific routing, prompt compaction, rate limits, fallback models, MAI-Thinking-1 evaluation path.</td>
+<td>AI usage is tied to specific workflow steps, measurable outcomes, and model-readiness evidence.</td><td>Track input, cached input, output, retries, failed-call waste, model choice, prompt version, and evaluation outcome.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="deployment">
+<h2>Azure solution deployment plan</h2>
+<p class="lead">Deploy the architecture in layers. Each layer creates evidence for the next layer and prevents premature complexity.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Objective</th><th>Business value delivered</th>
+<th>Azure implementation</th>
+<th>Pattern target</th>
+<th>Exit criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Azure Landing Zone</strong></td>
+<td>Set the platform foundation before workload deployment.</td><td>A reusable governed foundation that can be applied across many companies without redesigning the Azure baseline each time.</td>
+<td>Management groups, platform and application landing zones, subscription vending, RBAC, policy baseline, network plan, API boundary placement, naming/tagging standard, and usage alerts.</td>
+<td>P1–P5</td>
+<td>Every workload has a target subscription, policy baseline, owner, environment tag, and business owner before deployment.</td>
+</tr>
+<tr>
+<td><strong>2. Identity and secrets</strong></td>
+<td>Remove hardcoded credentials.</td><td>Higher trust in regulated and customer-hosted deployments because access is identity-based and secrets are externalized.</td>
+<td>Managed identities, Key Vault, workload identity for AKS pods.</td>
+<td>P1–P5</td>
+<td>Workers and apps access dependencies without embedded secrets.</td>
+</tr>
+<tr>
+<td><strong>3. Container supply chain</strong></td>
+<td>Create a repeatable deployment path.</td><td>Repeatable releases and stronger traceability from build artifact to deployed workflow worker.</td>
+<td>ACR, image tagging, vulnerability checks, release promotion.</td>
+<td>P1–P5</td>
+<td>Every deployable artifact is versioned and traceable to source.</td>
+</tr>
+<tr>
+<td><strong>4. AKS baseline</strong></td>
+<td>Run the portable compute substrate.</td><td>A portable runtime that supports the customer’s Kubernetes teaching model and scales workflow workers independently.</td>
+<td>AKS cluster, node pools, namespaces, ingress, autoscaling, pod disruption budgets.</td>
+<td>P1–P4</td>
+<td>Workers can scale independently from the workflow server.</td>
+</tr>
+<tr>
+<td><strong>5. API Layer and integration contracts</strong></td>
+<td>Expose stable integration surfaces without exposing workers or databases.</td><td>Faster, safer integration with customer systems through versioned contracts instead of direct worker or database access.</td>
+<td>API Management or governed API gateway pattern, OpenAPI specs, AKS ingress routing, workflow command APIs, callback APIs, auth policies, idempotency headers, correlation headers, and async handoff rules.</td>
+<td>P2–P6</td>
+<td>External systems can start, query, approve, and callback into workflows through governed APIs.</td>
+</tr>
+<tr>
+<td><strong>6. PostgreSQL foundation</strong></td>
+<td>Deploy operational persistence.</td><td>A clear operational data foundation for workflow state, app data, vectors, and evaluation records.</td>
+<td>Azure Database for PostgreSQL, databases/schemas, backup retention, connection pooling.</td>
+<td>P1–P4</td>
+<td>Temporal persistence and app data are separated and backed up.</td>
+</tr>
+<tr>
+<td><strong>7. Temporal deployment</strong></td>
+<td>Establish durable execution.</td><td>A reliable workflow layer that survives failures and replaces home-grown process orchestration.</td>
+<td>Temporal Helm deployment, namespace model, workers, UI access controls, persistence configuration.</td>
+<td>P1–P4</td>
+<td>Demo workflow survives worker failure and completes after retry.</td>
+</tr>
+<tr>
+<td><strong>8. Bounded AI activities</strong></td>
+<td>Add intelligence safely inside workflow steps.</td><td>Useful AI inserted into real business steps with validation, fallback, and human review where needed.</td>
+<td>Model endpoint integration, schemas, policy gates, validation, retry and fallback logic.</td>
+<td>P1–P5</td>
+<td>AI output cannot directly mutate state without validation.</td>
+</tr>
+<tr>
+<td><strong>9. Workflow observability</strong></td>
+<td>Make execution observable.</td><td>Operational leaders can see failures, retries, latency, AI decisions, and business outcomes in one trace path.</td>
+<td>Application Insights, Log Analytics, dashboards for workflow status, retries, latency, and token usage.</td>
+<td>P2–P5</td>
+<td>Every workflow run can be traced from trigger to final outcome.</td>
+</tr>
+<tr>
+<td><strong>10. Production hardening</strong></td>
+<td>Prepare for customer or business-critical usage.</td><td>Customer-facing usage becomes safer because recovery, rollback, and incident response are tested.</td>
+<td>HA database posture, private endpoints, backup restore drill, SLO alerts, runbooks.</td>
+<td>P3–P4</td>
+<td>Recovery, rollback, and incident response are tested.</td>
+</tr>
+<tr>
+<td><strong>11. Evaluation readiness</strong></td>
+<td>Prepare traces for measurable improvement.</td><td>The organization gains measurable quality evidence before future tuning or advanced optimization.</td>
+<td>Eval datasets, result labels, correction capture, scheduled eval workflows, quality dashboards.</td>
+<td>P5</td>
+<td>Quality regressions can be detected before changes ship.</td>
+</tr>
+<tr class="layer-row-ai"><td><strong>9A. Build 2026 MAI model readiness</strong></td><td>Validate whether MAI-Thinking-1 should be enabled for selected reasoning workflows.</td><td>Gives the customer a forward-looking model path while preserving the Temporal-first workflow boundary.</td><td>Confirm access, define task routing, add evaluation examples, set approval rules, and keep fallback model routing in place.</td><td>Access decision, model-use register, evaluation examples, workflow trace sample, approval checklist.</td></tr></tbody>
+</table>
+</section>
+<section id="value-measurement">
+<h2>Business value measurement model</h2>
+<p class="lead">Use the same evidence model across accelerators so business value is measured consistently instead of inferred from architecture diagrams.</p>
+<table>
+<thead><tr><th>Value area</th><th>Primary indicators</th><th>How the architecture captures it</th></tr></thead>
+<tbody>
+<tr><td><strong>Modernization progress</strong></td><td>Number of workflows moved from custom logic to Temporal, number of reusable API contracts, number of teams using the common landing-zone pattern.</td><td>Workflow registry, API catalog, landing-zone subscription inventory, deployment records.</td></tr>
+<tr><td><strong>Reliability improvement</strong></td><td>Workflow completion rate, retry recovery rate, queue age, failed workflow trend, restore drill success.</td><td>Temporal history, Service Bus/Event Grid metrics, Application Insights dashboards, recovery runbooks.</td></tr>
+<tr><td><strong>Integration simplicity</strong></td><td>Time to onboard a new customer system, number of breaking API changes, callback success rate, adapter reuse.</td><td>OpenAPI versions, gateway telemetry, correlation IDs, integration adapter logs.</td></tr>
+<tr><td><strong>AI usefulness</strong></td><td>Approval rate, human override reasons, validation pass rate, decision quality score, exception reduction by workflow type.</td><td>AI activity logs, workflow outcomes, validation records, feedback labels, evaluation workflows.</td></tr>
+<tr><td><strong>Operational discipline</strong></td><td>Policy compliance, tagged ownership, secret-free deployments, trace coverage, SLO review completion.</td><td>Azure Policy, Key Vault and managed identity review, Azure Monitor, operational review records.</td></tr>
+</tbody>
+</table>
+</section>
+<section id="azure-backup-demo">
+<h2>Spec-Driven Development: Azure Backup Demo Environment</h2>
+<p class="lead"><strong>Document version:</strong> 1.0<br/><strong>Target audience:</strong> Cloud engineering, customer engineering, solution architecture, sales engineering, demo presenters<br/><strong>Primary objective:</strong> Build a repeatable Azure Backup demo environment that can show backup configuration, policy design, restore workflows, operational monitoring, and ransomware-resilience controls.</p>
+
+<h3>1. Executive Summary</h3>
+<p>This specification defines a demo environment for Azure Backup. The environment is designed to demonstrate how an enterprise can protect Azure workloads using native Azure backup services, validate recovery scenarios, and show operational governance around backup security.</p>
+<ul><li>How Azure Backup protects virtual machines, files, disks, databases, and newer Azure data sources.</li><li>How backup vaults and Recovery Services vaults are selected based on workload type.</li><li>How backup policies define frequency, retention, and recovery objectives.</li><li>How recovery is performed through VM restore, file-level restore, disk restore, and workload-specific restore.</li><li>How soft delete, immutability, monitoring, alerts, RBAC, and private access patterns strengthen backup resilience.</li></ul>
+
+<h3>2. Demo Goals</h3>
+<h4>2.1 Primary Goals</h4>
+<ol><li>Protect representative Azure workloads.</li><li>Use policy-driven backup configuration.</li><li>Restore data from recovery points.</li><li>Demonstrate backup isolation and recovery control.</li><li>Show backup monitoring and operational alerts.</li><li>Demonstrate security controls for accidental or malicious deletion scenarios.</li><li>Provide a reusable environment that can be deployed, demonstrated, and cleaned up.</li></ol>
+<h4>2.2 Secondary Goals</h4>
+<ol><li>Recovery Services vault versus Backup vault selection.</li><li>Operational backup ownership and RBAC.</li><li>Cost factors such as protected instances, retained data, storage redundancy, and retention.</li><li>Enterprise patterns for landing zone integration.</li><li>How backup fits into a broader business continuity and ransomware recovery strategy.</li></ol>
+
+<h3>3. Source Alignment</h3>
+<p>This spec is aligned to current Microsoft Azure Backup documentation as of June 2026.</p>
+<ul><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-overview">Azure Backup overview</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-support-matrix">Azure Backup support matrix</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-azure-recovery-services-vault-overview">Recovery Services vault overview</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview">Backup vault overview</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-azure-vms-introduction">Azure VM Backup overview</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-azure-arm-restore-vms">Azure VM restore</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/azure-file-share-backup-overview">Azure Files Backup overview</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/disk-backup-overview">Azure Disk Backup overview</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/secure-by-default">Soft delete for Azure Backup</a></li><li><a href="https://learn.microsoft.com/en-us/azure/backup/backup-azure-immutable-vault-concept">Immutable vault concept</a></li><li><a href="https://azure.microsoft.com/en-us/pricing/details/backup/">Azure Backup pricing</a></li></ul>
+
+<h3>4. In-Scope Demo Capabilities</h3>
+<table><thead><tr><th>Capability</th><th>Required</th><th>Notes</th></tr></thead><tbody><tr><td>Azure VM backup</td><td>Yes</td><td>Core demo scenario using Recovery Services vault</td></tr><tr><td>VM restore</td><td>Yes</td><td>Restore full VM or disk from recovery point</td></tr><tr><td>File-level restore</td><td>Yes</td><td>Demonstrate recovery of a deleted file where supported</td></tr><tr><td>Azure Files backup</td><td>Yes</td><td>Demonstrate storage account and file share protection</td></tr><tr><td>Azure Disk backup</td><td>Optional</td><td>Useful for newer Backup vault workflow</td></tr><tr><td>Backup policy configuration</td><td>Yes</td><td>Daily backup and short demo retention</td></tr><tr><td>Recovery Services vault</td><td>Yes</td><td>Used for Azure VM and Azure Files scenarios</td></tr><tr><td>Backup vault</td><td>Optional but recommended</td><td>Used for newer workloads such as Azure Disk Backup</td></tr><tr><td>Backup monitoring</td><td>Yes</td><td>Backup jobs, backup alerts, Azure Monitor integration</td></tr><tr><td>Soft delete</td><td>Yes</td><td>Demonstrate secure-by-default behavior</td></tr><tr><td>Immutable vault</td><td>Optional</td><td>Show design pattern; enable only if demo cleanup plan allows it</td></tr><tr><td>Cross-region restore</td><td>Optional</td><td>Only if using geo-redundant storage and the region supports it</td></tr><tr><td>Infrastructure as Code</td><td>Yes</td><td>Bicep or Terraform preferred</td></tr><tr><td>Cleanup automation</td><td>Yes</td><td>Required to avoid orphaned demo cost</td></tr></tbody></table>
+
+<h3>5. Out-of-Scope Capabilities</h3>
+<ol><li>Azure Site Recovery disaster recovery orchestration.</li><li>SAP HANA backup.</li><li>SQL Server in Azure VM backup.</li><li>On-premises workload backup through MARS or Azure Backup Server.</li><li>Long-term production retention.</li><li>Enterprise-scale backup center integration across many subscriptions.</li><li>Production-grade private endpoint design for every service.</li></ol>
+<p>These can be added as future extensions.</p>
+
+<h3>6. Demo Architecture</h3>
+<h4>6.1 Logical Architecture</h4>
+<pre><code>+---------------------------------------------------------------+
+| Azure Subscription                                             |
+|                                                               |
+|  +---------------------+        +---------------------------+  |
+|  | Resource Group       |        | Monitoring / Operations    |  |
+|  | rg-backup-demo       |        | Log Analytics Workspace    |  |
+|  |                     |        | Azure Monitor Alerts       |  |
+|  |  +---------------+  |        +---------------------------+  |
+|  |  | Demo VM        |                                          |
+|  |  | Windows/Linux  |                                          |
+|  |  +-------+-------+                                          |
+|  |          |                                                  |
+|  |          v                                                  |
+|  |  +---------------------------+                              |
+|  |  | Recovery Services Vault    |                              |
+|  |  | rsv-backup-demo            |                              |
+|  |  | - VM backup policy         |                              |
+|  |  | - Azure Files policy       |                              |
+|  |  | - soft delete              |                              |
+|  |  | - alerts                   |                              |
+|  |  +---------------------------+                              |
+|  |                                                               |
+|  |  +---------------------------+                              |
+|  |  | Storage Account            |                              |
+|  |  | stbackupdemo               |                              |
+|  |  | - Azure file share         |                              |
+|  |  | - sample files             |                              |
+|  |  +---------------------------+                              |
+|  |                                                               |
+|  |  +---------------------------+                              |
+|  |  | Backup Vault               |                              |
+|  |  | bv-backup-demo             |                              |
+|  |  | - optional disk backup     |                              |
+|  |  +---------------------------+                              |
+|  +-----------------------------------------------------------+  |
++---------------------------------------------------------------+</code></pre>
+<h4>6.2 Resource Groups</h4>
+<table><thead><tr><th>Resource Group</th><th>Purpose</th></tr></thead><tbody><tr><td><code>rg-backup-demo-core</code></td><td>Demo workload resources such as VM, disk, storage account, file share</td></tr><tr><td><code>rg-backup-demo-protection</code></td><td>Recovery Services vault, Backup vault, backup policies</td></tr><tr><td><code>rg-backup-demo-ops</code></td><td>Log Analytics workspace, action groups, alerts, dashboards</td></tr></tbody></table>
+<p>A single resource group can be used for a simplified lab, but separate resource groups make the demo easier to explain.</p>
+
+<h3>7. Workload Design</h3>
+<h4>7.1 Demo VM</h4>
+<table><thead><tr><th>Option</th><th>OS</th><th>Size</th><th>Purpose</th></tr></thead><tbody><tr><td>Option A</td><td>Windows Server</td><td><code>Standard_B2s</code></td><td>Easy file-level restore demonstration</td></tr><tr><td>Option B</td><td>Ubuntu Linux</td><td><code>Standard_B2s</code></td><td>Lower-cost Linux demo</td></tr><tr><td>Option C</td><td>Both Windows and Linux</td><td><code>Standard_B2s</code> each</td><td>Broader customer demo</td></tr></tbody></table>
+<p>Minimum requirements: OS disk, one attached data disk, sample folder and sample files, tagging for ownership and cleanup, managed identity enabled where useful, and no public RDP or SSH exposure unless explicitly required.</p>
+<pre><code>Environment: Demo
+Workload: AzureBackup
+Owner: &lt;owner-name&gt;
+CostCenter: Demo
+AutoDeleteAfter: &lt;date&gt;</code></pre>
+<h4>7.2 Storage Account and Azure File Share</h4>
+<p>The environment must include one storage account, one Azure file share, sample files for delete-and-restore demo, and backup protection through Azure Backup.</p>
+<pre><code>/demo-data
+  /finance
+    q1-report.xlsx
+    q2-report.xlsx
+  /operations
+    runbook.md
+    server-list.csv
+  /customer
+    contract-template.docx</code></pre>
+<h4>7.3 Optional Managed Disk Backup</h4>
+<p>For demonstrating Backup vault behavior, deploy one additional managed disk and configure Azure Disk Backup. This scenario is useful when explaining that not all backup workloads use the same vault type.</p>
+
+<h3>8. Vault Design</h3>
+<h4>8.1 Recovery Services Vault</h4>
+<p>The Recovery Services vault is required for the core demo. Recommended name: <code>rsv-backup-demo-&lt;region-code&gt;</code>.</p>
+<table><thead><tr><th>Setting</th><th>Value</th></tr></thead><tbody><tr><td>Storage redundancy</td><td>Locally redundant storage for low-cost demo; geo-redundant storage for cross-region restore demo</td></tr><tr><td>Soft delete</td><td>Enabled</td></tr><tr><td>Enhanced security</td><td>Enabled where available</td></tr><tr><td>Public network access</td><td>Allowed for simple demo; restrict in advanced demo</td></tr><tr><td>Backup alerts</td><td>Enabled</td></tr><tr><td>Diagnostic settings</td><td>Send to Log Analytics</td></tr></tbody></table>
+<h4>8.2 Backup Vault</h4>
+<p>The Backup vault is optional but recommended if the demo includes Azure Disk Backup or newer workloads. Recommended name: <code>bv-backup-demo-&lt;region-code&gt;</code>.</p>
+<table><thead><tr><th>Setting</th><th>Value</th></tr></thead><tbody><tr><td>Vault datastore</td><td>Vaulted backup where applicable</td></tr><tr><td>Redundancy</td><td>Locally redundant for demo cost control</td></tr><tr><td>Diagnostic settings</td><td>Send to Log Analytics</td></tr><tr><td>RBAC</td><td>Restrict backup operator and restore operator permissions</td></tr></tbody></table>
+
+<h3>9. Backup Policy Design</h3>
+<h4>9.1 VM Backup Policy</h4>
+<table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody><tr><td>Policy name</td><td><code>pol-vm-daily-demo</code></td></tr><tr><td>Backup frequency</td><td>Daily</td></tr><tr><td>Backup time</td><td>10:00 PM local demo region time</td></tr><tr><td>Instant restore snapshot retention</td><td>2 days for simple demo</td></tr><tr><td>Daily recovery point retention</td><td>7 days</td></tr><tr><td>Weekly retention</td><td>Disabled for low-cost demo</td></tr><tr><td>Monthly retention</td><td>Disabled for low-cost demo</td></tr><tr><td>Yearly retention</td><td>Disabled for low-cost demo</td></tr></tbody></table>
+<div class="callout"><strong>Production discussion point:</strong> Demo retention is intentionally short. Production retention should be driven by compliance, business continuity, and workload recovery requirements.</div>
+<h4>9.2 Azure Files Backup Policy</h4>
+<table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody><tr><td>Policy name</td><td><code>pol-files-daily-demo</code></td></tr><tr><td>Backup frequency</td><td>Daily</td></tr><tr><td>Retention</td><td>7 days</td></tr><tr><td>Use case</td><td>Restore deleted or modified file share data</td></tr></tbody></table>
+<h4>9.3 Optional Disk Backup Policy</h4>
+<table><thead><tr><th>Parameter</th><th>Value</th></tr></thead><tbody><tr><td>Policy name</td><td><code>pol-disk-hourly-demo</code></td></tr><tr><td>Backup frequency</td><td>Frequent snapshots if supported</td></tr><tr><td>Retention</td><td>1 to 7 days</td></tr><tr><td>Use case</td><td>Demonstrate Backup vault and disk-centric protection</td></tr></tbody></table>
+
+<h3>10. Security Requirements</h3>
+<h4>10.1 Identity and Access</h4>
+<table><thead><tr><th>Persona</th><th>Role</th><th>Scope</th></tr></thead><tbody><tr><td>Demo Owner</td><td>Contributor</td><td>Demo resource groups</td></tr><tr><td>Backup Admin</td><td>Backup Contributor</td><td>Vault scope</td></tr><tr><td>Restore Operator</td><td>Backup Operator</td><td>Vault scope</td></tr><tr><td>Security Reviewer</td><td>Reader + Backup Reader</td><td>Vault and operations resource groups</td></tr></tbody></table>
+<h4>10.2 Soft Delete</h4>
+<p>Soft delete must remain enabled for the demo. It protects backup data from accidental or malicious deletion by retaining deleted backup items for a configured period.</p>
+<ol><li>Protect VM with Azure Backup.</li><li>Stop protection and attempt to delete backup data.</li><li>Show that deleted backup items are retained through soft delete.</li><li>Explain how this helps recover from accidental or malicious deletion.</li></ol>
+<h4>10.3 Immutable Vault</h4>
+<p>Immutable vault is optional. Use it only if the presenter understands cleanup implications. Show the setting and explain its purpose, but do not lock immutability in a disposable demo unless the cleanup process has been tested.</p>
+<h4>10.4 Network Security</h4>
+<div class="grid-2"><div class="card"><h4>Simple demo</h4><ul><li>Public Azure control plane access is acceptable.</li><li>No public RDP/SSH inbound access unless explicitly required.</li></ul></div><div class="card"><h4>Advanced demo</h4><ul><li>Use Azure Bastion for VM access.</li><li>Use private endpoints where supported.</li><li>Restrict storage account network access.</li><li>Use Azure Policy to deny public IP creation.</li></ul></div></div>
+
+<h3>11. Monitoring and Operations</h3>
+<h4>11.1 Required Monitoring</h4>
+<ol><li>Backup jobs.</li><li>Backup alerts.</li><li>Recovery points.</li><li>Protected items.</li><li>Backup health.</li><li>Diagnostic logs in Log Analytics.</li><li>A simple workbook or dashboard.</li></ol>
+<h4>11.2 Suggested Log Analytics Queries</h4>
+<p><strong>Backup Jobs</strong></p><pre><code>AzureDiagnostics
+| where Category has "AzureBackup"
+| project TimeGenerated, Resource, Category, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc</code></pre>
+<p><strong>Failed Backup Operations</strong></p><pre><code>AzureDiagnostics
+| where Category has "AzureBackup"
+| where ResultType !in ("Success", "Succeeded")
+| project TimeGenerated, Resource, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc</code></pre>
+<p><strong>Vault Activity</strong></p><pre><code>AzureActivity
+| where ResourceProviderValue =~ "Microsoft.RecoveryServices"
+| project TimeGenerated, OperationNameValue, ActivityStatusValue, Caller, ResourceGroup, Resource
+| order by TimeGenerated desc</code></pre>
+
+<h3>12. Demo User Stories</h3>
+<div class="grid-2"><div class="card"><h4>Story 1: Protect an Azure VM</h4><p><strong>As a</strong> backup administrator, <strong>I want</strong> to configure backup for an Azure VM, <strong>so that</strong> I can recover the VM or its data if it is deleted, corrupted, or changed incorrectly.</p><ul><li>VM appears as a protected item in the Recovery Services vault.</li><li>Backup policy is assigned.</li><li>Initial backup job can be triggered.</li><li>Recovery point is created.</li><li>Backup job status is visible.</li></ul></div><div class="card"><h4>Story 2: Restore a VM</h4><p><strong>As a</strong> restore operator, <strong>I want</strong> to restore a VM from a recovery point, <strong>so that</strong> I can recover from a workload failure.</p><ul><li>A recovery point is selected.</li><li>Restore option is shown.</li><li>Restore to new VM or restore disk is demonstrated.</li><li>Restored resource is clearly tagged as demo restore output.</li><li>Presenter explains when to use full VM restore versus disk restore.</li></ul></div><div class="card"><h4>Story 3: Restore a File</h4><p><strong>As a</strong> workload owner, <strong>I want</strong> to restore a deleted file from backup, <strong>so that</strong> I can recover from accidental deletion without restoring the full VM.</p><ul><li>Sample file is created.</li><li>Backup recovery point exists.</li><li>File is deleted or modified.</li><li>File-level restore workflow is demonstrated.</li><li>Restored file is validated.</li></ul></div><div class="card"><h4>Story 4: Protect Azure File Share</h4><p><strong>As a</strong> platform operator, <strong>I want</strong> to back up an Azure file share, <strong>so that</strong> shared application or user data can be recovered.</p><ul><li>Storage account and file share are deployed.</li><li>File share contains sample files.</li><li>Backup is configured.</li><li>Recovery point is created.</li><li>Restore workflow is demonstrated.</li></ul></div><div class="card"><h4>Story 5: Demonstrate Backup Security</h4><p><strong>As a</strong> security stakeholder, <strong>I want</strong> to understand how backup data is protected from deletion, <strong>so that</strong> I can assess ransomware recovery posture.</p><ul><li>Soft delete setting is shown.</li><li>Deleted backup item behavior is explained.</li><li>Immutable vault concept is explained.</li><li>RBAC separation is explained.</li><li>Backup alerting is shown.</li></ul></div><div class="card"><h4>Story 6: Monitor Backup Health</h4><p><strong>As an</strong> operations team member, <strong>I want</strong> to monitor backup job status and failures, <strong>so that</strong> I can quickly identify backup issues.</p><ul><li>Backup jobs are visible in the vault.</li><li>Alerts or diagnostic settings are configured.</li><li>Logs are queryable in Log Analytics.</li><li>Failed job query is available.</li><li>Presenter explains operational handoff.</li></ul></div></div>
+
+<h3>13. Functional Requirements</h3>
+<table><thead><tr><th>ID</th><th>Requirement</th><th>Priority</th></tr></thead><tbody><tr><td>FR-001</td><td>Deploy a demo Azure VM</td><td>Must</td></tr><tr><td>FR-002</td><td>Deploy a Recovery Services vault</td><td>Must</td></tr><tr><td>FR-003</td><td>Configure VM backup policy</td><td>Must</td></tr><tr><td>FR-004</td><td>Enable VM backup</td><td>Must</td></tr><tr><td>FR-005</td><td>Trigger initial backup</td><td>Must</td></tr><tr><td>FR-006</td><td>Show recovery points</td><td>Must</td></tr><tr><td>FR-007</td><td>Restore VM or disk</td><td>Must</td></tr><tr><td>FR-008</td><td>Demonstrate file-level recovery</td><td>Must</td></tr><tr><td>FR-009</td><td>Deploy storage account and Azure file share</td><td>Must</td></tr><tr><td>FR-010</td><td>Configure Azure Files backup</td><td>Must</td></tr><tr><td>FR-011</td><td>Configure diagnostics to Log Analytics</td><td>Must</td></tr><tr><td>FR-012</td><td>Configure backup alerts</td><td>Should</td></tr><tr><td>FR-013</td><td>Deploy optional Backup vault</td><td>Should</td></tr><tr><td>FR-014</td><td>Configure optional Azure Disk Backup</td><td>Could</td></tr><tr><td>FR-015</td><td>Demonstrate immutable vault setting</td><td>Could</td></tr><tr><td>FR-016</td><td>Provide cleanup automation</td><td>Must</td></tr></tbody></table>
+
+<h3>14. Non-Functional Requirements</h3>
+<table><thead><tr><th>ID</th><th>Requirement</th><th>Description</th></tr></thead><tbody><tr><td>NFR-001</td><td>Repeatability</td><td>Environment must be deployable through IaC</td></tr><tr><td>NFR-002</td><td>Low cost</td><td>Use small SKUs and short retention</td></tr><tr><td>NFR-003</td><td>Security</td><td>Avoid unnecessary public access</td></tr><tr><td>NFR-004</td><td>Clean teardown</td><td>Demo must be deletable without manual orphan cleanup where possible</td></tr><tr><td>NFR-005</td><td>Observability</td><td>Logs and backup jobs must be visible</td></tr><tr><td>NFR-006</td><td>Explainability</td><td>Resource names and tags must be demo-friendly</td></tr><tr><td>NFR-007</td><td>Portability</td><td>Region and naming must be parameterized</td></tr></tbody></table>
+
+<h3>15. Infrastructure as Code Requirements</h3>
+<p>The implementation should use Bicep, Terraform, or Azure Verified Modules.</p>
+<pre><code>/modules
+  /resource-group
+  /network
+  /vm
+  /storage
+  /recovery-services-vault
+  /backup-vault
+  /monitoring
+  /rbac
+/scripts
+  deploy.ps1
+  seed-demo-data.ps1
+  trigger-backup.ps1
+  restore-demo.ps1
+  cleanup.ps1
+/docs
+  demo-runbook.md
+  presenter-notes.md
+  architecture.md</code></pre>
+<pre><code>environmentName: backup-demo
+location: canadacentral
+owner: krishna
+deployWindowsVm: true
+deployLinuxVm: false
+deployAzureFiles: true
+deployDiskBackup: false
+enableSoftDelete: true
+enableImmutableVault: false
+retentionDays: 7
+storageRedundancy: LRS</code></pre>
+
+<h3>16. Naming Standards</h3>
+<table><thead><tr><th>Resource</th><th>Naming Pattern</th><th>Example</th></tr></thead><tbody><tr><td>Resource group</td><td><code>rg-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;</code></td><td><code>rg-backup-demo-cc</code></td></tr><tr><td>Recovery Services vault</td><td><code>rsv-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;</code></td><td><code>rsv-backup-demo-cc</code></td></tr><tr><td>Backup vault</td><td><code>bv-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;</code></td><td><code>bv-backup-demo-cc</code></td></tr><tr><td>VM</td><td><code>vm-&lt;os&gt;-backup-demo-01</code></td><td><code>vm-win-backup-demo-01</code></td></tr><tr><td>Storage account</td><td><code>st&lt;workload&gt;&lt;env&gt;&lt;unique&gt;</code></td><td><code>stbackupdemo001</code></td></tr><tr><td>Log Analytics</td><td><code>law-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;</code></td><td><code>law-backup-demo-cc</code></td></tr></tbody></table>
+
+<h3>17. Demo Flow</h3>
+<h4>17.1 Presenter Flow</h4>
+<ol><li>Show demo architecture.</li><li>Explain Recovery Services vault and Backup vault.</li><li>Show protected VM.</li><li>Show VM backup policy.</li><li>Trigger or review backup job.</li><li>Show recovery point.</li><li>Demonstrate VM restore or disk restore.</li><li>Demonstrate file-level restore.</li><li>Show Azure Files protection.</li><li>Demonstrate Azure Files restore.</li><li>Show backup monitoring.</li><li>Explain soft delete and immutable vault.</li><li>Explain cost factors and cleanup.</li></ol>
+<h4>17.2 Technical Demo Steps</h4>
+<p><strong>Step 1: Deploy Environment</strong></p><pre><code>az deployment sub create \
+  --location canadacentral \
+  --template-file main.bicep \
+  --parameters environmentName=backup-demo location=canadacentral</code></pre>
+<p><strong>Step 2: Seed Demo Data</strong></p><pre><code>./scripts/seed-demo-data.ps1 `
+  -ResourceGroupName rg-backup-demo-core `
+  -StorageAccountName stbackupdemo001 `
+  -FileShareName demo-share</code></pre>
+<p><strong>Step 3: Trigger Initial Backup</strong></p><pre><code>az backup protection backup-now \
+  --resource-group rg-backup-demo-protection \
+  --vault-name rsv-backup-demo-cc \
+  --container-name &lt;container-name&gt; \
+  --item-name &lt;vm-name&gt; \
+  --retain-until &lt;yyyy-mm-dd&gt;</code></pre>
+<p><strong>Step 4: Validate Backup Job</strong></p><pre><code>az backup job list \
+  --resource-group rg-backup-demo-protection \
+  --vault-name rsv-backup-demo-cc \
+  --output table</code></pre>
+<p><strong>Step 5: Restore Scenario</strong></p><ol><li>Open Recovery Services vault.</li><li>Select Backup items.</li><li>Select Azure Virtual Machine.</li><li>Select demo VM.</li><li>Select Restore VM or File Recovery.</li><li>Choose recovery point.</li><li>Execute restore or show pre-staged restored resource.</li></ol>
+
+<h3>18. Test Plan</h3>
+<h4>18.1 Deployment Tests</h4><table><thead><tr><th>Test ID</th><th>Test</th><th>Expected Result</th></tr></thead><tbody><tr><td>T-001</td><td>Deploy IaC template</td><td>All resources deployed successfully</td></tr><tr><td>T-002</td><td>Validate naming</td><td>Names match naming standard</td></tr><tr><td>T-003</td><td>Validate tags</td><td>Required tags exist</td></tr><tr><td>T-004</td><td>Validate VM access</td><td>Admin can access through approved method</td></tr><tr><td>T-005</td><td>Validate diagnostics</td><td>Logs flow to Log Analytics</td></tr></tbody></table>
+<h4>18.2 Backup Tests</h4><table><thead><tr><th>Test ID</th><th>Test</th><th>Expected Result</th></tr></thead><tbody><tr><td>T-101</td><td>Enable VM backup</td><td>VM appears as protected item</td></tr><tr><td>T-102</td><td>Trigger backup</td><td>Backup job succeeds</td></tr><tr><td>T-103</td><td>View recovery point</td><td>Recovery point is visible</td></tr><tr><td>T-104</td><td>Enable Azure Files backup</td><td>File share appears as protected</td></tr><tr><td>T-105</td><td>Trigger Azure Files backup</td><td>Backup completes successfully</td></tr></tbody></table>
+<h4>18.3 Restore Tests</h4><table><thead><tr><th>Test ID</th><th>Test</th><th>Expected Result</th></tr></thead><tbody><tr><td>T-201</td><td>Restore VM disk</td><td>Disk restore completes</td></tr><tr><td>T-202</td><td>File-level restore</td><td>Deleted file is recovered</td></tr><tr><td>T-203</td><td>Restore Azure file share item</td><td>File or share data is recovered</td></tr><tr><td>T-204</td><td>Validate restored data</td><td>Restored content matches expected sample</td></tr></tbody></table>
+<h4>18.4 Security Tests</h4><table><thead><tr><th>Test ID</th><th>Test</th><th>Expected Result</th></tr></thead><tbody><tr><td>T-301</td><td>Verify soft delete</td><td>Soft delete is enabled</td></tr><tr><td>T-302</td><td>Attempt backup item deletion</td><td>Deleted item is retained by soft delete</td></tr><tr><td>T-303</td><td>Validate RBAC</td><td>Non-authorized user cannot delete backup items</td></tr><tr><td>T-304</td><td>Validate alerting</td><td>Backup alert path is functional</td></tr></tbody></table>
+
+<h3>19. Acceptance Criteria</h3>
+<ol><li>Environment deploys successfully from IaC.</li><li>VM backup is configured and recovery point is created.</li><li>Azure Files backup is configured and recovery point is created.</li><li>At least one restore scenario is demonstrated successfully.</li><li>Backup jobs and alerts are visible.</li><li>Soft delete behavior is explained and visible.</li><li>Demo runbook is complete.</li><li>Cleanup procedure is tested.</li><li>Cost-control tags and retention settings are applied.</li><li>Presenter can complete the full demo in 30 to 45 minutes.</li></ol>
+
+<h3>20. Cost Control Requirements</h3>
+<div class="grid-2"><div class="card"><h4>Cost-control decisions</h4><ul><li>Use small VM sizes.</li><li>Use locally redundant storage unless cross-region restore is required.</li><li>Use short retention.</li><li>Delete restored resources after demo.</li><li>Avoid production-scale retention policies.</li><li>Avoid enabling immutable locked settings unless required.</li><li>Use auto-delete tags.</li><li>Run cleanup script after the demo.</li></ul></div><div class="card"><h4>Cost drivers to explain</h4><ol><li>Number of protected instances.</li><li>Backup storage consumed.</li><li>Retention duration.</li><li>Storage redundancy.</li><li>Snapshot retention.</li><li>Restore test resources.</li><li>Monitoring/log ingestion.</li></ol></div></div>
+
+<h3>21. Risks and Mitigations</h3>
+<table><thead><tr><th>Risk</th><th>Impact</th><th>Mitigation</th></tr></thead><tbody><tr><td>Backup job takes longer than demo window</td><td>Demo delay</td><td>Pre-stage successful backup and recovery point</td></tr><tr><td>Restore takes too long</td><td>Demo delay</td><td>Use small VM and small files</td></tr><tr><td>Immutable setting blocks cleanup</td><td>Cost and operational issue</td><td>Do not lock immutability in disposable demo</td></tr><tr><td>Public VM access creates security issue</td><td>Security exposure</td><td>Use Bastion or just-in-time access</td></tr><tr><td>Missing RBAC permissions</td><td>Demo failure</td><td>Validate roles before session</td></tr><tr><td>Azure region capacity issue</td><td>Deployment failure</td><td>Parameterize location</td></tr><tr><td>Cost overrun</td><td>Budget issue</td><td>Short retention and cleanup script</td></tr></tbody></table>
+
+<h3>22. Demo Script</h3>
+<div class="grid-2"><div class="card"><h4>Opening</h4><p>"Today we are demonstrating how Azure Backup can protect core Azure workloads using policy-driven backup, centralized vault management, restore workflows, and built-in protection controls such as soft delete and optional immutability."</p></div><div class="card"><h4>Explain Vaults</h4><p>"Azure Backup uses different vault types depending on workload. Recovery Services vaults are commonly used for Azure VM and workload backup scenarios. Backup vaults are used for certain newer Azure data source backup scenarios. The demo shows the distinction so teams understand which vault pattern to use."</p></div><div class="card"><h4>VM Backup</h4><p>"This VM represents a typical application server. It has a backup policy assigned, a recovery point available, and can be restored either as a full VM, a disk, or through file-level recovery depending on the recovery scenario."</p></div><div class="card"><h4>Azure Files Backup</h4><p>"This file share represents shared application or business data. Azure Backup can protect the file share and allow restore of deleted or modified files."</p></div><div class="card"><h4>Security</h4><p>"Backup is not only about copies of data. The security model matters. Soft delete and vault immutability help reduce the risk of accidental or malicious deletion of backup data. RBAC separates who can configure backup from who can perform restore or delete operations."</p></div><div class="card"><h4>Close</h4><p>"The key takeaway is that Azure Backup provides native, policy-driven protection for Azure workloads with operational visibility, restore validation, and security controls that are important for business continuity and ransomware recovery planning."</p></div></div>
+
+<h3>23. Implementation Backlog</h3>
+<h4>Epic 1: Foundation</h4><table><thead><tr><th>ID</th><th>User Story</th><th>Priority</th></tr></thead><tbody><tr><td>BL-001</td><td>Create resource groups</td><td>Must</td></tr><tr><td>BL-002</td><td>Create naming and tagging module</td><td>Must</td></tr><tr><td>BL-003</td><td>Create Log Analytics workspace</td><td>Must</td></tr><tr><td>BL-004</td><td>Create baseline network</td><td>Should</td></tr></tbody></table>
+<h4>Epic 2: Workload Deployment</h4><table><thead><tr><th>ID</th><th>User Story</th><th>Priority</th></tr></thead><tbody><tr><td>BL-101</td><td>Deploy demo VM</td><td>Must</td></tr><tr><td>BL-102</td><td>Attach data disk</td><td>Must</td></tr><tr><td>BL-103</td><td>Seed sample files</td><td>Must</td></tr><tr><td>BL-104</td><td>Deploy storage account and file share</td><td>Must</td></tr></tbody></table>
+<h4>Epic 3: Backup Configuration</h4><table><thead><tr><th>ID</th><th>User Story</th><th>Priority</th></tr></thead><tbody><tr><td>BL-201</td><td>Deploy Recovery Services vault</td><td>Must</td></tr><tr><td>BL-202</td><td>Create VM backup policy</td><td>Must</td></tr><tr><td>BL-203</td><td>Enable VM backup</td><td>Must</td></tr><tr><td>BL-204</td><td>Enable Azure Files backup</td><td>Must</td></tr><tr><td>BL-205</td><td>Deploy optional Backup vault</td><td>Should</td></tr><tr><td>BL-206</td><td>Configure optional disk backup</td><td>Could</td></tr></tbody></table>
+<h4>Epic 4: Monitoring and Security</h4><table><thead><tr><th>ID</th><th>User Story</th><th>Priority</th></tr></thead><tbody><tr><td>BL-301</td><td>Configure diagnostic settings</td><td>Must</td></tr><tr><td>BL-302</td><td>Configure backup alerts</td><td>Should</td></tr><tr><td>BL-303</td><td>Validate soft delete</td><td>Must</td></tr><tr><td>BL-304</td><td>Configure RBAC personas</td><td>Should</td></tr><tr><td>BL-305</td><td>Document immutable vault guidance</td><td>Should</td></tr></tbody></table>
+<h4>Epic 5: Demo Readiness</h4><table><thead><tr><th>ID</th><th>User Story</th><th>Priority</th></tr></thead><tbody><tr><td>BL-401</td><td>Create demo runbook</td><td>Must</td></tr><tr><td>BL-402</td><td>Create presenter notes</td><td>Must</td></tr><tr><td>BL-403</td><td>Create cleanup script</td><td>Must</td></tr><tr><td>BL-404</td><td>Test full demo flow</td><td>Must</td></tr></tbody></table>
+
+<h3>24. Definition of Done</h3>
+<ul><li>All must-have backlog items are implemented.</li><li>Deployment is repeatable.</li><li>Backup and restore workflows are tested.</li><li>Monitoring views are available.</li><li>Demo runbook is validated.</li><li>Cleanup is tested.</li><li>Known limitations are documented.</li><li>Presenter can explain the business value and technical design.</li></ul>
+
+<h3>25. Future Enhancements</h3>
+<ol><li>Add SQL Server in Azure VM backup.</li><li>Add SAP HANA backup scenario.</li><li>Add Azure Kubernetes Service backup scenario if required.</li><li>Add Backup Center view across multiple subscriptions.</li><li>Add Azure Policy enforcement for backup compliance.</li><li>Add Defender for Cloud recommendations.</li><li>Add cross-region restore demonstration.</li><li>Add private endpoint design.</li><li>Add production landing zone integration.</li><li>Add cost dashboard for backup consumption.</li></ol>
+
+<h3>26. Suggested Repository Structure</h3>
+<pre><code>azure-backup-demo-spec/
+  README.md
+  SPEC.md
+  /infra
+    main.bicep
+    parameters.dev.json
+    parameters.demo.json
+    /modules
+      recovery-services-vault.bicep
+      backup-vault.bicep
+      vm.bicep
+      storage.bicep
+      monitoring.bicep
+      rbac.bicep
+  /scripts
+    deploy.ps1
+    seed-demo-data.ps1
+    trigger-backup.ps1
+    validate-backup.ps1
+    cleanup.ps1
+  /docs
+    architecture.md
+    demo-runbook.md
+    presenter-notes.md
+    test-plan.md
+  /queries
+    backup-jobs.kql
+    failed-backups.kql
+    vault-activity.kql</code></pre>
+
+<h3>27. Summary</h3>
+<p>This specification creates a structured, repeatable, and explainable Azure Backup demo environment. It is intentionally designed to be small enough for a controlled demo while still showing enterprise-relevant capabilities: vault selection, policy-driven backup, restore validation, monitoring, RBAC, soft delete, and optional immutability.</p>
+<div class="callout warning"><strong>Demo posture:</strong> The environment should be treated as a disposable technical demo, not a production backup architecture. Production implementation requires workload-specific RPO/RTO design, retention policy definition, compliance review, security review, cost modeling, and restore testing at operational scale.</div>
+</section>
+<section id="sources">
+<h2>Source notes and validation checklist</h2>
+<p class="lead">Use these links when validating the deployment design and service configuration.</p>
+<table>
+<thead><tr><th>Area</th><th>Validation source</th><th>What to confirm</th></tr></thead>
+<tbody><tr class="layer-row-ai"><td>Build 2026 MAI model</td><td><a href="https://build.microsoft.com/en-US/home">Microsoft Build 2026</a>, <a href="https://blogs.microsoft.com/blog/2026/06/02/microsoft-build-2026-be-yourself-at-work/">Official Build 2026 announcement</a>, and <a href="https://microsoft.ai/news/building-a-hillclimbing-machine-launching-seven-new-mai-models/">Microsoft AI MAI model announcement</a></td><td>MAI-Thinking-1 availability, private-preview access, model routing, evaluation readiness, and bounded Temporal activity design.</td></tr>
+<tr class="layer-row-foundation"><td>Azure Landing Zone</td><td><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/">Azure landing zone overview</a>, <a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-areas">design areas</a>, and <a href="https://learn.microsoft.com/en-us/azure/architecture/landing-zones/landing-zone-deploy">deployment options</a></td><td>Management group hierarchy, platform/application landing zones, policy baseline, network topology, identity model, logging, tagging, and subscription vending.</td></tr>
+<tr class="layer-row-compute"><td>AKS</td><td><a href="https://learn.microsoft.com/en-us/azure/aks/">AKS documentation</a></td><td>Cluster configuration, node VM sizes, availability requirements, and autoscaling limits.</td></tr>
+<tr class="layer-row-data"><td>PostgreSQL</td><td><a href="https://learn.microsoft.com/en-us/azure/postgresql/">Azure Database for PostgreSQL documentation</a></td><td>Capacity configuration, storage, backup retention, HA design, and operational posture.</td></tr>
+<tr><td>HorizonDB</td><td><a href="https://azure.microsoft.com/en-us/products/horizondb">HorizonDB product page</a></td><td>Preview availability, region, compatibility requirements, replicas, and migration timing.</td></tr>
+<tr class="layer-row-compute"><td>Container registry</td><td><a href="https://learn.microsoft.com/en-us/azure/container-registry/">ACR documentation</a></td><td>Registry configuration, private endpoint needs, replication, and image lifecycle policy.</td></tr>
+<tr class="layer-row-api"><td>API Layer</td><td><a href="https://learn.microsoft.com/en-us/azure/api-management/">Azure API Management documentation</a>, <a href="https://learn.microsoft.com/en-us/azure/api-management/api-management-key-concepts">overview and key concepts</a>, <a href="https://learn.microsoft.com/en-us/azure/api-management/api-management-gateways-overview">API gateway overview</a>, <a href="https://learn.microsoft.com/en-us/azure/api-management/self-hosted-gateway-overview">self-hosted gateway overview</a>, and <a href="https://learn.microsoft.com/en-us/azure/architecture/microservices/design/gateway">API gateway guidance</a></td><td>Gateway placement, API contracts, authentication, authorization, backend routing, policy, telemetry, hybrid deployment needs, and private connectivity requirements.</td></tr>
+<tr class="layer-row-event"><td>Messaging/eventing</td><td><a href="https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-messaging-overview">Service Bus documentation</a> and <a href="https://learn.microsoft.com/en-us/azure/event-grid/overview">Event Grid documentation</a></td><td>Queue/topic usage, event delivery attempts, and dead-letter behavior.</td></tr>
+<tr class="layer-row-observe"><td>Observability</td><td><a href="https://learn.microsoft.com/en-us/azure/azure-monitor/overview">Azure Monitor documentation</a></td><td>Telemetry volume, retention, sampling, diagnostic settings, and alerting scope.</td></tr>
+<tr><td>Model calls</td><td><a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/overview">Azure OpenAI Service documentation</a></td><td>Model selection, input/output volume, retry behavior, task routing, and bounded workflow integration.</td></tr>
+<tr><td>Governance and access</td><td><a href="https://learn.microsoft.com/en-us/azure/role-based-access-control/overview">Azure RBAC overview</a>, <a href="https://learn.microsoft.com/en-us/azure/governance/policy/overview">Azure Policy overview</a>, and <a href="https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview">managed identities overview</a></td><td>Least-privilege access, policy assignment model, workload identity approach, and subscription/resource-group scope boundaries.</td></tr><tr><td>Private networking</td><td><a href="https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview">Private endpoint overview</a>, <a href="https://learn.microsoft.com/en-us/azure/dns/private-dns-overview">Azure Private DNS overview</a>, and <a href="https://learn.microsoft.com/en-us/azure/dns/dns-private-resolver-overview">Azure DNS Private Resolver overview</a></td><td>Private endpoint inventory, DNS resolution pattern, hybrid name resolution, and public exposure review.</td></tr><tr><td>Application ingress protection</td><td><a href="https://learn.microsoft.com/en-us/azure/application-gateway/overview">Application Gateway overview</a> and <a href="https://learn.microsoft.com/en-us/azure/web-application-firewall/ag/ag-overview">Application Gateway WAF overview</a></td><td>External ingress need, TLS boundary, path-based routing, WAF policy, and backend routing design.</td></tr><tr class="layer-row-security"><td>Security posture</td><td><a href="https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-cloud-introduction">Microsoft Defender for Cloud overview</a></td><td>Security posture visibility, workload protection recommendations, remediation ownership, and operational review cadence.</td></tr><tr><td>Azure Storage</td><td><a href="https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview">Storage account overview</a></td><td>Diagnostic archive, controlled payload staging, lifecycle management, private access, and retention boundaries.</td></tr><tr><td>Customer-hosted hybrid Kubernetes</td><td><a href="https://learn.microsoft.com/en-us/azure/aks/aksarc/aks-overview">AKS enabled by Azure Arc overview</a></td><td>Hybrid operation requirements, centralized Kubernetes management, monitoring, policy, and customer-hosted deployment constraints.</td></tr><tr><td><span class="source-logo"><img alt="Temporal logomark" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>Temporal brand assets</span></td><td><a href="https://temporal.io/brand">Temporal brand guidelines</a></td><td>Official horizontal logo and logomark references used in the page header, workflow diagram, and Temporal-related pattern sections.</td></tr>
+<tr><td><span class="source-logo"><img alt="Temporal logomark" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>Temporal advantages</span></td><td><a href="https://docs.temporal.io/">Temporal documentation</a>, <a href="https://docs.temporal.io/workflow-execution/event">Event History documentation</a>, <a href="https://temporal.io/about">Temporal about page</a>, and <a href="https://temporal.io/blog/tips-for-running-temporal-on-kubernetes">Temporal on Kubernetes guidance</a></td><td>Durable execution, event history, crash recovery, MIT license reference, and Kubernetes operating considerations.</td></tr>
+<tr class="layer-row-workflow"><td><span class="source-logo"><img alt="Temporal logomark" src="https://images.ctfassets.net/0uuz8ydxyd9p/3B1zR4imcNyF9oHQxT06AD/9fce8b9ead280e66c21805c58d115176/Temporal_Symbol_dark.svg"/>Temporal</span></td><td><a href="https://temporal.io/">Temporal product page</a>, <a href="https://docs.temporal.io/temporal-service/persistence">Temporal persistence docs</a>, and <a href="https://docs.temporal.io/self-hosted-guide/visibility">self-hosted visibility docs</a></td><td>Persistence store, visibility store, namespace model, versioning, workflow history growth.</td></tr>
+</tbody>
+</table>
+</section>
+</main>
+</div>
+<div class="footer">
+<p>Prepared for Azure-core durable intelligent workflow architecture with Azure Landing Zone foundation, an API Layer integration plane, Temporal durable execution, Postgres-first operational data, and business-value measurement across modernization, reliability, integration, AI usefulness, and operational discipline. Temporal marks are referenced from Temporal public brand assets. Validate the final design against the target subscription, region, governance requirements, and measured workload telemetry.</p>
+</div>
+
+<button class="back-to-top" type="button" aria-label="Back to top">↑</button>
+<script>
+(function () {
+  const links = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+  const sections = links
+    .map(link => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+  const progress = document.getElementById('scroll-progress-bar');
+  const topButton = document.querySelector('.back-to-top');
+
+  function updateProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const percent = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+    if (progress) progress.style.width = percent + '%';
+    if (topButton) topButton.classList.toggle('visible', scrollTop > 600);
+  }
+
+  function setActive(id) {
+    links.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible && visible.target && visible.target.id) setActive(visible.target.id);
+  }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, 0.15, 0.35, 0.6] });
+
+  sections.forEach(section => observer.observe(section));
+
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      const id = link.getAttribute('href').slice(1);
+      setActive(id);
+    });
+  });
+
+  if (topButton) {
+    topButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress);
+  updateProgress();
+  if (sections[0]) setActive(sections[0].id);
+})();
+</script>
+
+</body>
+</html>

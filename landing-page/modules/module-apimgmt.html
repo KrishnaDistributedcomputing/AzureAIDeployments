@@ -1,411 +1,505 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure API Management - API Gateway & Management</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
-    <style>
-        :root {
-            --orange: #e67e22;
-            --dark-bg: #1a1a1a;
-        }
-        body {
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            border-bottom: 3px solid var(--orange);
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--orange) !important;
-            font-size: 1.5rem;
-        }
-        .nav-link {
-            color: #b0b0b0 !important;
-            margin: 0 8px;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: var(--orange) !important;
-        }
-        .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--orange);
-            margin-bottom: 40px;
-        }
-        .hero-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .hero h1 {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #ecf0f1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .section-title {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2rem;
-            margin-top: 40px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--orange);
-        }
-        .card {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 20px;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
-        }
-        .card-header {
-            background-color: var(--orange);
-            color: white;
-            font-weight: bold;
-            border-radius: 0;
-        }
-        .card-body {
-            color: #e0e0e0;
-        }
-        .capability-list {
-            list-style: none;
-            padding: 0;
-        }
-        .capability-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-        }
-        .capability-list li:before {
-            content: "âœ" ";
-            color: var(--orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .pricing-tier {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .pricing-tier h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .use-case-card {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-            border-left: 4px solid var(--orange);
-        }
-        .use-case-card h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .faq-item {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .faq-item h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .sidebar {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .sidebar h5 {
-            color: var(--orange);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-            font-size: 0.95rem;
-        }
-        .sidebar-item:last-child {
-            border-bottom: none;
-        }
-        .code-block {
-            background-color: #1a1a1a;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            color: #7ec699;
-            font-size: 0.9rem;
-        }
-        footer {
-            background-color: #2c2c2c;
-            border-top: 2px solid var(--orange);
-            padding: 30px 0;
-            margin-top: 50px;
-            color: #b0b0b0;
-            text-align: center;
-        }
-        .container-main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure API Management | Core Azure Modules</title>
+  <meta name="description" content="Azure API Management - enterprise API gateway with policy control, security, analytics, and lifecycle management." />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+  <style>
+    :root {
+      --azure-navy: #0050a0;
+      --azure-blue: #0078d4;
+      --azure-sky: #00a2e8;
+      --azure-cyan: #50e6ff;
+      --accent: var(--azure-blue);
+      --accent-dark: var(--azure-cyan);
+    }
+    body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; }
+    .module-icon { font-size: 3.5rem; margin: 20px 0; }
+    .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+    .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+    .btn-deploy { background: var(--accent); color: white; border: none; }
+    .btn-deploy:hover { background: var(--azure-navy); color: white; }
+    .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸŒ</span>
-            <h1>Azure API Management</h1>
-            <p class="subtitle">Complete API gateway for publishing, managing, and securing APIs at scale</p>
-        </div>
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/modules">
+        <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="container-main">
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="module-icon">🌐</div>
+          <h1 class="mb-3">Azure API Management</h1>
+          <p class="lead mb-4">Enterprise API gateway for publishing, securing, governing, and scaling APIs across internal, partner, and external channels.</p>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+          <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div style="font-size: 10rem; opacity: 0.3;">🌐</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <section class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+          <p class="fs-5">Azure API Management centralizes API publication, security, throttling, and observability. It provides a policy-driven gateway with full API lifecycle controls and developer onboarding capabilities for enterprise integration at scale.</p>
+
+          <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+          <ul class="fs-5">
+            <li><strong>Unified API Gateway:</strong> Route, transform, and secure requests with low-latency policy enforcement</li>
+            <li><strong>Policy Engine:</strong> Apply authentication, rate limits, caching, JWT validation, and payload transformations</li>
+            <li><strong>Developer Portal:</strong> Expose API products, documentation, and onboarding flows to consumers</li>
+            <li><strong>API Lifecycle Controls:</strong> Manage versions, revisions, products, and subscriptions</li>
+            <li><strong>Observability:</strong> Gateway telemetry with Azure Monitor and Application Insights integration</li>
+            <li><strong>Hybrid and Multi-region:</strong> Support for enterprise network topologies and global API delivery</li>
+          </ul>
+
+          <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🔐 Secure API Front Door</h5>
+                  <p class="card-text">Apply central authentication, authorization, and rate limits for all backend services.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🤝 Partner API Publishing</h5>
+                  <p class="card-text">Publish curated API products with subscriptions, quotas, and controlled onboarding.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🤖 GenAI Gateway</h5>
+                  <p class="card-text">Govern Azure OpenAI access with token quotas, content policies, and request shaping.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">📈 API Monetization</h5>
+                  <p class="card-text">Package APIs into products with usage plans and billing-aligned subscription controls.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="spec-box">
+            <h5 class="fw-bold">📊 Quick Stats</h5>
+            <ul class="list-unstyled">
+              <li><strong>Typical Monthly:</strong> $150 - $3,500</li>
+              <li><strong>SLA Availability:</strong> 99.9%</li>
+              <li><strong>Policy Types:</strong> 40+</li>
+              <li><strong>Global Regions:</strong> 50+</li>
+              <li><strong>Gateway Mode:</strong> Managed + self-hosted options</li>
+            </ul>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🚀 Deployment</h5>
+            <p><small><strong>Resource Provider:</strong> Microsoft.ApiManagement</small></p>
+            <p><small><strong>SKU:</strong> Consumption, Developer, Basic, Standard, Premium, StandardV2</small></p>
+            <p><small><strong>Regions:</strong> East US, West Europe, UK South, Japan East</small></p>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🔗 Dependencies</h5>
+            <ul class="list-unstyled small">
+              <li>✓ Entra ID (identity and auth flows)</li>
+              <li>✓ Azure Monitor (gateway logs and metrics)</li>
+              <li>✓ Application Insights (request tracing)</li>
+              <li>✓ Key Vault (certificates and secrets)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="pricing-tier">
+            <h5>Consumption</h5>
+            <p class="text-muted">Serverless pay-per-use</p>
+            <p><strong>Approx:</strong> $3.50 per 1M calls</p>
+            <ul class="list-unstyled small">
+              <li>✓ Burst-friendly usage model</li>
+              <li>✓ No fixed gateway base cost</li>
+              <li>✓ Suitable for variable demand</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="pricing-tier">
+            <h5>Developer</h5>
+            <p class="text-muted">Non-production environments</p>
+            <p><strong>Approx:</strong> $40-70/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ Dev and test workloads</li>
+              <li>✓ Full policy support</li>
+              <li>✓ Single-unit instance</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="pricing-tier recommended">
+            <h5>Standard</h5>
+            <p class="text-muted">Recommended for production</p>
+            <p><strong>Approx:</strong> $150-900/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ Production-grade SLA</li>
+              <li>✓ Scalable gateway capacity</li>
+              <li>✓ Balanced cost and reliability</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="pricing-tier">
+            <h5>Premium</h5>
+            <p class="text-muted">Enterprise and multi-region</p>
+            <p><strong>Approx:</strong> $1,500-3,500/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ VNet integration at scale</li>
+              <li>✓ Multi-region deployment</li>
+              <li>✓ Highest throughput profile</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+        <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can change by region, SKU, gateway capacity, request volume, and Microsoft pricing updates. Confirm current rates in the official Azure pricing calculator before sign-off.
+      </div>
+    </section>
+
+    <section id="deployment" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+      <p class="text-muted">Spec-based development guide for Azure API Management. Author and validate this spec before requesting infrastructure provisioning.</p>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">📋 Spec Header — DS-APIM-001</h5>
+        <table class="table table-sm small mb-0">
+          <tbody>
+            <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-APIM-001</td></tr>
+            <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+            <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+            <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+            <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+            <tr><td class="fw-medium">Applies to</td><td>Azure API Management</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">⚙️ Required Parameters</h5>
+        <p class="small text-muted mb-3">All parameters must be resolved before the spec advances to <strong>Approved</strong> status.</p>
+        <table class="table table-sm small">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Azure region for APIM service deployment</td></tr>
+            <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage: <code>dev</code> | <code>staging</code> | <code>prod</code></td></tr>
+            <tr><td><code>skuName</code></td><td>string</td><td>Yes</td><td>Service SKU such as <code>StandardV2</code> or <code>Premium</code></td></tr>
+            <tr><td><code>capacity</code></td><td>int</td><td>Yes</td><td>Unit count for throughput and resilience</td></tr>
+            <tr><td><code>publisherName</code></td><td>string</td><td>Yes</td><td>Organization display name for API consumers</td></tr>
+            <tr><td><code>publisherEmail</code></td><td>string</td><td>Yes</td><td>Support contact email for API subscriptions</td></tr>
+            <tr><td><code>privateEndpointEnabled</code></td><td>bool</td><td>Yes</td><td>Enable private network routing for regulated workloads</td></tr>
+            <tr><td><code>subscriptionRequiredDefault</code></td><td>bool</td><td>Yes</td><td>Default requirement for API product subscription keys</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">🔗 Dependency Wiring</h5>
         <div class="row">
-            <div class="col-lg-8">
-                
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure API Management is a hybrid, multi-cloud management platform for APIs across all environments. It enables enterprises to publish APIs to external, partner, and internal developers to unlock the potential of their data and services.</p>
-                            <p>APIM provides gateway, developer portal, and complete API lifecycle management capabilities.</p>
-                        </div>
-                    </div>
-                </section>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Entra ID</h6>
+                <p class="small mb-1">Used for OAuth/OpenID flows, managed identities, and admin access governance.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Key Vault</h6>
+                <p class="small mb-1">Stores certificates, backend secrets, and named values referenced by policies.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Azure Monitor</h6>
+                <p class="small mb-1">Gateway logs, metrics, and traces must be collected for SLO and incident response.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>API Gateway:</strong> High-performance gateway with caching, throttling, and routing</li>
-                        <li><strong>Developer Portal:</strong> Self-service portal for discovering and testing APIs</li>
-                        <li><strong>Policy Engine:</strong> Powerful policy framework for rate limiting, validation, and transformation</li>
-                        <li><strong>Analytics & Monitoring:</strong> Built-in analytics and integration with Azure Monitor</li>
-                        <li><strong>OpenAPI / Swagger Support:</strong> Import and export OpenAPI specifications</li>
-                        <li><strong>Subscription Management:</strong> Control access with subscription keys and certificates</li>
-                        <li><strong>Versioning & Releases:</strong> Manage multiple API versions and releases</li>
-                        <li><strong>AI Integration:</strong> Built-in generative AI capabilities for API management</li>
-                    </ul>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">✓ Acceptance Gates</h5>
+        <p class="small text-muted mb-3">All gates must pass before the deployment is considered production-ready.</p>
+        <ul class="small mb-0">
+          <li class="mb-2"><strong>Gate 1 — Gateway health:</strong> API gateway endpoint must return HTTP 200 for health route and sustain p95 latency under target threshold.</li>
+          <li class="mb-2"><strong>Gate 2 — Security policy:</strong> JWT validation and rate-limit policies must be applied to all published production APIs.</li>
+          <li class="mb-2"><strong>Gate 3 — Subscription enforcement:</strong> Subscription keys must be required where product policy mandates authenticated consumer access.</li>
+          <li class="mb-2"><strong>Gate 4 — Secret hygiene:</strong> Named values marked as secret must resolve from Key Vault references, not plain text literals.</li>
+          <li><strong>Gate 5 — Observability:</strong> Gateway request metrics, backend latency, and failed policy events must be visible in Azure Monitor within 15 minutes.</li>
+        </ul>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ"Œ API Gateway</h5>
-                        <p>Centralized gateway for backend services with rate limiting, request/response transformation, and authentication.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">🚀 Spec Workflow</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Author:</strong> Define API products, policies, and security defaults. Resolve all <code>&lt;placeholder&gt;</code> fields.</li>
+          <li class="mb-2"><strong>Review:</strong> Submit for architecture and security review. At least one non-author reviewer approval is required.</li>
+          <li class="mb-2"><strong>CI gate:</strong> Validate policy schema, SKU constraints, and dependency references before IaC generation.</li>
+          <li class="mb-2"><strong>Deploy:</strong> Approved spec triggers pipeline deployment of APIM instance, APIs, products, and policy artifacts.</li>
+          <li><strong>Validate:</strong> Run all acceptance gates and publish evidence in release documentation.</li>
+        </ol>
+      </div>
+    </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ'¼ Partner Integration</h5>
-                        <p>Publish APIs securely to partners with subscription management and usage monitoring.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+      <p class="text-muted">Use this workflow to deploy Azure API Management from the parameter-driven specification and validate gateway readiness before publishing APIs to consumers.</p>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ¤- GenAI API Gateway</h5>
-                        <p>Manage access to AI services like OpenAI with rate limiting and usage tracking.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">1. Prerequisites</h5>
+        <ul class="small mb-0">
+          <li>Azure CLI with Bicep support installed and authenticated to the target subscription</li>
+          <li>Approved values for <code>location</code>, <code>environment</code>, <code>skuName</code>, <code>capacity</code>, <code>publisherName</code>, and <code>publisherEmail</code></li>
+          <li>Security decisions completed for subscription requirements, Entra ID integration, and Key Vault-backed named values</li>
+          <li>Azure Monitor and Application Insights destinations prepared for telemetry</li>
+        </ul>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"Š Analytics Platform</h5>
-                        <p>Expose data and analytics through APIs with fine-grained access control and quotas.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">2. Deployment Steps</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Create or select the resource group:</strong> Use the approved API platform resource boundary.</li>
+          <li class="mb-2"><strong>Validate platform dependencies:</strong> Confirm identity, certificate, secret, and backend connectivity dependencies are ready.</li>
+          <li class="mb-2"><strong>Build the Bicep template:</strong> Compile the deployment artifact before execution to catch validation issues early.</li>
+          <li class="mb-2"><strong>Deploy with approved parameters:</strong> Pass parameter-driven values for <code>location</code> and <code>environment</code> together with the selected SKU and publisher details.</li>
+          <li><strong>Run post-deploy checks:</strong> Verify gateway endpoint health, products, named values, and monitoring before onboarding API traffic.</li>
+        </ol>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ",, Service Integration</h5>
-                        <p>Decouple internal services and provide standardized interfaces across teams.</p>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">3. Azure CLI Example</h5>
+        <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
 
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Tiers</h2>
-                    
-                    <div class="pricing-tier">
-                        <h5>Developer</h5>
-                        <p><strong>Cost:</strong> ~$40/month | Not for production</p>
-                        <p>For development and testing with single instance.</p>
-                    </div>
+az group create \
+  --name rg-apim-&lt;environment&gt; \
+  --location &lt;location&gt;
 
-                    <div class="pricing-tier">
-                        <h5>Standard</h5>
-                        <p><strong>Cost:</strong> ~$150/month | 1M calls/month included</p>
-                        <p>Recommended for most production workloads.</p>
-                    </div>
+az bicep build \
+  --file specs/azure-apimgmt.bicep
 
-                    <div class="pricing-tier">
-                        <h5>Premium</h5>
-                        <p><strong>Cost:</strong> ~$600/month | Multi-region, 10M calls/month</p>
-                        <p>For large-scale, multi-region deployments.</p>
-                    </div>
-
-                    <div class="pricing-tier">
-                        <h5>Consumption</h5>
-                        <p><strong>Cost:</strong> $3.50 per 1M calls</p>
-                        <p>Pay-as-you-go for variable workloads.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure API Management Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-apimgmt.bicep</code></p>
-                            
-                            <div class="code-block">
-az bicep build --file azure-apimgmt.bicep
 az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-apimgmt.json
-                            </div>
+  --resource-group rg-apim-&lt;environment&gt; \
+  --template-file specs/azure-apimgmt.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+      </div>
 
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Service ID</li>
-                                <li>Gateway endpoint</li>
-                                <li>Developer portal URL</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">4. Validation Checklist</h5>
+        <ul class="small mb-0">
+          <li>Gateway hostname resolves and returns expected responses</li>
+          <li>Configured APIs, products, and subscriptions are present</li>
+          <li>Policy enforcement behaves as expected for authentication and rate limiting</li>
+          <li>Named values and secrets resolve correctly from approved sources</li>
+          <li>Gateway logs, metrics, and traces are visible in monitoring tools</li>
+        </ul>
+      </div>
+    </section>
 
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What's the difference between APIM tiers?</h5>
-                        <p>Developer is for testing, Standard for production, Premium for multi-region. Consumption is serverless pay-per-call.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+      <p class="text-muted mb-4">A complete, production-ready example of DS-APIM-001 - fully resolved, no placeholders. Use this as a reference when authoring your own spec.</p>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+          <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+        </a>
+        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+        </a>
+        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+          <i class="bi bi-github me-2"></i>Open on GitHub
+        </a>
+      </div>
 
-                    <div class="faq-item">
-                        <h5>Can I use APIM with OpenAI?</h5>
-                        <p>Yes. APIM works great as a gateway for OpenAI APIs with rate limiting, request transformation, and monitoring.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What policies are available?</h5>
-                        <p>40+ built-in policies for authentication, rate limiting, caching, request/response transformation, and error handling.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>How do I expose a legacy backend?</h5>
-                        <p>Add your backend URL to APIM REST APIs and define policies for transformation, caching, and security.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> API Gateway</div>
-                    <div class="sidebar-item"><strong>SLA:</strong> 99.9% availability</div>
-                    <div class="sidebar-item"><strong>Regions:</strong> 50+ worldwide</div>
-                    <div class="sidebar-item"><strong>Policies:</strong> 40+ built-in</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-diagram-3"></i> Dependencies</h5>
-                    <div class="sidebar-item">â€¢ Backend services/APIs</div>
-                    <div class="sidebar-item">â€¢ Azure Entra ID (auth)</div>
-                    <div class="sidebar-item">â€¢ Azure Monitor (tracking)</div>
-                    <div class="sidebar-item">â€¢ Application Insights</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-shield-check"></i> Security</h5>
-                    <div class="sidebar-item">âœ" OAuth 2.0 / OpenID Connect</div>
-                    <div class="sidebar-item">âœ" Mutual TLS authentication</div>
-                    <div class="sidebar-item">âœ" IP whitelisting</div>
-                    <div class="sidebar-item">âœ" Request validation</div>
-                    <div class="sidebar-item">âœ" Token validation policies</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-speedometer2"></i> Best Practices</h5>
-                    <div class="sidebar-item">â†' Implement rate limiting</div>
-                    <div class="sidebar-item">â†' Use caching policies</div>
-                    <div class="sidebar-item">â†' Enable API analytics</div>
-                    <div class="sidebar-item">â†' Validate all inputs</div>
-                    <div class="sidebar-item">â†' Monitor for anomalies</div>
-                </div>
-            </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(90deg,var(--azure-navy),var(--azure-blue));color:white;border-radius:8px 8px 0 0;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#sampleSpec">
+          <span class="fw-bold"><i class="bi bi-file-earmark-check me-2"></i>DS-APIM-001 v1.0 - Azure API Management (Production) <span class="badge bg-success ms-2">Approved</span></span>
+          <i class="bi bi-chevron-down"></i>
         </div>
+        <div class="collapse show" id="sampleSpec">
+          <div class="card-body p-4">
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">1. Document Header</h6>
+              <table class="table table-sm small mb-0">
+                <tbody>
+                  <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-APIM-001</td></tr>
+                  <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                  <tr><td class="fw-medium">Status</td><td><span class="badge bg-success">Approved</span></td></tr>
+                  <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                  <tr><td class="fw-medium">Owner</td><td>Platform Engineering - API Platform</td></tr>
+                  <tr><td class="fw-medium">Reviewer</td><td>Security Architecture</td></tr>
+                  <tr><td class="fw-medium">Applies to</td><td>Azure API Management - Production (East US)</td></tr>
+                  <tr><td class="fw-medium">Date</td><td>2026-03-27</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">2. Purpose &amp; Scope</h6>
+              <p class="small mb-2"><strong>Purpose:</strong> Define production deployment and governance requirements for Azure API Management, including gateway policies, security baselines, and observability controls.</p>
+              <p class="small mb-2"><strong>In scope:</strong> APIM service instance, APIs, products, subscriptions, named values, policy definitions, and monitoring setup.</p>
+              <p class="small mb-0"><strong>Out of scope:</strong> Backend service business logic and domain-specific payload schemas.</p>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">3. Functional Requirements</h6>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>FR-01</strong> - The gateway must enforce authentication and authorization for all production APIs.<br><span class="text-muted">Rationale: Protects backend services from unauthorized access.</span></li>
+                <li class="mb-2"><strong>FR-02</strong> - The platform must apply rate limiting and quota controls at product or API scope.<br><span class="text-muted">Rationale: Prevents abuse and protects backend capacity.</span></li>
+                <li class="mb-2"><strong>FR-03</strong> - The service must provide developer onboarding through documented products and subscription workflows.<br><span class="text-muted">Rationale: Standardized API consumption improves delivery velocity.</span></li>
+                <li><strong>FR-04</strong> - Gateway telemetry must support operational dashboards and incident triage.<br><span class="text-muted">Rationale: API reliability requires measurable SLO monitoring.</span></li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">4. Resolved Parameters</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Approved by</th></tr></thead>
+                <tbody>
+                  <tr><td><code>location</code></td><td>East US</td><td>Infra Lead</td></tr>
+                  <tr><td><code>environment</code></td><td>prod</td><td>Infra Lead</td></tr>
+                  <tr><td><code>skuName</code></td><td>StandardV2</td><td>Architecture</td></tr>
+                  <tr><td><code>capacity</code></td><td>1</td><td>Platform Engineering</td></tr>
+                  <tr><td><code>publisherName</code></td><td>Organization</td><td>Platform Engineering</td></tr>
+                  <tr><td><code>publisherEmail</code></td><td>admin@organization.com</td><td>Platform Engineering</td></tr>
+                  <tr><td><code>privateEndpointEnabled</code></td><td>false</td><td>Security</td></tr>
+                  <tr><td><code>subscriptionRequiredDefault</code></td><td>true</td><td>Security</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">5. Security Controls</h6>
+              <ul class="small mb-0">
+                <li class="mb-1"><strong>Authentication:</strong> OAuth 2.0 or JWT policy enforcement for protected APIs.</li>
+                <li class="mb-1"><strong>Transport:</strong> TLS 1.2 minimum for inbound and outbound API traffic.</li>
+                <li class="mb-1"><strong>Secrets:</strong> Named values containing sensitive data must be marked secret and sourced from Key Vault references.</li>
+                <li class="mb-1"><strong>Abuse protection:</strong> Rate limit and quota policies must be active for external-facing products.</li>
+                <li><strong>Auditability:</strong> Failed auth attempts and policy violations must be logged centrally.</li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">6. Cost Estimate (itemised)</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Item</th><th>Unit</th><th>Est. Volume/mo</th><th>Unit Price</th><th>Est. Monthly</th></tr></thead>
+                <tbody>
+                  <tr><td>APIM StandardV2 base</td><td>per unit-month</td><td>1</td><td>$700</td><td>$700</td></tr>
+                  <tr><td>Gateway calls over baseline</td><td>per 1M calls</td><td>20</td><td>$3.50</td><td>$70</td></tr>
+                  <tr><td>Application Insights ingestion</td><td>per GB</td><td>25 GB</td><td>$2.30</td><td>$58</td></tr>
+                  <tr><td>Log Analytics ingestion</td><td>per GB</td><td>20 GB</td><td>$2.30</td><td>$46</td></tr>
+                  <tr class="table-active fw-bold"><td colspan="4">Total estimated monthly</td><td>$874</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">7. Acceptance Gates</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Gate</th><th>Test</th><th>Pass Condition</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>G-01</td><td>Gateway health check</td><td>HTTP 200 and p95 latency within target</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-02</td><td>Auth policy validation</td><td>Protected route denies unauthenticated requests</td><td>Security Architecture</td></tr>
+                  <tr><td>G-03</td><td>Rate limit policy</td><td>Configured quota/rate limits enforce expected behavior</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-04</td><td>Secret handling</td><td>No plain text secrets in APIM named values</td><td>Security Architecture</td></tr>
+                  <tr><td>G-05</td><td>Observability</td><td>API request, latency, and failure metrics visible</td><td>SRE</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-0">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">8. Rollback &amp; Recovery</h6>
+              <ol class="small mb-0">
+                <li class="mb-1"><strong>Policy rollback:</strong> Revert to prior validated policy package and republish API revisions.</li>
+                <li class="mb-1"><strong>Configuration rollback:</strong> Reapply last approved APIM deployment artifact.</li>
+                <li><strong>Escalation:</strong> If authentication or rate-limit controls fail, disable affected product subscriptions and trigger incident response.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn-more" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+      <div class="faq-item">
+        <h5>Which APIM tier should I choose for production?</h5>
+        <p>Most teams start with Standard or StandardV2 for production. Premium is recommended for advanced network isolation and multi-region scale patterns.</p>
+      </div>
+      <div class="faq-item">
+        <h5>Can APIM front Azure OpenAI and other AI services?</h5>
+        <p>Yes. APIM is commonly used as a centralized GenAI gateway to enforce quotas, policy checks, and tenant isolation controls.</p>
+      </div>
+      <div class="faq-item">
+        <h5>How should I manage APIM secrets?</h5>
+        <p>Use Key Vault references for named values and avoid plain text secrets in portal or repository configuration.</p>
+      </div>
+    </section>
+
+    <div class="text-center py-4 border-top">
+      <a href="/modules" class="btn btn-outline-primary me-2"><i class="bi bi-arrow-left me-2"></i>Back to Modules</a>
+      <a href="/modules/module-openai.html" class="btn btn-primary">Next: OpenAI <i class="bi bi-arrow-right ms-2"></i></a>
     </div>
+  </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure API Management Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/api-management/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
-        </div>
-    </footer>
-
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmRXyJgX7c0f3HmGzTi/CUEfxWMp" crossorigin="anonymous"></script>
 </body>
 </html>
-

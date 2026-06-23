@@ -1,404 +1,494 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Key Vault - Secrets & Key Management</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
-    <style>
-        :root {
-            --orange: #e67e22;
-            --dark-bg: #1a1a1a;
-        }
-        body {
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            border-bottom: 3px solid var(--orange);
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--orange) !important;
-            font-size: 1.5rem;
-        }
-        .nav-link {
-            color: #b0b0b0 !important;
-            margin: 0 8px;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: var(--orange) !important;
-        }
-        .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--orange);
-            margin-bottom: 40px;
-        }
-        .hero-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .hero h1 {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #ecf0f1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .section-title {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2rem;
-            margin-top: 40px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--orange);
-        }
-        .card {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 20px;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
-        }
-        .card-header {
-            background-color: var(--orange);
-            color: white;
-            font-weight: bold;
-            border-radius: 0;
-        }
-        .card-body {
-            color: #e0e0e0;
-        }
-        .capability-list {
-            list-style: none;
-            padding: 0;
-        }
-        .capability-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-        }
-        .capability-list li:before {
-            content: "âœ" ";
-            color: var(--orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .pricing-tier {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .pricing-tier h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .use-case-card {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-            border-left: 4px solid var(--orange);
-        }
-        .use-case-card h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .faq-item {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .faq-item h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .sidebar {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .sidebar h5 {
-            color: var(--orange);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-            font-size: 0.95rem;
-        }
-        .sidebar-item:last-child {
-            border-bottom: none;
-        }
-        .code-block {
-            background-color: #1a1a1a;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            color: #7ec699;
-            font-size: 0.9rem;
-        }
-        footer {
-            background-color: #2c2c2c;
-            border-top: 2px solid var(--orange);
-            padding: 30px 0;
-            margin-top: 50px;
-            color: #b0b0b0;
-            text-align: center;
-        }
-        .container-main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure Key Vault | Core Azure Modules</title>
+  <meta name="description" content="Azure Key Vault - secure secrets, keys, and certificate management with enterprise-grade access control and monitoring." />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+  <style>
+    :root {
+      --azure-navy: #0050a0;
+      --azure-blue: #0078d4;
+      --azure-sky: #00a2e8;
+      --azure-cyan: #50e6ff;
+      --accent: var(--azure-blue);
+      --accent-dark: var(--azure-cyan);
+    }
+    body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; }
+    .module-icon { font-size: 3.5rem; margin: 20px 0; }
+    .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+    .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+    .btn-deploy { background: var(--accent); color: white; border: none; }
+    .btn-deploy:hover { background: var(--azure-navy); color: white; }
+    .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸ"</span>
-            <h1>Azure Key Vault</h1>
-            <p class="subtitle">Centralized secrets and key management for applications and infrastructure</p>
-        </div>
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/modules">
+        <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="container-main">
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="module-icon">🔐</div>
+          <h1 class="mb-3">Azure Key Vault</h1>
+          <p class="lead mb-4">Centralized secrets, keys, and certificates management for secure cloud-native and enterprise workloads.</p>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+          <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div style="font-size: 10rem; opacity: 0.3;">🔐</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <section class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+          <p class="fs-5">Azure Key Vault protects secrets, encryption keys, and certificates with strong access controls and auditability. It enables centralized management for credentials and cryptographic assets used by applications, platforms, and automation systems.</p>
+
+          <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+          <ul class="fs-5">
+            <li><strong>Secrets Management:</strong> Store connection strings, API tokens, and passwords securely</li>
+            <li><strong>Key Management:</strong> Manage software and HSM-backed keys for encryption workloads</li>
+            <li><strong>Certificate Lifecycle:</strong> Import, generate, renew, and rotate certificates</li>
+            <li><strong>Access Governance:</strong> Control access via Entra ID and RBAC policies</li>
+            <li><strong>Soft Delete and Purge Protection:</strong> Recover deleted assets and protect against accidental loss</li>
+            <li><strong>Monitoring and Audit:</strong> Capture access and operation telemetry for compliance and security analysis</li>
+          </ul>
+
+          <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🔑 Application Secrets</h5>
+                  <p class="card-text">Securely reference runtime secrets from apps without embedding credentials in code or config files.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🧾 Certificate Management</h5>
+                  <p class="card-text">Manage certificate issuance and renewal for APIs, web services, and gateway endpoints.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🛡️ Encryption Key Control</h5>
+                  <p class="card-text">Use customer-managed keys for data-at-rest encryption across storage and database services.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">📋 Compliance and Audit</h5>
+                  <p class="card-text">Track who accessed what and when, supporting governance, forensics, and policy reporting.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="spec-box">
+            <h5 class="fw-bold">📊 Quick Stats</h5>
+            <ul class="list-unstyled">
+              <li><strong>Typical Monthly:</strong> $50 - $900</li>
+              <li><strong>SLA Availability:</strong> 99.99%</li>
+              <li><strong>Tier Options:</strong> Standard, Premium (HSM)</li>
+              <li><strong>Security Controls:</strong> RBAC + network ACL + purge protection</li>
+              <li><strong>Global Regions:</strong> 60+</li>
+            </ul>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🚀 Deployment</h5>
+            <p><small><strong>Resource Provider:</strong> Microsoft.KeyVault</small></p>
+            <p><small><strong>SKU:</strong> Standard, Premium</small></p>
+            <p><small><strong>Security Baseline:</strong> Soft delete + purge protection</small></p>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🔗 Dependencies</h5>
+            <ul class="list-unstyled small">
+              <li>✓ Entra ID (authentication and authorization)</li>
+              <li>✓ Azure Monitor (audit and diagnostics)</li>
+              <li>✓ Managed Identity (application access)</li>
+              <li>✓ Private Link (network isolation)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Standard</h5>
+            <p class="text-muted">Software-backed key operations</p>
+            <p><strong>Approx:</strong> $50-300/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ Secrets and software keys</li>
+              <li>✓ Cost-efficient default option</li>
+              <li>✓ Suitable for most workloads</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier recommended">
+            <h5>Premium (HSM)</h5>
+            <p class="text-muted">Hardware-protected key operations</p>
+            <p><strong>Approx:</strong> $200-900/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ HSM-backed cryptographic keys</li>
+              <li>✓ Strong compliance posture</li>
+              <li>✓ Advanced key scenarios</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Operation Charges</h5>
+            <p class="text-muted">Usage-based request pricing</p>
+            <p><strong>Approx:</strong> Variable by operation volume</p>
+            <ul class="list-unstyled small">
+              <li>✓ Scales with secret/key activity</li>
+              <li>✓ Includes get/list/create ops</li>
+              <li>✓ Monitor via budget thresholds</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+        <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can vary by region, SKU tier, operation volume, and Microsoft pricing updates. Confirm current rates in the official Azure pricing calculator before sign-off.
+      </div>
+    </section>
+
+    <section id="deployment" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+      <p class="text-muted">Spec-based development guide for Azure Key Vault. Author and validate this spec before requesting infrastructure provisioning.</p>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">📋 Spec Header - DS-AKV-001</h5>
+        <table class="table table-sm small mb-0">
+          <tbody>
+            <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AKV-001</td></tr>
+            <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+            <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+            <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+            <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+            <tr><td class="fw-medium">Applies to</td><td>Azure Key Vault</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">⚙️ Required Parameters</h5>
+        <p class="small text-muted mb-3">All parameters must be resolved before the spec advances to <strong>Approved</strong> status.</p>
+        <table class="table table-sm small">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Parameter-driven deployment region for Key Vault resources</td></tr>
+            <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage: <code>dev</code> | <code>staging</code> | <code>prod</code></td></tr>
+            <tr><td><code>skuName</code></td><td>string</td><td>Yes</td><td><code>standard</code> or <code>premium</code> based on key protection requirements</td></tr>
+            <tr><td><code>enableSoftDelete</code></td><td>bool</td><td>Yes</td><td>Must remain enabled for recoverability and governance</td></tr>
+            <tr><td><code>enablePurgeProtection</code></td><td>bool</td><td>Yes</td><td>Required for production compliance posture</td></tr>
+            <tr><td><code>networkDefaultAction</code></td><td>string</td><td>Yes</td><td><code>Allow</code> or <code>Deny</code> depending on network hardening policy</td></tr>
+            <tr><td><code>privateEndpointEnabled</code></td><td>bool</td><td>Conditional</td><td>Enable for private-only data plane access</td></tr>
+            <tr><td><code>rbacEnabled</code></td><td>bool</td><td>Yes</td><td>Determines data-plane authorization model</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">🔗 Dependency Wiring</h5>
         <div class="row">
-            <div class="col-lg-8">
-                
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure Key Vault is a cloud service that safeguards cryptographic keys and secrets used by cloud applications. It helps solve key management challenges and keeps your security credentials safe by centralizing them in a secure, dedicated vault.</p>
-                            <p>With Key Vault, you can encrypt keys and secrets, manage certificates, and control access through Azure's identity platform.</p>
-                        </div>
-                    </div>
-                </section>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Entra ID</h6>
+                <p class="small mb-1">Identity backbone for RBAC, principals, and managed identity access flows.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Azure Monitor</h6>
+                <p class="small mb-1">Audit logs and access events must be sent to Log Analytics for security operations.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Private Link</h6>
+                <p class="small mb-1">Private endpoint is required for strict private-network-only secret access models.</p>
+                <span class="badge bg-secondary">Conditional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Secrets Management:</strong> Store and manage passwords, connection strings, and API keys</li>
-                        <li><strong>Key Management:</strong> Create and manage cryptographic keys for data encryption</li>
-                        <li><strong>Certificate Management:</strong> Manage public/private certificates for SSL/TLS</li>
-                        <li><strong>Hardware Security Module (HSM):</strong> Premium tier with FIPS 140-2 validated HSMs</li>
-                        <li><strong>Role-Based Access Control:</strong> Fine-grained access with Azure AD integration</li>
-                        <li><strong>Soft Delete & Purge Protection:</strong> Recover accidentally deleted vaults and secrets</li>
-                        <li><strong>Monitoring & Auditing:</strong> Track all access and changes via Azure Monitor</li>
-                        <li><strong>Key Rotation:</strong> Automate secret rotation and versioning</li>
-                    </ul>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">✓ Acceptance Gates</h5>
+        <p class="small text-muted mb-3">All gates must pass before the deployment is considered production-ready.</p>
+        <ul class="small mb-0">
+          <li class="mb-2"><strong>Gate 1 - Vault health:</strong> Vault endpoint resolves and responds for authorized operations.</li>
+          <li class="mb-2"><strong>Gate 2 - Protection controls:</strong> Soft delete and purge protection are enabled according to policy.</li>
+          <li class="mb-2"><strong>Gate 3 - Access model:</strong> RBAC or access-policy model matches approved identity governance decision.</li>
+          <li class="mb-2"><strong>Gate 4 - Network posture:</strong> ACL and private endpoint settings enforce approved connectivity boundaries.</li>
+          <li><strong>Gate 5 - Auditability:</strong> Secret/key access and admin operations are visible in monitoring within 15 minutes.</li>
+        </ul>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ"' Application Secrets</h5>
-                        <p>Store application connection strings, API keys, and passwords securely without embedding them in code.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">🚀 Spec Workflow</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Author:</strong> Define vault security baselines and resolve all <code>&lt;placeholder&gt;</code> values.</li>
+          <li class="mb-2"><strong>Review:</strong> Submit for platform and security review with at least one non-author approver.</li>
+          <li class="mb-2"><strong>CI gate:</strong> Validate security controls, SKU constraints, and dependencies before IaC generation.</li>
+          <li class="mb-2"><strong>Deploy:</strong> Approved spec deploys vault, network ACLs, and protection settings.</li>
+          <li><strong>Validate:</strong> Execute acceptance tests and store evidence in release records.</li>
+        </ol>
+      </div>
+    </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"' Database Credentials</h5>
-                        <p>Manage database connection credentials centrally with rotation and audit trails.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+      <p class="text-muted">Use this workflow to deploy Azure Key Vault from the parameter-driven specification and validate security readiness before storing production secrets.</p>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"œ Certificate Management</h5>
-                        <p>Manage SSL/TLS certificates with automated renewal and deployment to Azure services.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">1. Prerequisites</h5>
+        <ul class="small mb-0">
+          <li>Azure CLI with Bicep support installed and authenticated to the target subscription</li>
+          <li>Approved values for <code>location</code>, <code>environment</code>, <code>skuName</code>, and protection settings</li>
+          <li>Identity and RBAC model agreed for data-plane access</li>
+          <li>Monitoring destination configured for Key Vault diagnostics</li>
+        </ul>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ" Encryption Keys</h5>
-                        <p>Store and manage keys for customer-managed encryption in storage, databases, and services.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">2. Deployment Steps</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Create or select the resource group:</strong> Use the approved environment boundary.</li>
+          <li class="mb-2"><strong>Validate security baseline:</strong> Confirm soft delete, purge protection, and network access settings.</li>
+          <li class="mb-2"><strong>Build the Bicep template:</strong> Compile deployment artifact before execution.</li>
+          <li class="mb-2"><strong>Deploy with approved parameters:</strong> Pass parameter-driven <code>location</code> and <code>environment</code> values.</li>
+          <li><strong>Run post-deploy checks:</strong> Validate access controls, logging, and secret operations readiness.</li>
+        </ol>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ¢ Compliance & Governance</h5>
-                        <p>Meet regulatory requirements with comprehensive audit logs and access controls.</p>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">3. Azure CLI Example</h5>
+        <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
 
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Tiers</h2>
-                    
-                    <div class="pricing-tier">
-                        <h5>Standard</h5>
-                        <p><strong>Cost:</strong> $0.6/vault/month + operations</p>
-                        <p>For typical workloads with standard security requirements and software-backed keys.</p>
-                    </div>
+az group create \
+  --name rg-keyvault-&lt;environment&gt; \
+  --location &lt;location&gt;
 
-                    <div class="pricing-tier">
-                        <h5>Premium (HSM-Backed)</h5>
-                        <p><strong>Cost:</strong> $2.0/vault/month + operations</p>
-                        <p>For sensitive workloads requiring hardware-backed cryptographic keys with FIPS compliance.</p>
-                    </div>
+az bicep build \
+  --file specs/azure-keyvault.bicep
 
-                    <div class="pricing-tier">
-                        <h5>Operations Pricing</h5>
-                        <p>Get ($0.03), List ($0.015), Create ($0.1), Import ($0.1) per 10K operations</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Key Vault Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-keyvault.bicep</code></p>
-                            
-                            <div class="code-block">
-az bicep build --file azure-keyvault.bicep
 az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-keyvault.json
-                            </div>
+  --resource-group rg-keyvault-&lt;environment&gt; \
+  --template-file specs/azure-keyvault.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+      </div>
 
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Vault ID</li>
-                                <li>Vault name</li>
-                                <li>Vault URI</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">4. Validation Checklist</h5>
+        <ul class="small mb-0">
+          <li>Vault URI resolves and deployment outputs match expected values</li>
+          <li>Soft delete and purge protection are enabled</li>
+          <li>Access control model matches approved RBAC/policy design</li>
+          <li>Network restrictions align with approved security posture</li>
+          <li>Audit and diagnostic logs are visible in monitoring targets</li>
+        </ul>
+      </div>
+    </section>
 
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What's the difference between Standard and Premium?</h5>
-                        <p>Standard uses software-backed keys, while Premium (HSM-backed) uses FIPS 140-2 validated hardware modules. Premium is required for highly sensitive workloads.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+      <p class="text-muted mb-4">A complete, production-ready example of DS-AKV-001 - fully resolved, no placeholders. Use this as a reference when authoring your own spec.</p>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+          <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+        </a>
+        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+        </a>
+        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+          <i class="bi bi-github me-2"></i>Open on GitHub
+        </a>
+      </div>
 
-                    <div class="faq-item">
-                        <h5>How do I access Key Vault secrets in applications?</h5>
-                        <p>Use managed identities with Azure SDKs, Azure Key Vault references in App Configuration, or Key Vault secret mounts in Kubernetes.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What about secret rotation?</h5>
-                        <p>Azure provides flexible rotation policies. You can set custom rotation policies and use Event Grid to trigger updates when secrets rotate.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Can I restrict network access?</h5>
-                        <p>Yes. Use Private Link for network isolation, or IP-based firewall rules to restrict access to specific networks.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Secrets Management</div>
-                    <div class="sidebar-item"><strong>SLA:</strong> 99.99% availability</div>
-                    <div class="sidebar-item"><strong>Regions:</strong> 60+ worldwide</div>
-                    <div class="sidebar-item"><strong>HSM:</strong> FIPS 140-2 Level 2</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-diagram-3"></i> Dependencies</h5>
-                    <div class="sidebar-item">â€¢ Azure Entra ID (authentication)</div>
-                    <div class="sidebar-item">â€¢ Azure Monitor (auditing)</div>
-                    <div class="sidebar-item">â€¢ Managed Identity (access)</div>
-                    <div class="sidebar-item">â€¢ Private Link (isolation)</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-shield-check"></i> Security</h5>
-                    <div class="sidebar-item">âœ" FIPS 140-2 compliance</div>
-                    <div class="sidebar-item">âœ" Soft delete by default</div>
-                    <div class="sidebar-item">âœ" Purge protection available</div>
-                    <div class="sidebar-item">âœ" End-to-end encryption</div>
-                    <div class="sidebar-item">âœ" Azure AD RBAC</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-speedometer2"></i> Best Practices</h5>
-                    <div class="sidebar-item">â†' Use managed identities for access</div>
-                    <div class="sidebar-item">â†' Enable soft delete always</div>
-                    <div class="sidebar-item">â†' Monitor access with alerts</div>
-                    <div class="sidebar-item">â†' Rotate secrets regularly</div>
-                    <div class="sidebar-item">â†' Use Private Link</div>
-                </div>
-            </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(90deg,var(--azure-navy),var(--azure-blue));color:white;border-radius:8px 8px 0 0;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#sampleSpec">
+          <span class="fw-bold"><i class="bi bi-file-earmark-check me-2"></i>DS-AKV-001 v1.0 - Azure Key Vault (Production) <span class="badge bg-success ms-2">Approved</span></span>
+          <i class="bi bi-chevron-down"></i>
         </div>
+        <div class="collapse show" id="sampleSpec">
+          <div class="card-body p-4">
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">1. Document Header</h6>
+              <table class="table table-sm small mb-0">
+                <tbody>
+                  <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AKV-001</td></tr>
+                  <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                  <tr><td class="fw-medium">Status</td><td><span class="badge bg-success">Approved</span></td></tr>
+                  <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                  <tr><td class="fw-medium">Owner</td><td>Platform Engineering - Security Services</td></tr>
+                  <tr><td class="fw-medium">Reviewer</td><td>Security Architecture</td></tr>
+                  <tr><td class="fw-medium">Applies to</td><td>Azure Key Vault - Production (&lt;location&gt;)</td></tr>
+                  <tr><td class="fw-medium">Date</td><td>2026-03-27</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">2. Purpose and Scope</h6>
+              <p class="small mb-2"><strong>Purpose:</strong> Define secure deployment and governance requirements for Key Vault secrets, keys, and certificate lifecycle operations.</p>
+              <p class="small mb-2"><strong>In scope:</strong> Vault provisioning, protection settings, access controls, network rules, and monitoring integration.</p>
+              <p class="small mb-0"><strong>Out of scope:</strong> Application-side secret handling logic and downstream credential rotation implementation details.</p>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">3. Functional Requirements</h6>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>FR-01</strong> - Vault must enforce secure access controls via approved identity model.<br><span class="text-muted">Rationale: Prevents unauthorized secret and key retrieval.</span></li>
+                <li class="mb-2"><strong>FR-02</strong> - Soft delete and purge protection must remain enabled in production.<br><span class="text-muted">Rationale: Ensures recovery and anti-tamper posture.</span></li>
+                <li class="mb-2"><strong>FR-03</strong> - Vault operations must be fully auditable via centralized logging.<br><span class="text-muted">Rationale: Supports compliance and incident investigation.</span></li>
+                <li><strong>FR-04</strong> - Network exposure must align with approved security boundary controls.<br><span class="text-muted">Rationale: Reduces attack surface and data exfiltration risk.</span></li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">4. Resolved Parameters</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Approved by</th></tr></thead>
+                <tbody>
+                  <tr><td><code>location</code></td><td>&lt;location&gt; (parameter-driven)</td><td>Infra Lead</td></tr>
+                  <tr><td><code>environment</code></td><td>prod</td><td>Infra Lead</td></tr>
+                  <tr><td><code>skuName</code></td><td>standard</td><td>Security</td></tr>
+                  <tr><td><code>enableSoftDelete</code></td><td>true</td><td>Security</td></tr>
+                  <tr><td><code>enablePurgeProtection</code></td><td>true</td><td>Security</td></tr>
+                  <tr><td><code>networkDefaultAction</code></td><td>Allow</td><td>Network Security</td></tr>
+                  <tr><td><code>privateEndpointEnabled</code></td><td>false</td><td>Security</td></tr>
+                  <tr><td><code>rbacEnabled</code></td><td>true</td><td>Platform Engineering</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">5. Security Controls</h6>
+              <ul class="small mb-0">
+                <li class="mb-1"><strong>Access governance:</strong> Enforce least-privilege roles and managed identity access paths.</li>
+                <li class="mb-1"><strong>Data protection:</strong> Use HSM-backed keys where compliance requires hardware protection.</li>
+                <li class="mb-1"><strong>Recoverability:</strong> Maintain soft delete and purge protection for all production vaults.</li>
+                <li class="mb-1"><strong>Network controls:</strong> Apply ACL and private networking posture per approved security model.</li>
+                <li><strong>Auditability:</strong> Capture all secret/key operations in monitoring with retention aligned to policy.</li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">6. Cost Estimate (itemised)</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Item</th><th>Unit</th><th>Est. Volume/mo</th><th>Unit Price</th><th>Est. Monthly</th></tr></thead>
+                <tbody>
+                  <tr><td>Vault base (Standard)</td><td>per vault-month</td><td>1</td><td>$0.60</td><td>$1</td></tr>
+                  <tr><td>Secret operations</td><td>per 10K operations</td><td>300</td><td>$0.03</td><td>$9</td></tr>
+                  <tr><td>Key operations</td><td>per 10K operations</td><td>150</td><td>$0.10</td><td>$15</td></tr>
+                  <tr><td>Certificate operations</td><td>per 10K operations</td><td>50</td><td>$0.10</td><td>$5</td></tr>
+                  <tr><td>Log Analytics ingestion</td><td>per GB</td><td>10 GB</td><td>$2.30</td><td>$23</td></tr>
+                  <tr class="table-active fw-bold"><td colspan="4">Total estimated monthly</td><td>$53</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">7. Acceptance Gates</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Gate</th><th>Test</th><th>Pass Condition</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>G-01</td><td>Vault reachability</td><td>Authorized operations return expected responses</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-02</td><td>Protection controls</td><td>Soft delete and purge protection enabled</td><td>Security Architecture</td></tr>
+                  <tr><td>G-03</td><td>Identity enforcement</td><td>Access model matches approved RBAC/policy design</td><td>Security Architecture</td></tr>
+                  <tr><td>G-04</td><td>Network posture</td><td>ACL and private networking settings match baseline</td><td>Network Security</td></tr>
+                  <tr><td>G-05</td><td>Logging</td><td>Audit and diagnostic events visible in monitoring</td><td>SRE</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-0">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">8. Rollback and Recovery</h6>
+              <ol class="small mb-0">
+                <li class="mb-1"><strong>Configuration rollback:</strong> Reapply prior approved vault deployment artifact.</li>
+                <li class="mb-1"><strong>Access rollback:</strong> Restore previous role assignments or access policies from versioned baseline.</li>
+                <li><strong>Escalation:</strong> If unauthorized access is detected, disable affected principals, rotate secrets, and initiate incident response.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn-more" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+      <div class="faq-item">
+        <h5>When should I choose Premium over Standard?</h5>
+        <p>Choose Premium when hardware-protected keys and advanced compliance requirements demand HSM-backed cryptographic operations.</p>
+      </div>
+      <div class="faq-item">
+        <h5>Should production vaults use private endpoints?</h5>
+        <p>For strict security postures, yes. Private endpoints reduce public exposure and align with zero-trust network patterns.</p>
+      </div>
+      <div class="faq-item">
+        <h5>How should applications access secrets?</h5>
+        <p>Use managed identities and least-privilege RBAC assignments. Avoid embedding secrets in code or static configuration.</p>
+      </div>
+    </section>
+
+    <div class="text-center py-4 border-top">
+      <a href="/modules" class="btn btn-outline-primary me-2"><i class="bi bi-arrow-left me-2"></i>Back to Modules</a>
+      <a href="/modules/module-monitor.html" class="btn btn-primary">Next: Azure Monitor <i class="bi bi-arrow-right ms-2"></i></a>
     </div>
+  </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Key Vault Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/key-vault/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
-        </div>
-    </footer>
-
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmRXyJgX7c0f3HmGzTi/CUEfxWMp" crossorigin="anonymous"></script>
 </body>
 </html>
-

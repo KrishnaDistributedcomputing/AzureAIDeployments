@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Help &amp; Getting Started — Azure AI Patterns</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjHS1QVoT2H8K1OKNqNdfHU6rEQf12wnhx0VTpEpfJ35vAVgdW2hIGd" crossorigin="anonymous" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" integrity="sha384-dFA4uY42aIvygz1mUGzoKF25ZD/vaXfJ/Z2JnW+MD8LKnMeJkelNj8jlPREo2by1" crossorigin="anonymous" />
+  <title>Help &amp; Getting Started - Azure AI Patterns</title>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root{--accent:#0078d4}
     [data-bs-theme="dark"]{--accent:#50e6ff}
@@ -64,7 +64,7 @@
       <div class="row align-items-center">
         <div class="col-lg-8">
           <h1 class="display-4 fw-bold mb-3"><i class="bi bi-question-circle-fill me-3"></i>Help &amp; Getting Started</h1>
-          <p class="lead mb-0">A step-by-step guide to understanding, selecting, and deploying Azure AI patterns. From prerequisites to production — everything you need to get started.</p>
+          <p class="lead mb-0">A step-by-step guide to understanding, selecting, and deploying Azure AI patterns. From prerequisites to production - everything you need to get started.</p>
         </div>
         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
           <span class="badge bg-dark fs-6 px-4 py-2"><i class="bi bi-book me-2"></i>User Guide</span>
@@ -108,37 +108,37 @@
                 <div class="col-md-4">
                   <div class="d-flex align-items-start">
                     <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                    <div><strong>Architecture diagrams</strong> — Mermaid-based visual reference</div>
+                    <div><strong>Architecture diagrams</strong> - Mermaid-based visual reference</div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="d-flex align-items-start">
                     <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                    <div><strong>Bill of Materials</strong> — Every Azure service, SKU, and Bicep type</div>
+                    <div><strong>Bill of Materials</strong> - Every Azure service, SKU, and Bicep type</div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="d-flex align-items-start">
                     <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                    <div><strong>Cost estimates</strong> — Live pricing from Azure Retail API</div>
+                    <div><strong>Cost estimates</strong> - Live pricing from Azure Retail API</div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="d-flex align-items-start">
                     <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                    <div><strong>SLA &amp; WAF scores</strong> — Composite SLA and Well-Architected alignment</div>
+                    <div><strong>SLA &amp; WAF scores</strong> - Composite SLA and Well-Architected alignment</div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="d-flex align-items-start">
                     <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                    <div><strong>Deployment specs</strong> — GitHub Actions workflow + Bicep structure</div>
+                    <div><strong>Deployment specs</strong> - GitHub Actions workflow + Bicep structure</div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="d-flex align-items-start">
                     <i class="bi bi-check-circle-fill text-success me-2 mt-1"></i>
-                    <div><strong>RBAC requirements</strong> — Exact roles needed on Azure &amp; GitHub</div>
+                    <div><strong>RBAC requirements</strong> - Exact roles needed on Azure &amp; GitHub</div>
                   </div>
                 </div>
               </div>
@@ -192,7 +192,7 @@
                 <div class="card-body">
                   <ul class="mb-0">
                     <li><strong>Active Azure subscription</strong> with sufficient spending limit</li>
-                    <li><strong>Azure OpenAI access</strong> — must be <a href="https://aka.ms/oai/access" target="_blank">requested and approved</a></li>
+                    <li><strong>Azure OpenAI access</strong> - must be <a href="https://aka.ms/oai/access" target="_blank">requested and approved</a></li>
                     <li><strong>RBAC Role</strong>: <code>Owner</code> or <code>Contributor</code> + <code>User Access Administrator</code> on the subscription</li>
                     <li><strong>Resource providers</strong> registered: <code>Microsoft.CognitiveServices</code>, <code>Microsoft.Search</code>, <code>Microsoft.KeyVault</code></li>
                     <li><strong>Quota</strong>: Check <a href="https://portal.azure.com/#view/Microsoft_Azure_Capacity/QuotaMenuBlade" target="_blank">Azure Quota page</a> for OpenAI TPM and GPU limits</li>
@@ -207,7 +207,7 @@
                   <ul class="mb-0">
                     <li><strong>GitHub account</strong> with repository write access</li>
                     <li><strong>GitHub Actions</strong> enabled on the target repository</li>
-                    <li><strong>Repository secret</strong>: <code>AZURE_CREDENTIALS</code> — Service Principal JSON
+                    <li><strong>Repository secret</strong>: <code>AZURE_CREDENTIALS</code> - Service Principal JSON
                       <pre class="bg-body-tertiary p-2 rounded mt-1 small mb-0"><code>{
   "clientId": "&lt;sp-app-id&gt;",
   "clientSecret": "&lt;sp-secret&gt;",
@@ -227,11 +227,11 @@
                 <div class="card-header bg-primary text-white fw-bold"><i class="bi bi-pc-display me-2"></i>Local Development</div>
                 <div class="card-body">
                   <ul class="mb-0">
-                    <li><strong>VS Code 1.85+</strong> — <a href="https://code.visualstudio.com" target="_blank">Download</a></li>
-                    <li><strong>Azure CLI 2.60+</strong> — <code>az --version</code> to check, then <code>az login</code></li>
-                    <li><strong>Bicep CLI</strong> — <code>az bicep install</code> (or via VS Code extension)</li>
-                    <li><strong>Git</strong> — configured with push access to GitHub</li>
-                    <li><strong>Node.js 18+</strong> (optional) — for Azure Functions patterns</li>
+                    <li><strong>VS Code 1.85+</strong> - <a href="https://code.visualstudio.com" target="_blank">Download</a></li>
+                    <li><strong>Azure CLI 2.60+</strong> - <code>az --version</code> to check, then <code>az login</code></li>
+                    <li><strong>Bicep CLI</strong> - <code>az bicep install</code> (or via VS Code extension)</li>
+                    <li><strong>Git</strong> - configured with push access to GitHub</li>
+                    <li><strong>Node.js 18+</strong> (optional) - for Azure Functions patterns</li>
                   </ul>
                 </div>
               </div>
@@ -267,13 +267,13 @@
                 <tr><th>If You Need...</th><th>Choose</th><th>Why</th><th>Est. Cost</th></tr>
               </thead>
               <tbody>
-                <tr><td>Shared AI for the whole org, lowest cost</td><td><a href="index.html" class="fw-bold text-primary">Pattern 1 — Centralized Hub</a></td><td>Single OpenAI behind APIM; central governance</td><td>~$3,723/mo</td></tr>
-                <tr><td>Team-level data isolation, autonomy</td><td><a href="index.html" class="fw-bold text-info">Pattern 2 — Decentralized Spoke</a></td><td>Separate subscriptions &amp; VNets per team</td><td>~$7,360/mo</td></tr>
-                <tr><td>Shared models + team-specific RAG</td><td><a href="index.html" class="fw-bold text-success">Pattern 3 — Hybrid Central-Spoke</a></td><td>Central AOAI via APIM + spoke ML endpoints</td><td>~$5,685/mo</td></tr>
-                <tr><td>Full ML lifecycle: train → deploy → monitor</td><td><a href="index.html" class="fw-bold" style="color:#6f42c1">Pattern 4 — AI Factory / MLOps</a></td><td>Azure ML workspace with CI/CD pipelines</td><td>~$6,120/mo</td></tr>
-                <tr><td>Fast PoC, hackathon, minimal infra</td><td><a href="index.html" class="fw-bold text-warning">Pattern 5 — Serverless AI</a></td><td>Functions + Logic Apps; no VNet, pay-per-use</td><td>~$890/mo</td></tr>
-                <tr><td>Regulated data (HIPAA, PCI), zero trust</td><td><a href="index.html" class="fw-bold text-danger">Pattern 6 — Secure Private AI</a></td><td>Fully private VNet, Firewall Premium, HSM</td><td>~$10,240/mo</td></tr>
-                <tr><td>Data-heavy: Databricks, Synapse, Fabric</td><td><a href="index.html" class="fw-bold text-dark">Pattern 7 — Data-Centric Lakehouse</a></td><td>Medallion architecture + vector search</td><td>~$8,350/mo</td></tr>
+                <tr><td>Shared AI for the whole org, lowest cost</td><td><a href="index.html" class="fw-bold text-primary">Pattern 1 - Centralized Hub</a></td><td>Single OpenAI behind APIM; central governance</td><td>~$3,723/mo</td></tr>
+                <tr><td>Team-level data isolation, autonomy</td><td><a href="index.html" class="fw-bold text-info">Pattern 2 - Decentralized Spoke</a></td><td>Separate subscriptions &amp; VNets per team</td><td>~$7,360/mo</td></tr>
+                <tr><td>Shared models + team-specific RAG</td><td><a href="index.html" class="fw-bold text-success">Pattern 3 - Hybrid Central-Spoke</a></td><td>Central AOAI via APIM + spoke ML endpoints</td><td>~$5,685/mo</td></tr>
+                <tr><td>Full ML lifecycle: train → deploy → monitor</td><td><a href="index.html" class="fw-bold" style="color:#6f42c1">Pattern 4 - AI Factory / MLOps</a></td><td>Azure ML workspace with CI/CD pipelines</td><td>~$6,120/mo</td></tr>
+                <tr><td>Fast PoC, hackathon, minimal infra</td><td><a href="index.html" class="fw-bold text-warning">Pattern 5 - Serverless AI</a></td><td>Functions + Logic Apps; no VNet, pay-per-use</td><td>~$890/mo</td></tr>
+                <tr><td>Regulated data (HIPAA, PCI), zero trust</td><td><a href="index.html" class="fw-bold text-danger">Pattern 6 - Secure Private AI</a></td><td>Fully private VNet, Firewall Premium, HSM</td><td>~$10,240/mo</td></tr>
+                <tr><td>Data-heavy: Databricks, Synapse, Fabric</td><td><a href="index.html" class="fw-bold text-dark">Pattern 7 - Data-Centric Lakehouse</a></td><td>Medallion architecture + vector search</td><td>~$8,350/mo</td></tr>
               </tbody>
             </table>
           </div>
@@ -294,7 +294,7 @@
                 <h5 class="fw-bold">Select Your Pattern</h5>
                 <p class="mb-2">Browse the <a href="index.html#patterns">7 Patterns</a> on the home page. Click any pattern card to see its overview, or click <strong>"View Full Details"</strong> to see the complete architecture diagram, BOM table, and service breakdown.</p>
                 <div class="bg-body-tertiary p-3 rounded">
-                  <strong>Compare patterns</strong> side-by-side using the <a href="index.html#comparison">Comparison Table</a> — it shows service count, SLA, cost, and networking model for all 7 patterns.
+                  <strong>Compare patterns</strong> side-by-side using the <a href="index.html#comparison">Comparison Table</a> - it shows service count, SLA, cost, and networking model for all 7 patterns.
                 </div>
               </div>
             </div>
@@ -307,11 +307,11 @@
                 <h5 class="fw-bold">Review the Architecture</h5>
                 <p class="mb-2">Each pattern detail page includes:</p>
                 <ul class="mb-0">
-                  <li><strong>Mermaid architecture diagram</strong> — visual flow of all services and connections (click <em>Enlarge</em> for fullscreen view)</li>
-                  <li><strong>Bill of Materials table</strong> — every Azure service, SKU, monthly cost, and Bicep resource type</li>
-                  <li><strong>Service breakdown cards</strong> — deep-dive into each service's role, configuration, and security posture</li>
-                  <li><strong>Security considerations</strong> — networking, encryption, RBAC, private endpoints</li>
-                  <li><strong>Use cases &amp; constraints</strong> — when to use and when to avoid this pattern</li>
+                  <li><strong>Mermaid architecture diagram</strong> - visual flow of all services and connections (click <em>Enlarge</em> for fullscreen view)</li>
+                  <li><strong>Bill of Materials table</strong> - every Azure service, SKU, monthly cost, and Bicep resource type</li>
+                  <li><strong>Service breakdown cards</strong> - deep-dive into each service's role, configuration, and security posture</li>
+                  <li><strong>Security considerations</strong> - networking, encryption, RBAC, private endpoints</li>
+                  <li><strong>Use cases &amp; constraints</strong> - when to use and when to avoid this pattern</li>
                 </ul>
               </div>
             </div>
@@ -402,19 +402,19 @@
                 <h5 class="fw-bold">Create Your Bicep Files</h5>
                 <p class="mb-2">Using the generated file structure as a guide, create your Bicep modules:</p>
                 <pre class="bg-body-tertiary p-3 rounded small"><code>infra/pattern1/
-├── main.bicep                  # Main orchestrator
-├── parameters.dev.bicepparam   # Dev parameters
-├── parameters.prod.bicepparam  # Prod parameters
-├── modules/
-│   ├── openai.bicep            # Azure OpenAI + model deployments
-│   ├── search.bicep            # Azure AI Search
-│   ├── keyvault.bicep          # Key Vault with RBAC
-│   ├── monitoring.bicep        # Log Analytics + App Insights
-│   ├── storage.bicep           # Storage Account(s)
-│   ├── networking.bicep        # VNet, subnets, NSGs, PEs
-│   └── rbac.bicep              # Role assignments
-└── .github/workflows/
-    └── deploy-pattern1.yml     # CI/CD workflow</code></pre>
+â"œâ"€â"€ main.bicep                  # Main orchestrator
+â"œâ"€â"€ parameters.dev.bicepparam   # Dev parameters
+â"œâ"€â"€ parameters.prod.bicepparam  # Prod parameters
+â"œâ"€â"€ modules/
+â",   â"œâ"€â"€ openai.bicep            # Azure OpenAI + model deployments
+â",   â"œâ"€â"€ search.bicep            # Azure AI Search
+â",   â"œâ"€â"€ keyvault.bicep          # Key Vault with RBAC
+â",   â"œâ"€â"€ monitoring.bicep        # Log Analytics + App Insights
+â",   â"œâ"€â"€ storage.bicep           # Storage Account(s)
+â",   â"œâ"€â"€ networking.bicep        # VNet, subnets, NSGs, PEs
+â",   â""â"€â"€ rbac.bicep              # Role assignments
+â""â"€â"€ .github/workflows/
+    â""â"€â"€ deploy-pattern1.yml     # CI/CD workflow</code></pre>
                 <div class="alert alert-success mb-0 mt-3">
                   <i class="bi bi-lightbulb me-2"></i><strong>Pro Tip:</strong> Use <strong>GitHub Copilot</strong> in VS Code to scaffold Bicep modules. Type a comment like <code>// Azure OpenAI with S0 SKU and private endpoint</code> and Copilot will generate the resource definition.
                 </div>
@@ -447,7 +447,7 @@ git push origin main</code></pre>
               <div class="card h-100 step-card shadow-sm">
                 <div class="card-body">
                   <h6 class="fw-bold"><i class="bi bi-1-circle text-primary me-2"></i>Understand the CAF Hierarchy</h6>
-                  <p class="small mb-0">Review the <strong>Management Group structure</strong> — Root → Platform / Landing Zones / Sandbox. The AI &amp; ML management group sits under Landing Zones with Prod and NonProd subscriptions. This enables AI-specific Azure Policies, quota isolation, and cost tracking.</p>
+                  <p class="small mb-0">Review the <strong>Management Group structure</strong> - Root → Platform / Landing Zones / Sandbox. The AI &amp; ML management group sits under Landing Zones with Prod and NonProd subscriptions. This enables AI-specific Azure Policies, quota isolation, and cost tracking.</p>
                 </div>
               </div>
             </div>
@@ -471,7 +471,7 @@ git push origin main</code></pre>
               <div class="card h-100 step-card shadow-sm">
                 <div class="card-body">
                   <h6 class="fw-bold"><i class="bi bi-4-circle text-primary me-2"></i>Complete the Checklist</h6>
-                  <p class="small mb-0">The <strong>24-item deployment checklist</strong> covers Foundation, Networking, Security &amp; Identity, and AI-specific readiness. Check off each item as you set up your landing zone — it's divided into 4 categories for easy tracking.</p>
+                  <p class="small mb-0">The <strong>24-item deployment checklist</strong> covers Foundation, Networking, Security &amp; Identity, and AI-specific readiness. Check off each item as you set up your landing zone - it's divided into 4 categories for easy tracking.</p>
                 </div>
               </div>
             </div>
@@ -567,7 +567,7 @@ git push origin main</code></pre>
 
         <!-- Deploy Spec Generator -->
         <section id="deploy-spec" class="mb-5">
-          <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2 text-success"></i>Deploy Spec Generator — Detailed Walkthrough</h2>
+          <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-code me-2 text-success"></i>Deploy Spec Generator - Detailed Walkthrough</h2>
           <p>The deployment spec generator creates a complete infrastructure-as-code plan tailored to your chosen pattern. Here's a detailed walkthrough:</p>
 
           <div class="accordion" id="specAccordion">
@@ -589,7 +589,7 @@ git push origin main</code></pre>
               <div id="spec2" class="accordion-collapse collapse" data-bs-parent="#specAccordion">
                 <div class="accordion-body">
                   <p>The form has two sections:</p>
-                  <p><strong>All fields have sensible defaults</strong> — you can generate a spec without filling in anything. Override only what you need:</p>
+                  <p><strong>All fields have sensible defaults</strong> - you can generate a spec without filling in anything. Override only what you need:</p>
                   <table class="table table-sm table-bordered">
                     <thead class="table-light"><tr><th>Field</th><th>Default</th><th>Description</th></tr></thead>
                     <tbody>
@@ -597,7 +597,7 @@ git push origin main</code></pre>
                       <tr><td>Repository Name</td><td><code>azure-ai-patternN</code></td><td>Just the repo name (not the full URL)</td></tr>
                       <tr><td>Branch</td><td><code>main</code></td><td>Target branch for the workflow trigger</td></tr>
                       <tr><td>Target Folder Path</td><td><code>infra/patternN</code></td><td>Where the Bicep files will live</td></tr>
-                      <tr><td>Subscription ID</td><td><code>00000000-...</code></td><td>Azure subscription GUID — replace with yours</td></tr>
+                      <tr><td>Subscription ID</td><td><code>00000000-...</code></td><td>Azure subscription GUID - replace with yours</td></tr>
                       <tr><td>Region</td><td>Canada Central</td><td>Azure region for deployment</td></tr>
                       <tr><td>Resource Group</td><td><code>rg-ai-&lt;env&gt;-&lt;region&gt;-001</code></td><td>CAF-compliant name auto-generated</td></tr>
                       <tr><td>Environment</td><td>Production</td><td>Affects naming and parameter files</td></tr>
@@ -612,12 +612,12 @@ git push origin main</code></pre>
                 <div class="accordion-body">
                   <p>The right side of the generator form shows exactly what you need <strong>before</strong> deploying:</p>
                   <ul>
-                    <li><strong>Azure RBAC Roles</strong> — Owner/Contributor, Cognitive Services Contributor, Network Contributor, etc.</li>
-                    <li><strong>GitHub Requirements</strong> — Write access, Actions enabled, <code>AZURE_CREDENTIALS</code> secret</li>
-                    <li><strong>VS Code Extensions</strong> — Bicep, Azure Account, Azure CLI 2.60+</li>
-                    <li><strong>Quota Pre-Checks</strong> — OpenAI access, GPU quota, TPM/RPM limits, PE limits</li>
+                    <li><strong>Azure RBAC Roles</strong> - Owner/Contributor, Cognitive Services Contributor, Network Contributor, etc.</li>
+                    <li><strong>GitHub Requirements</strong> - Write access, Actions enabled, <code>AZURE_CREDENTIALS</code> secret</li>
+                    <li><strong>VS Code Extensions</strong> - Bicep, Azure Account, Azure CLI 2.60+</li>
+                    <li><strong>Quota Pre-Checks</strong> - OpenAI access, GPU quota, TPM/RPM limits, PE limits</li>
                   </ul>
-                  <p class="mb-0">These are specific to each pattern — Pattern 6 (Secure) will show HSM roles; Pattern 4 (MLOps) will show ML-specific roles.</p>
+                  <p class="mb-0">These are specific to each pattern - Pattern 6 (Secure) will show HSM roles; Pattern 4 (MLOps) will show ML-specific roles.</p>
                 </div>
               </div>
             </div>
@@ -627,43 +627,43 @@ git push origin main</code></pre>
                 <div class="accordion-body">
                   <p>Click <strong>"Generate Deployment Spec Sheet"</strong>. The output follows a logical <strong>Microsoft CAF lifecycle</strong> across 6 phases and 15 sections:</p>
 
-                  <h6 class="fw-semibold mt-3 text-primary">Phase 1 — CAF Ready: Landing Zone Foundation</h6>
+                  <h6 class="fw-semibold mt-3 text-primary">Phase 1 - CAF Ready: Landing Zone Foundation</h6>
                   <ol>
-                    <li><strong>Target Environment</strong> — subscription, region, resource group, GitHub repo, and CAF management group hierarchy</li>
-                    <li><strong>CAF Resource Naming Convention</strong> — auto-generated names using <code>&lt;abbreviation&gt;-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;-&lt;instance&gt;</code> (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank">CAF reference</a>)</li>
-                    <li><strong>CAF Tagging Strategy</strong> — 6 required + 6 recommended tags, <code>tags.bicep</code> module, and Azure Policy JSON (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging" target="_blank">CAF reference</a>)</li>
+                    <li><strong>Target Environment</strong> - subscription, region, resource group, GitHub repo, and CAF management group hierarchy</li>
+                    <li><strong>CAF Resource Naming Convention</strong> - auto-generated names using <code>&lt;abbreviation&gt;-&lt;workload&gt;-&lt;env&gt;-&lt;region&gt;-&lt;instance&gt;</code> (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations" target="_blank">CAF reference</a>)</li>
+                    <li><strong>CAF Tagging Strategy</strong> - 6 required + 6 recommended tags, <code>tags.bicep</code> module, and Azure Policy JSON (<a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-tagging" target="_blank">CAF reference</a>)</li>
                   </ol>
 
-                  <h6 class="fw-semibold mt-3 text-success">Phase 2 — CAF Adopt: Resource Provisioning</h6>
+                  <h6 class="fw-semibold mt-3 text-success">Phase 2 - CAF Adopt: Resource Provisioning</h6>
                   <ol start="4">
-                    <li><strong>Azure Services BOM</strong> — full Bill of Materials with SKUs, Bicep resource types, model deployments, and network topology</li>
-                    <li><strong>Network &amp; Connectivity</strong> — topology, private DNS, NSG rules, firewall, and forced tunneling guidance</li>
+                    <li><strong>Azure Services BOM</strong> - full Bill of Materials with SKUs, Bicep resource types, model deployments, and network topology</li>
+                    <li><strong>Network &amp; Connectivity</strong> - topology, private DNS, NSG rules, firewall, and forced tunneling guidance</li>
                   </ol>
 
-                  <h6 class="fw-semibold mt-3 text-danger">Phase 3 — CAF Secure: Identity, Security &amp; Compliance</h6>
+                  <h6 class="fw-semibold mt-3 text-danger">Phase 3 - CAF Secure: Identity, Security &amp; Compliance</h6>
                   <ol start="6">
-                    <li><strong>Identity &amp; Access Management</strong> — RBAC roles, Managed Identities, Zero Trust principles</li>
-                    <li><strong>Data Protection &amp; Encryption</strong> — encryption at rest/transit, Key Vault, compliance frameworks, Azure Policy</li>
-                    <li><strong>GitHub &amp; DevOps Access</strong> — repo access, OIDC credentials, branch protection</li>
+                    <li><strong>Identity &amp; Access Management</strong> - RBAC roles, Managed Identities, Zero Trust principles</li>
+                    <li><strong>Data Protection &amp; Encryption</strong> - encryption at rest/transit, Key Vault, compliance frameworks, Azure Policy</li>
+                    <li><strong>GitHub &amp; DevOps Access</strong> - repo access, OIDC credentials, branch protection</li>
                   </ol>
 
-                  <h6 class="fw-semibold mt-3 text-warning">Phase 4 — CAF Manage: Operations &amp; Resilience</h6>
+                  <h6 class="fw-semibold mt-3 text-warning">Phase 4 - CAF Manage: Operations &amp; Resilience</h6>
                   <ol start="9">
-                    <li><strong>Monitoring &amp; Diagnostics</strong> — Log Analytics, alerts, dashboards</li>
-                    <li><strong>High Availability</strong> — HA strategy, composite SLA calculation with per-service breakdown</li>
-                    <li><strong>Disaster Recovery</strong> — DR strategy, RPO/RTO targets, failover checklist</li>
+                    <li><strong>Monitoring &amp; Diagnostics</strong> - Log Analytics, alerts, dashboards</li>
+                    <li><strong>High Availability</strong> - HA strategy, composite SLA calculation with per-service breakdown</li>
+                    <li><strong>Disaster Recovery</strong> - DR strategy, RPO/RTO targets, failover checklist</li>
                   </ol>
 
-                  <h6 class="fw-semibold mt-3 text-info">Phase 5 — CAF Govern: Cost Management</h6>
+                  <h6 class="fw-semibold mt-3 text-info">Phase 5 - CAF Govern: Cost Management</h6>
                   <ol start="12">
-                    <li><strong>Cost Management</strong> — budget alerts, optimization best practices, VS Code tooling</li>
+                    <li><strong>Cost Management</strong> - budget alerts, optimization best practices, VS Code tooling</li>
                   </ol>
 
-                  <h6 class="fw-semibold mt-3" style="color:#6f42c1">Phase 6 — Deployment Execution</h6>
+                  <h6 class="fw-semibold mt-3" style="color:#6f42c1">Phase 6 - Deployment Execution</h6>
                   <ol start="13">
-                    <li><strong>Pre-Deployment Checklist</strong> — 25+ items across Azure, governance, networking, security, and DevOps readiness</li>
-                    <li><strong>GitHub Actions CI/CD Workflow</strong> — validate → deploy pipeline YAML with CAF tags</li>
-                    <li><strong>Bicep File Structure</strong> — modules for tags, identity, networking, monitoring, policies, and tests</li>
+                    <li><strong>Pre-Deployment Checklist</strong> - 25+ items across Azure, governance, networking, security, and DevOps readiness</li>
+                    <li><strong>GitHub Actions CI/CD Workflow</strong> - validate → deploy pipeline YAML with CAF tags</li>
+                    <li><strong>Bicep File Structure</strong> - modules for tags, identity, networking, monitoring, policies, and tests</li>
                   </ol>
 
                   <p class="mt-3 mb-0">The spec ends with a <strong>CAF Alignment Summary</strong> table mapping each CAF pillar (Strategy, Plan, Ready, Adopt, Govern, Manage, Secure) to its corresponding sections.</p>
@@ -683,8 +683,8 @@ git push origin main</code></pre>
                   <div class="tool-icon bg-primary text-white me-3"><i class="bi bi-cloud-fill"></i></div>
                   <div>
                     <h6 class="fw-bold mb-1">Azure OpenAI Service</h6>
-                    <p class="small text-muted mb-1">The core of every pattern — provides GPT-4o, text-embedding-3-large, and other models.</p>
-                    <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/" target="_blank" class="small">Documentation ↗</a>
+                    <p class="small text-muted mb-1">The core of every pattern - provides GPT-4o, text-embedding-3-large, and other models.</p>
+                    <a href="https://learn.microsoft.com/en-us/azure/ai-services/openai/" target="_blank" class="small">Documentation →</a>
                   </div>
                 </div>
               </div>
@@ -696,7 +696,7 @@ git push origin main</code></pre>
                   <div>
                     <h6 class="fw-bold mb-1">Azure AI Search</h6>
                     <p class="small text-muted mb-1">Vector + keyword hybrid search for RAG patterns. Indexes documents for retrieval.</p>
-                    <a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" class="small">Documentation ↗</a>
+                    <a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" class="small">Documentation →</a>
                   </div>
                 </div>
               </div>
@@ -708,7 +708,7 @@ git push origin main</code></pre>
                   <div>
                     <h6 class="fw-bold mb-1">API Management</h6>
                     <p class="small text-muted mb-1">Gateway for centralized patterns (1, 3). Rate limiting, auth, caching, load balancing.</p>
-                    <a href="https://learn.microsoft.com/en-us/azure/api-management/" target="_blank" class="small">Documentation ↗</a>
+                    <a href="https://learn.microsoft.com/en-us/azure/api-management/" target="_blank" class="small">Documentation →</a>
                   </div>
                 </div>
               </div>
@@ -720,7 +720,7 @@ git push origin main</code></pre>
                   <div>
                     <h6 class="fw-bold mb-1">Key Vault / Managed HSM</h6>
                     <p class="small text-muted mb-1">Secure key, secret, and certificate storage. HSM for regulated patterns (6).</p>
-                    <a href="https://learn.microsoft.com/en-us/azure/key-vault/" target="_blank" class="small">Documentation ↗</a>
+                    <a href="https://learn.microsoft.com/en-us/azure/key-vault/" target="_blank" class="small">Documentation →</a>
                   </div>
                 </div>
               </div>
@@ -732,7 +732,7 @@ git push origin main</code></pre>
                   <div>
                     <h6 class="fw-bold mb-1">Azure Machine Learning</h6>
                     <p class="small text-muted mb-1">End-to-end ML platform for training, deployment, MLOps. Pattern 3, 4, 7.</p>
-                    <a href="https://learn.microsoft.com/en-us/azure/machine-learning/" target="_blank" class="small">Documentation ↗</a>
+                    <a href="https://learn.microsoft.com/en-us/azure/machine-learning/" target="_blank" class="small">Documentation →</a>
                   </div>
                 </div>
               </div>
@@ -744,7 +744,7 @@ git push origin main</code></pre>
                   <div>
                     <h6 class="fw-bold mb-1">Azure Firewall Premium</h6>
                     <p class="small text-muted mb-1">TLS inspection, threat intel, application rules. Patterns 2, 3, 6.</p>
-                    <a href="https://learn.microsoft.com/en-us/azure/firewall/" target="_blank" class="small">Documentation ↗</a>
+                    <a href="https://learn.microsoft.com/en-us/azure/firewall/" target="_blank" class="small">Documentation →</a>
                   </div>
                 </div>
               </div>
@@ -787,7 +787,7 @@ git push origin main</code></pre>
                       <li>Run <code>az bicep build --file main.bicep</code> locally to check syntax</li>
                       <li>Use <code>az deployment group what-if</code> before deploying to see planned changes</li>
                       <li>Check <strong>resource provider registration</strong>: <code>az provider register --namespace Microsoft.CognitiveServices</code></li>
-                      <li>Verify <strong>naming conventions</strong> — some resources (Storage, ACR) require globally unique names</li>
+                      <li>Verify <strong>naming conventions</strong> - some resources (Storage, ACR) require globally unique names</li>
                     </ul>
                   </td>
                 </tr>
@@ -807,7 +807,7 @@ git push origin main</code></pre>
                   <td>
                     <ul class="mb-0 small">
                       <li>Request GPU quota increase via <a href="https://portal.azure.com/#view/Microsoft_Azure_Capacity/QuotaMenuBlade" target="_blank">Quotas page</a></li>
-                      <li>Try a different <strong>region</strong> — GPU availability varies by location</li>
+                      <li>Try a different <strong>region</strong> - GPU availability varies by location</li>
                       <li>Use <strong>Spot Instances</strong> for training workloads to reduce cost</li>
                     </ul>
                   </td>
@@ -816,7 +816,7 @@ git push origin main</code></pre>
                   <td><strong>Mermaid diagrams not rendering</strong></td>
                   <td>
                     <ul class="mb-0 small">
-                      <li>Mermaid.js v11 is loaded from CDN — check your network/firewall isn't blocking <code>cdn.jsdelivr.net</code></li>
+                      <li>Mermaid.js v11 is loaded from CDN - check your network/firewall isn't blocking <code>cdn.jsdelivr.net</code></li>
                       <li>Try refreshing the page or switching browsers (Chrome/Edge recommended)</li>
                       <li>Click the <strong>Enlarge</strong> button for a cleaner fullscreen view</li>
                     </ul>
@@ -835,7 +835,7 @@ git push origin main</code></pre>
               <h2 class="accordion-header"><button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">Which pattern is cheapest?</button></h2>
               <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                  <strong>Pattern 5 — Serverless AI</strong> at ~$890/month. It uses Azure Functions (Consumption), Logic Apps, and pay-per-token OpenAI — no VNet, no Firewall, no VMs. Ideal for PoCs and internal tools. See the <a href="index.html#costs">Cost Comparison</a> for all patterns.
+                  <strong>Pattern 5 - Serverless AI</strong> at ~$890/month. It uses Azure Functions (Consumption), Logic Apps, and pay-per-token OpenAI - no VNet, no Firewall, no VMs. Ideal for PoCs and internal tools. See the <a href="index.html#costs">Cost Comparison</a> for all patterns.
                 </div>
               </div>
             </div>
@@ -843,7 +843,7 @@ git push origin main</code></pre>
               <h2 class="accordion-header"><button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">Which pattern is most secure?</button></h2>
               <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
-                  <strong>Pattern 6 — Secure Private AI</strong>. Fully private VNet with zero public endpoints, Azure Firewall Premium with TLS inspection, Managed HSM for keys, DDoS Protection, Azure Bastion for management access. Required for HIPAA, PCI-DSS, and ITAR workloads.
+                  <strong>Pattern 6 - Secure Private AI</strong>. Fully private VNet with zero public endpoints, Azure Firewall Premium with TLS inspection, Managed HSM for keys, DDoS Protection, Azure Bastion for management access. Required for HIPAA, PCI-DSS, and ITAR workloads.
                 </div>
               </div>
             </div>
@@ -878,8 +878,8 @@ git push origin main</code></pre>
                   <ol class="mb-0">
                     <li>Use the <a href="index.html#costs">Live Pricing</a> section on the home page for real-time Azure Retail API prices</li>
                     <li>Use the <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank">Azure Pricing Calculator</a> for custom configurations</li>
-                    <li>Check the BOM table on each pattern detail page — it lists per-service monthly costs</li>
-                    <li>For OpenAI tokens, estimate: <code>tokens × price_per_1k_tokens / 1000</code></li>
+                    <li>Check the BOM table on each pattern detail page - it lists per-service monthly costs</li>
+                    <li>For OpenAI tokens, estimate: <code>tokens Ã- price_per_1k_tokens / 1000</code></li>
                   </ol>
                 </div>
               </div>
@@ -938,15 +938,10 @@ az ad sp create-for-rbac \
     </div>
   </footer>
 
-    <button id="backToTop" class="btn btn-primary btn-sm rounded-circle shadow"><i class="bi bi-arrow-up"></i></button>
+  <button id="backToTop" class="btn btn-primary btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55DQYC+9uNTmQvcQV1RoGtR1uxHnL" crossorigin="anonymous"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
   <script>
-      // Back to top button
-      document.getElementById('backToTop').addEventListener('click', () => {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-      });
-
     const toggle=document.getElementById('themeToggle');
     toggle.addEventListener('click',()=>{
       const html=document.documentElement;
@@ -966,3 +961,4 @@ az ad sp create-for-rbac \
   </script>
 </body>
 </html>
+

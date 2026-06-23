@@ -17,7 +17,9 @@
     { "source": "/module-specs", "destination": "/module-spec-guide.html" },
     { "source": "/quiz", "destination": "/quiz.html" },
     { "source": "/monitoring", "destination": "/monitoring.html" },
-    { "source": "/help", "destination": "/help.html" }
+    { "source": "/help", "destination": "/help.html" },
+    { "source": "/top3", "destination": "/top3.html" },
+    { "source": "/temporal", "destination": "/Temporal_pattern_June_2026.html" }
   ],
   "headers": [
     {

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure Backup Pattern A Live Showcase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root { --az-blue:#0078d4; --az-cyan:#00a4ef; --az-green:#107c10; --az-amber:#ffb900; --ink:#172033; --panel:#ffffff; --line:#d7e2f0; }
+    body { font-family: Aptos, "Segoe UI", sans-serif; color:var(--ink); background:linear-gradient(135deg,#f7fbff 0%,#eef6ff 42%,#f8fbf7 100%); }
+    .hero { min-height:52vh; display:flex; align-items:center; background:radial-gradient(circle at 12% 20%,rgba(0,120,212,.18),transparent 28%), radial-gradient(circle at 78% 10%,rgba(16,124,16,.16),transparent 24%), linear-gradient(135deg,#061b32,#0d3a63 58%,#155e75); color:#fff; }
+    .hero h1 { font-size:clamp(2.2rem,5vw,4.7rem); line-height:.96; letter-spacing:0; }
+    .section-kicker { color:var(--az-blue); font-weight:800; text-transform:uppercase; letter-spacing:.08em; font-size:.78rem; }
+    .resource-card, .feature-panel, .status-tile { border:0; border-radius:12px; box-shadow:0 12px 30px rgba(14,40,70,.09); background:var(--panel); }
+    .resource-card { transition:transform .16s ease, box-shadow .16s ease; }
+    .resource-card:hover { transform:translateY(-4px); box-shadow:0 18px 42px rgba(14,40,70,.14); }
+    .resource-icon { width:48px; height:48px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; background:rgba(0,120,212,.12); color:var(--az-blue); font-size:1.45rem; }
+    .architecture { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1rem; position:relative; }
+    .arch-node { min-height:140px; border:1px solid var(--line); border-radius:12px; background:#fff; padding:1rem; position:relative; overflow:hidden; }
+    .arch-node::after { content:""; position:absolute; inset:auto -20px -34px auto; width:90px; height:90px; border-radius:50%; background:rgba(0,120,212,.08); }
+    .arch-arrow { align-self:center; text-align:center; color:var(--az-blue); font-size:2rem; }
+    .metric { font-size:2rem; font-weight:800; }
+    .badge-soft { background:rgba(0,120,212,.1); color:#075a9c; border:1px solid rgba(0,120,212,.18); }
+    .timeline-step { border-left:4px solid var(--az-blue); padding:.25rem 0 .85rem 1rem; margin-bottom:.75rem; }
+    .code-block { background:#071322; color:#e7f2ff; border-radius:12px; padding:1rem; overflow:auto; font-size:.9rem; }
+    .click-tab.active { background:var(--az-blue); color:#fff; }
+    .portal-link { text-decoration:none; }
+    .portal-link .bi-box-arrow-up-right { opacity:.72; }
+    @media (max-width: 992px) { .architecture { grid-template-columns:1fr; } .arch-arrow { transform:rotate(90deg); } }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="azure-backup.html"><i class="bi bi-shield-check text-primary me-2"></i>Azure Backup Pattern A</a>
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary btn-sm" href="azure-backup.html#deployment-patterns"><i class="bi bi-arrow-left me-1"></i>Patterns</a>
+        <a class="btn btn-primary btn-sm" href="downloads/azure-backup/pattern-a-core-demo-deployment.md" download><i class="bi bi-download me-1"></i>Download Spec</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container py-5">
+      <div class="row align-items-center gy-4">
+        <div class="col-lg-7">
+          <div class="badge rounded-pill text-bg-light text-primary mb-3">Live deployment showcase</div>
+          <h1 class="fw-bold mb-3">Core Demo Environment</h1>
+          <p class="lead mb-4">A deployed Pattern A Azure Backup environment with clickable resource links, architecture flow, protection status, and restore demo path.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-light btn-lg" href="#resources"><i class="bi bi-grid-3x3-gap me-2"></i>Open Resources</a>
+            <a class="btn btn-outline-light btn-lg" href="#tour"><i class="bi bi-play-circle me-2"></i>Feature Tour</a>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="row g-3">
+            <div class="col-6"><div class="status-tile p-3"><div class="metric text-success">9</div><div>Tagged resources</div></div></div>
+            <div class="col-6"><div class="status-tile p-3"><div class="metric text-primary">3</div><div>Resource groups</div></div></div>
+            <div class="col-6"><div class="status-tile p-3"><div class="metric text-warning">0</div><div>Backup jobs</div></div></div>
+            <div class="col-6"><div class="status-tile p-3"><div class="metric text-info">LRS</div><div>Storage posture</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="py-5" id="status">
+      <div class="container">
+        <div class="section-kicker">Deployment state</div>
+        <h2 class="fw-bold mb-4">Pattern A status board</h2>
+        <div class="row g-4">
+          <div class="col-lg-4"><div class="feature-panel p-4 h-100"><i class="bi bi-check-circle-fill text-success fs-2"></i><h3 class="h5 fw-bold mt-3">Infrastructure deployed</h3><p class="mb-0">VM, storage, vault, policies, network, and Log Analytics resources exist in Canada Central.</p></div></div>
+          <div class="col-lg-4"><div class="feature-panel p-4 h-100"><i class="bi bi-exclamation-triangle-fill text-warning fs-2"></i><h3 class="h5 fw-bold mt-3">Protection pending</h3><p class="mb-0">No protected items or backup jobs are visible yet. VM and Azure Files protection still need operational enablement.</p></div></div>
+          <div class="col-lg-4"><div class="feature-panel p-4 h-100"><i class="bi bi-activity text-primary fs-2"></i><h3 class="h5 fw-bold mt-3">Monitoring ready</h3><p class="mb-0">The Recovery Services vault is connected to the Log Analytics workspace through diagnostic settings.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-body-tertiary" id="architecture">
+      <div class="container">
+        <div class="section-kicker">Architecture</div>
+        <h2 class="fw-bold mb-4">Clickable deployment flow</h2>
+        <div class="architecture">
+          <a class="arch-node portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-core/providers/Microsoft.Compute/virtualMachines/vm-win-backup-demo-01"><span class="badge badge-soft mb-2">Workload</span><h3 class="h5 fw-bold">vm-win-backup-demo-01</h3><p class="mb-0">Windows demo VM with OS disk and attached data disk.</p><i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-3"></i></a>
+          <div class="arch-arrow"><i class="bi bi-arrow-right-circle-fill"></i></div>
+          <a class="arch-node portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-protection/providers/Microsoft.RecoveryServices/vaults/rsv-backup-demo-cc"><span class="badge badge-soft mb-2">Protection</span><h3 class="h5 fw-bold">rsv-backup-demo-cc</h3><p class="mb-0">Recovery Services vault with daily VM and Azure Files policies.</p><i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-3"></i></a>
+          <a class="arch-node portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-core/providers/Microsoft.Storage/storageAccounts/stbackupdemo2rb5gngle6ad"><span class="badge badge-soft mb-2">Data</span><h3 class="h5 fw-bold">demo-share</h3><p class="mb-0">Azure Files share hosted in stbackupdemo2rb5gngle6ad.</p><i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-3"></i></a>
+          <div class="arch-arrow"><i class="bi bi-arrow-right-circle-fill"></i></div>
+          <a class="arch-node portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-ops/providers/Microsoft.OperationalInsights/workspaces/law-backup-demo-cc"><span class="badge badge-soft mb-2">Operations</span><h3 class="h5 fw-bold">law-backup-demo-cc</h3><p class="mb-0">Log Analytics workspace for vault diagnostics and KQL review.</p><i class="bi bi-box-arrow-up-right position-absolute top-0 end-0 m-3"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5" id="resources">
+      <div class="container">
+        <div class="section-kicker">Azure resources</div>
+        <h2 class="fw-bold mb-4">Open the live deployment</h2>
+        <div class="row g-4">
+          <div class="col-md-6 col-xl-3"><a class="card resource-card h-100 portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-core"><div class="card-body"><span class="resource-icon"><i class="bi bi-folder2-open"></i></span><h3 class="h5 fw-bold mt-3">Core RG</h3><p class="text-body-secondary mb-0">rg-backup-demo-core</p></div></a></div>
+          <div class="col-md-6 col-xl-3"><a class="card resource-card h-100 portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-protection"><div class="card-body"><span class="resource-icon"><i class="bi bi-shield-lock"></i></span><h3 class="h5 fw-bold mt-3">Protection RG</h3><p class="text-body-secondary mb-0">rg-backup-demo-protection</p></div></a></div>
+          <div class="col-md-6 col-xl-3"><a class="card resource-card h-100 portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-ops"><div class="card-body"><span class="resource-icon"><i class="bi bi-graph-up"></i></span><h3 class="h5 fw-bold mt-3">Operations RG</h3><p class="text-body-secondary mb-0">rg-backup-demo-ops</p></div></a></div>
+          <div class="col-md-6 col-xl-3"><a class="card resource-card h-100 portal-link" target="_blank" href="https://portal.azure.com/#@/resource/subscriptions/e62428e7-08dd-4bc2-82e2-2c51586d9105/resourceGroups/rg-backup-demo-protection/providers/Microsoft.RecoveryServices/vaults/rsv-backup-demo-cc"><div class="card-body"><span class="resource-icon"><i class="bi bi-safe2"></i></span><h3 class="h5 fw-bold mt-3">Vault</h3><p class="text-body-secondary mb-0">rsv-backup-demo-cc</p></div></a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-5 bg-body-tertiary" id="tour">
+      <div class="container">
+        <div class="section-kicker">Feature tour</div>
+        <h2 class="fw-bold mb-4">Showcase the demo story</h2>
+        <div class="row g-4 align-items-start">
+          <div class="col-lg-4">
+            <div class="d-grid gap-2">
+              <button class="btn click-tab active text-start" data-tour="protect"><i class="bi bi-shield-check me-2"></i>Protect workload</button>
+              <button class="btn click-tab text-start" data-tour="restore"><i class="bi bi-arrow-counterclockwise me-2"></i>Restore path</button>
+              <button class="btn click-tab text-start" data-tour="monitor"><i class="bi bi-search me-2"></i>Monitor jobs</button>
+              <button class="btn click-tab text-start" data-tour="resilience"><i class="bi bi-lock me-2"></i>Resilience controls</button>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="feature-panel p-4">
+              <h3 class="fw-bold" id="tourTitle">Protect workload</h3>
+              <p class="lead" id="tourText">Start with the deployed VM and Azure file share, then enable protection in the Recovery Services vault using the daily demo policies.</p>
+              <pre class="code-block mb-0" id="tourCommand">./scripts/trigger-backup.ps1 `
+  -ProtectionResourceGroupName rg-backup-demo-protection `
+  -VaultName rsv-backup-demo-cc `
+  -VmName vm-win-backup-demo-01 `
+  -StorageAccountName stbackupdemo2rb5gngle6ad</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="py-4 text-center bg-white">
+    <div class="container">
+      <p class="mb-1 text-body-secondary">Pattern A deployed in Jan 2026 Subscription, Canada Central.</p>
+      <a href="azure-backup.html" class="text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to Azure Backup patterns</a>
+    </div>
+  </footer>
+
+  <script>
+    const tours = {
+      protect: { title:'Protect workload', text:'Start with the deployed VM and Azure file share, then enable protection in the Recovery Services vault using the daily demo policies.', command:'./scripts/trigger-backup.ps1 `\n  -ProtectionResourceGroupName rg-backup-demo-protection `\n  -VaultName rsv-backup-demo-cc `\n  -VmName vm-win-backup-demo-01 `\n  -StorageAccountName stbackupdemo2rb5gngle6ad' },
+      restore: { title:'Restore path', text:'Use a recovery point to demonstrate VM file recovery, restored disks, or Azure Files item-level restore after the initial backup completes.', command:'Open rsv-backup-demo-cc > Backup items > vm-win-backup-demo-01 > File Recovery or Restore VM' },
+      monitor: { title:'Monitor jobs', text:'Use Log Analytics and the vault job view to show backup jobs, protected items, failed operations, and vault activity.', command:'AzureDiagnostics\n| where Category has "AzureBackup"\n| order by TimeGenerated desc' },
+      resilience: { title:'Resilience controls', text:'Show soft delete, RBAC separation, no public VM ingress, short demo retention, and the immutability caveat for disposable environments.', command:'Soft delete: Enabled\nImmutable vault: Not locked for cleanup\nRetention: 7 days\nStorage redundancy: LRS' }
+    };
+    document.querySelectorAll('.click-tab').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.click-tab').forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        const tour = tours[button.dataset.tour];
+        document.getElementById('tourTitle').textContent = tour.title;
+        document.getElementById('tourText').textContent = tour.text;
+        document.getElementById('tourCommand').textContent = tour.command;
+      });
+    });
+  </script>
+</body>
+</html>

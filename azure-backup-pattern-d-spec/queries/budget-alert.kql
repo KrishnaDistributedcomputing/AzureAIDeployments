@@ -1,0 +1,17 @@
+// Query 4: Budget Alert (Monthly backup spend vs. budget)
+// Pattern D - Enterprise Landing Zone Pattern
+// Purpose: Alert when backup spending exceeds budget to enable cost control
+// Frequency: Daily check, alert on budget overage
+
+AzureDiagnostics
+| where ResourceType == "VAULTS"
+| extend CostCenter = tostring(parse_json(Tags)["cost-center"])
+| summarize 
+    TotalBackupGB = sum(todouble(parse_json(Details)["BackupItemSize"]))
+    by CostCenter
+| extend 
+    EstimatedMonthlyCost = TotalBackupGB * 0.05,
+    BudgetThreshold = 5000,
+    BudgetStatus = iff(EstimatedMonthlyCost > 5000, "🔴 OVER BUDGET", "🟢 WITHIN BUDGET"),
+    VariancePercent = round(((EstimatedMonthlyCost - 5000) / 5000) * 100, 1)
+| order by EstimatedMonthlyCost desc

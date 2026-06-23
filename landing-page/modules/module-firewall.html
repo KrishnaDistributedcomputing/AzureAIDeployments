@@ -1,245 +1,493 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Firewall - Network Security</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
-    <style>
-        :root {--orange: #e67e22; --dark-bg: #1a1a1a;}
-        body {background-color: var(--dark-bg); color: #e0e0e0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6;}
-        .navbar {background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%); border-bottom: 3px solid var(--orange);}
-        .navbar-brand {font-weight: bold; color: var(--orange) !important; font-size: 1.5rem;}
-        .nav-link {color: #b0b0b0 !important; margin: 0 8px; transition: color 0.3s ease;}
-        .nav-link:hover {color: var(--orange) !important;}
-        .hero {background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); padding: 80px 20px; text-align: center; border-bottom: 3px solid var(--orange); margin-bottom: 40px;}
-        .hero-icon {font-size: 4rem; margin-bottom: 20px; display: block;}
-        .hero h1 {color: var(--orange); font-weight: bold; font-size: 2.8rem; margin-bottom: 15px;}
-        .hero .subtitle {font-size: 1.2rem; color: #ecf0f1; max-width: 700px; margin: 0 auto;}
-        .section-title {color: var(--orange); font-weight: bold; font-size: 2rem; margin-top: 40px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid var(--orange);}
-        .card {background-color: #2c2c2c; border: 1px solid #e67e22; border-radius: 8px; transition: transform 0.3s ease, box-shadow 0.3s ease; margin-bottom: 20px;}
-        .card:hover {transform: translateY(-5px); box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);}
-        .card-header {background-color: var(--orange); color: white; font-weight: bold; border-radius: 0;}
-        .card-body {color: #e0e0e0;}
-        .capability-list {list-style: none; padding: 0;}
-        .capability-list li {padding: 10px 0; border-bottom: 1px solid #444; color: #b0b0b0;}
-        .capability-list li:before {content: "âœ" "; color: var(--orange); font-weight: bold; margin-right: 10px;}
-        .pricing-tier {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 20px; margin: 15px 0; border-radius: 4px;}
-        .pricing-tier h5 {color: var(--orange); margin-bottom: 10px;}
-        .use-case-card {background-color: #2c2c2c; border: 1px solid #444; padding: 20px; margin: 15px 0; border-radius: 4px; border-left: 4px solid var(--orange);}
-        .use-case-card h5 {color: var(--orange); margin-bottom: 10px;}
-        .faq-item {background-color: #2c2c2c; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px;}
-        .faq-item h5 {color: var(--orange); margin-bottom: 10px;}
-        .sidebar {background-color: #2c2c2c; border: 1px solid #e67e22; padding: 20px; border-radius: 8px; margin-bottom: 20px;}
-        .sidebar h5 {color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 10px;}
-        .sidebar-item {padding: 8px 0; border-bottom: 1px solid #444; color: #b0b0b0; font-size: 0.95rem;}
-        .sidebar-item:last-child {border-bottom: none;}
-        .code-block {background-color: #1a1a1a; border-left: 4px solid var(--orange); padding: 15px; margin: 15px 0; border-radius: 4px; overflow-x: auto; font-family: 'Courier New', monospace; color: #7ec699; font-size: 0.9rem;}
-        footer {background-color: #2c2c2c; border-top: 2px solid var(--orange); padding: 30px 0; margin-top: 50px; color: #b0b0b0; text-align: center;}
-        .container-main {max-width: 1200px; margin: 0 auto; padding: 0 20px;}
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure Firewall | Core Azure Modules</title>
+  <meta name="description" content="Azure Firewall - managed, stateful network security with threat intelligence, policy control, and enterprise observability." />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+  <style>
+    :root {
+      --azure-navy: #0050a0;
+      --azure-blue: #0078d4;
+      --azure-sky: #00a2e8;
+      --azure-cyan: #50e6ff;
+      --accent: var(--azure-blue);
+      --accent-dark: var(--azure-cyan);
+    }
+    body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; }
+    .module-icon { font-size: 3.5rem; margin: 20px 0; }
+    .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+    .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+    .btn-deploy { background: var(--accent); color: white; border: none; }
+    .btn-deploy:hover { background: var(--azure-navy); color: white; }
+    .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸ›¡ï¸</span>
-            <h1>Azure Firewall</h1>
-            <p class="subtitle">Stateful, managed network firewall with threat intelligence and built-in DDoS protection</p>
-        </div>
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/modules">
+        <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <div class="container-main">
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="module-icon">🛡️</div>
+          <h1 class="mb-3">Azure Firewall</h1>
+          <p class="lead mb-4">Managed, stateful network firewall for enterprise-grade ingress and egress control with threat intelligence and centralized policy governance.</p>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+          <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div style="font-size: 10rem; opacity: 0.3;">🛡️</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <section class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+          <p class="fs-5">Azure Firewall is a cloud-native, highly available network security service for filtering east-west and north-south traffic. It supports L3-L7 policies, application FQDN rules, DNAT/SNAT, and threat-intelligence based controls with centralized monitoring.</p>
+
+          <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+          <ul class="fs-5">
+            <li><strong>Stateful L3-L7 Inspection:</strong> Evaluate traffic flows using network, application, and NAT rule collections</li>
+            <li><strong>Threat Intelligence:</strong> Alert or deny traffic to known malicious IPs and domains</li>
+            <li><strong>Policy Hierarchy:</strong> Centralized management with Firewall Policy and reusable rule collection groups</li>
+            <li><strong>TLS Inspection (Premium):</strong> Decrypt and inspect outbound HTTPS flows for advanced filtering</li>
+            <li><strong>IDPS (Premium):</strong> Signature-driven intrusion detection and prevention</li>
+            <li><strong>Zone Redundancy:</strong> Multi-zone deployment support for resilience and continuity</li>
+          </ul>
+
+          <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🏗️ Hub-and-Spoke Security</h5>
+                  <p class="card-text">Centralize network controls in a hub VNet and inspect transit traffic from spoke workloads.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🌐 Controlled Internet Egress</h5>
+                  <p class="card-text">Route outbound traffic through approved FQDN and destination rules with full audit trails.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🧠 Threat Intelligence Filtering</h5>
+                  <p class="card-text">Block communication with known malicious endpoints to reduce lateral and external risk.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🔒 Zero Trust Enforcement</h5>
+                  <p class="card-text">Apply explicit allow-list rules and deny-by-default posture for sensitive workloads.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="spec-box">
+            <h5 class="fw-bold">📊 Quick Stats</h5>
+            <ul class="list-unstyled">
+              <li><strong>Typical Monthly:</strong> $1,050 - $4,800</li>
+              <li><strong>SLA Availability:</strong> 99.95%</li>
+              <li><strong>Tier Options:</strong> Standard, Premium</li>
+              <li><strong>Threat Mode:</strong> Alert or Deny</li>
+              <li><strong>Throughput:</strong> Auto-scales by platform design</li>
+            </ul>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🚀 Deployment</h5>
+            <p><small><strong>Resource Provider:</strong> Microsoft.Network</small></p>
+            <p><small><strong>SKU:</strong> AZFW_VNet (Standard/Premium)</small></p>
+            <p><small><strong>Subnet:</strong> Dedicated AzureFirewallSubnet required</small></p>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🔗 Dependencies</h5>
+            <ul class="list-unstyled small">
+              <li>✓ Virtual Network + AzureFirewallSubnet</li>
+              <li>✓ Public IP (Standard SKU)</li>
+              <li>✓ Azure Monitor (diagnostics and metrics)</li>
+              <li>✓ Route tables (forced tunneling scenarios)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Standard</h5>
+            <p class="text-muted">Core enterprise firewall controls</p>
+            <p><strong>Approx:</strong> $1,000-2,000/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ Network/application/NAT rules</li>
+              <li>✓ Threat intelligence filtering</li>
+              <li>✓ Centralized logging support</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier recommended">
+            <h5>Premium</h5>
+            <p class="text-muted">Advanced inspection and IDPS</p>
+            <p><strong>Approx:</strong> $2,200-4,800/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ TLS inspection</li>
+              <li>✓ IDPS signatures and controls</li>
+              <li>✓ URL filtering enhancements</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Data Processing</h5>
+            <p class="text-muted">Usage-based processing charges</p>
+            <p><strong>Approx:</strong> Variable by GB processed</p>
+            <ul class="list-unstyled small">
+              <li>✓ Scales with traffic volume</li>
+              <li>✓ Impacts total monthly run rate</li>
+              <li>✓ Monitor with budget thresholds</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+        <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can vary by region, SKU tier, traffic volume, policy complexity, and Microsoft pricing updates. Always confirm current rates in the official Azure pricing calculator before approval.
+      </div>
+    </section>
+
+    <section id="deployment" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+      <p class="text-muted">Spec-based development guide for Azure Firewall. Author and validate this spec before requesting infrastructure provisioning.</p>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">📋 Spec Header - DS-AFW-001</h5>
+        <table class="table table-sm small mb-0">
+          <tbody>
+            <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AFW-001</td></tr>
+            <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+            <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+            <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+            <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+            <tr><td class="fw-medium">Applies to</td><td>Azure Firewall</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">⚙️ Required Parameters</h5>
+        <p class="small text-muted mb-3">All parameters must be resolved before the spec advances to <strong>Approved</strong> status.</p>
+        <table class="table table-sm small">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Parameter-driven deployment region for the firewall and public IP resources</td></tr>
+            <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage: <code>dev</code> | <code>staging</code> | <code>prod</code></td></tr>
+            <tr><td><code>firewallSkuTier</code></td><td>string</td><td>Yes</td><td><code>Standard</code> or <code>Premium</code> based on inspection requirements</td></tr>
+            <tr><td><code>threatIntelMode</code></td><td>string</td><td>Yes</td><td><code>Alert</code> or <code>Deny</code> based on risk posture</td></tr>
+            <tr><td><code>zones</code></td><td>array</td><td>Yes</td><td>Availability zones for resilient deployment</td></tr>
+            <tr><td><code>networkRuleCollections</code></td><td>array</td><td>Yes</td><td>Allow/deny network rule collections with priorities</td></tr>
+            <tr><td><code>applicationRuleCollections</code></td><td>array</td><td>Yes</td><td>FQDN and protocol-based rule collections</td></tr>
+            <tr><td><code>privateEndpointRouting</code></td><td>bool</td><td>Conditional</td><td>Required when forcing private connectivity controls</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">🔗 Dependency Wiring</h5>
         <div class="row">
-            <div class="col-lg-8">
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure Firewall is a managed, cloud-based network security service that protects your VNet resources. It's a stateful firewall with built-in high availability and unrestricted scalability.</p>
-                            <p>Provides Layer 4 and Layer 7 filtering, threat intelligence integration, and seamless Azure Monitor integration.</p>
-                        </div>
-                    </div>
-                </section>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Virtual Network</h6>
+                <p class="small mb-1">Firewall requires dedicated <code>AzureFirewallSubnet</code> in target VNet.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Public IP</h6>
+                <p class="small mb-1">Standard SKU public IP supports inbound/outbound inspection and NAT.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Azure Monitor</h6>
+                <p class="small mb-1">Diagnostic logs and metrics must be collected for detection and response.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Stateful Inspection:</strong> Full Layer 4 protocol inspection and filtering</li>
-                        <li><strong>Application Rules:</strong> Layer 7 filtering with FQDNs and HTTP/HTTPS inspection</li>
-                        <li><strong>Network Rules:</strong> Layer 4 filtering with protocols, ports, and IP addresses</li>
-                        <li><strong>NAT Rules:</strong> Source and destination network address translation</li>
-                        <li><strong>Threat Intelligence:</strong> Blocking known malicious IPs and domains</li>
-                        <li><strong>High Availability:</strong> Zone-redundant deployments across zones</li>
-                        <li><strong>Scalability:</strong> Handles unlimited connections simultaneously</li>
-                        <li><strong>Logging & Monitoring:</strong> Full integration with Azure Monitor and Log Analytics</li>
-                    </ul>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">✓ Acceptance Gates</h5>
+        <p class="small text-muted mb-3">All gates must pass before the deployment is considered production-ready.</p>
+        <ul class="small mb-0">
+          <li class="mb-2"><strong>Gate 1 - Rule enforcement:</strong> Network and application rules must enforce expected allow/deny behavior under test traffic matrix.</li>
+          <li class="mb-2"><strong>Gate 2 - Threat intelligence:</strong> Configured threat mode must generate expected alerts or blocks for known malicious indicators.</li>
+          <li class="mb-2"><strong>Gate 3 - Availability:</strong> Zone-redundant deployment health must remain green across selected zones.</li>
+          <li class="mb-2"><strong>Gate 4 - Logging:</strong> Firewall logs, rule hits, and threat events must appear in Log Analytics within 15 minutes.</li>
+          <li><strong>Gate 5 - Routing validation:</strong> UDR/egress paths must force targeted traffic through firewall without bypass routes.</li>
+        </ul>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ-ï¸ Hub-Spoke Architecture</h5>
-                        <p>Centralize firewall in hub VNet for spoke traffic inspection.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">🚀 Spec Workflow</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Author:</strong> Define required rule collections, threat mode, and routing assumptions; resolve all <code>&lt;placeholder&gt;</code> values.</li>
+          <li class="mb-2"><strong>Review:</strong> Submit for network and security review with at least one non-author approver.</li>
+          <li class="mb-2"><strong>CI gate:</strong> Validate rule priorities, subnet dependencies, and policy schema before IaC generation.</li>
+          <li class="mb-2"><strong>Deploy:</strong> Approved spec deploys firewall, public IP, and baseline rule collections.</li>
+          <li><strong>Validate:</strong> Execute acceptance tests and archive evidence in release records.</li>
+        </ol>
+      </div>
+    </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸŒ Internet Gateway</h5>
-                        <p>Single egress point for all VNet traffic with centralized logging.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+      <p class="text-muted">Use this workflow to deploy Azure Firewall from the parameter-driven specification and validate the environment before traffic cutover.</p>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ" Threat Prevention</h5>
-                        <p>Block malicious IPs/domains using threat intelligence feeds.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">1. Prerequisites</h5>
+        <ul class="small mb-0">
+          <li>Azure CLI with Bicep support installed and authenticated with the target subscription</li>
+          <li>An existing virtual network with a dedicated <code>AzureFirewallSubnet</code></li>
+          <li>Approved values for <code>location</code>, <code>environment</code>, <code>firewallSkuTier</code>, <code>threatIntelMode</code>, and baseline rule collections</li>
+          <li>Log Analytics workspace ready for firewall diagnostics</li>
+        </ul>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"‹ Compliance Monitoring</h5>
-                        <p>Audit and log all network traffic for compliance requirements.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">2. Deployment Steps</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Create or select the resource group:</strong> Ensure the target resource group matches the approved environment boundary.</li>
+          <li class="mb-2"><strong>Confirm network dependencies:</strong> Verify the VNet, <code>AzureFirewallSubnet</code>, route tables, and public IP requirements are already approved.</li>
+          <li class="mb-2"><strong>Build the Bicep template:</strong> Compile the spec artifact before running the deployment to catch validation issues early.</li>
+          <li class="mb-2"><strong>Deploy with parameter values:</strong> Pass the approved <code>location</code> and <code>environment</code> values and keep rule collection values aligned with the spec.</li>
+          <li><strong>Validate post-deploy:</strong> Confirm firewall health, logging, routing, and rule enforcement before moving production traffic.</li>
+        </ol>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ›¡ï¸ Zero-Trust Implementation</h5>
-                        <p>Enforce strict allow-lists for all network communication.</p>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">3. Azure CLI Example</h5>
+        <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
 
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Model</h2>
-                    <div class="pricing-tier">
-                        <h5>Deployment Fee</h5>
-                        <p><strong>Cost:</strong> ~$1.25/hour</p>
-                        <p>Base hourly charge regardless of usage.</p>
-                    </div>
+az group create \
+  --name rg-network-&lt;environment&gt; \
+  --location &lt;location&gt;
 
-                    <div class="pricing-tier">
-                        <h5>Data Processing</h5>
-                        <p><strong>Cost:</strong> ~$0.016 per GB</p>
-                        <p>Charged for data processed by firewall.</p>
-                    </div>
-                </section>
+az bicep build \
+  --file specs/azure-firewall.bicep
 
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Firewall Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-firewall.bicep</code></p>
-                            <div class="code-block">
-az bicep build --file azure-firewall.bicep
 az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-firewall.json
-                            </div>
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Firewall ID</li>
-                                <li>Public IP address</li>
-                                <li>Private IP address</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+  --resource-group rg-network-&lt;environment&gt; \
+  --template-file specs/azure-firewall.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+      </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>Can I use Azure Firewall with NSGs?</h5>
-                        <p>Yes. NSGs filter traffic at NIC level, Firewall filters at VNet level. Both are complementary.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">4. Validation Checklist</h5>
+        <ul class="small mb-0">
+          <li>Public IP and private IP are provisioned and visible in deployment outputs</li>
+          <li>Threat intelligence mode is set to the approved state</li>
+          <li>Firewall logs are flowing to Log Analytics</li>
+          <li>Rule collections enforce expected allow/deny behavior</li>
+          <li>User-defined routes send intended traffic through the firewall path</li>
+        </ul>
+      </div>
+    </section>
 
-                    <div class="faq-item">
-                        <h5>What's the throughput?</h5>
-                        <p>Up to 30 Gbps per deployment automatically, scales as needed.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+      <p class="text-muted mb-4">A complete, production-ready example of DS-AFW-001 - fully resolved, no placeholders. Use this as a reference when authoring your own spec.</p>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+          <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+        </a>
+        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+        </a>
+        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+          <i class="bi bi-github me-2"></i>Open on GitHub
+        </a>
+      </div>
 
-                    <div class="faq-item">
-                        <h5>Does it support IDPS?</h5>
-                        <p>Yes. Intrusion Detection/Prevention System is available in Premium tier.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What about DNS filtering?</h5>
-                        <p>Azure Firewall can filter egress DNS traffic and log all DNS queries.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Firewall</div>
-                    <div class="sidebar-item"><strong>Throughput:</strong> 30 Gbps+</div>
-                    <div class="sidebar-item"><strong>SLA:</strong> 99.95%</div>
-                    <div class="sidebar-item"><strong>Scalability:</strong> Unlimited</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Tiers</h5>
-                    <div class="sidebar-item">â€¢ Standard (Basic rules)</div>
-                    <div class="sidebar-item">â€¢ Premium (IDPS, Encryption)</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Key Features</h5>
-                    <div class="sidebar-item">âœ" Stateful inspection</div>
-                    <div class="sidebar-item">âœ" Threat intelligence</div>
-                    <div class="sidebar-item">âœ" Zone redundancy</div>
-                    <div class="sidebar-item">âœ" Azure Monitor aligned</div>
-                    <div class="sidebar-item">âœ" FQDN filtering</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5> Best Practices</h5>
-                    <div class="sidebar-item">â†' Use in hub-spoke model</div>
-                    <div class="sidebar-item">â†' Enable threat intelligence</div>
-                    <div class="sidebar-item">â†' Log all traffic</div>
-                    <div class="sidebar-item">â†' Use zone redundancy</div>
-                    <div class="sidebar-item">â†' Monitor regularly</div>
-                </div>
-            </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(90deg,var(--azure-navy),var(--azure-blue));color:white;border-radius:8px 8px 0 0;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#sampleSpec">
+          <span class="fw-bold"><i class="bi bi-file-earmark-check me-2"></i>DS-AFW-001 v1.0 - Azure Firewall (Production) <span class="badge bg-success ms-2">Approved</span></span>
+          <i class="bi bi-chevron-down"></i>
         </div>
+        <div class="collapse show" id="sampleSpec">
+          <div class="card-body p-4">
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">1. Document Header</h6>
+              <table class="table table-sm small mb-0">
+                <tbody>
+                  <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AFW-001</td></tr>
+                  <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                  <tr><td class="fw-medium">Status</td><td><span class="badge bg-success">Approved</span></td></tr>
+                  <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                  <tr><td class="fw-medium">Owner</td><td>Platform Engineering - Network Security</td></tr>
+                  <tr><td class="fw-medium">Reviewer</td><td>Security Architecture</td></tr>
+                  <tr><td class="fw-medium">Applies to</td><td>Azure Firewall - Production (&lt;location&gt;)</td></tr>
+                  <tr><td class="fw-medium">Date</td><td>2026-03-27</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">2. Purpose &amp; Scope</h6>
+              <p class="small mb-2"><strong>Purpose:</strong> Define firewall deployment and rule governance requirements for enterprise network segmentation and egress control.</p>
+              <p class="small mb-2"><strong>In scope:</strong> Azure Firewall instance, policy/rule collections, threat intelligence mode, diagnostics, and forced routing validation.</p>
+              <p class="small mb-0"><strong>Out of scope:</strong> Application-layer authorization controls and host-based firewall configuration.</p>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">3. Functional Requirements</h6>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>FR-01</strong> - Firewall must enforce explicit allow-list traffic rules for critical egress flows.<br><span class="text-muted">Rationale: Reduces attack surface and blocks unauthorized outbound connectivity.</span></li>
+                <li class="mb-2"><strong>FR-02</strong> - Threat intelligence mode must be active and aligned to security policy.<br><span class="text-muted">Rationale: Improves detection and response to known bad indicators.</span></li>
+                <li class="mb-2"><strong>FR-03</strong> - Deployment must provide zone-level resilience where supported.<br><span class="text-muted">Rationale: Maintains connectivity during zonal faults.</span></li>
+                <li><strong>FR-04</strong> - All firewall events must be observable through centralized logging.<br><span class="text-muted">Rationale: Enables compliance reporting and incident analysis.</span></li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">4. Resolved Parameters</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Approved by</th></tr></thead>
+                <tbody>
+                  <tr><td><code>location</code></td><td>&lt;location&gt; (parameter-driven)</td><td>Infra Lead</td></tr>
+                  <tr><td><code>environment</code></td><td>prod</td><td>Infra Lead</td></tr>
+                  <tr><td><code>firewallSkuTier</code></td><td>Standard</td><td>Security</td></tr>
+                  <tr><td><code>threatIntelMode</code></td><td>Alert</td><td>Security</td></tr>
+                  <tr><td><code>zones</code></td><td>[1,2,3]</td><td>Architecture</td></tr>
+                  <tr><td><code>networkRuleCollections</code></td><td>allow-outbound baseline</td><td>Network Engineering</td></tr>
+                  <tr><td><code>applicationRuleCollections</code></td><td>allow-azure-services baseline</td><td>Network Engineering</td></tr>
+                  <tr><td><code>privateEndpointRouting</code></td><td>true</td><td>Security</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">5. Security Controls</h6>
+              <ul class="small mb-0">
+                <li class="mb-1"><strong>Policy governance:</strong> Rule changes must follow approval workflow and be version controlled.</li>
+                <li class="mb-1"><strong>Threat mode:</strong> Alert or deny behavior must align with environment risk posture.</li>
+                <li class="mb-1"><strong>Egress control:</strong> Default-deny posture for unapproved destinations and protocols.</li>
+                <li class="mb-1"><strong>Ingress control:</strong> DNAT rules limited to approved exposed services only.</li>
+                <li><strong>Telemetry:</strong> Diagnostics streamed to Log Analytics with retention per compliance requirements.</li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">6. Cost Estimate (itemised)</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Item</th><th>Unit</th><th>Est. Volume/mo</th><th>Unit Price</th><th>Est. Monthly</th></tr></thead>
+                <tbody>
+                  <tr><td>Firewall deployment (Standard)</td><td>per hour</td><td>730 h</td><td>$1.25</td><td>$913</td></tr>
+                  <tr><td>Data processed</td><td>per GB</td><td>3,500 GB</td><td>$0.016</td><td>$56</td></tr>
+                  <tr><td>Public IP (Standard)</td><td>per hour</td><td>730 h</td><td>$0.005</td><td>$4</td></tr>
+                  <tr><td>Log Analytics ingestion</td><td>per GB</td><td>35 GB</td><td>$2.30</td><td>$81</td></tr>
+                  <tr class="table-active fw-bold"><td colspan="4">Total estimated monthly</td><td>$1,054</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">7. Acceptance Gates</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Gate</th><th>Test</th><th>Pass Condition</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>G-01</td><td>Rule enforcement validation</td><td>Expected allow/deny traffic matrix passes</td><td>Network Engineering</td></tr>
+                  <tr><td>G-02</td><td>Threat intel behavior</td><td>Configured mode triggers expected event behavior</td><td>Security Architecture</td></tr>
+                  <tr><td>G-03</td><td>Zonal resilience check</td><td>Service health remains compliant across zones</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-04</td><td>Logging visibility</td><td>Rule and threat logs available in workspace</td><td>SRE</td></tr>
+                  <tr><td>G-05</td><td>Route path verification</td><td>No approved traffic bypasses firewall path</td><td>Network Engineering</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-0">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">8. Rollback &amp; Recovery</h6>
+              <ol class="small mb-0">
+                <li class="mb-1"><strong>Policy rollback:</strong> Revert to prior approved firewall policy package.</li>
+                <li class="mb-1"><strong>Rule rollback:</strong> Restore previous rule collection priorities and entries.</li>
+                <li><strong>Escalation:</strong> If critical traffic is blocked unexpectedly, enable emergency allow override and trigger incident response bridge.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn-more" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+      <div class="faq-item">
+        <h5>Can I use Azure Firewall with NSGs?</h5>
+        <p>Yes. NSGs and Azure Firewall are complementary. NSGs secure subnet/NIC boundaries while Firewall provides centralized policy and advanced traffic inspection.</p>
+      </div>
+      <div class="faq-item">
+        <h5>When should I choose Premium tier?</h5>
+        <p>Choose Premium when you require TLS inspection, IDPS, and advanced URL filtering for stricter security and compliance workloads.</p>
+      </div>
+      <div class="faq-item">
+        <h5>How do I validate forced tunneling?</h5>
+        <p>Validate UDRs and next-hop paths from workload subnets, then confirm all inspected flows are visible in firewall diagnostics.</p>
+      </div>
+    </section>
+
+    <div class="text-center py-4 border-top">
+      <a href="/modules" class="btn btn-outline-primary me-2"><i class="bi bi-arrow-left me-2"></i>Back to Modules</a>
+      <a href="/modules/module-vnet.html" class="btn btn-primary">Next: Virtual Network <i class="bi bi-arrow-right ms-2"></i></a>
     </div>
+  </div>
 
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Firewall Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/firewall/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
-        </div>
-    </footer>
-
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmRXyJgX7c0f3HmGzTi/CUEfxWMp" crossorigin="anonymous"></script>
 </body>
 </html>
-

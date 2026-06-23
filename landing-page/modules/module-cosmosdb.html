@@ -1,429 +1,391 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure Cosmos DB - Globally Distributed Database</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Azure Cosmos DB | Core Azure Modules</title>
+    <meta name="description" content="Azure Cosmos DB - globally distributed, low-latency database for modern applications with multi-model APIs and enterprise-scale resiliency." />
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' crossorigin='anonymous'>
     <style>
         :root {
-            --orange: #e67e22;
-            --dark-bg: #1a1a1a;
-            --light-bg: #f8f9fa;
-            --accent: #3498db;
+            --azure-navy: #0050a0;
+            --azure-blue: #0078d4;
+            --azure-sky: #00a2e8;
+            --azure-cyan: #50e6ff;
+            --accent: var(--azure-blue);
         }
-        body {
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-        }
-        .navbar {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            border-bottom: 3px solid var(--orange);
-        }
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--orange) !important;
-            font-size: 1.5rem;
-        }
-        .nav-link {
-            color: #b0b0b0 !important;
-            margin: 0 8px;
-            transition: color 0.3s ease;
-        }
-        .nav-link:hover {
-            color: var(--orange) !important;
-        }
-        .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--orange);
-            margin-bottom: 40px;
-        }
-        .hero-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        .hero h1 {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #ecf0f1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .section-title {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2rem;
-            margin-top: 40px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--orange);
-        }
-        .card {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 20px;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
-        }
-        .card-header {
-            background-color: var(--orange);
-            color: white;
-            font-weight: bold;
-            border-radius: 0;
-        }
-        .card-body {
-            color: #e0e0e0;
-        }
-        .capability-list {
-            list-style: none;
-            padding: 0;
-        }
-        .capability-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-        }
-        .capability-list li:before {
-            content: "âœ" ";
-            color: var(--orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .pricing-tier {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .pricing-tier h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .btn-orange {
-            background-color: var(--orange);
-            border: none;
-            color: white;
-        }
-        .btn-orange:hover {
-            background-color: #d45a1a;
-            color: white;
-        }
-        .use-case-card {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-            border-left: 4px solid var(--orange);
-        }
-        .use-case-card h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .faq-item {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        .faq-item h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        .sidebar {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .sidebar h5 {
-            color: var(--orange);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sidebar-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-            font-size: 0.95rem;
-        }
-        .sidebar-item:last-child {
-            border-bottom: none;
-        }
-        .code-block {
-            background-color: #1a1a1a;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            color: #7ec699;
-            font-size: 0.9rem;
-        }
-        footer {
-            background-color: #2c2c2c;
-            border-top: 2px solid var(--orange);
-            padding: 30px 0;
-            margin-top: 50px;
-            color: #b0b0b0;
-            text-align: center;
-        }
-        .container-main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; }
+        .module-icon { font-size: 3.5rem; margin: 20px 0; }
+        .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; height: 100%; }
+        .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+        .btn-deploy { background: var(--accent); color: white; border: none; }
+        .btn-deploy:hover { background: var(--azure-navy); color: white; }
+        .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/modules">
+                <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸŒ</span>
-            <h1>Azure Cosmos DB</h1>
-            <p class="subtitle">Globally distributed, multi-model database with guaranteed low latency and high availability</p>
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="module-icon"><i class="bi bi-database-fill"></i></div>
+                    <h1 class="mb-3">Azure Cosmos DB</h1>
+                    <p class="lead mb-4">Globally distributed, low-latency database platform for mission-critical workloads requiring elastic scale, high availability, and flexible data models.</p>
+                    <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+                    <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div style="font-size: 9rem; opacity: 0.3;"><i class="bi bi-globe2"></i></div>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Main Content -->
-    <div class="container-main">
-        <div class="row">
-            <div class="col-lg-8">
-                
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure Cosmos DB is a fully managed, globally distributed NoSQL database service designed for modern applications that require global scale with guaranteed sub-10ms latencies at the 99th percentile.</p>
-                            <p>It supports multiple data models including document, key-value, graph, and wide-column, enabling you to choose the right model for your application needs while maintaining consistency across the globe.</p>
+    <div class="container py-5">
+        <section class="mb-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+                    <p class="fs-5">Azure Cosmos DB is a fully managed, globally distributed database service built for internet-scale applications. It provides predictable performance, enterprise availability, and multi-region resiliency while supporting diverse workload patterns across document, key-value, graph, and columnar models.</p>
+
+                    <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+                    <ul class="fs-5">
+                        <li><strong>Global Distribution:</strong> Deploy data close to users with regional replication and automatic failover options</li>
+                        <li><strong>Multi-Model APIs:</strong> SQL (Core), MongoDB, Cassandra, Gremlin, and Table interfaces</li>
+                        <li><strong>Guaranteed Performance:</strong> Consistent low-latency reads and writes with throughput controls</li>
+                        <li><strong>Consistency Choices:</strong> Strong, bounded staleness, session, consistent prefix, and eventual</li>
+                        <li><strong>Elastic Scale:</strong> Scale throughput and storage as workloads evolve</li>
+                        <li><strong>Continuous Backup:</strong> Built-in backup and restore capabilities for operational resilience</li>
+                    </ul>
+
+                    <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Global SaaS Data Layer</h5>
+                                    <p class="card-text">Serve distributed users with low-latency access and high availability across regions.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">High-Volume User Profiles</h5>
+                                    <p class="card-text">Store identity, preferences, and session state for large-scale consumer platforms.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Operational Event Stores</h5>
+                                    <p class="card-text">Persist event-centric application records with flexible schema and predictable throughput.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Real-Time Product Catalogs</h5>
+                                    <p class="card-text">Power low-latency reads for dynamic catalogs, personalization, and recommendation workflows.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Global Distribution:</strong> Replicate data across any Azure region with transparent failover</li>
-                        <li><strong>Multi-Model Support:</strong> Document (SQL/Core), MongoDB, Cassandra, Gremlin (graph), Table APIs</li>
-                        <li><strong>Low Latency:</strong> Single-digit millisecond response times worldwide</li>
-                        <li><strong>Consistency Models:</strong> Choose between strong, bounded staleness, session, or eventual consistency</li>
-                        <li><strong>Automatic Indexing:</strong> Every property is indexed automatically for fast queries</li>
-                        <li><strong>Backup & Restore:</strong> Automated continuous backups with point-in-time restore</li>
-                        <li><strong>Server-side Scripting:</strong> Execute stored procedures, triggers, and UDFs in SQL</li>
-                        <li><strong>Real-time Analytics:</strong> Integrated Azure Synapse Link for OLAP queries</li>
-                    </ul>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸŒ Global Web Applications</h5>
-                        <p>Build applications that serve users worldwide with consistent low-latency experience and automatic replication.</p>
+                <div class="col-lg-4">
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-bar-chart-line me-2"></i>Quick Stats</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>Service Type:</strong> Managed globally distributed database</li>
+                            <li><strong>Latency Target:</strong> Single-digit milliseconds (workload dependent)</li>
+                            <li><strong>Availability:</strong> Enterprise SLA options</li>
+                            <li><strong>Scale Model:</strong> Throughput and storage elasticity</li>
+                            <li><strong>Replication:</strong> Multi-region support</li>
+                        </ul>
                     </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"± Mobile Apps</h5>
-                        <p>Store user profiles, preferences, and real-time data with offline support through Cosmos DB Change Feed.</p>
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-rocket-takeoff me-2"></i>Deployment</h5>
+                        <p><small><strong>Resource Provider:</strong> Microsoft.DocumentDB</small></p>
+                        <p><small><strong>Core Resources:</strong> Account + SQL Database + Container</small></p>
+                        <p><small><strong>Spec File:</strong> specs/azure-cosmosdb.bicep</small></p>
+                        <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
                     </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ"Š Real-time Analytics</h5>
-                        <p>Combine transactional data with Azure Synapse Link for instant OLAP analytics without ETL.</p>
+                    <div class="spec-box">
+                        <h5 class="fw-bold"><i class="bi bi-link-45deg me-2"></i>Dependencies</h5>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Azure Monitor diagnostics and alerts</li>
+                            <li>+ Network policy and Private Link strategy</li>
+                            <li>+ Identity and RBAC model for data access</li>
+                            <li>+ Backup and recovery governance controls</li>
+                        </ul>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸŽ&reg; Gaming Leaderboards</h5>
-                        <p>Store game state, leaderboards, and user data with guaranteed consistency and massive scale.</p>
-                    </div>
-
-                    <div class="use-case-card">
-                        <h5>ðŸ¥ Healthcare Records</h5>
-                        <p>Store patient records across geographic locations with compliance requirements and real-time access.</p>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Tiers</h2>
-                    
-                    <div class="pricing-tier">
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="pricing-tier recommended">
                         <h5>Provisioned Throughput</h5>
-                        <p><strong>Cost:</strong> Based on RU/s (Request Units per second) and storage</p>
-                        <p>Pay for reserved throughput. Scaling requires manual adjustment. Best for predictable workloads.</p>
+                        <p class="text-muted">Reserved performance model</p>
+                        <p><strong>Approx:</strong> Charged by RU/s and storage</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Strong fit for predictable workloads</li>
+                            <li>+ Stable performance envelopes</li>
+                            <li>+ Manual throughput planning required</li>
+                        </ul>
                     </div>
-
+                </div>
+                <div class="col-md-4">
+                    <div class="pricing-tier">
+                        <h5>Autoscale Throughput</h5>
+                        <p class="text-muted">Elastic RU scaling model</p>
+                        <p><strong>Approx:</strong> Based on autoscale max RU configuration</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Handles bursty traffic patterns</li>
+                            <li>+ Reduces manual scaling effort</li>
+                            <li>+ Optimize ceiling for cost control</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="pricing-tier">
                         <h5>Serverless</h5>
-                        <p><strong>Cost:</strong> Per-request pricing (~$0.25 per million RUs)</p>
-                        <p>Pay only for consumed requests. Auto-scales, best for variable workloads.</p>
+                        <p class="text-muted">Consumption-based model</p>
+                        <p><strong>Approx:</strong> Per request and storage consumed</p>
+                        <ul class="list-unstyled small mb-0">
+                            <li>+ Good for intermittent workloads</li>
+                            <li>+ Lower baseline cost footprint</li>
+                            <li>+ Monitor RU spikes carefully</li>
+                        </ul>
                     </div>
+                </div>
+            </div>
+            <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+                <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can vary by region, RU/s configuration, storage growth, replication strategy, and Microsoft pricing updates. Confirm current rates in the official Azure pricing calculator before approval.
+            </div>
+        </section>
 
-                    <div class="pricing-tier">
-                        <h5>Autoscale</h5>
-                        <p><strong>Cost:</strong> 10x hourly RU allocation * hourly rate</p>
-                        <p>Automatically scale throughput between 4,000-40,000 RU/s (or higher).</p>
-                    </div>
+        <section id="deployment" class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+            <p class="text-muted">Specification-first deployment guide for Azure Cosmos DB. Resolve all placeholders and validate acceptance gates before production rollout.</p>
 
-                    <div class="pricing-tier">
-                        <h5>Examples</h5>
-                        <p>1,000 RU/s provisioned: ~$50/month | 100 GB storage: ~$25/month</p>
-                    </div>
-                </section>
+            <div class="spec-box">
+                <h5 class="fw-bold">Spec Header - DS-COSMOS-001</h5>
+                <table class="table table-sm small mb-0">
+                    <tbody>
+                        <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-COSMOS-001</td></tr>
+                        <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                        <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+                        <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                        <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+                        <tr><td class="fw-medium">Applies to</td><td>Azure Cosmos DB</td></tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure Cosmos DB Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-cosmosdb.bicep</code></p>
-                            
-                            <div class="code-block">
-# Deploy Cosmos DB with SQL API
-az bicep build --file azure-cosmosdb.bicep
-az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-cosmosdb.json \
-  --parameters location=eastus environment=prod
+            <div class="spec-box">
+                <h5 class="fw-bold">Required Parameters</h5>
+                <table class="table table-sm small mb-0">
+                    <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+                    <tbody>
+                        <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Parameter-driven deployment region for account and data plane resources</td></tr>
+                        <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage such as <code>dev</code>, <code>staging</code>, or <code>prod</code></td></tr>
+                        <tr><td><code>apiVersion</code></td><td>string</td><td>Yes</td><td>Resource API version for Cosmos account, database, and container</td></tr>
+                        <tr><td><code>tags</code></td><td>object</td><td>Yes</td><td>Governance metadata for ownership, environment, and lifecycle tracking</td></tr>
+                        <tr><td><code>consistencyPolicy.defaultConsistencyLevel</code></td><td>string</td><td>Yes</td><td>Read/write consistency behavior for application requirements</td></tr>
+                        <tr><td><code>container.options.throughput</code></td><td>int</td><td>Yes</td><td>Provisioned RU/s throughput for initial workload profile</td></tr>
+                        <tr><td><code>partitionKey.paths</code></td><td>array</td><td>Yes</td><td>Partition strategy that drives scale and query efficiency</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Dependency Wiring</h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Cosmos Account</h6>
+                                <p class="small mb-1">Global control plane resource with replication, consistency, and networking settings.</p>
+                                <span class="badge" style="background:var(--azure-blue)">Required</span>
                             </div>
-
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Connection endpoint</li>
-                                <li>Account ID</li>
-                                <li>Primary key</li>
-                                <li>Database name</li>
-                            </ul>
                         </div>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What are Request Units (RUs)?</h5>
-                        <p>RUs are a unit of throughput that abstracts the cost of database operations. A simple read of a 1-KB document costs 1 RU. Complex queries can cost more depending on complexity and operation size.</p>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">SQL Database + Container</h6>
+                                <p class="small mb-1">Logical and physical data structures with partitioning and indexing strategy.</p>
+                                <span class="badge" style="background:var(--azure-blue)">Required</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="faq-item">
-                        <h5>How is data replicated?</h5>
-                        <p>Data is automatically replicated across all regions you specify with transparent failover. Changes are asynchronously replicated based on your consistency model.</p>
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+                            <div class="card-body">
+                                <h6 class="fw-bold">Monitoring + Recovery</h6>
+                                <p class="small mb-1">Diagnostics, backup policy, and operational safeguards for reliability.</p>
+                                <span class="badge bg-secondary">Conditional</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="faq-item">
-                        <h5>Can I have multi-region writes?</h5>
-                        <p>Yes! Enable multi-master across multiple regions. Each region can accept writes, and conflicts are resolved automatically based on your conflict resolution policy.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What's the maximum document size?</h5>
-                        <p>Documents can be up to 2 MB in size. Larger data should be split into smaller documents.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> NoSQL Database</div>
-                    <div class="sidebar-item"><strong>SLA:</strong> 99.99% availability</div>
-                    <div class="sidebar-item"><strong>Regions:</strong> 60+ worldwide</div>
-                    <div class="sidebar-item"><strong>Latency:</strong> &lt;10ms p99</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-diagram-3"></i> Dependencies</h5>
-                    <div class="sidebar-item">â€¢ Azure Monitor (diagnostics)</div>
-                    <div class="sidebar-item">â€¢ Azure Synapse Link (analytics)</div>
-                    <div class="sidebar-item">â€¢ Azure Functions (triggers)</div>
-                    <div class="sidebar-item">â€¢ Private Link (network)</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-shield-check"></i> Security</h5>
-                    <div class="sidebar-item">âœ" Encryption at rest (always)</div>
-                    <div class="sidebar-item">âœ" Encryption in transit (TLS)</div>
-                    <div class="sidebar-item">âœ" Azure AD authentication</div>
-                    <div class="sidebar-item">âœ" Role-based access control</div>
-                    <div class="sidebar-item">âœ" Private endpoints available</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-speedometer2"></i> Performance Tips</h5>
-                    <div class="sidebar-item">â†' Use consistent partition keys</div>
-                    <div class="sidebar-item">â†' Batch operations when possible</div>
-                    <div class="sidebar-item">â†' Monitor RU consumption</div>
-                    <div class="sidebar-item">â†' Use indexes wisely</div>
-                    <div class="sidebar-item">â†' Enable read replicas</div>
                 </div>
             </div>
-        </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Acceptance Gates</h5>
+                <ul class="small mb-0">
+                    <li class="mb-2"><strong>Gate 1:</strong> Cosmos account, database, and container are provisioned in approved <code>&lt;location&gt;</code>.</li>
+                    <li class="mb-2"><strong>Gate 2:</strong> Connectivity, authentication, and endpoint behavior are verified for application clients.</li>
+                    <li class="mb-2"><strong>Gate 3:</strong> Partitioning and throughput meet baseline performance targets.</li>
+                    <li class="mb-2"><strong>Gate 4:</strong> Backup policy and recovery posture satisfy resilience requirements.</li>
+                    <li><strong>Gate 5:</strong> Monitoring, diagnostics, and RBAC governance are operationally validated.</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">Spec Workflow</h5>
+                <ol class="small mb-0">
+                    <li class="mb-2"><strong>Author:</strong> Define consistency model, partition key, throughput, and replication expectations.</li>
+                    <li class="mb-2"><strong>Review:</strong> Obtain platform, security, and data architecture approvals.</li>
+                    <li class="mb-2"><strong>Validate:</strong> Confirm parameter completeness and workload assumptions.</li>
+                    <li class="mb-2"><strong>Deploy:</strong> Execute approved IaC with parameter-driven values.</li>
+                    <li><strong>Evidence:</strong> Capture performance, recovery, and compliance validation artifacts.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+            <p class="text-muted">Use this sequence to deploy Azure Cosmos DB from specification and verify performance and resilience controls.</p>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">1. Prerequisites</h5>
+                <ul class="small mb-0">
+                    <li>Azure CLI with Bicep support installed and authenticated to target subscription</li>
+                    <li>Approved <code>location</code>, <code>environment</code>, partition key, and throughput values</li>
+                    <li>Network and access policy decisions finalized (public network access, identity, RBAC)</li>
+                    <li>Operational monitoring and backup policy aligned with governance requirements</li>
+                </ul>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">2. Deployment Steps</h5>
+                <ol class="small mb-0">
+                    <li class="mb-2">Create or select the data services resource group.</li>
+                    <li class="mb-2">Compile and review the Cosmos DB Bicep template.</li>
+                    <li class="mb-2">Deploy with approved parameter set for environment and location.</li>
+                    <li class="mb-2">Run connectivity and throughput baseline tests.</li>
+                    <li>Validate diagnostics, backup settings, and role-based access controls.</li>
+                </ol>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">3. Azure CLI Example</h5>
+                <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
+
+az group create \
+  --name rg-cosmos-&lt;environment&gt; \
+  --location &lt;location&gt;
+
+az bicep build \
+  --file specs/azure-cosmosdb.bicep
+
+az deployment group create \
+  --resource-group rg-cosmos-&lt;environment&gt; \
+  --template-file specs/azure-cosmosdb.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+            </div>
+
+            <div class="spec-box">
+                <h5 class="fw-bold">4. Validation Checklist</h5>
+                <ul class="small mb-0">
+                    <li>Outputs <code>cosmosDbId</code>, <code>cosmosDbEndpoint</code>, <code>cosmosDbName</code>, and <code>databaseName</code> are returned</li>
+                    <li>Client connectivity and authentication flows are verified</li>
+                    <li>Throughput and partition design meet expected workload profile</li>
+                    <li>Backup and restore posture is tested against policy</li>
+                    <li>Diagnostic telemetry and alerts are visible for operations teams</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+            <p class="text-muted mb-4">Use the approved sample spec-kit as a formatting and governance baseline when authoring Cosmos DB specifications.</p>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+                    <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+                </a>
+                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+                </a>
+                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+                    <i class="bi bi-github me-2"></i>Open on GitHub
+                </a>
+            </div>
+        </section>
+
+        <section class="mb-5">
+            <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+            <div class="faq-item">
+                <h5>How should I choose a partition key?</h5>
+                <p class="mb-0">Choose a key with high cardinality and balanced access distribution to avoid hot partitions and sustain throughput efficiency.</p>
+            </div>
+            <div class="faq-item">
+                <h5>When should autoscale be used?</h5>
+                <p class="mb-0">Autoscale is a strong choice for workloads with significant traffic variation where manual RU/s tuning is operationally expensive.</p>
+            </div>
+            <div class="faq-item">
+                <h5>What consistency level is recommended by default?</h5>
+                <p class="mb-0">Session consistency is often a practical baseline for balancing performance and correctness, but final selection should align with workload semantics.</p>
+            </div>
+        </section>
     </div>
 
-    <!-- Footer -->
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
+    <section id="learn-more" class="py-4 bg-white border-top">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-3">Learn More</h3>
+            <a href="https://learn.microsoft.com/azure/cosmos-db/introduction" target="_blank" rel="noopener" class="btn btn-outline-primary btn-lg">
+                <i class="bi bi-microsoft me-2"></i>Official Azure Cosmos DB Documentation
+            </a>
         </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure Cosmos DB Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/cosmos-db/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
+    </section>
+
+    <footer class="py-4 text-center text-muted bg-light border-top">
+        <div class="container">
+            <small>&copy; 2026 Azure AI Deployment Essentials. Module documentation for architecture and deployment planning.</small>
         </div>
     </footer>
 
     <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
 </body>
 </html>
-

@@ -1,0 +1,18 @@
+// Query 2: Access Audit Trail (RBAC Activities)
+// Pattern B - Ransomware Resilience Pattern
+// Purpose: Track all vault management activities for compliance and security audit
+// Frequency: Daily review by SOC team
+
+AzureDiagnostics
+| where ResourceType == "VAULTS"
+| where OperationName in ("CreateVault", "DeleteVault", "UpdateVault", "EnableSoftDelete", "ModifyBackupPolicy", "DeleteBackupPolicy")
+| project 
+    TimeGenerated, 
+    Caller = tostring(parse_json(Identity)["caller"]),
+    CallerIPAddress = tostring(parse_json(Identity)["callerIPAddress"]),
+    OperationName, 
+    ResourceName,
+    Status,
+    VaultName = ResourceName,
+    Details = tostring(parse_json(Details))
+| order by TimeGenerated desc

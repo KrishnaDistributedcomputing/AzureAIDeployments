@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Pattern 1: Centralized Hub AI — Azure AI Patterns</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
   <style>
     :root{--accent:#0078d4;--accent-dark:#50e6ff}
     [data-bs-theme="dark"]{--accent:#50e6ff}
@@ -76,7 +76,7 @@
           <p class="lead mb-0">A single-region shared AI platform hosted in the Hub landing zone, consumed by multiple application spokes. All AI services centrally managed, governed, and shared across business units.</p>
         </div>
         <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
-          <span class="badge bg-light text-dark fs-5 px-4 py-2">~$3,723/mo</span>
+          <span class="badge bg-light text-dark fs-5 px-4 py-2">$10,000 &ndash; $15,000/mo*</span>
         </div>
       </div>
     </div>
@@ -96,8 +96,8 @@
         <div class="col-6 col-md-3">
           <div class="card stat-card h-100 shadow-sm p-3">
             <i class="bi bi-currency-dollar text-success fs-3"></i>
-            <div class="fw-bold fs-5">~$3,723</div>
-            <small class="text-body-secondary">Monthly Cost</small>
+            <div class="fw-bold fs-5">$10K&ndash;$15K</div>
+            <small class="text-body-secondary">Monthly Est.*</small>
           </div>
         </div>
         <div class="col-6 col-md-3">
@@ -220,21 +220,24 @@ graph TB
             <tr><td>3</td><td><i class="bi bi-hdd-rack text-primary me-1"></i>Azure Machine Learning</td><td><code>{base}-{env}-aml</code></td><td>Workspace</td><td>Model registry, experiments, pipelines</td><td class="text-end">$0*</td></tr>
             <tr><td>4</td><td><i class="bi bi-database text-primary me-1"></i>ADLS Gen2</td><td><code>{base}{env}adls</code></td><td>Standard LRS, HNS</td><td>Data lake for models, embeddings, raw data</td><td class="text-end fw-bold">~$50</td></tr>
             <tr><td>5</td><td><i class="bi bi-key-fill text-primary me-1"></i>Azure Key Vault</td><td><code>{base}-{env}-kv</code></td><td>Standard</td><td>Secrets, keys, certificates (RBAC auth)</td><td class="text-end">~$5</td></tr>
-            <tr><td>6</td><td><i class="bi bi-graph-up text-primary me-1"></i>Log Analytics</td><td><code>{base}-{env}-law</code></td><td>PerGB2018</td><td>Centralized logging (90‑day retention)</td><td class="text-end">~$23</td></tr>
-            <tr><td>7</td><td><i class="bi bi-speedometer2 text-primary me-1"></i>Application Insights</td><td><code>{base}-{env}-ai</code></td><td>Workspace‑based</td><td>APM telemetry for AI services</td><td class="text-end">Incl.</td></tr>
+            <tr><td>6</td><td><i class="bi bi-graph-up text-primary me-1"></i>Log Analytics</td><td><code>{base}-{env}-law</code></td><td>PerGB2018</td><td>Centralized logging (90-day retention)</td><td class="text-end">~$23</td></tr>
+            <tr><td>7</td><td><i class="bi bi-speedometer2 text-primary me-1"></i>Application Insights</td><td><code>{base}-{env}-ai</code></td><td>Workspace-based</td><td>APM telemetry for AI services</td><td class="text-end">Incl.</td></tr>
             <tr><td>8</td><td><i class="bi bi-diagram-2 text-primary me-1"></i>Hub VNet</td><td><code>{base}-{env}-hub-vnet</code></td><td>/16, 4 subnets</td><td>Network isolation backbone</td><td class="text-end">Free</td></tr>
-            <tr><td>9</td><td><i class="bi bi-diagram-2 text-primary me-1"></i>Spoke VNets (×N)</td><td><code>{base}-{env}-spoke-{n}-vnet</code></td><td>/16, 2 subnets</td><td>Application landing zones</td><td class="text-end">Free</td></tr>
+            <tr><td>9</td><td><i class="bi bi-diagram-2 text-primary me-1"></i>Spoke VNets (Ã-N)</td><td><code>{base}-{env}-spoke-{n}-vnet</code></td><td>/16, 2 subnets</td><td>Application landing zones</td><td class="text-end">Free</td></tr>
             <tr><td>10</td><td><i class="bi bi-link-45deg text-primary me-1"></i>VNet Peering</td><td>Hub↔Spoke</td><td>Bidirectional</td><td>Private connectivity hub ↔ spokes</td><td class="text-end">~$10/TB</td></tr>
             <tr><td>11</td><td><i class="bi bi-globe2 text-primary me-1"></i>Private DNS Zones</td><td>6 zones</td><td>Global</td><td>Name resolution for private endpoints</td><td class="text-end">~$3</td></tr>
             <tr><td>12</td><td><i class="bi bi-shield-fill-check text-primary me-1"></i>Private Endpoints</td><td>Per AI service</td><td>—</td><td>Private network access to PaaS</td><td class="text-end">~$22</td></tr>
-            <tr><td>13</td><td><i class="bi bi-lock-fill text-primary me-1"></i>NSG</td><td><code>{base}-{env}-hub-nsg</code></td><td>DenyAllInbound</td><td>Micro‑segmentation on hub subnets</td><td class="text-end">Free</td></tr>
+            <tr><td>13</td><td><i class="bi bi-lock-fill text-primary me-1"></i>NSG</td><td><code>{base}-{env}-hub-nsg</code></td><td>DenyAllInbound</td><td>Micro-segmentation on hub subnets</td><td class="text-end">Free</td></tr>
           </tbody>
           <tfoot class="table-dark">
-            <tr><td colspan="5" class="fw-bold">Estimated Total (Moderate Production)</td><td class="text-end fw-bold">~$3,723/mo</td></tr>
+            <tr><td colspan="5" class="fw-bold">Estimated Range (Moderate Production)</td><td class="text-end fw-bold">$10,000 &ndash; $15,000/mo</td></tr>
           </tfoot>
         </table>
       </div>
       <p class="text-body-secondary small">* AML workspace is free; compute instances billed separately. Token costs based on ~500M tokens/month.</p>
+      <div class="alert alert-warning bg-warning-subtle border-warning mt-3 mb-0 py-2 px-3 small" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i><strong>Pricing Disclaimer:</strong> Estimates start from a <strong>$10,000&ndash;$15,000/mo base</strong> (Azure OpenAI, AI Search, AML, networking, monitoring, Key Vault, and platform operations). Actual costs will vary based on Azure region, reserved instance commitments, Enterprise Agreement discounts, consumption volume, and selected SKU tiers. Use the <a href="https://azure.microsoft.com/en-us/pricing/calculator/" target="_blank" rel="noopener" class="alert-link">Azure Pricing Calculator</a> for your specific configuration. These figures are provided for planning purposes only and do not constitute a pricing guarantee.
+      </div>
     </div>
   </section>
 
@@ -509,10 +512,10 @@ graph TB
 
   <button id="backToTop" class="btn btn-primary btn-sm rounded-circle shadow" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src='https://cdn.jsdelivr.net/npm/mermaid@11.15.0/dist/mermaid.min.js' integrity='sha384-yQ4mmBBT+vhTAwjFH0toJXNYJ6O4usWnt6EPIdWwrRvx2V/n5lXuDZQwQFeSFydF' crossorigin='anonymous'></script>
   <script>
-    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'loose',flowchart:{htmlLabels:true,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
+    mermaid.initialize({startOnLoad:true,theme:'default',securityLevel:'strict',flowchart:{htmlLabels:false,curve:'linear',nodeSpacing:50,rankSpacing:60,padding:20,useMaxWidth:true,wrappingWidth:200},themeVariables:{fontSize:'18px',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',primaryColor:'#4a90d9',primaryTextColor:'#fff',primaryBorderColor:'#2c6fad',lineColor:'#5a6570',secondaryColor:'#f0f4f8',tertiaryColor:'#e8f4e8'}});
     function enlargeDiagram(btn){const wrapper=btn.closest('.diagram-wrapper');const svg=wrapper.querySelector('svg');if(!svg)return;const overlay=document.createElement('div');overlay.className='diagram-fullscreen';overlay.innerHTML='<div class="diagram-inner"><button class="btn btn-sm btn-outline-danger btn-close-fs" onclick="this.closest(\'.diagram-fullscreen\').remove()"><i class="bi bi-x-lg me-1"></i>Close</button><div class="diagram-content"></div></div>';overlay.querySelector('.diagram-content').appendChild(svg.cloneNode(true));overlay.addEventListener('click',function(e){if(e.target===overlay)overlay.remove();});document.addEventListener('keydown',function esc(e){if(e.key==='Escape'){overlay.remove();document.removeEventListener('keydown',esc);}});document.body.appendChild(overlay);}
     const toggle=document.getElementById('themeToggle');
     toggle.addEventListener('click',()=>{
@@ -527,3 +530,4 @@ graph TB
   </script>
 </body>
 </html>
+

@@ -1,475 +1,493 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azure AI Search - Intelligent Search Platform</title>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
-    <style>
-        :root {
-            --orange: #e67e22;
-            --dark-bg: #1a1a1a;
-            --light-bg: #f8f9fa;
-            --accent: #3498db;
-        }
-        
-        body {
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-        }
-        
-        .navbar {
-            background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
-            border-bottom: 3px solid var(--orange);
-        }
-        
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--orange) !important;
-            font-size: 1.5rem;
-        }
-        
-        .nav-link {
-            color: #b0b0b0 !important;
-            margin: 0 8px;
-            transition: color 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            color: var(--orange) !important;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            padding: 80px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--orange);
-            margin-bottom: 40px;
-        }
-        
-        .hero-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            display: block;
-        }
-        
-        .hero h1 {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-        }
-        
-        .hero .subtitle {
-            font-size: 1.2rem;
-            color: #ecf0f1;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .section-title {
-            color: var(--orange);
-            font-weight: bold;
-            font-size: 2rem;
-            margin-top: 40px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--orange);
-        }
-        
-        .card {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 20px;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.2);
-        }
-        
-        .card-header {
-            background-color: var(--orange);
-            color: white;
-            font-weight: bold;
-            border-radius: 0;
-        }
-        
-        .card-body {
-            color: #e0e0e0;
-        }
-        
-        .capability-list {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .capability-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-        }
-        
-        .capability-list li:before {
-            content: "âœ" ";
-            color: var(--orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        
-        .pricing-tier {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        
-        .pricing-tier h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        
-        .btn-orange {
-            background-color: var(--orange);
-            border: none;
-            color: white;
-        }
-        
-        .btn-orange:hover {
-            background-color: #d45a1a;
-            color: white;
-        }
-        
-        .highlight {
-            color: var(--orange);
-            font-weight: bold;
-        }
-        
-        .use-case-card {
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            padding: 20px;
-            margin: 15px 0;
-            border-radius: 4px;
-            border-left: 4px solid var(--orange);
-        }
-        
-        .use-case-card h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        
-        .faq-item {
-            background-color: #2c2c2c;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-        
-        .faq-item h5 {
-            color: var(--orange);
-            margin-bottom: 10px;
-        }
-        
-        .sidebar {
-            background-color: #2c2c2c;
-            border: 1px solid #e67e22;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .sidebar h5 {
-            color: var(--orange);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .sidebar-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #444;
-            color: #b0b0b0;
-            font-size: 0.95rem;
-        }
-        
-        .sidebar-item:last-child {
-            border-bottom: none;
-        }
-        
-        .code-block {
-            background-color: #1a1a1a;
-            border-left: 4px solid var(--orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            color: #7ec699;
-            font-size: 0.9rem;
-        }
-        
-        footer {
-            background-color: #2c2c2c;
-            border-top: 2px solid var(--orange);
-            padding: 30px 0;
-            margin-top: 50px;
-            color: #b0b0b0;
-            text-align: center;
-        }
-        
-        .container-main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure AI Search | Core Azure Modules</title>
+  <meta name="description" content="Azure AI Search - intelligent retrieval platform with hybrid search, semantic ranking, and vector search for enterprise applications." />
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH' crossorigin='anonymous'>
+  <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css' rel='stylesheet' integrity='sha384-4R2V6kM8fU6w5vDq6bC5M0Q3nLJv2W8x8QW0fvkYlCYwH14r2raXI5QunlslqY5T' crossorigin='anonymous'>
+  <style>
+    :root {
+      --azure-navy: #0050a0;
+      --azure-blue: #0078d4;
+      --azure-sky: #00a2e8;
+      --azure-cyan: #50e6ff;
+      --accent: var(--azure-blue);
+      --accent-dark: var(--azure-cyan);
+    }
+    body { background: linear-gradient(135deg, #f7fbff 0%, #e6f4ff 100%); min-height: 100vh; }
+    .hero { background: linear-gradient(135deg, var(--azure-navy) 0%, var(--azure-blue) 40%, var(--azure-sky) 70%, var(--azure-cyan) 100%); color: white; padding: 60px 20px; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; }
+    .module-icon { font-size: 3.5rem; margin: 20px 0; }
+    .spec-box { background: #f8f9fa; border-left: 4px solid var(--accent); border-radius: 8px; padding: 20px; margin: 15px 0; }
+    .pricing-tier { background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 10px 0; }
+    .pricing-tier.recommended { border-color: var(--accent); background: linear-gradient(135deg, rgba(0,120,212,.06) 0%, rgba(0,162,232,.05) 65%, rgba(80,230,255,.06) 100%); }
+    .btn-deploy { background: var(--accent); color: white; border: none; }
+    .btn-deploy:hover { background: var(--azure-navy); color: white; }
+    .faq-item { background: white; border-left: 4px solid var(--accent); padding: 15px; margin: 10px 0; border-radius: 6px; }
+  </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/index.html"> Azure Platform</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/core-modules.html">Core Modules</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/sdd.html">SDD Training</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <div class="hero">
-        <div class="container-main">
-            <span class="hero-icon">ðŸ"</span>
-            <h1>Azure AI Search</h1>
-            <p class="subtitle">Enterprise-scale AI-powered search platform with semantic understanding and hybrid search capabilities</p>
-        </div>
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/modules">
+        <i class="bi bi-puzzle-fill text-primary me-2"></i>Core Modules
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/modules">All Modules</a></li>
+        </ul>
+      </div>
     </div>
+  </nav>
 
-    <!-- Main Content -->
-    <div class="container-main">
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <div class="module-icon">🔎</div>
+          <h1 class="mb-3">Azure AI Search</h1>
+          <p class="lead mb-4">Enterprise retrieval platform for hybrid search, semantic ranking, and vector search at production scale.</p>
+          <a href="#deployment" class="btn btn-light btn-lg me-2"><i class="bi bi-file-earmark-text me-2"></i>View Spec</a>
+          <a href="#learn-more" class="btn btn-outline-light btn-lg"><i class="bi bi-book me-2"></i>Learn More</a>
+        </div>
+        <div class="col-lg-6 text-center">
+          <div style="font-size: 10rem; opacity: 0.3;">🔎</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container py-5">
+    <section class="mb-5">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-4"><i class="bi bi-info-circle me-2"></i>Overview</h2>
+          <p class="fs-5">Azure AI Search provides low-latency retrieval for enterprise applications with lexical search, semantic ranking, vector search, and hybrid ranking strategies. It is designed for knowledge retrieval, document intelligence, and RAG architectures where relevance and throughput must be predictable.</p>
+
+          <h3 class="fw-bold mt-5 mb-3">Key Capabilities</h3>
+          <ul class="fs-5">
+            <li><strong>Hybrid Search:</strong> Combine keyword retrieval with vector similarity in a single query path</li>
+            <li><strong>Semantic Ranking:</strong> Transformer-based reranking improves relevance for natural-language queries</li>
+            <li><strong>Vector Search:</strong> ANN-based retrieval for embeddings generated by Azure OpenAI and other models</li>
+            <li><strong>Indexer Pipelines:</strong> Native ingestion from Blob Storage, SQL, Cosmos DB, and SharePoint sources</li>
+            <li><strong>AI Enrichment:</strong> OCR, language detection, key phrase extraction, and custom skills in the enrichment pipeline</li>
+            <li><strong>Scale Controls:</strong> Replica and partition scaling for throughput and index capacity isolation</li>
+          </ul>
+
+          <h3 class="fw-bold mt-5 mb-3">Common Use Cases</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">📚 Enterprise Knowledge Search</h5>
+                  <p class="card-text">Search policies, playbooks, and documents with semantic ranking and context-aware retrieval.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🧠 RAG Retrieval Layer</h5>
+                  <p class="card-text">Serve grounding context to LLM applications with vector + keyword hybrid retrieval.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🗂️ Document Intelligence</h5>
+                  <p class="card-text">Index scanned docs and unstructured files using OCR, enrichment, and metadata filters.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">🛒 Commerce Discovery</h5>
+                  <p class="card-text">Improve catalog findability with facets, typo tolerance, and intent-driven ranking.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="spec-box">
+            <h5 class="fw-bold">📊 Quick Stats</h5>
+            <ul class="list-unstyled">
+              <li><strong>Typical Monthly:</strong> $250 - $2,400</li>
+              <li><strong>SLA Availability:</strong> 99.9%</li>
+              <li><strong>Global Regions:</strong> 30+</li>
+              <li><strong>Index Scale:</strong> Up to billions of docs</li>
+              <li><strong>Latency Target:</strong> &lt; 250 ms query p95</li>
+            </ul>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🚀 Deployment</h5>
+            <p><small><strong>Resource Provider:</strong> Microsoft.Search</small></p>
+            <p><small><strong>SKU:</strong> Basic, Standard, S3 HD</small></p>
+            <p><small><strong>Regions:</strong> East US, West Europe, UK South, Australia East</small></p>
+            <a href="#deployment" class="btn btn-deploy btn-sm w-100 mt-2">View Spec</a>
+          </div>
+
+          <div class="spec-box">
+            <h5 class="fw-bold">🔗 Dependencies</h5>
+            <ul class="list-unstyled small">
+              <li>✓ Azure OpenAI (embeddings, optional)</li>
+              <li>✓ Azure Monitor (logging and metrics)</li>
+              <li>✓ Key Vault (query key/admin key handling)</li>
+              <li>✓ Private Link (network isolation)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-warning mt-3 mb-0 small" role="alert">
+        <strong>Pricing disclaimer:</strong> Prices shown are planning estimates only and can change by region, SKU, semantic ranker usage, query volume, reservations, and Microsoft pricing updates. Confirm current rates in the official Azure pricing calculator before sign-off.
+      </div>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-currency-dollar me-2"></i>Pricing</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>Basic</h5>
+            <p class="text-muted">For pilot and low-volume production</p>
+            <p><strong>Approx:</strong> $250-450/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ Entry-level search capacity</li>
+              <li>✓ Suitable for small corpora</li>
+              <li>✓ Single-digit million docs</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier recommended">
+            <h5>Standard</h5>
+            <p class="text-muted">Recommended for enterprise workloads</p>
+            <p><strong>Approx:</strong> $700-1,800/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ Replica + partition scaling</li>
+              <li>✓ Semantic ranking support</li>
+              <li>✓ Best balance of cost/performance</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="pricing-tier">
+            <h5>S3 HD</h5>
+            <p class="text-muted">High-density, large multi-tenant indexes</p>
+            <p><strong>Approx:</strong> $1,500-3,500/month</p>
+            <ul class="list-unstyled small">
+              <li>✓ High index density</li>
+              <li>✓ Large-scale retrieval workloads</li>
+              <li>✓ Cost-efficient at very large corpus size</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="deployment" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-file-earmark-text me-2"></i>Service Specification</h2>
+      <p class="text-muted">Spec-based development guide for Azure AI Search. Author and validate this spec before requesting infrastructure provisioning.</p>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">📋 Spec Header — DS-AIS-001</h5>
+        <table class="table table-sm small mb-0">
+          <tbody>
+            <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AIS-001</td></tr>
+            <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+            <tr><td class="fw-medium">Status</td><td><span class="badge bg-warning text-dark">Draft</span></td></tr>
+            <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+            <tr><td class="fw-medium">Owner</td><td>&lt;team-owner&gt;</td></tr>
+            <tr><td class="fw-medium">Applies to</td><td>Azure AI Search</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">⚙️ Required Parameters</h5>
+        <p class="small text-muted mb-3">All parameters must be resolved before the spec advances to <strong>Approved</strong> status.</p>
+        <table class="table table-sm small">
+          <thead><tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>location</code></td><td>string</td><td>Yes</td><td>Azure region for Search service deployment</td></tr>
+            <tr><td><code>environment</code></td><td>string</td><td>Yes</td><td>Deployment stage: <code>dev</code> | <code>staging</code> | <code>prod</code></td></tr>
+            <tr><td><code>sku</code></td><td>string</td><td>Yes</td><td>Service SKU: <code>basic</code> | <code>standard</code> | <code>standard3</code> | <code>s3hd</code></td></tr>
+            <tr><td><code>replicaCount</code></td><td>int</td><td>Yes</td><td>Query throughput scaling unit. Must satisfy availability target.</td></tr>
+            <tr><td><code>partitionCount</code></td><td>int</td><td>Yes</td><td>Index storage scaling unit. Must satisfy corpus size target.</td></tr>
+            <tr><td><code>privateEndpointEnabled</code></td><td>bool</td><td>Yes</td><td>Enable private endpoint and deny public traffic when required.</td></tr>
+            <tr><td><code>semanticConfigEnabled</code></td><td>bool</td><td>Yes</td><td>Enable semantic ranking profile for natural-language relevance.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="spec-box">
+        <h5 class="fw-bold">🔗 Dependency Wiring</h5>
         <div class="row">
-            <!-- Main Content -->
-            <div class="col-lg-8">
-                
-                <!-- Overview -->
-                <section class="mb-5">
-                    <h2 class="section-title">Overview</h2>
-                    <div class="card">
-                        <div class="card-body">
-                            <p>Azure AI Search (formerly Cognitive Search) provides AI-powered search capabilities for your applications. It combines traditional full-text search with AI-powered understanding, semantic ranking, and vector search for semantic similarity matching.</p>
-                            <p>Built on Apache Lucene, Azure AI Search enables you to build intelligent search experiences that go beyond keyword matching, incorporating natural language understanding and machine learning.</p>
-                        </div>
-                    </div>
-                </section>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Azure OpenAI</h6>
+                <p class="small mb-1">Provides embeddings for vector retrieval. Model version and embedding dimension must be pinned.</p>
+                <span class="badge bg-secondary">Optional</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Azure Monitor</h6>
+                <p class="small mb-1">Diagnostic logs and query latency metrics must be sent to Log Analytics.</p>
+                <span class="badge" style="background:var(--azure-blue)">Required</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="card border-0" style="background:rgba(0,120,212,.06); border-radius:8px;">
+              <div class="card-body">
+                <h6 class="fw-bold">Private Link</h6>
+                <p class="small mb-1">Private endpoint routing is required for strict network isolation deployments.</p>
+                <span class="badge bg-secondary">Conditional</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-                <!-- Key Capabilities -->
-                <section class="mb-5">
-                    <h2 class="section-title">Key Capabilities</h2>
-                    <ul class="capability-list">
-                        <li><strong>Hybrid Search:</strong> Full-text search combined with semantic ranking for better relevance</li>
-                        <li><strong>Vector Search:</strong> Semantic similarity search using embeddings from Azure OpenAI</li>
-                        <li><strong>AI Enrichment:</strong> Built-in skills for NLP, OCR, and entity recognition</li>
-                        <li><strong>Semantic Ranking:</strong> AI-powered ranking using transformer models</li>
-                        <li><strong>Faceted Navigation:</strong> Filter and drill-down capabilities for complex queries</li>
-                        <li><strong>Multi-language Support:</strong> Search across 50+ languages</li>
-                        <li><strong>Custom Analyzers:</strong> Full control over tokenization and text processing</li>
-                        <li><strong>Scalability:</strong> Handle massive indexes and concurrent queries</li>
-                    </ul>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">✓ Acceptance Gates</h5>
+        <p class="small text-muted mb-3">All gates must pass before the deployment is considered production-ready.</p>
+        <ul class="small mb-0">
+          <li class="mb-2"><strong>Gate 1 — Query health:</strong> <code>POST /indexes/{index}/docs/search</code> must return HTTP 200 with p95 latency under 250 ms for baseline load profile.</li>
+          <li class="mb-2"><strong>Gate 2 — Semantic ranker:</strong> At least one semantic configuration must be active and mapped to the primary index schema.</li>
+          <li class="mb-2"><strong>Gate 3 — Network isolation:</strong> Public endpoint access must return denied response when <code>privateEndpointEnabled = true</code>.</li>
+          <li class="mb-2"><strong>Gate 4 — Replica/partition sizing:</strong> Configured counts must meet documented throughput and corpus targets approved by architecture review.</li>
+          <li><strong>Gate 5 — Observability:</strong> Query latency, throttling, and service health metrics must appear in Azure Monitor dashboards within 15 minutes.</li>
+        </ul>
+      </div>
 
-                <!-- Use Cases -->
-                <section class="mb-5">
-                    <h2 class="section-title">Use Cases</h2>
-                    
-                    <div class="use-case-card">
-                        <h5>ðŸ"š Knowledge Base Retrieval</h5>
-                        <p>Build intelligent knowledge bases and FAQ systems with semantic understanding to find relevant answers even when exact keywords don't match.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">🚀 Spec Workflow</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Author:</strong> Complete all required parameters and index schema assumptions. Resolve every <code>&lt;placeholder&gt;</code>.</li>
+          <li class="mb-2"><strong>Review:</strong> Submit spec for architecture and security review. At least one non-author reviewer approval is required.</li>
+          <li class="mb-2"><strong>CI gate:</strong> Spec linting validates SKU, scaling constraints, and dependency references before IaC generation.</li>
+          <li class="mb-2"><strong>Deploy:</strong> Approved spec triggers the infrastructure pipeline to provision Search service, semantic config, and network controls.</li>
+          <li><strong>Validate:</strong> Execute acceptance gates in target environment and capture evidence in release records.</li>
+        </ol>
+      </div>
+    </section>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ›' E-commerce Search</h5>
-                        <p>Enhance product discovery with semantic search, understanding customer intent beyond keywords and improving conversion rates.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-terminal me-2"></i>How to Deploy</h2>
+      <p class="text-muted">Use this workflow to deploy Azure AI Search from the parameter-driven specification and validate service readiness before onboarding application traffic.</p>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ",, Enterprise Document Search</h5>
-                        <p>Search across documents, PDFs, and scanned images with OCR and entity recognition for comprehensive content discovery.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">1. Prerequisites</h5>
+        <ul class="small mb-0">
+          <li>Azure CLI with Bicep support installed and authenticated to the target subscription</li>
+          <li>Approved values for <code>location</code>, <code>environment</code>, <code>sku</code>, <code>replicaCount</code>, and <code>partitionCount</code></li>
+          <li>Index schema, semantic configuration, and optional vector/embedding dependency decisions completed</li>
+          <li>Azure Monitor or Log Analytics workspace prepared for diagnostics</li>
+        </ul>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ¥ Medical Records Retrieval</h5>
-                        <p>Search clinical documents and medical records using semantic understanding for better patient outcomes and research.</p>
-                    </div>
+      <div class="spec-box">
+        <h5 class="fw-bold">2. Deployment Steps</h5>
+        <ol class="small mb-0">
+          <li class="mb-2"><strong>Create or select the resource group:</strong> Use the approved environment boundary for the deployment.</li>
+          <li class="mb-2"><strong>Validate service sizing:</strong> Confirm the selected SKU, replicas, and partitions match throughput and corpus requirements.</li>
+          <li class="mb-2"><strong>Build the Bicep template:</strong> Compile the deployment artifact before running the deployment.</li>
+          <li class="mb-2"><strong>Deploy with approved parameters:</strong> Pass the parameter-driven <code>location</code> and environment values used in the spec.</li>
+          <li><strong>Run post-deploy checks:</strong> Verify search endpoint health, semantic configuration, and diagnostics before release sign-off.</li>
+        </ol>
+      </div>
 
-                    <div class="use-case-card">
-                        <h5>ðŸ" Legal Document Discovery</h5>
-                        <p>Search through contracts and legal documents with semantic understanding for faster e-discovery and compliance.</p>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">3. Azure CLI Example</h5>
+        <pre class="bg-dark text-light rounded p-3 small mb-0"><code>az account set --subscription &lt;subscription-id&gt;
 
-                <!-- Pricing -->
-                <section class="mb-5">
-                    <h2 class="section-title">Pricing Tiers</h2>
-                    
-                    <div class="pricing-tier">
-                        <h5>Free Tier</h5>
-                        <p><strong>Cost:</strong> Free | <strong>Limit:</strong> 3 indexes, 10 MB storage, 1M requests/month</p>
-                        <p>Good for development and testing with size and capacity limitations.</p>
-                    </div>
+az group create \
+  --name rg-search-&lt;environment&gt; \
+  --location &lt;location&gt;
 
-                    <div class="pricing-tier">
-                        <h5>Basic Tier</h5>
-                        <p><strong>Cost:</strong> ~$0.23/hour (billed daily) | <strong>Limit:</strong> 15 indexes, 2 GB storage</p>
-                        <p>Suitable for production workloads with moderate scale and performance requirements.</p>
-                    </div>
+az bicep build \
+  --file specs/azure-aisearch.bicep
 
-                    <div class="pricing-tier">
-                        <h5>Standard Tier</h5>
-                        <p><strong>Cost:</strong> ~$0.69/hour (billed daily) | Multiple units available</p>
-                        <p>Recommended for most production scenarios with high availability and scalability.</p>
-                    </div>
-
-                    <div class="pricing-tier">
-                        <h5>Storage Optimized Tier</h5>
-                        <p><strong>Cost:</strong> ~$1.04/hour | Optimized for large indexes and searchability</p>
-                        <p>For scenarios requiring massive indexes with lower query throughput.</p>
-                    </div>
-                </section>
-
-                <!-- Deployment Spec -->
-                <section class="mb-5">
-                    <h2 class="section-title">Bicep Deployment</h2>
-                    <div class="card">
-                        <div class="card-header">Azure AI Search Spec</div>
-                        <div class="card-body">
-                            <p><strong>Specification File:</strong> <code>azure-aisearch.bicep</code></p>
-                            <p>Deploy Azure AI Search with semantic configuration and hybrid search setup:</p>
-                            
-                            <div class="code-block">
-# Deploy using:
-az bicep build --file azure-aisearch.bicep
 az deployment group create \
-  --resource-group myResourceGroup \
-  --template-file azure-aisearch.json \
-  --parameters location=eastus environment=prod
-                            </div>
+  --resource-group rg-search-&lt;environment&gt; \
+  --template-file specs/azure-aisearch.bicep \
+  --parameters location=&lt;location&gt; environment=&lt;environment&gt;</code></pre>
+      </div>
 
-                            <p><strong>Outputs:</strong></p>
-                            <ul class="capability-list">
-                                <li>Service ID</li>
-                                <li>Search endpoint URL</li>
-                                <li>Service name</li>
-                                <li>API keys</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
+      <div class="spec-box">
+        <h5 class="fw-bold">4. Validation Checklist</h5>
+        <ul class="small mb-0">
+          <li>Search service endpoint resolves and returns successful query responses</li>
+          <li>Replica and partition counts match approved sizing values</li>
+          <li>Semantic configuration is created and mapped to the intended index</li>
+          <li>Diagnostics are flowing to Azure Monitor or Log Analytics</li>
+          <li>Private endpoint and public access settings match the approved network posture</li>
+        </ul>
+      </div>
+    </section>
 
-                <!-- FAQ -->
-                <section class="mb-5">
-                    <h2 class="section-title">FAQ</h2>
-                    
-                    <div class="faq-item">
-                        <h5>What's the difference between full-text and semantic search?</h5>
-                        <p>Full-text search matches keywords, while semantic search understands meaning and intent. Semantic ranking uses AI to reorder results based on relevance to the actual meaning of the query.</p>
-                    </div>
+    <section class="mb-5">
+      <h2 class="fw-bold mb-2"><i class="bi bi-clipboard2-check me-2"></i>Sample Best Practice Spec</h2>
+      <p class="text-muted mb-4">A complete, production-ready example of DS-AIS-001 — fully resolved, no placeholders. Use this as a reference when authoring your own spec.</p>
+      <div class="d-flex flex-wrap gap-2 mb-4">
+        <a href="/specs/sample-spec-kit-openai.md" class="btn btn-deploy">
+          <i class="bi bi-filetype-md me-2"></i>Open Sample Spec-Kit (.md)
+        </a>
+        <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary">
+          <i class="bi bi-box-arrow-up-right me-2"></i>Open on ai.azuretools.wiki
+        </a>
+        <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark">
+          <i class="bi bi-github me-2"></i>Open on GitHub
+        </a>
+      </div>
 
-                    <div class="faq-item">
-                        <h5>How do vector searches work?</h5>
-                        <p>Vector search uses embeddings (numerical representations) created from text using models like OpenAI's embeddings. Documents with similar meanings have similar vectors, enabling semantic similarity search.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>What's the maximum index size?</h5>
-                        <p>The limit depends on your tier. Standard tier supports up to 50 GB per service. You can scale up with multiple replicas and partitions for larger deployments.</p>
-                    </div>
-
-                    <div class="faq-item">
-                        <h5>Can I use it with custom embeddings?</h5>
-                        <p>Yes. You can use embeddings from Azure OpenAI, Hugging Face, or your own model and index them directly in Azure AI Search.</p>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <div class="sidebar">
-                    <h5><i class="bi bi-lightning-charge"></i> Quick Stats</h5>
-                    <div class="sidebar-item"><strong>Service Type:</strong> Managed search</div>
-                    <div class="sidebar-item"><strong>SLA:</strong> 99.9% uptime</div>
-                    <div class="sidebar-item"><strong>Regions:</strong> 30+ worldwide</div>
-                    <div class="sidebar-item"><strong>Based On:</strong> Apache Lucene</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-diagram-3"></i> Dependencies</h5>
-                    <div class="sidebar-item">â€¢ Azure OpenAI (for embeddings)</div>
-                    <div class="sidebar-item">â€¢ Azure Storage (optional indexing)</div>
-                    <div class="sidebar-item">â€¢ Azure Monitor (logging)</div>
-                    <div class="sidebar-item">â€¢ Private Link (network isolation)</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-shield-check"></i> Security Best Practices</h5>
-                    <div class="sidebar-item">âœ" Use API keys or Azure AD authentication</div>
-                    <div class="sidebar-item">âœ" Enable Private Link for network isolation</div>
-                    <div class="sidebar-item">âœ" Use encryption at rest</div>
-                    <div class="sidebar-item">âœ" Monitor with Azure Monitor</div>
-                    <div class="sidebar-item">âœ" Implement role-based access control</div>
-                </div>
-
-                <div class="sidebar">
-                    <h5><i class="bi bi-speedometer2"></i> Performance Tips</h5>
-                    <div class="sidebar-item">â†' Use replicas for read scaling</div>
-                    <div class="sidebar-item">â†' Use partitions for write scaling</div>
-                    <div class="sidebar-item">â†' Optimize tokenization</div>
-                    <div class="sidebar-item">â†' Monitor query latency</div>
-                    <div class="sidebar-item">â†' Cache popular queries</div>
-                </div>
-            </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background:linear-gradient(90deg,var(--azure-navy),var(--azure-blue));color:white;border-radius:8px 8px 0 0;cursor:pointer;" data-bs-toggle="collapse" data-bs-target="#sampleSpec">
+          <span class="fw-bold"><i class="bi bi-file-earmark-check me-2"></i>DS-AIS-001 v1.0 — Azure AI Search (Production) <span class="badge bg-success ms-2">Approved</span></span>
+          <i class="bi bi-chevron-down"></i>
         </div>
+        <div class="collapse show" id="sampleSpec">
+          <div class="card-body p-4">
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">1. Document Header</h6>
+              <table class="table table-sm small mb-0">
+                <tbody>
+                  <tr><td class="fw-medium" style="width:180px">Document ID</td><td>DS-AIS-001</td></tr>
+                  <tr><td class="fw-medium">Version</td><td>1.0</td></tr>
+                  <tr><td class="fw-medium">Status</td><td><span class="badge bg-success">Approved</span></td></tr>
+                  <tr><td class="fw-medium">Type</td><td>Deployment</td></tr>
+                  <tr><td class="fw-medium">Owner</td><td>Platform Engineering - Data Retrieval</td></tr>
+                  <tr><td class="fw-medium">Reviewer</td><td>Security Architecture</td></tr>
+                  <tr><td class="fw-medium">Applies to</td><td>Azure AI Search - Production (East US)</td></tr>
+                  <tr><td class="fw-medium">Date</td><td>2026-03-27</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">2. Purpose &amp; Scope</h6>
+              <p class="small mb-2"><strong>Purpose:</strong> Define the deployment specification for Azure AI Search in production, including service sizing, semantic configuration, private networking, and observability controls.</p>
+              <p class="small mb-2"><strong>In scope:</strong> Search service provisioning, indexer integrations, semantic config, replica/partition capacity, diagnostics and private endpoint.</p>
+              <p class="small mb-0"><strong>Out of scope:</strong> Application ranking business logic, index document modeling decisions owned by product teams, and prompt orchestration.</p>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">3. Functional Requirements</h6>
+              <ul class="small mb-0">
+                <li class="mb-2"><strong>FR-01</strong> - The service must expose a hybrid retrieval index combining lexical and vector fields.<br><span class="text-muted">Rationale: Improves relevance quality for enterprise question-answering and discovery.</span></li>
+                <li class="mb-2"><strong>FR-02</strong> - The service must enable semantic ranking for the primary query profile.<br><span class="text-muted">Rationale: Natural-language queries require reranking beyond term-frequency scoring.</span></li>
+                <li class="mb-2"><strong>FR-03</strong> - The service must sustain query latency p95 under 250 ms at baseline production load.<br><span class="text-muted">Rationale: Upstream chat and portal UX depend on low-latency retrieval.</span></li>
+                <li><strong>FR-04</strong> - The service must support index refresh within agreed ingestion SLA.<br><span class="text-muted">Rationale: Stale content reduces answer trust and retrieval precision.</span></li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">4. Resolved Parameters</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Parameter</th><th>Value</th><th>Approved by</th></tr></thead>
+                <tbody>
+                  <tr><td><code>location</code></td><td>East US</td><td>Infra Lead</td></tr>
+                  <tr><td><code>environment</code></td><td>prod</td><td>Infra Lead</td></tr>
+                  <tr><td><code>sku</code></td><td>standard</td><td>Architecture</td></tr>
+                  <tr><td><code>replicaCount</code></td><td>3</td><td>Platform Engineering</td></tr>
+                  <tr><td><code>partitionCount</code></td><td>1</td><td>Platform Engineering</td></tr>
+                  <tr><td><code>semanticConfigEnabled</code></td><td>true</td><td>AI Lead</td></tr>
+                  <tr><td><code>privateEndpointEnabled</code></td><td>true</td><td>Security</td></tr>
+                  <tr><td><code>publicNetworkAccess</code></td><td>Disabled</td><td>Security</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">5. Security Controls</h6>
+              <ul class="small mb-0">
+                <li class="mb-1"><strong>Authentication:</strong> Managed Identity for indexer data sources and automation jobs where applicable.</li>
+                <li class="mb-1"><strong>Authorization:</strong> Least-privilege RBAC for management plane; query/admin keys restricted and rotated.</li>
+                <li class="mb-1"><strong>Network:</strong> Private Endpoint in approved subnet; public ingress blocked for production.</li>
+                <li class="mb-1"><strong>Data protection:</strong> Encryption at rest and in transit; TLS 1.2 minimum enforced.</li>
+                <li><strong>Auditability:</strong> Diagnostic events and request telemetry retained in Log Analytics for 90 days.</li>
+              </ul>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">6. Cost Estimate (itemised)</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Item</th><th>Unit</th><th>Est. Volume/mo</th><th>Unit Price</th><th>Est. Monthly</th></tr></thead>
+                <tbody>
+                  <tr><td>Search service (Standard, 3 replicas)</td><td>per replica-hour</td><td>2,190 h</td><td>$0.34</td><td>$745</td></tr>
+                  <tr><td>Search partitions (1 partition)</td><td>included with SKU</td><td>-</td><td>-</td><td>$0</td></tr>
+                  <tr><td>Semantic ranker usage</td><td>per 1,000 queries</td><td>5,000</td><td>$1.00</td><td>$500</td></tr>
+                  <tr><td>Private Endpoint</td><td>per hour</td><td>730 h</td><td>$0.01</td><td>$7</td></tr>
+                  <tr><td>Log Analytics ingestion</td><td>per GB</td><td>20 GB</td><td>$2.30</td><td>$46</td></tr>
+                  <tr class="table-active fw-bold"><td colspan="4">Total estimated monthly</td><td>$1,298</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-4">
+              <h6 class="fw-bold text-uppercase small text-muted mb-3">7. Acceptance Gates</h6>
+              <table class="table table-sm small mb-0">
+                <thead><tr><th>Gate</th><th>Test</th><th>Pass Condition</th><th>Owner</th></tr></thead>
+                <tbody>
+                  <tr><td>G-01</td><td>Query health check</td><td>HTTP 200 and p95 &lt; 250 ms</td><td>Platform Engineering</td></tr>
+                  <tr><td>G-02</td><td>Semantic ranking</td><td>Semantic profile active on primary index</td><td>AI Lead</td></tr>
+                  <tr><td>G-03</td><td>Network isolation</td><td>Public endpoint denied when private mode enabled</td><td>Security Architecture</td></tr>
+                  <tr><td>G-04</td><td>Indexing SLA</td><td>Document freshness within agreed ingestion window</td><td>Data Engineering</td></tr>
+                  <tr><td>G-05</td><td>Observability</td><td>Metrics and logs visible in monitor workbook</td><td>Platform Engineering</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="spec-box mb-0">
+              <h6 class="fw-bold text-uppercase small text-muted mb-2">8. Rollback &amp; Recovery</h6>
+              <ol class="small mb-0">
+                <li class="mb-1"><strong>Service rollback:</strong> Reapply last approved deployment artifact and restore prior replica/partition settings.</li>
+                <li class="mb-1"><strong>Index schema rollback:</strong> Switch aliases to previously validated index version.</li>
+                <li><strong>Escalation:</strong> If network isolation validation fails, disable public access immediately and notify Security within 15 minutes.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="learn-more" class="mb-5">
+      <h2 class="fw-bold mb-4"><i class="bi bi-question-circle me-2"></i>FAQ</h2>
+      <div class="faq-item">
+        <h5>When should I choose hybrid search over vector-only?</h5>
+        <p>Use hybrid search when you need both lexical precision and semantic recall. It performs better than vector-only for mixed query patterns and compliance-heavy use cases.</p>
+      </div>
+      <div class="faq-item">
+        <h5>How should I size replicas and partitions?</h5>
+        <p>Replicas scale query throughput and availability. Partitions scale index storage and indexing throughput. Start with measured workload baselines and adjust from p95 latency and indexing SLA.</p>
+      </div>
+      <div class="faq-item">
+        <h5>Can I run AI Search fully private?</h5>
+        <p>Yes. Configure Private Endpoint with DNS integration and disable public network access for production environments requiring strict isolation.</p>
+      </div>
+    </section>
+
+    <div class="text-center py-4 border-top">
+      <a href="/modules" class="btn btn-outline-primary me-2"><i class="bi bi-arrow-left me-2"></i>Back to Modules</a>
+      <a href="/modules/module-keyvault.html" class="btn btn-primary">Next: Key Vault <i class="bi bi-arrow-right ms-2"></i></a>
     </div>
+  </div>
 
-    <!-- Footer -->
-    <div class="container-main" style="margin-top: 24px;">
-    <div class="card" style="border:1px solid #d6e8ff;">
-        <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
-            <div>
-                <h6 class="mb-1" style="font-weight:700;">Sample Spec-Kit Reference</h6>
-                <p class="mb-0" style="color:#6c757d; font-size:0.95rem;">Use the approved OpenAI Spec-kit as a formatting and quality baseline for module specifications.</p>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <a href="/specs/sample-spec-kit-openai.md" class="btn btn-primary btn-sm">Open .md Spec-Kit</a>
-                <a href="https://ai.azuretools.wiki/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-primary btn-sm">Open on ai.azuretools.wiki</a>
-                <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/blob/main/landing-page/specs/sample-spec-kit-openai.md" target="_blank" rel="noopener" class="btn btn-outline-dark btn-sm">Open on GitHub</a>
-            </div>
-        </div>
-    </div>
-</div>
-<footer>
-        <div class="container-main">
-            <p>&copy; 2024 Azure Platform. Azure AI Search Documentation</p>
-            <small>For more information, visit <a href="https://learn.microsoft.com/en-us/azure/search/" target="_blank" rel="noopener noreferrer">Microsoft Learn</a></small>
-        </div>
-    </footer>
-
-    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js' integrity='sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz' crossorigin='anonymous'></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmRXyJgX7c0f3HmGzTi/CUEfxWMp" crossorigin="anonymous"></script>
 </body>
 </html>
-
