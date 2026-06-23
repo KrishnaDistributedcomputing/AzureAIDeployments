@@ -259,6 +259,161 @@
         .scroll-to-top.show {
             opacity: 1;
         }
+
+        .click-demo-shell {
+            display: grid;
+            grid-template-columns: minmax(280px, 1.1fr) minmax(300px, 0.9fr);
+            gap: 22px;
+            margin-top: 24px;
+        }
+
+        .click-demo-stage,
+        .click-demo-guide {
+            background: linear-gradient(145deg, #ffffff 0%, #f7fbff 100%);
+            border: 1px solid #b8d8ff;
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: 0 16px 40px rgba(0, 40, 80, 0.10);
+        }
+
+        .click-progress-track {
+            height: 10px;
+            background: #e7eef8;
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 14px 0 22px;
+        }
+
+        .click-progress-bar {
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(90deg, #d83b01, #ffb169);
+            transition: width 0.3s ease;
+        }
+
+        .attack-map {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .attack-node {
+            background: #fff;
+            border: 2px solid #d9e2ef;
+            border-radius: 8px;
+            min-height: 138px;
+            padding: 16px;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .attack-node.active {
+            transform: translateY(-6px);
+            border-color: #d83b01;
+            box-shadow: 0 12px 26px rgba(216, 59, 1, 0.18);
+        }
+
+        .attack-node i {
+            color: #d83b01;
+            font-size: 2rem;
+        }
+
+        .attack-node h5 {
+            margin: 12px 0 6px;
+            color: #1f2937;
+        }
+
+        .attack-node p {
+            color: #5f6b7a;
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        .click-step-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .click-step-button {
+            border: 1px solid #c8d5e4;
+            background: #fff;
+            color: #28415e;
+            border-radius: 8px;
+            padding: 10px 8px;
+            font-weight: 700;
+        }
+
+        .click-step-button:hover,
+        .click-step-button.active {
+            background: #d83b01;
+            border-color: #d83b01;
+            color: #fff;
+        }
+
+        .click-live-card {
+            border: 1px solid #e0e8f2;
+            border-radius: 8px;
+            padding: 18px;
+            background: #fff;
+        }
+
+        .click-live-card h3 {
+            color: #d83b01;
+            font-size: 1.45rem;
+        }
+
+        .click-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .click-metric {
+            background: #fff4ef;
+            border: 1px solid #ffd0bd;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .click-metric strong {
+            display: block;
+            color: #b83100;
+            font-size: 1.35rem;
+        }
+
+        .help-card {
+            background: #fff8e6;
+            border: 1px solid #ffd778;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 14px;
+        }
+
+        .live-console {
+            background: #0c1117;
+            color: #9cffc7;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 220px;
+            font-family: Consolas, 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .live-console .prompt {
+            color: #7dd3fc;
+        }
+
+        @media (max-width: 992px) {
+            .click-demo-shell,
+            .attack-map,
+            .click-step-buttons,
+            .click-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -312,6 +467,59 @@
                         <strong>⏱️ Deployment Time</strong>
                         25-30 minutes automated deployment
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Click-through Demo Lab -->
+        <section class="mb-5" id="click-demo">
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Click-through Demo: Ransomware Response</h2>
+            <p class="lead">Run the incident story as a guided portal walkthrough: attack signal, blocked privilege path, soft-delete recovery, and executive closeout.</p>
+
+            <div class="click-demo-shell">
+                <div class="click-demo-stage">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <span class="badge-security"><i class="bi bi-broadcast"></i> Live incident simulation</span>
+                        <button class="btn btn-outline-danger btn-sm" type="button" id="patternBReset">Restart demo</button>
+                    </div>
+                    <div class="click-progress-track"><div class="click-progress-bar" id="patternBProgress"></div></div>
+
+                    <div class="attack-map">
+                        <div class="attack-node active" data-b-node="signal"><i class="bi bi-virus"></i><h5>Attack Signal</h5><p>Backup delete events and unusual RBAC requests appear in audit logs.</p></div>
+                        <div class="attack-node" data-b-node="rbac"><i class="bi bi-person-lock"></i><h5>RBAC Gate</h5><p>Operator role cannot weaken policy, delete vault, or change immutability.</p></div>
+                        <div class="attack-node" data-b-node="vault"><i class="bi bi-safe2"></i><h5>Vault Guard</h5><p>Soft delete and immutable posture preserve recovery points.</p></div>
+                        <div class="attack-node" data-b-node="recover"><i class="bi bi-arrow-counterclockwise"></i><h5>Recovery</h5><p>Undelete, restore, validate, and export incident evidence.</p></div>
+                    </div>
+
+                    <div class="click-step-buttons">
+                        <button class="click-step-button active" type="button" data-b-step="0">1. Detect</button>
+                        <button class="click-step-button" type="button" data-b-step="1">2. Contain</button>
+                        <button class="click-step-button" type="button" data-b-step="2">3. Preserve</button>
+                        <button class="click-step-button" type="button" data-b-step="3">4. Recover</button>
+                        <button class="click-step-button" type="button" data-b-step="4">5. Report</button>
+                    </div>
+
+                    <div class="click-live-card">
+                        <h3 id="patternBTitle">Detect suspicious backup activity</h3>
+                        <p id="patternBText">Start with the security dashboard: backup deletion attempts, access changes, and failed vault operations show the incident story immediately.</p>
+                        <div class="click-metrics">
+                            <div class="click-metric"><strong id="patternBMetricOne">7</strong><span id="patternBMetricOneLabel">Delete attempts</span></div>
+                            <div class="click-metric"><strong id="patternBMetricTwo">0</strong><span id="patternBMetricTwoLabel">Vault changes allowed</span></div>
+                            <div class="click-metric"><strong id="patternBMetricThree">14d</strong><span id="patternBMetricThreeLabel">Soft-delete window</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="click-demo-guide">
+                    <div class="help-card">
+                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
+                        <div id="patternBHelp">Ask the customer who can delete backups today. Then show how this pattern makes the attack noisy and recoverable.</div>
+                    </div>
+                    <div class="live-console" id="patternBConsole"><span class="prompt">KQL&gt;</span> AzureActivity
+| where OperationNameValue has "backup" or OperationNameValue has "vault"
+| summarize Attempts=count() by Caller, ActivityStatusValue
+
+Blocked destructive operations found.</div>
                 </div>
             </div>
         </section>
@@ -834,6 +1042,34 @@ az monitor alert list --query "[?contains(name, 'backup')]"
                 }
             });
         });
+
+        const patternBSteps = [
+            ['Detect suspicious backup activity', 'Start with the security dashboard: backup deletion attempts, access changes, and failed vault operations show the incident story immediately.', 'signal', '20%', ['7', '0', '14d'], ['Delete attempts', 'Vault changes allowed', 'Soft-delete window'], 'Ask the customer who can delete backups today. Then show how this pattern makes the attack noisy and recoverable.', '<span class="prompt">KQL&gt;</span> AzureActivity\n| where OperationNameValue has "backup" or OperationNameValue has "vault"\n| summarize Attempts=count() by Caller, ActivityStatusValue\n\nBlocked destructive operations found.'],
+            ['Contain with separated roles', 'Show that the compromised operator can trigger jobs and restores but cannot change vault lock, delete backup items, or reduce retention.', 'rbac', '40%', ['4 roles', 'Least privilege', '0 policy edits'], ['Separated duties', 'Access model', 'Blocked changes'], 'Name the human story: backup operators can help recovery without having keys to destroy protection.', '<span class="prompt">az&gt;</span> role assignment list --scope protection-rg\n\nBackup Operator: no delete permissions\nRestore Operator: restore only\nSecurity Admin: vault lock owner'],
+            ['Preserve recovery points', 'Open the vault posture: soft delete, immutable lock, and audit diagnostics keep recovery points available after a destructive attempt.', 'vault', '62%', ['Enabled', 'Locked', 'Logged'], ['Soft delete', 'Immutability', 'Diagnostics'], 'This is the "we can still recover" moment. Highlight that deleted backup items remain visible to authorized responders.', '<span class="prompt">az&gt;</span> backup item list --backup-management-type AzureIaasVM\n\nState: SoftDeleted\nRecoveryPointsAvailable: true\nUndeleteAction: available'],
+            ['Recover the protected workload', 'Run the response path: undelete backup item, choose clean recovery point, restore disk or files, and validate workload startup.', 'recover', '84%', ['8 min', 'Clean point', 'Validated'], ['Restore elapsed', 'Recovery point', 'App check'], 'Tie this step to RTO: the demo proves the team can move from attack detection to verified recovery.', '<span class="prompt">PS&gt;</span> ./restore-after-ransomware.ps1 -RecoveryPoint Clean\n\nUndelete completed\nDisk restored\nValidation checks passed'],
+            ['Report control effectiveness', 'Close with evidence: audit KQL, incident timeline, blocked actions, restored assets, and recommended escalation to Pattern D for governance scale.', 'recover', '100%', ['3 KQL', '1 report', 'Pattern D'], ['Evidence queries', 'Executive artifact', 'Next step'], 'End with an executive answer: the control did not prevent the attack attempt, but it preserved recoverability and evidence.', '<span class="prompt">KQL&gt;</span> union AzureActivity, AzureDiagnostics\n| summarize Events=count() by bin(TimeGenerated, 1h), Category\n\nIncident pack exported: ransomware-response-summary.csv']
+        ];
+
+        function renderPatternBStep(index) {
+            const step = patternBSteps[index];
+            document.getElementById('patternBTitle').textContent = step[0];
+            document.getElementById('patternBText').textContent = step[1];
+            document.getElementById('patternBProgress').style.width = step[3];
+            document.getElementById('patternBMetricOne').textContent = step[4][0];
+            document.getElementById('patternBMetricTwo').textContent = step[4][1];
+            document.getElementById('patternBMetricThree').textContent = step[4][2];
+            document.getElementById('patternBMetricOneLabel').textContent = step[5][0];
+            document.getElementById('patternBMetricTwoLabel').textContent = step[5][1];
+            document.getElementById('patternBMetricThreeLabel').textContent = step[5][2];
+            document.getElementById('patternBHelp').textContent = step[6];
+            document.getElementById('patternBConsole').innerHTML = step[7];
+            document.querySelectorAll('[data-b-step]').forEach(button => button.classList.toggle('active', Number(button.dataset.bStep) === index));
+            document.querySelectorAll('[data-b-node]').forEach(node => node.classList.toggle('active', node.dataset.bNode === step[2]));
+        }
+
+        document.querySelectorAll('[data-b-step]').forEach(button => button.addEventListener('click', () => renderPatternBStep(Number(button.dataset.bStep))));
+        document.getElementById('patternBReset').addEventListener('click', () => renderPatternBStep(0));
     </script>
 </body>
 </html>

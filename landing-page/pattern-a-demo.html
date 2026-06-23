@@ -474,6 +474,192 @@
             font-size: 0.9em;
         }
 
+        .click-demo-shell {
+            display: grid;
+            grid-template-columns: minmax(260px, 1.15fr) minmax(300px, .85fr);
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .demo-stage,
+        .demo-sidecar {
+            background: linear-gradient(145deg, rgba(0, 120, 212, 0.18), rgba(45, 45, 61, 0.94));
+            border: 1px solid rgba(80, 230, 255, 0.42);
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: inset 0 0 24px rgba(0, 191, 255, 0.08), 0 18px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        .demo-progress-track {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.09);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 14px 0 22px;
+        }
+
+        .demo-progress-bar {
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(90deg, #00bfff, #7ce3ff);
+            border-radius: 999px;
+            transition: width 0.35s ease;
+        }
+
+        .demo-topology {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            position: relative;
+            margin-bottom: 22px;
+        }
+
+        .demo-node {
+            min-height: 148px;
+            background: rgba(10, 14, 39, 0.84);
+            border: 1px solid rgba(0, 191, 255, 0.32);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease;
+        }
+
+        .demo-node::after {
+            content: '';
+            position: absolute;
+            inset: auto 14px 14px 14px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
+        }
+
+        .demo-node.active {
+            transform: translateY(-6px);
+            border-color: #50e6ff;
+            box-shadow: 0 0 28px rgba(80, 230, 255, 0.24);
+        }
+
+        .demo-node.active::after {
+            background: linear-gradient(90deg, #00bfff, #00ff8a);
+        }
+
+        .demo-node i {
+            color: #50e6ff;
+            font-size: 2rem;
+        }
+
+        .demo-node h5 {
+            color: #fff;
+            margin: 12px 0 6px;
+            font-size: 1rem;
+        }
+
+        .demo-node p {
+            color: #b8d8e8;
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        .demo-step-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .demo-step-button {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(80, 230, 255, 0.28);
+            color: #dff7ff;
+            border-radius: 8px;
+            padding: 10px 8px;
+            font-weight: 700;
+            transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .demo-step-button:hover,
+        .demo-step-button.active {
+            background: rgba(0, 120, 212, 0.48);
+            border-color: #50e6ff;
+            transform: translateY(-2px);
+        }
+
+        .demo-live-card {
+            background: rgba(0, 0, 0, 0.36);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 18px;
+            min-height: 218px;
+        }
+
+        .demo-live-card h3 {
+            color: #50e6ff;
+            margin-bottom: 10px;
+        }
+
+        .demo-live-card p {
+            color: #c6d9e6;
+        }
+
+        .demo-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .demo-live-metric {
+            background: rgba(16, 124, 16, 0.12);
+            border: 1px solid rgba(0, 255, 138, 0.25);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .demo-live-metric strong {
+            display: block;
+            color: #00ff8a;
+            font-size: 1.3rem;
+        }
+
+        .demo-live-metric span {
+            color: #b0b0b0;
+            font-size: 0.82rem;
+        }
+
+        .demo-help-panel {
+            background: rgba(255, 193, 7, 0.10);
+            border: 1px solid rgba(255, 193, 7, 0.36);
+            border-radius: 8px;
+            padding: 15px;
+            color: #ffe9a6;
+            margin-bottom: 14px;
+        }
+
+        .demo-command-panel {
+            background: #05070d;
+            border: 1px solid rgba(80, 230, 255, 0.32);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 230px;
+            font-family: Consolas, 'Courier New', monospace;
+            color: #8fffd2;
+            white-space: pre-wrap;
+        }
+
+        .demo-command-panel .prompt {
+            color: #50e6ff;
+        }
+
+        @media (max-width: 992px) {
+            .click-demo-shell,
+            .demo-topology,
+            .demo-step-buttons,
+            .demo-metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         footer {
             background: #0a0a0a;
             border-top: 2px solid #0078d4;
@@ -526,6 +712,7 @@
                     <a href="/backup-pattern-c-demo" class="nav-link">Pattern C</a>
                     <a href="/backup-pattern-d-demo" class="nav-link">Pattern D</a>
                     <a href="#overview" class="nav-link">Overview</a>
+                    <a href="#click-demo" class="nav-link">Click Demo</a>
                     <a href="#user" class="nav-link">Demo User</a>
                     <a href="#deployment" class="nav-link">Deployment</a>
                     <a href="#restore" class="nav-link">Restore Workflows</a>
@@ -578,6 +765,79 @@
             </div>
             <div class="alert-custom">
                 <i class="bi bi-lightning"></i> <strong>Key Message:</strong> "How do I backup a Windows VM and restore files quickly?"
+            </div>
+        </div>
+
+        <!-- Click-through Demo Lab -->
+        <div id="click-demo" class="section">
+            <div class="section-title">
+                <i class="bi bi-play-circle"></i> Click-through Demo Lab
+            </div>
+            <p style="font-size: 1.05em; color: #b0b0b0; margin-bottom: 20px;">
+                Walk through the customer conversation like a live portal demo. Click each step to animate the protected workload, vault, restore flow, and operator guidance.
+            </p>
+
+            <div class="click-demo-shell">
+                <div class="demo-stage">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <span class="status-badge active"><i class="bi bi-broadcast"></i> Live guided mode</span>
+                            <span class="status-badge protected"><i class="bi bi-clock-history"></i> 15 minute talk track</span>
+                        </div>
+                        <button class="btn-custom" type="button" id="patternAResetDemo"><i class="bi bi-arrow-clockwise"></i> Restart</button>
+                    </div>
+                    <div class="demo-progress-track" aria-label="Demo progress">
+                        <div class="demo-progress-bar" id="patternAProgress"></div>
+                    </div>
+
+                    <div class="demo-topology" aria-label="Pattern A live topology">
+                        <div class="demo-node active" data-node="workload">
+                            <i class="bi bi-pc-display-horizontal"></i>
+                            <h5>Windows VM</h5>
+                            <p>demo-vm-prod with OS disk, data disk, and customer-facing sample files.</p>
+                        </div>
+                        <div class="demo-node" data-node="vault">
+                            <i class="bi bi-shield-check"></i>
+                            <h5>Recovery Services Vault</h5>
+                            <p>Daily policy, on-demand backup, 7-day retention, and 14-day soft delete.</p>
+                        </div>
+                        <div class="demo-node" data-node="restore">
+                            <i class="bi bi-folder-symlink"></i>
+                            <h5>Restore Workspace</h5>
+                            <p>Browse recovery points, mount restore script, recover files, validate data.</p>
+                        </div>
+                    </div>
+
+                    <div class="demo-step-buttons" role="tablist" aria-label="Pattern A demo steps">
+                        <button class="demo-step-button active" type="button" data-demo-step="0">1. Brief</button>
+                        <button class="demo-step-button" type="button" data-demo-step="1">2. Protect</button>
+                        <button class="demo-step-button" type="button" data-demo-step="2">3. Monitor</button>
+                        <button class="demo-step-button" type="button" data-demo-step="3">4. Restore</button>
+                        <button class="demo-step-button" type="button" data-demo-step="4">5. Close</button>
+                    </div>
+
+                    <div class="demo-live-card">
+                        <h3 id="patternATitle">Customer brief: rapid Azure Backup proof</h3>
+                        <p id="patternANarrative">Position the demo as a low-risk way to see VM backup, file-share backup, recovery points, and restore validation in one short session.</p>
+                        <div class="demo-metrics-grid">
+                            <div class="demo-live-metric"><strong id="patternAMetricOne">60 min</strong><span id="patternAMetricOneLabel">Demo-ready deployment</span></div>
+                            <div class="demo-live-metric"><strong id="patternAMetricTwo">7 days</strong><span id="patternAMetricTwoLabel">Retention policy</span></div>
+                            <div class="demo-live-metric"><strong id="patternAMetricThree">$47</strong><span id="patternAMetricThreeLabel">Estimated one-day cost</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-sidecar">
+                    <div class="demo-help-panel">
+                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
+                        <div id="patternAHelp">Open with the customer question: "Can I recover a deleted business file quickly without rebuilding the VM?" Then show the resource group and vault.</div>
+                    </div>
+                    <div class="demo-command-panel" id="patternAConsole"><span class="prompt">PS&gt;</span> ./deploy.ps1 -Pattern CoreDemo
+
+Deploying Recovery Services vault...
+Applying daily policy...
+Demo environment ready.</div>
+                </div>
             </div>
         </div>
 
@@ -1181,6 +1441,87 @@
                 }
             });
         });
+
+            const patternASteps = [
+                {
+                    title: 'Customer brief: rapid Azure Backup proof',
+                    narrative: 'Position the demo as a low-risk way to see VM backup, file-share backup, recovery points, and restore validation in one short session.',
+                    node: 'workload',
+                    progress: '20%',
+                    metrics: ['60 min', '7 days', '$47'],
+                    labels: ['Demo-ready deployment', 'Retention policy', 'Estimated one-day cost'],
+                    help: 'Open with the customer question: "Can I recover a deleted business file quickly without rebuilding the VM?" Then show the resource group and vault.',
+                    console: '<span class="prompt">PS&gt;</span> ./deploy.ps1 -Pattern CoreDemo\n\nDeploying Recovery Services vault...\nApplying daily policy...\nDemo environment ready.'
+                },
+                {
+                    title: 'Protect the VM and file share',
+                    narrative: 'Show how the VM, data disk, and Azure Files share are associated to the vault and policy without hand-building a complex runbook.',
+                    node: 'vault',
+                    progress: '40%',
+                    metrics: ['2 items', '11 PM', '14 days'],
+                    labels: ['Protected sources', 'Daily schedule', 'Soft-delete safety net'],
+                    help: 'Point out the simple operating model: one policy, visible protected items, and a predictable retention window for demo conversations.',
+                    console: '<span class="prompt">az&gt;</span> backup protection enable-for-vm --vault-name demo-vault-prod --vm demo-vm-prod\n\nProtection state: Protected\nPolicy: Daily-7Day-Retention\nNext scheduled backup: 23:00 UTC'
+                },
+                {
+                    title: 'Monitor backup health live',
+                    narrative: 'Switch to job status and Log Analytics. The demo story is confidence: operators can see backup progress, failures, and restore readiness.',
+                    node: 'vault',
+                    progress: '60%',
+                    metrics: ['100%', '3 jobs', '0 failed'],
+                    labels: ['Latest job status', 'Jobs in walkthrough', 'Failure count'],
+                    help: 'Use this step to answer: "How do I know backups are actually happening?" Show job history, alerts, and the KQL query links.',
+                    console: '<span class="prompt">KQL&gt;</span> AzureDiagnostics\n| where Category == "AzureBackupReport"\n| summarize Jobs=count(), Failed=countif(JobStatus_s != "Completed")\n\nJobs: 3\nFailed: 0\nLatest: Completed'
+                },
+                {
+                    title: 'Restore a deleted business file',
+                    narrative: 'Demonstrate the fastest win: pick a recovery point, mount the restore script, browse files, and recover the missing document.',
+                    node: 'restore',
+                    progress: '82%',
+                    metrics: ['4 min', '1 file', 'Verified'],
+                    labels: ['File restore time', 'Recovered item', 'Checksum status'],
+                    help: 'Narrate this as a business event: Finance deleted budget.xlsx, the operator restores it without restoring the whole VM.',
+                    console: '<span class="prompt">PS&gt;</span> ./demo-restore-scenarios.ps1 -Scenario FileRestore\n\nRecovery point selected: Latest completed\nMounted restore volume: Z:\\\nRestored: Finance\\budget.xlsx\nValidation: checksum matched'
+                },
+                {
+                    title: 'Close with cost and next pattern',
+                    narrative: 'Finish by showing the cleanup path, one-day cost, and when to move the customer to Pattern B for ransomware resilience.',
+                    node: 'restore',
+                    progress: '100%',
+                    metrics: ['$47', '5 min', 'Pattern B'],
+                    labels: ['One-day demo cost', 'Cleanup time', 'Recommended next step'],
+                    help: 'Close with a clear decision: Pattern A proves restore basics; Pattern B adds RBAC separation, immutable vault posture, and attack recovery.',
+                    console: '<span class="prompt">PS&gt;</span> ./cleanup-demo.ps1 -Confirm\n\nStopping VM...\nRemoving demo resource group...\nBilling stopped.\nNext: open Pattern B ransomware resilience demo.'
+                }
+            ];
+
+            function renderPatternAStep(index) {
+                const step = patternASteps[index];
+                document.getElementById('patternATitle').textContent = step.title;
+                document.getElementById('patternANarrative').textContent = step.narrative;
+                document.getElementById('patternAProgress').style.width = step.progress;
+                document.getElementById('patternAMetricOne').textContent = step.metrics[0];
+                document.getElementById('patternAMetricTwo').textContent = step.metrics[1];
+                document.getElementById('patternAMetricThree').textContent = step.metrics[2];
+                document.getElementById('patternAMetricOneLabel').textContent = step.labels[0];
+                document.getElementById('patternAMetricTwoLabel').textContent = step.labels[1];
+                document.getElementById('patternAMetricThreeLabel').textContent = step.labels[2];
+                document.getElementById('patternAHelp').textContent = step.help;
+                document.getElementById('patternAConsole').innerHTML = step.console;
+
+                document.querySelectorAll('[data-demo-step]').forEach(button => {
+                    button.classList.toggle('active', Number(button.dataset.demoStep) === index);
+                });
+                document.querySelectorAll('.demo-node').forEach(node => {
+                    node.classList.toggle('active', node.dataset.node === step.node);
+                });
+            }
+
+            document.querySelectorAll('[data-demo-step]').forEach(button => {
+                button.addEventListener('click', () => renderPatternAStep(Number(button.dataset.demoStep)));
+            });
+
+            document.getElementById('patternAResetDemo').addEventListener('click', () => renderPatternAStep(0));
     </script>
 </body>
 </html>

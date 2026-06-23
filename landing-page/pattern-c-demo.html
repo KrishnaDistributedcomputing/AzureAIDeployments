@@ -289,6 +289,161 @@
             opacity: 1;
         }
 
+        .click-demo-shell {
+            display: grid;
+            grid-template-columns: minmax(280px, 1.1fr) minmax(300px, 0.9fr);
+            gap: 22px;
+            margin-top: 24px;
+        }
+
+        .click-demo-stage,
+        .click-demo-guide {
+            background: linear-gradient(145deg, #ffffff 0%, #f5fff6 100%);
+            border: 1px solid #bde8c4;
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: 0 16px 40px rgba(20, 90, 35, 0.10);
+        }
+
+        .click-progress-track {
+            height: 10px;
+            background: #e3f3e6;
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 14px 0 22px;
+        }
+
+        .click-progress-bar {
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(90deg, #107c10, #74d680);
+            transition: width 0.3s ease;
+        }
+
+        .placement-map {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .placement-node {
+            background: #fff;
+            border: 2px solid #d8eadb;
+            border-radius: 8px;
+            min-height: 138px;
+            padding: 16px;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .placement-node.active {
+            transform: translateY(-6px);
+            border-color: var(--success-green);
+            box-shadow: 0 12px 26px rgba(16, 124, 16, 0.18);
+        }
+
+        .placement-node i {
+            color: var(--success-green);
+            font-size: 2rem;
+        }
+
+        .placement-node h5 {
+            margin: 12px 0 6px;
+            color: #17351d;
+        }
+
+        .placement-node p {
+            color: #5c6f60;
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        .click-step-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .click-step-button {
+            border: 1px solid #c8ddca;
+            background: #fff;
+            color: #24522c;
+            border-radius: 8px;
+            padding: 10px 8px;
+            font-weight: 700;
+        }
+
+        .click-step-button:hover,
+        .click-step-button.active {
+            background: var(--success-green);
+            border-color: var(--success-green);
+            color: #fff;
+        }
+
+        .click-live-card {
+            border: 1px solid #dbeadf;
+            border-radius: 8px;
+            padding: 18px;
+            background: #fff;
+        }
+
+        .click-live-card h3 {
+            color: var(--success-green);
+            font-size: 1.45rem;
+        }
+
+        .click-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .click-metric {
+            background: #ecfaee;
+            border: 1px solid #bde8c4;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .click-metric strong {
+            display: block;
+            color: var(--success-green);
+            font-size: 1.35rem;
+        }
+
+        .help-card {
+            background: #fffbe9;
+            border: 1px solid #f0d979;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 14px;
+        }
+
+        .live-console {
+            background: #07110a;
+            color: #9cffc7;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 220px;
+            font-family: Consolas, 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .live-console .prompt {
+            color: #74d680;
+        }
+
+        @media (max-width: 992px) {
+            .click-demo-shell,
+            .placement-map,
+            .click-step-buttons,
+            .click-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .vault-comparison {
                 grid-template-columns: 1fr;
@@ -347,6 +502,58 @@
                         <strong>⏱️ Deployment Time</strong>
                         30-35 minutes (varies based on optional workloads)
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Click-through Demo Lab -->
+        <section class="mb-5" id="click-demo">
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Click-through Demo: Workload Placement</h2>
+            <p class="lead">Guide a platform team through the live decision flow: classify the workload, choose the vault, run the right restore, and compare cost.</p>
+
+            <div class="click-demo-shell">
+                <div class="click-demo-stage">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <span class="badge-cloud"><i class="bi bi-broadcast"></i> Live architecture selector</span>
+                        <button class="btn btn-outline-success btn-sm" type="button" id="patternCReset">Restart demo</button>
+                    </div>
+                    <div class="click-progress-track"><div class="click-progress-bar" id="patternCProgress"></div></div>
+
+                    <div class="placement-map">
+                        <div class="placement-node active" data-c-node="classify"><i class="bi bi-ui-checks-grid"></i><h5>Classify</h5><p>Map VM, files, disk, blob, and AKS to the correct protection model.</p></div>
+                        <div class="placement-node" data-c-node="rsv"><i class="bi bi-archive"></i><h5>RSV Lane</h5><p>Traditional IaaS backup for VMs, Azure Files, SQL in VM, and SAP.</p></div>
+                        <div class="placement-node" data-c-node="vault"><i class="bi bi-cloud-upload"></i><h5>Backup Vault Lane</h5><p>Cloud-native operational backup for disks, blobs, and AKS.</p></div>
+                        <div class="placement-node" data-c-node="optimize"><i class="bi bi-speedometer2"></i><h5>Optimize</h5><p>Compare restore speed, redundancy, retention, and monthly cost.</p></div>
+                    </div>
+
+                    <div class="click-step-buttons">
+                        <button class="click-step-button active" type="button" data-c-step="0">1. Intake</button>
+                        <button class="click-step-button" type="button" data-c-step="1">2. RSV</button>
+                        <button class="click-step-button" type="button" data-c-step="2">3. Snapshot</button>
+                        <button class="click-step-button" type="button" data-c-step="3">4. Blob PITR</button>
+                        <button class="click-step-button" type="button" data-c-step="4">5. Compare</button>
+                    </div>
+
+                    <div class="click-live-card">
+                        <h3 id="patternCTitle">Intake: classify every workload first</h3>
+                        <p id="patternCText">Start by sorting workloads by restore behavior. VMs and file shares go to RSV; disks, blobs, and AKS go to Backup Vault.</p>
+                        <div class="click-metrics">
+                            <div class="click-metric"><strong id="patternCMetricOne">11</strong><span id="patternCMetricOneLabel">Protected resources</span></div>
+                            <div class="click-metric"><strong id="patternCMetricTwo">2</strong><span id="patternCMetricTwoLabel">Vault types</span></div>
+                            <div class="click-metric"><strong id="patternCMetricThree">30%</strong><span id="patternCMetricThreeLabel">Potential savings</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="click-demo-guide">
+                    <div class="help-card">
+                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
+                        <div id="patternCHelp">Lead with a platform team question: "Which vault should we standardize on?" The answer is workload-driven, not one-size-fits-all.</div>
+                    </div>
+                    <div class="live-console" id="patternCConsole"><span class="prompt">Matrix&gt;</span> VM, Azure Files -> Recovery Services Vault
+Managed disk, Blob, AKS -> Backup Vault
+
+Placement model ready.</div>
                 </div>
             </div>
         </section>
@@ -859,6 +1066,34 @@ az storage blob list -c backup-demo --account-name storage
         scrollToTop.addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        const patternCSteps = [
+            ['Intake: classify every workload first', 'Start by sorting workloads by restore behavior. VMs and file shares go to RSV; disks, blobs, and AKS go to Backup Vault.', 'classify', '20%', ['11', '2', '30%'], ['Protected resources', 'Vault types', 'Potential savings'], 'Lead with a platform team question: "Which vault should we standardize on?" The answer is workload-driven, not one-size-fits-all.', '<span class="prompt">Matrix&gt;</span> VM, Azure Files -> Recovery Services Vault\nManaged disk, Blob, AKS -> Backup Vault\n\nPlacement model ready.'],
+            ['RSV lane: traditional restore choices', 'Show VM and file share protection in Recovery Services Vault, then walk through file restore, disk restore, and full VM recovery options.', 'rsv', '40%', ['3-5 min', '9999d', 'GRS'], ['File restore', 'Max retention', 'Redundancy option'], 'Explain that RSV is the mature lane for IaaS operations and long-retention recovery requirements.', '<span class="prompt">az&gt;</span> backup item list --vault-name rsv-modern-demo\n\nVM: protected\nAzure Files: protected\nRestore modes: File, Disk, Full VM'],
+            ['Backup Vault lane: disk snapshot restore', 'Trigger an ad hoc backup for a managed disk and restore from snapshot. The visual point is fast, cloud-native recovery.', 'vault', '60%', ['<1 min', '5 disks', 'LRS'], ['Snapshot restore', 'Disk workload count', 'Storage redundancy'], 'Use this step to show why not every cloud-native workload needs long RSV-style retention.', '<span class="prompt">az&gt;</span> dataprotection backup-instance adhoc-backup --backup-instance-name disk-backup\n\nSnapshot created\nRestore disk available\nElapsed: 42 seconds'],
+            ['Blob operational backup and PITR', 'Delete a test blob, then restore the storage account to a point before deletion. This feels live because the file list visibly returns.', 'vault', '82%', ['7 days', '<1 min', 'PITR'], ['Restore window', 'Restore action', 'Recovery mode'], 'Tell the data lake story: operational backup is continuous and made for accidental deletion or pipeline mistakes.', '<span class="prompt">az&gt;</span> storage blob delete -n customer-feed.csv\n<span class="prompt">az&gt;</span> dataprotection restore trigger --restore-to-timestamp 2026-06-23T14:30:00Z\n\ncustomer-feed.csv restored'],
+            ['Compare cost, SLA, and standards', 'Close with the placement matrix, monthly cost estimate, restore SLA, and the standard: use the vault that matches the workload.', 'optimize', '100%', ['$73', 'P95 ok', '30-50%'], ['Monthly estimate', 'Restore SLA status', 'Savings range'], 'Finish with a simple governance decision the customer can adopt: classify, place, monitor, optimize.', '<span class="prompt">KQL&gt;</span> BackupCoverageByVault\n| summarize Protected=count(), MonthlyCost=sum(Cost) by VaultType\n\nRSV: $50\nBackup Vault: $18\nStorage: $5']
+        ];
+
+        function renderPatternCStep(index) {
+            const step = patternCSteps[index];
+            document.getElementById('patternCTitle').textContent = step[0];
+            document.getElementById('patternCText').textContent = step[1];
+            document.getElementById('patternCProgress').style.width = step[3];
+            document.getElementById('patternCMetricOne').textContent = step[4][0];
+            document.getElementById('patternCMetricTwo').textContent = step[4][1];
+            document.getElementById('patternCMetricThree').textContent = step[4][2];
+            document.getElementById('patternCMetricOneLabel').textContent = step[5][0];
+            document.getElementById('patternCMetricTwoLabel').textContent = step[5][1];
+            document.getElementById('patternCMetricThreeLabel').textContent = step[5][2];
+            document.getElementById('patternCHelp').textContent = step[6];
+            document.getElementById('patternCConsole').innerHTML = step[7];
+            document.querySelectorAll('[data-c-step]').forEach(button => button.classList.toggle('active', Number(button.dataset.cStep) === index));
+            document.querySelectorAll('[data-c-node]').forEach(node => node.classList.toggle('active', node.dataset.cNode === step[2]));
+        }
+
+        document.querySelectorAll('[data-c-step]').forEach(button => button.addEventListener('click', () => renderPatternCStep(Number(button.dataset.cStep))));
+        document.getElementById('patternCReset').addEventListener('click', () => renderPatternCStep(0));
 
         // FAQ Toggle
         document.querySelectorAll('.faq-question').forEach(question => {

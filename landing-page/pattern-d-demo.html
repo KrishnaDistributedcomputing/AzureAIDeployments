@@ -267,6 +267,161 @@
             opacity: 1;
         }
 
+        .click-demo-shell {
+            display: grid;
+            grid-template-columns: minmax(280px, 1.1fr) minmax(300px, 0.9fr);
+            gap: 22px;
+            margin-top: 24px;
+        }
+
+        .click-demo-stage,
+        .click-demo-guide {
+            background: linear-gradient(145deg, #ffffff 0%, #fbf8ff 100%);
+            border: 1px solid #d6c6ff;
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: 0 16px 40px rgba(72, 35, 150, 0.11);
+        }
+
+        .click-progress-track {
+            height: 10px;
+            background: #eee7ff;
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 14px 0 22px;
+        }
+
+        .click-progress-bar {
+            width: 20%;
+            height: 100%;
+            background: linear-gradient(90deg, #7f3ff2, #4ec8ff);
+            transition: width 0.3s ease;
+        }
+
+        .governance-map {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .governance-node {
+            background: #fff;
+            border: 2px solid #e3d9ff;
+            border-radius: 8px;
+            min-height: 138px;
+            padding: 16px;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .governance-node.active {
+            transform: translateY(-6px);
+            border-color: #7f3ff2;
+            box-shadow: 0 12px 26px rgba(127, 63, 242, 0.18);
+        }
+
+        .governance-node i {
+            color: #7f3ff2;
+            font-size: 2rem;
+        }
+
+        .governance-node h5 {
+            margin: 12px 0 6px;
+            color: #2f195d;
+        }
+
+        .governance-node p {
+            color: #655b76;
+            font-size: 0.88rem;
+            margin: 0;
+        }
+
+        .click-step-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .click-step-button {
+            border: 1px solid #d8caef;
+            background: #fff;
+            color: #472778;
+            border-radius: 8px;
+            padding: 10px 8px;
+            font-weight: 700;
+        }
+
+        .click-step-button:hover,
+        .click-step-button.active {
+            background: #7f3ff2;
+            border-color: #7f3ff2;
+            color: #fff;
+        }
+
+        .click-live-card {
+            border: 1px solid #e5dff1;
+            border-radius: 8px;
+            padding: 18px;
+            background: #fff;
+        }
+
+        .click-live-card h3 {
+            color: #7f3ff2;
+            font-size: 1.45rem;
+        }
+
+        .click-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .click-metric {
+            background: #f5efff;
+            border: 1px solid #dccfff;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .click-metric strong {
+            display: block;
+            color: #6a2fd4;
+            font-size: 1.35rem;
+        }
+
+        .help-card {
+            background: #fffbe9;
+            border: 1px solid #f0d979;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 14px;
+        }
+
+        .live-console {
+            background: #0d0717;
+            color: #b9ffdc;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 220px;
+            font-family: Consolas, 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .live-console .prompt {
+            color: #b895ff;
+        }
+
+        @media (max-width: 992px) {
+            .click-demo-shell,
+            .governance-map,
+            .click-step-buttons,
+            .click-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
             .rg-card {
                 margin-bottom: 15px;
@@ -325,6 +480,59 @@
                         <strong>⏱️ Deployment Time</strong>
                         40-50 minutes automated deployment
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Click-through Demo Lab -->
+        <section class="mb-5" id="click-demo">
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Click-through Demo: Enterprise Control Room</h2>
+            <p class="lead">Use this guided control-room flow to show executives and platform teams how governance, security, cost, and audit evidence connect.</p>
+
+            <div class="click-demo-shell">
+                <div class="click-demo-stage">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <span class="badge-enterprise"><i class="bi bi-broadcast"></i> Live governance simulation</span>
+                        <button class="btn btn-outline-primary btn-sm" type="button" id="patternDReset">Restart demo</button>
+                    </div>
+                    <div class="click-progress-track"><div class="click-progress-bar" id="patternDProgress"></div></div>
+
+                    <div class="governance-map">
+                        <div class="governance-node active" data-d-node="caf"><i class="bi bi-diagram-3"></i><h5>CAF Scope</h5><p>Management group policy, subscription guardrails, and tagged resource groups.</p></div>
+                        <div class="governance-node" data-d-node="zero"><i class="bi bi-shield-lock"></i><h5>Zero Trust</h5><p>Private endpoints, Bastion access, NSGs, and separated operator duties.</p></div>
+                        <div class="governance-node" data-d-node="finops"><i class="bi bi-cash-coin"></i><h5>FinOps</h5><p>Cost center tags, budgets, alerts, and backup storage optimization.</p></div>
+                        <div class="governance-node" data-d-node="audit"><i class="bi bi-clipboard2-check"></i><h5>Audit Evidence</h5><p>Policy compliance, restore SLA evidence, and immutable audit records.</p></div>
+                    </div>
+
+                    <div class="click-step-buttons">
+                        <button class="click-step-button active" type="button" data-d-step="0">1. Govern</button>
+                        <button class="click-step-button" type="button" data-d-step="1">2. Secure</button>
+                        <button class="click-step-button" type="button" data-d-step="2">3. Operate</button>
+                        <button class="click-step-button" type="button" data-d-step="3">4. Optimize</button>
+                        <button class="click-step-button" type="button" data-d-step="4">5. Audit</button>
+                    </div>
+
+                    <div class="click-live-card">
+                        <h3 id="patternDTitle">Govern: prove the enterprise landing zone shape</h3>
+                        <p id="patternDText">Start at the management group and show how policy requires tags, soft delete, private access, and vault diagnostics before workloads onboard.</p>
+                        <div class="click-metrics">
+                            <div class="click-metric"><strong id="patternDMetricOne">3 RGs</strong><span id="patternDMetricOneLabel">Separated ownership</span></div>
+                            <div class="click-metric"><strong id="patternDMetricTwo">5 roles</strong><span id="patternDMetricTwoLabel">RBAC model</span></div>
+                            <div class="click-metric"><strong id="patternDMetricThree">4 KQL</strong><span id="patternDMetricThreeLabel">Evidence queries</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="click-demo-guide">
+                    <div class="help-card">
+                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
+                        <div id="patternDHelp">Open with a CIO question: "Can backup be governed as a platform control, not a per-app afterthought?" Then show the three-resource-group operating model.</div>
+                    </div>
+                    <div class="live-console" id="patternDConsole"><span class="prompt">Policy&gt;</span> Evaluate backup landing zone controls
+
+Tag enforcement: compliant
+Soft delete policy: compliant
+Private access policy: compliant</div>
                 </div>
             </div>
         </section>
@@ -853,6 +1061,34 @@ az backup vault backup-properties show \
                 answer.classList.toggle('show');
             });
         });
+
+        const patternDSteps = [
+            ['Govern: prove the enterprise landing zone shape', 'Start at the management group and show how policy requires tags, soft delete, private access, and vault diagnostics before workloads onboard.', 'caf', '20%', ['3 RGs', '5 roles', '4 KQL'], ['Separated ownership', 'RBAC model', 'Evidence queries'], 'Open with a CIO question: "Can backup be governed as a platform control, not a per-app afterthought?" Then show the three-resource-group operating model.', '<span class="prompt">Policy&gt;</span> Evaluate backup landing zone controls\n\nTag enforcement: compliant\nSoft delete policy: compliant\nPrivate access policy: compliant'],
+            ['Secure: enforce zero-trust recovery paths', 'Move to the protection layer and show private endpoints, Bastion-based access, NSGs, immutable posture, and restricted restore operators.', 'zero', '40%', ['Private', 'Locked', 'No public'], ['Vault access', 'Immutability', 'Network exposure'], 'Point out that recovery is still possible while public vault access and broad admin paths are removed.', '<span class="prompt">az&gt;</span> network private-endpoint list -g protection-rg\n\nVault endpoint: approved\nStorage endpoint: approved\nPublic network access: disabled'],
+            ['Operate: run the backup command center', 'Show daily operational health, failed backup triage, restore SLA status, and the incident runbook handoff across SOC and backup teams.', 'audit', '60%', ['99.5%', 'P95 ok', '1 alert'], ['Backup success', 'Restore SLA', 'Active signals'], 'Make this feel like the weekly operations review: signals, owner, decision, evidence.', '<span class="prompt">KQL&gt;</span> RestoreSlaCompliance\n| summarize P95RestoreMinutes=percentile(Duration, 95), Failures=countif(Status != "Success")\n\nP95RestoreMinutes: 48\nFailures: 1'],
+            ['Optimize: connect FinOps to resilience', 'Switch to cost center views, budget alerts, redundancy choices, retention tiers, and storage growth so finance can tune without weakening recovery.', 'finops', '80%', ['$72/day', '8%', '3 tags'], ['Infra estimate', 'Budget drift', 'Required tags'], 'Tell the finance story carefully: cost optimization is allowed, but policy prevents changes that break recovery requirements.', '<span class="prompt">KQL&gt;</span> CostByCostCenter\n| summarize MonthlyCost=sum(Cost) by CostCenter, VaultType\n\nFinance: $412\nClaims: $365\nBudget drift: 8%'],
+            ['Audit: export board-ready proof', 'Close by exporting compliance evidence: policies applied, restore tests completed, budget alerts active, and audit trail preserved.', 'audit', '100%', ['100%', '12 tests', 'Exported'], ['Policy compliance', 'Quarterly restores', 'Evidence pack'], 'End with the executive artifact: the environment is governable, recoverable, cost-visible, and auditable.', '<span class="prompt">Report&gt;</span> Export enterprise backup evidence pack\n\nPolicy compliance: 100%\nRestore test records: 12\nAudit trail: immutable\nOutput: backup-governance-board-pack.zip']
+        ];
+
+        function renderPatternDStep(index) {
+            const step = patternDSteps[index];
+            document.getElementById('patternDTitle').textContent = step[0];
+            document.getElementById('patternDText').textContent = step[1];
+            document.getElementById('patternDProgress').style.width = step[3];
+            document.getElementById('patternDMetricOne').textContent = step[4][0];
+            document.getElementById('patternDMetricTwo').textContent = step[4][1];
+            document.getElementById('patternDMetricThree').textContent = step[4][2];
+            document.getElementById('patternDMetricOneLabel').textContent = step[5][0];
+            document.getElementById('patternDMetricTwoLabel').textContent = step[5][1];
+            document.getElementById('patternDMetricThreeLabel').textContent = step[5][2];
+            document.getElementById('patternDHelp').textContent = step[6];
+            document.getElementById('patternDConsole').innerHTML = step[7];
+            document.querySelectorAll('[data-d-step]').forEach(button => button.classList.toggle('active', Number(button.dataset.dStep) === index));
+            document.querySelectorAll('[data-d-node]').forEach(node => node.classList.toggle('active', node.dataset.dNode === step[2]));
+        }
+
+        document.querySelectorAll('[data-d-step]').forEach(button => button.addEventListener('click', () => renderPatternDStep(Number(button.dataset.dStep))));
+        document.getElementById('patternDReset').addEventListener('click', () => renderPatternDStep(0));
     </script>
 </body>
 </html>
