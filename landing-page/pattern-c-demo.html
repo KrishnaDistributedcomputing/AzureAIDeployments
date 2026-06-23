@@ -54,6 +54,10 @@
     [data-bs-theme="dark"] .help-panel h3 { color: var(--accent); }
     .console-panel { background: #07111f; color: #b9ffdc; font-family: Consolas, "Courier New", monospace; font-size: 0.86rem; white-space: pre-wrap; min-height: 226px; }
     .console-panel .prompt { color: #50e6ff; }
+    .arch-banner { background: linear-gradient(135deg, #eef4ff, #f6f0ff); border: 1px solid #dbe4ff; border-radius: 8px; padding: 1.25rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; }
+    [data-bs-theme="dark"] .arch-banner { background: linear-gradient(135deg, rgba(0,120,212,0.18), rgba(127,86,217,0.18)); border-color: var(--line); }
+    .arch-banner h3 { font-size: 1.1rem; margin: 0 0 0.25rem; }
+    .arch-banner p { color: var(--muted); margin: 0; max-width: 640px; }
     .proof-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
     .proof-card h3 { font-size: 1rem; }
     .artifact-table th, .artifact-table td { vertical-align: middle; font-size: 0.9rem; }
@@ -95,6 +99,7 @@
           <p class="lead mb-0">A compact executive walkthrough that proves protection should follow business priority — matching each application to the right recovery promise and vault type instead of one model for everything.</p>
           <div class="compact-nav">
             <a href="#click-demo">Click Demo</a>
+            <a href="#architecture">Architecture</a>
             <a href="#proof">Proof</a>
             <a href="#artifacts">Artifacts</a>
             <a href="#references">References</a>
@@ -173,6 +178,16 @@ What it means: protection follows business priority, not technology habit.
 Why it matters: critical services get stronger recovery while lower-risk workloads stay cost efficient.
 Key takeaway: Pattern C turns backup placement into an application portfolio decision.</div>
         </aside>
+      </div>
+    </section>
+
+    <section class="mb-4" id="architecture">
+      <div class="arch-banner">
+        <div>
+          <h3><i class="bi bi-easel2 text-primary me-1"></i>Interactive architecture walkthrough</h3>
+          <p>Step through workload classification, two-vault placement, monitoring, and validated recovery in a guided click-through.</p>
+        </div>
+        <a href="/backup-pattern-c-architecture" class="btn btn-primary btn-lg text-nowrap"><i class="bi bi-play-circle me-1"></i>Launch architecture demo</a>
       </div>
     </section>
 
