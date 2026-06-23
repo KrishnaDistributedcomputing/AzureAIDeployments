@@ -1,0 +1,5 @@
+AzureDiagnostics
+| where Category has "AzureBackup"
+| where ResultType !in ("Success", "Succeeded")
+| project TimeGenerated, Resource, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc

@@ -1,0 +1,4 @@
+AzureActivity
+| where ResourceProviderValue =~ "Microsoft.RecoveryServices"
+| project TimeGenerated, OperationNameValue, ActivityStatusValue, Caller, ResourceGroup, Resource
+| order by TimeGenerated desc
