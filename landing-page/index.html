@@ -203,6 +203,10 @@
     .cat-greenfield .category-label { background:linear-gradient(135deg,#6dff91,#00c06d); color:#0d2a1c; }
     .cat-greenfield .pattern-card { border-left:4px solid #22c55e !important; }
     [data-bs-theme="dark"] .cat-greenfield { background:rgba(109,255,145,.10); }
+    .cat-backup { border-color:#50e6ff; background:rgba(80,230,255,.06); }
+    .cat-backup .category-label { background:linear-gradient(135deg,#004578,#50e6ff); color:#fff; }
+    .cat-backup .pattern-card { border-left:4px solid #0078d4 !important; }
+    [data-bs-theme="dark"] .cat-backup { background:rgba(80,230,255,.10); }
 
     .badge-cost { font-size: .75rem; }
     .icon-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
@@ -299,6 +303,9 @@
               <li><a class="dropdown-item" href="/landing-zone"><i class="bi bi-building-fill-gear text-success me-2"></i>Landing Zone Architecture</a></li>
               <li><a class="dropdown-item" href="/azure-backup"><i class="bi bi-shield-check text-primary me-2"></i>Azure Backup Patterns</a></li>
               <li><a class="dropdown-item" href="/backup-pattern-a-demo"><i class="bi bi-lightning-charge text-warning me-2"></i>Pattern A Live Demo <span class="badge bg-info ms-1" style="font-size: 0.7em;">INTERACTIVE</span></a></li>
+              <li><a class="dropdown-item" href="/backup-pattern-b-demo"><i class="bi bi-shield-lock text-danger me-2"></i>Pattern B Ransomware Resilience</a></li>
+              <li><a class="dropdown-item" href="/backup-pattern-c-demo"><i class="bi bi-cloud-upload text-success me-2"></i>Pattern C Modern Workloads</a></li>
+              <li><a class="dropdown-item" href="/backup-pattern-d-demo"><i class="bi bi-building text-info me-2"></i>Pattern D Enterprise Landing Zone</a></li>
               <li><a class="dropdown-item" href="/education"><i class="bi bi-mortarboard-fill me-2" style="color:#6f42c1"></i>Education AI Platform</a></li>
               <li><a class="dropdown-item" href="/modules"><i class="bi bi-puzzle me-2"></i>Core Azure Modules</a></li>
               <li><a class="dropdown-item" href="/module-specs"><i class="bi bi-file-earmark-text me-2" style="color:#007acc"></i>Spec Writing Guide</a></li>
@@ -377,12 +384,15 @@
             <span class="badge rounded-pill me-1 mb-1" style="background:rgba(230,126,34,.6);font-size:.82rem;font-weight:500;letter-spacing:.3px"><i class="bi bi-box-arrow-in-up-right me-1"></i>Migration</span>
             <span class="text-white-50" style="font-size:.88rem">Lift &amp; Shift &middot; SQL to Azure SQL</span><br/>
             <span class="badge rounded-pill me-1 mb-1" style="background:rgba(25,135,84,.6);font-size:.82rem;font-weight:500;letter-spacing:.3px"><i class="bi bi-rocket-takeoff me-1"></i>Greenfield</span>
-            <span class="text-white-50" style="font-size:.88rem">Landing Zone Accelerator &middot; AVM &middot; Entra Governance</span>
+            <span class="text-white-50" style="font-size:.88rem">Landing Zone Accelerator &middot; AVM &middot; Entra Governance</span><br/>
+            <span class="badge rounded-pill me-1 mb-1" style="background:rgba(0,120,212,.72);font-size:.82rem;font-weight:500;letter-spacing:.3px"><i class="bi bi-shield-check me-1"></i>Backup &amp; Resilience</span>
+            <span class="text-white-50" style="font-size:.88rem">Azure Backup &middot; Ransomware Recovery &middot; Vault Governance</span>
           </div>
           <p class="text-white-50 mb-4" style="font-size:.85rem">Each pattern includes: services, costs, SLA alignment, WAF checklist, and Bicep deployment templates.</p>
           <div class="d-flex flex-wrap gap-3 mb-4">
             <a href="#patterns" class="btn btn-light hero-btn"><i class="bi bi-grid-3x3-gap-fill me-2"></i>Explore Patterns</a>
             <a href="#comparison" class="btn btn-outline-light hero-btn"><i class="bi bi-table me-2"></i>Compare All</a>
+            <a href="/azure-backup" class="btn btn-outline-light hero-btn"><i class="bi bi-shield-check me-2"></i>Backup Patterns</a>
 
           </div>
         </div>
@@ -808,6 +818,118 @@
 
         </div><!-- close Greenfield row -->
       </div><!-- close cat-greenfield box -->
+
+      <!-- Backup & Resilience Box -->
+      <div class="category-box cat-backup">
+        <span class="category-label"><i class="bi bi-shield-check me-1"></i>Backup &amp; Resilience – Patterns A–D</span>
+        <p class="text-muted small mt-2 mb-3">Spec-driven Azure Backup demos, ransomware recovery, modern workload protection, and enterprise governance</p>
+        <div class="row g-4">
+
+        <div class="col-md-6 col-lg-3 pattern-item" data-keywords="backup pattern a core demo restore recovery services vault files">
+          <div class="card h-100 pattern-card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle bg-primary bg-opacity-10 text-primary me-3"><i class="bi bi-lightning-charge-fill"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">Pattern A: Core Demo</h5>
+                  <span class="badge bg-success badge-cost">Demo-ready</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">Rapid Azure Backup demo for VM, Azure Files, Recovery Services vault, restore workflows, and monitoring.</p>
+              <div class="mt-2">
+                <span class="badge bg-primary-subtle text-primary-emphasis me-1">VM backup</span>
+                <span class="badge bg-primary-subtle text-primary-emphasis me-1">File restore</span>
+                <span class="badge bg-primary-subtle text-primary-emphasis">KQL</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+              <a href="/backup-pattern-a-demo" class="btn btn-sm btn-outline-primary"><i class="bi bi-play-circle me-1"></i>Demo</a>
+              <a href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>.md</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 pattern-item" data-keywords="backup pattern b ransomware resilience rbac soft delete immutable vault">
+          <div class="card h-100 pattern-card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle bg-danger bg-opacity-10 text-danger me-3"><i class="bi bi-shield-lock-fill"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">Pattern B: Ransomware</h5>
+                  <span class="badge bg-danger badge-cost">Security</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">RBAC separation, soft delete, immutable vault guidance, and alerting for ransomware recovery conversations.</p>
+              <div class="mt-2">
+                <span class="badge bg-danger-subtle text-danger-emphasis me-1">RBAC</span>
+                <span class="badge bg-danger-subtle text-danger-emphasis me-1">Soft delete</span>
+                <span class="badge bg-danger-subtle text-danger-emphasis">Alerts</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+              <a href="/backup-pattern-b-demo" class="btn btn-sm btn-outline-danger"><i class="bi bi-play-circle me-1"></i>Demo</a>
+              <a href="/downloads/azure-backup/pattern-b/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>.md</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 pattern-item" data-keywords="backup pattern c modern workloads backup vault disk aks blob recovery services vault">
+          <div class="card h-100 pattern-card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle bg-success bg-opacity-10 text-success me-3"><i class="bi bi-cloud-upload-fill"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">Pattern C: Modern</h5>
+                  <span class="badge bg-success badge-cost">Cloud-native</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">Vault selection for Recovery Services vault vs Backup vault across disk, AKS, blob, VM, and file workloads.</p>
+              <div class="mt-2">
+                <span class="badge bg-success-subtle text-success-emphasis me-1">Backup vault</span>
+                <span class="badge bg-success-subtle text-success-emphasis me-1">AKS</span>
+                <span class="badge bg-success-subtle text-success-emphasis">Blob</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+              <a href="/backup-pattern-c-demo" class="btn btn-sm btn-outline-success"><i class="bi bi-play-circle me-1"></i>Demo</a>
+              <a href="/downloads/azure-backup/pattern-c/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>.md</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3 pattern-item" data-keywords="backup pattern d enterprise landing zone caf governance zero trust finops compliance">
+          <div class="card h-100 pattern-card shadow-sm">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-3">
+                <div class="icon-circle bg-info bg-opacity-10 text-info me-3"><i class="bi bi-building-fill-gear"></i></div>
+                <div>
+                  <h5 class="card-title mb-0">Pattern D: Enterprise</h5>
+                  <span class="badge bg-info badge-cost">Governance</span>
+                </div>
+              </div>
+              <p class="card-text text-muted small">CAF-aligned resource separation, zero-trust network controls, FinOps tagging, compliance audit, and runbooks.</p>
+              <div class="mt-2">
+                <span class="badge bg-info-subtle text-info-emphasis me-1">CAF</span>
+                <span class="badge bg-info-subtle text-info-emphasis me-1">FinOps</span>
+                <span class="badge bg-info-subtle text-info-emphasis">Private access</span>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-0 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+              <a href="/backup-pattern-d-demo" class="btn btn-sm btn-outline-info"><i class="bi bi-play-circle me-1"></i>Demo</a>
+              <a href="/downloads/azure-backup/pattern-d/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>.md</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="d-flex flex-wrap gap-2 justify-content-center mt-2">
+            <a href="/azure-backup" class="btn btn-primary"><i class="bi bi-shield-check me-2"></i>Open Azure Backup Pattern Hub</a>
+            <a href="/azure-backup#artifacts" class="btn btn-outline-primary"><i class="bi bi-folder-symlink me-2"></i>View Published Artifacts</a>
+          </div>
+        </div>
+
+        </div>
+      </div><!-- close cat-backup box -->
 
     </div>
   </section>
