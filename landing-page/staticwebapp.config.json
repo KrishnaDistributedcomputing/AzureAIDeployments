@@ -32,7 +32,6 @@
     "exclude": ["/img/*", "*.css", "*.js", "*.svg", "*.png", "*.jpg", "*.ico"]
   },
   "globalHeaders": {
-    "Content-Type": "text/html; charset=utf-8",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
     "X-XSS-Protection": "1; mode=block",
@@ -42,7 +41,9 @@
     "Content-Security-Policy": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; font-src 'self' https://cdn.jsdelivr.net; img-src 'self' data: https:; svg-src 'self' data:; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
   },
   "mimeTypes": {
-    ".svg": "image/svg+xml"
+    ".svg": "image/svg+xml",
+    ".md": "text/markdown; charset=utf-8",
+    ".kql": "text/plain; charset=utf-8"
   }
 }
 

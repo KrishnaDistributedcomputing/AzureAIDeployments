@@ -121,6 +121,7 @@
             <a class="toc-link" href="#use-cases"><i class="bi bi-grid-3x3 me-2"></i>Use Cases</a>
             <a class="toc-link" href="#vault-selection"><i class="bi bi-vault me-2"></i>Vault Selection</a>
             <a class="toc-link" href="#patterns"><i class="bi bi-diagram-3 me-2"></i>Deployment Patterns</a>
+            <a class="toc-link" href="#artifacts"><i class="bi bi-folder-symlink me-2"></i>Published Artifacts</a>
             <a class="toc-link" href="#spec-template"><i class="bi bi-file-earmark-text me-2"></i>Spec Template</a>
             <a class="toc-link" href="#runbook"><i class="bi bi-arrow-repeat me-2"></i>Runbook</a>
             <a class="toc-link" href="#monitoring"><i class="bi bi-graph-up me-2"></i>Monitoring</a>
@@ -319,6 +320,11 @@
                 <li>Soft delete enabled; immutability explained</li>
               </ul>
               <p class="small"><strong>Acceptance:</strong> VM and file share protected, recovery point exists, one restore path demonstrated, cleanup tested.</p>
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" target="_blank">Deployment .md</a>
+                <a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-a/SPEC.md" target="_blank">SPEC.md</a>
+                <a class="btn btn-sm btn-outline-dark" href="/backup-pattern-a-demo">Demo</a>
+              </div>
             </div>
 
             <div class="pattern-item">
@@ -332,6 +338,11 @@
                 <li>Pre-staged recovery point</li>
               </ul>
               <p class="small"><strong>Acceptance:</strong> Presenter explains deletion protection, role separation, restore control, and alert path.</p>
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-b/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">Deployment .md</a>
+                <a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-b/SPEC.md" target="_blank">SPEC.md</a>
+                <a class="btn btn-sm btn-outline-dark" href="/backup-pattern-b-demo">Demo</a>
+              </div>
             </div>
 
             <div class="pattern-item">
@@ -345,6 +356,11 @@
                 <li>Clear vault distinctions</li>
               </ul>
               <p class="small"><strong>Acceptance:</strong> Team understands why Backup vault exists and which workloads use it.</p>
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-c/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">Deployment .md</a>
+                <a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-c/SPEC.md" target="_blank">SPEC.md</a>
+                <a class="btn btn-sm btn-outline-dark" href="/backup-pattern-c-demo">Demo</a>
+              </div>
             </div>
 
             <div class="pattern-item">
@@ -358,7 +374,84 @@
                 <li>Runbooks for deployment & handoff</li>
               </ul>
               <p class="small"><strong>Acceptance:</strong> Backup design mapped to CAF governance, security, operations, and costs.</p>
+              <div class="d-flex flex-wrap gap-2 mt-3">
+                <a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-d/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">Deployment .md</a>
+                <a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-d/SPEC.md" target="_blank">SPEC.md</a>
+                <a class="btn btn-sm btn-outline-dark" href="/backup-pattern-d-demo">Demo</a>
+              </div>
             </div>
+          </div>
+        </section>
+
+        <!-- Published Artifacts -->
+        <section id="artifacts">
+          <h2><i class="bi bi-folder-symlink me-2"></i>Published Artifacts</h2>
+          <p class="text-muted mb-4">Deployment markdown, specs, KQL queries, demos, and GitHub source links for all Azure Backup patterns</p>
+
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Pattern</th>
+                  <th>Deployment Markdown</th>
+                  <th>Spec</th>
+                  <th>KQL Queries</th>
+                  <th>Demo</th>
+                  <th>GitHub Source</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>A</strong><br><span class="text-muted small">Core Demo</span></td>
+                  <td><a href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" target="_blank">DEPLOYMENT_GUIDE.md</a></td>
+                  <td><a href="/downloads/azure-backup/pattern-a/SPEC.md" target="_blank">SPEC.md</a></td>
+                  <td class="small">
+                    <a href="/downloads/azure-backup/pattern-a/queries/backup-jobs.kql" target="_blank">backup-jobs.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-a/queries/failed-backups.kql" target="_blank">failed-backups.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-a/queries/vault-activity.kql" target="_blank">vault-activity.kql</a>
+                  </td>
+                  <td><a href="/backup-pattern-a-demo">Open demo</a></td>
+                  <td><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/tree/main/azure-backup-demo-spec" target="_blank">azure-backup-demo-spec</a></td>
+                </tr>
+                <tr>
+                  <td><strong>B</strong><br><span class="text-muted small">Ransomware Resilience</span></td>
+                  <td><a href="/downloads/azure-backup/pattern-b/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</a></td>
+                  <td><a href="/downloads/azure-backup/pattern-b/SPEC.md" target="_blank">SPEC.md</a></td>
+                  <td class="small">
+                    <a href="/downloads/azure-backup/pattern-b/queries/backup-failures-24h.kql" target="_blank">backup-failures-24h.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-b/queries/rbac-access-audit.kql" target="_blank">rbac-access-audit.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-b/queries/soft-delete-operations.kql" target="_blank">soft-delete-operations.kql</a>
+                  </td>
+                  <td><a href="/backup-pattern-b-demo">Open demo</a></td>
+                  <td><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/tree/main/azure-backup-pattern-b-spec" target="_blank">azure-backup-pattern-b-spec</a></td>
+                </tr>
+                <tr>
+                  <td><strong>C</strong><br><span class="text-muted small">Modern Workloads</span></td>
+                  <td><a href="/downloads/azure-backup/pattern-c/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</a></td>
+                  <td><a href="/downloads/azure-backup/pattern-c/SPEC.md" target="_blank">SPEC.md</a></td>
+                  <td class="small">
+                    <a href="/downloads/azure-backup/pattern-c/queries/backup-coverage-by-vault.kql" target="_blank">backup-coverage-by-vault.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-c/queries/restore-time-sla.kql" target="_blank">restore-time-sla.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-c/queries/vault-storage-redundancy.kql" target="_blank">vault-storage-redundancy.kql</a>
+                  </td>
+                  <td><a href="/backup-pattern-c-demo">Open demo</a></td>
+                  <td><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/tree/main/azure-backup-pattern-c-spec" target="_blank">azure-backup-pattern-c-spec</a></td>
+                </tr>
+                <tr>
+                  <td><strong>D</strong><br><span class="text-muted small">Enterprise Landing Zone</span></td>
+                  <td><a href="/downloads/azure-backup/pattern-d/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">INFRASTRUCTURE_DEPLOYMENT_GUIDE.md</a></td>
+                  <td><a href="/downloads/azure-backup/pattern-d/SPEC.md" target="_blank">SPEC.md</a></td>
+                  <td class="small">
+                    <a href="/downloads/azure-backup/pattern-d/queries/budget-alert.kql" target="_blank">budget-alert.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-d/queries/compliance-audit-trail.kql" target="_blank">compliance-audit-trail.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-d/queries/cost-by-cost-center.kql" target="_blank">cost-by-cost-center.kql</a><br>
+                    <a href="/downloads/azure-backup/pattern-d/queries/restore-sla-compliance.kql" target="_blank">restore-sla-compliance.kql</a>
+                  </td>
+                  <td><a href="/backup-pattern-d-demo">Open demo</a></td>
+                  <td><a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments/tree/main/azure-backup-pattern-d-spec" target="_blank">azure-backup-pattern-d-spec</a></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </section>
 

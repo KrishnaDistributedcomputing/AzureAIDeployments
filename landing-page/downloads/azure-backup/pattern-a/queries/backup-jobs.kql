@@ -1,0 +1,4 @@
+AzureDiagnostics
+| where Category has "AzureBackup"
+| project TimeGenerated, Resource, Category, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc

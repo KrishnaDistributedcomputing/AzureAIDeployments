@@ -1,0 +1,19 @@
+// Query 1: Backup Failures in Last 24 Hours
+// Pattern B - Ransomware Resilience Pattern
+// Purpose: Identify failed backup jobs for quick incident detection
+// Frequency: Run hourly by Azure Monitor
+
+AzureDiagnostics
+| where ResourceType == "VAULTS"
+| where OperationName in ("Backup", "BackupJob")
+| where Status == "Failed"
+| where TimeGenerated > ago(24h)
+| project 
+    TimeGenerated, 
+    OperationName, 
+    Status, 
+    BackupItemFriendlyName, 
+    Details,
+    VaultName = ResourceName,
+    ErrorMessage = tostring(parse_json(Details)["ErrorMessage"])
+| order by TimeGenerated desc

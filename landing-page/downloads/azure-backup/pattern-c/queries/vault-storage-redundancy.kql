@@ -1,0 +1,16 @@
+// Query 2: Vault Storage Redundancy & Workloads
+// Pattern C - Modern Workloads Pattern
+// Purpose: Show vault configuration including storage redundancy and protected workload types
+// Frequency: Monthly inventory review
+
+AzureDiagnostics
+| where ResourceType in ("VAULTS", "BACKUPVAULTS")
+| where OperationName == "CreateVault" or OperationName == "VaultCreated"
+| project 
+    Vault = ResourceName,
+    VaultType = ResourceType,
+    StorageRedundancy = tostring(parse_json(Details)["StorageRedundancy"]),
+    Location = tostring(parse_json(Details)["Location"]),
+    BackupItemTypes = tostring(parse_json(Details)["SupportedWorkloads"]),
+    TimeGenerated
+| order by TimeGenerated desc

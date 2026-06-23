@@ -1,0 +1,21 @@
+// Query 2: Compliance Audit Trail (RESTRICTED workloads only)
+// Pattern D - Enterprise Landing Zone Pattern
+// Purpose: Track all management operations on sensitive (RESTRICTED) workloads for compliance audit
+// Frequency: Continuous logging, weekly audit by compliance team
+
+AzureDiagnostics
+| where ResourceType == "VAULTS"
+| extend ComplianceLevel = tostring(parse_json(Tags)["compliance-level"])
+| where ComplianceLevel == "RESTRICTED"
+| where OperationName in ("CreateVault", "DeleteVault", "ModifyPolicy", "EnableSoftDelete", "DeleteRecoveryPoint", "UndeleteRecoveryPoint")
+| project 
+    TimeGenerated, 
+    Caller = tostring(parse_json(Identity)["caller"]),
+    CallerIPAddress = tostring(parse_json(Identity)["callerIPAddress"]),
+    OperationName, 
+    ResourceName,
+    Status,
+    CostCenter = tostring(parse_json(Tags)["cost-center"]),
+    ComplianceLevel,
+    Details = tostring(parse_json(Details))
+| order by TimeGenerated desc

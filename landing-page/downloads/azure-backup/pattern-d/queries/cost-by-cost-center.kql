@@ -1,0 +1,16 @@
+// Query 1: Cost Tracking by Cost Center
+// Pattern D - Enterprise Landing Zone Pattern
+// Purpose: Track backup costs broken down by business unit for chargeback
+// Frequency: Daily reporting, monthly finance review
+
+AzureDiagnostics
+| where ResourceType == "VAULTS"
+| extend CostCenter = tostring(parse_json(Tags)["cost-center"])
+| extend EnvironmentTag = tostring(parse_json(Tags)["environment"])
+| summarize 
+    BackupsSizeGB = sum(todouble(parse_json(Details)["BackupItemSize"])),
+    JobCount = count(),
+    FailedJobs = countif(Status == "Failed")
+    by CostCenter, EnvironmentTag, ResourceName
+| extend EstimatedMonthlyCost = BackupsSizeGB * 0.05
+| order by EstimatedMonthlyCost desc

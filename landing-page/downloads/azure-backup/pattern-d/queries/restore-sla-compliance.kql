@@ -1,0 +1,19 @@
+// Query 3: Restore Time SLA Compliance
+// Pattern D - Enterprise Landing Zone Pattern
+// Purpose: Ensure restore operations meet 4-hour SLA for critical workloads
+// Frequency: Daily SLA reporting
+
+AzureDiagnostics
+| where OperationName == "Restore"
+| extend 
+    StartTime = todatetime(parse_json(Details)["StartTime"]),
+    DurationMins = (TimeGenerated - todatetime(parse_json(Details)["StartTime"])) / 1m
+| extend ComplianceLevel = tostring(parse_json(Tags)["compliance-level"])
+| summarize 
+    P50 = percentile(DurationMins, 50), 
+    P95 = percentile(DurationMins, 95), 
+    P99 = percentile(DurationMins, 99),
+    RestoreCount = count()
+    by BackupItemType, ComplianceLevel
+| extend SLA_4Hour = iff(P95 < 240, "✓ PASS", "✗ FAIL")
+| order by ComplianceLevel, P95 desc
