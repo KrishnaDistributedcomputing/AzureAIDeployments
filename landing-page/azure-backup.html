@@ -3,47 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pattern A: Core Demo Environment — Azure Backup Spec-Driven Deployment</title>
-  <meta name="description" content="Spec-driven Azure Backup demo pattern: Deploy RSV, protect VM and Azure Files, validate backups, perform restores." />
-  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <title>Azure Backup Demo & Production Deployment Patterns</title>
+  <meta name="description" content="A comprehensive Azure Backup reference for deployment patterns, workload use cases, vault selection, backup policies, restore workflows, ransomware resilience, monitoring, and reusable specs." />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
-    :root { --accent: #0078d4; --accent-dark: #50e6ff; --backup-blue: #0063b1; }
-    [data-bs-theme="dark"] { --accent: #50e6ff; --backup-blue: #1e90ff; }
+    :root { --primary: #0078d4; --primary-dark: #106ebe; --accent: #50e6ff; --backup-blue: #0063b1; }
+    [data-bs-theme="dark"] { --primary: #50e6ff; --backup-blue: #1e90ff; }
     
-    .hero { position: relative; min-height: 320px; background: linear-gradient(135deg, #0050a0 0%, #0078d4 40%, #0063b1 100%); overflow: hidden; }
-    [data-bs-theme="dark"] .hero { background: linear-gradient(135deg, #001a33 0%, #003d66 40%, #004d99 100%); }
-    .hero svg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.15; pointer-events: none; }
+    body { background: linear-gradient(135deg, rgba(0, 120, 212, 0.03) 0%, rgba(80, 230, 255, 0.02) 100%); }
+    
+    .hero { background: linear-gradient(135deg, #0050a0 0%, #0078d4 40%, #0063b1 100%); position: relative; overflow: hidden; min-height: 300px; }
+    .hero::before { content: ""; position: absolute; inset: 0; background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); opacity: 0.5; }
     .hero .container { position: relative; z-index: 2; }
     
-    .spec-section { border-left: 5px solid var(--backup-blue); padding: 1.5rem; background: rgba(0, 99, 177, 0.03); border-radius: 8px; margin-bottom: 2rem; }
-    [data-bs-theme="dark"] .spec-section { background: rgba(0, 99, 177, 0.1); }
+    .section-card { border-left: 5px solid var(--backup-blue); background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(10px); padding: 2rem; border-radius: 12px; margin-bottom: 2rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+    [data-bs-theme="dark"] .section-card { background: rgba(255, 255, 255, 0.05); }
     
-    .code-block { background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.6; }
-    [data-bs-theme="dark"] .code-block { background: #2d2d2d; border-color: #444; color: #e0e0e0; }
+    .use-case-card { border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; transition: all 0.3s ease; }
+    [data-bs-theme="dark"] .use-case-card { border-color: #444; }
+    .use-case-card:hover { border-color: var(--backup-blue); box-shadow: 0 8px 20px rgba(0, 99, 177, 0.15); transform: translateY(-2px); }
     
-    .resource-table { font-size: 0.95rem; }
-    .resource-table td { padding: 0.75rem; border-bottom: 1px solid #ddd; }
-    [data-bs-theme="dark"] .resource-table td { border-color: #444; }
+    .pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0; }
+    .pattern-item { background: #f8f9fa; border-radius: 12px; padding: 1.5rem; border-left: 4px solid var(--backup-blue); }
+    [data-bs-theme="dark"] .pattern-item { background: #2d2d2d; }
     
-    .step-card { border-left: 4px solid var(--accent); padding: 1.25rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 1.5rem; }
-    [data-bs-theme="dark"] .step-card { background: #2d2d2d; border-left-color: #50e6ff; }
+    .code-block { background: #f5f5f5; border: 1px solid #ddd; border-radius: 8px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.85rem; overflow-x: auto; line-height: 1.6; margin: 1rem 0; }
+    [data-bs-theme="dark"] .code-block { background: #1e1e1e; border-color: #444; color: #e0e0e0; }
     
-    .tag-badge { display: inline-block; background: #e3f2fd; color: #0050a0; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; margin: 0.25rem; font-weight: 500; }
-    [data-bs-theme="dark"] .tag-badge { background: rgba(0, 78, 167, 0.3); color: #64b5f6; }
+    .table-comparison { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .table-comparison th { background: var(--primary); color: white; padding: 1rem; text-align: left; font-weight: 600; }
+    .table-comparison td { padding: 1rem; border-bottom: 1px solid #ddd; }
+    [data-bs-theme="dark"] .table-comparison td { border-color: #444; }
+    .table-comparison tr:nth-child(even) { background: #f9f9f9; }
+    [data-bs-theme="dark"] .table-comparison tr:nth-child(even) { background: #2d2d2d; }
     
-    .acceptance-check { list-style: none; padding-left: 0; }
-    .acceptance-check li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; }
-    .acceptance-check li:before { content: "✓"; position: absolute; left: 0; color: #28a745; font-weight: bold; }
+    .toc-link { color: var(--backup-blue); text-decoration: none; margin: 0.5rem 0; display: block; padding: 0.5rem 0; }
+    .toc-link:hover { color: var(--primary-dark); text-decoration: underline; }
     
-    .toc-sticky { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
+    h2 { color: var(--backup-blue); font-weight: bold; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 3px solid var(--accent); }
+    h3 { color: #0078d4; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem; }
     
-    h3 { color: var(--backup-blue); font-weight: bold; margin-top: 2rem; margin-bottom: 1rem; }
-    h4 { color: #0078d4; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .stat-box { background: linear-gradient(135deg, var(--primary) 0%, var(--backup-blue) 100%); color: white; padding: 1.5rem; border-radius: 10px; text-align: center; margin: 1rem 0; }
+    .stat-box-value { font-size: 2rem; font-weight: bold; }
+    .stat-box-label { font-size: 0.9rem; opacity: 0.9; }
     
-    .switch-toggle { background: #f8f9fa; border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin: 0.5rem 0; font-family: monospace; }
-    [data-bs-theme="dark"] .switch-toggle { background: #2d2d2d; border-color: #444; }
+    .badge-custom { background: rgba(0, 120, 212, 0.15); color: var(--backup-blue); border: 1px solid var(--backup-blue); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.85rem; margin: 0.25rem; display: inline-block; }
+    
+    .sticky-toc { position: sticky; top: 80px; max-height: calc(100vh - 100px); overflow-y: auto; }
+    
+    .hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
   </style>
 </head>
 <body>
@@ -51,16 +61,18 @@
   <nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary shadow-sm">
     <div class="container">
       <a class="navbar-brand fw-bold" href="index.html">
-        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure Backup <span class="badge bg-info text-dark ms-1" style="font-size:.6rem;vertical-align:middle">SPEC-DRIVEN</span>
+        <i class="bi bi-cloud-fill text-primary me-2"></i>Azure AI
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainNav">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>Home</a></li>
-          <li class="nav-item"><a class="nav-link fw-semibold active" href="azure-backup.html"><i class="bi bi-shield-check me-1"></i>Demo Pattern</a></li>
-          <li class="nav-item"><a class="nav-link" href="modules.html"><i class="bi bi-puzzle me-1"></i>Modules</a></li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house me-1"></i>AI Patterns</a></li>
+          <li class="nav-item"><a class="nav-link" href="landing-zone.html"><i class="bi bi-building me-1"></i>Landing Zone</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold active" href="azure-backup.html"><i class="bi bi-shield-check me-1"></i>Azure Backup</a></li>
+          <li class="nav-item"><a class="nav-link" href="csi-education.html"><i class="bi bi-mortarboard me-1"></i>Education AI</a></li>
+          <li class="nav-item"><a class="nav-link" href="help.html"><i class="bi bi-question-circle me-1"></i>Help</a></li>
         </ul>
         <button id="themeToggle" class="btn btn-outline-secondary ms-lg-3" onclick="toggleTheme()" title="Toggle dark mode">
           <i class="bi bi-moon-stars-fill"></i>
@@ -69,515 +81,596 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero text-white d-flex align-items-center">
-    <svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="#fff" stroke-width="0.5"/></pattern></defs><rect width="1200" height="400" fill="url(#grid)"/></svg>
+  <!-- Hero Section -->
+  <section class="hero text-white py-5">
     <div class="container py-5">
-      <h1 class="display-4 fw-bold mb-3">Pattern A: Core Demo Environment</h1>
-      <p class="lead">Azure Backup Spec-Driven Deployment for Sales & Customer Engineering</p>
-      <p class="text-white-50">Compact demo with VM + Azure Files protection, 7-day retention, Log Analytics diagnostics, and restore workflows.</p>
-      <div class="mt-4">
-        <span class="badge bg-light text-dark me-2"><i class="bi bi-file-earmark-text me-1"></i>Spec ID: AZB-SDD-PATTERN-A-CORE-DEMO</span>
-        <span class="badge bg-light text-dark"><i class="bi bi-clock me-1"></i>Deployment: ~20 minutes</span>
+      <h1 class="display-4 fw-bold mb-3">Azure Backup Demo & Production Deployment Patterns</h1>
+      <p class="lead mb-4">A dedicated Azure Backup reference covering workload use cases, vault selection, backup policies, restore workflows, ransomware resilience, operational monitoring, and reusable deployment specs.</p>
+      
+      <div class="hero-stats">
+        <div class="stat-box">
+          <div class="stat-box-value">10+</div>
+          <div class="stat-box-label">Backup Use Cases</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-value">2</div>
+          <div class="stat-box-label">Vault Types</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-value">4</div>
+          <div class="stat-box-label">Deployment Patterns</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-value">Spec-Driven</div>
+          <div class="stat-box-label">IaC Templates</div>
+        </div>
       </div>
     </div>
   </section>
 
-  <div class="container-fluid py-5">
-    <div class="container">
-      <div class="row">
-        <!-- Table of Contents (Sticky) -->
-        <div class="col-lg-3 mb-4">
-          <div class="toc-sticky card shadow-sm">
-            <div class="card-header bg-light fw-bold">
-              <i class="bi bi-list-ul me-2"></i>Contents
-            </div>
-            <div class="list-group list-group-flush">
-              <a href="#objective" class="list-group-item list-group-item-action"><small>Objective</small></a>
-              <a href="#use-cases" class="list-group-item list-group-item-action"><small>Use Cases</small></a>
-              <a href="#resources" class="list-group-item list-group-item-action"><small>Resources</small></a>
-              <a href="#tags" class="list-group-item list-group-item-action"><small>Tags</small></a>
-              <a href="#switches" class="list-group-item list-group-item-action"><small>Switches</small></a>
-              <a href="#deploy" class="list-group-item list-group-item-action"><small>Deploy</small></a>
-              <a href="#seed" class="list-group-item list-group-item-action"><small>Seed & Protect</small></a>
-              <a href="#restore" class="list-group-item list-group-item-action"><small>Restore Demo</small></a>
-              <a href="#acceptance" class="list-group-item list-group-item-action"><small>Acceptance</small></a>
-              <a href="#cleanup" class="list-group-item list-group-item-action"><small>Cleanup</small></a>
-            </div>
+  <div class="container py-5">
+    <div class="row">
+      <!-- Sidebar TOC -->
+      <div class="col-lg-3 mb-4">
+        <div class="card sticky-toc shadow-sm">
+          <div class="card-header bg-light fw-bold">
+            <i class="bi bi-list-ul me-2"></i>Page Map
+          </div>
+          <div class="card-body">
+            <a class="toc-link" href="#overview"><i class="bi bi-eye me-2"></i>Overview</a>
+            <a class="toc-link" href="#use-cases"><i class="bi bi-grid-3x3 me-2"></i>Use Cases</a>
+            <a class="toc-link" href="#vault-selection"><i class="bi bi-vault me-2"></i>Vault Selection</a>
+            <a class="toc-link" href="#patterns"><i class="bi bi-diagram-3 me-2"></i>Deployment Patterns</a>
+            <a class="toc-link" href="#spec-template"><i class="bi bi-file-earmark-text me-2"></i>Spec Template</a>
+            <a class="toc-link" href="#runbook"><i class="bi bi-arrow-repeat me-2"></i>Runbook</a>
+            <a class="toc-link" href="#monitoring"><i class="bi bi-graph-up me-2"></i>Monitoring</a>
+            <a class="toc-link" href="#iac"><i class="bi bi-code-square me-2"></i>Infrastructure as Code</a>
+            <a class="toc-link" href="#deployment"><i class="bi bi-cloud-arrow-up me-2"></i>Deploy to Azure</a>
           </div>
         </div>
+      </div>
 
-        <!-- Main Content -->
-        <div class="col-lg-9">
-          <!-- Objective -->
-          <section id="objective" class="mb-5">
-            <h3><i class="bi bi-target me-2"></i>Objective</h3>
-            <div class="spec-section">
-              <p>Deploy a <strong>compact, time-limited demo environment</strong> for Azure Backup that protects:</p>
-              <ul class="mb-0">
-                <li><strong>One Windows VM</strong> — Operating system and data disks with daily snapshots</li>
-                <li><strong>One Azure file share</strong> — Business-critical data with granular item-level restore</li>
-                <li><strong>Recovery Services vault</strong> — Central backup management with 7-day retention</li>
-                <li><strong>Log Analytics diagnostics</strong> — Backup job monitoring and performance analytics</li>
-                <li><strong>Restore workflows</strong> — VM file recovery, disk restore, and file share item restore</li>
+      <!-- Main Content -->
+      <div class="col-lg-9">
+
+        <!-- Overview -->
+        <section id="overview">
+          <h2><i class="bi bi-eye me-2"></i>Overview</h2>
+          
+          <div class="section-card">
+            <h3>Core Objective</h3>
+            <p>Protect Azure workloads with policy-driven backup, validated restore, centralized monitoring, least privilege, soft delete, optional immutability, and clean teardown for demo environments.</p>
+            <div class="row g-3 mt-3">
+              <div class="col-md-6">
+                <h6><i class="bi bi-shield-check text-success me-2"></i>Recovery Services vault</h6>
+                <small>Core pattern for VM, Files, SQL</small>
+              </div>
+              <div class="col-md-6">
+                <h6><i class="bi bi-safe text-warning me-2"></i>Backup vault</h6>
+                <small>Modern pattern for Disk, AKS, Blob</small>
+              </div>
+              <div class="col-md-6">
+                <h6><i class="bi bi-graph-up text-info me-2"></i>Log Analytics</h6>
+                <small>Operational monitoring & alerts</small>
+              </div>
+              <div class="col-md-6">
+                <h6><i class="bi bi-lock text-danger me-2"></i>RBAC + alerts</h6>
+                <small>Security & least privilege</small>
+              </div>
+            </div>
+          </div>
+
+          <p class="mt-4"><strong>What this page defines:</strong> This page converts Azure Backup planning into a spec-driven deployment pattern. Each use case identifies the workload, vault type, policy shape, restore workflow, security controls, monitoring evidence, and cleanup requirements before infrastructure is deployed.</p>
+
+          <p>The goal is to support both a low-cost demo environment and production conversation starters for enterprise backup design. Demo defaults favor small resources, short retention, locally redundant storage, pre-staged recovery points, and tested cleanup. Production decisions should be driven by RPO, RTO, compliance, data classification, regional availability, restore testing, and cost modeling.</p>
+
+          <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i><strong>Spec sections:</strong> Scenario, Vault choice, Policy, Restore path, Security, Monitoring, Cost controls, Cleanup
+          </div>
+        </section>
+
+        <!-- Use Cases -->
+        <section id="use-cases">
+          <h2><i class="bi bi-grid-3x3 me-2"></i>Use Case Catalog</h2>
+          <p class="text-muted">Azure Backup use cases and deployment intent</p>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-server text-primary me-2"></i>Azure VM Backup</h5>
+                <p>Protect Windows or Linux VMs with crash-consistent or app-consistent recovery points. Demonstrate VM restore, disk restore, and file-level recovery.</p>
+                <span class="badge-custom"><i class="bi bi-vault me-1"></i>Recovery Services vault</span>
+                <span class="badge-custom"><i class="bi bi-star me-1"></i>Must-have demo</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-folder text-success me-2"></i>Azure Files Backup</h5>
+                <p>Protect Azure file shares for accidental deletion, ransomware simulation, and point-in-time file or share restore demos.</p>
+                <span class="badge-custom"><i class="bi bi-vault me-1"></i>Recovery Services vault</span>
+                <span class="badge-custom"><i class="bi bi-arrow-counterclockwise me-1"></i>File restore</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-disc text-warning me-2"></i>Azure Disk Backup</h5>
+                <p>Use snapshot-based managed disk protection for application-owned disks and newer Backup vault workflows.</p>
+                <span class="badge-custom"><i class="bi bi-safe me-1"></i>Backup vault</span>
+                <span class="badge-custom"><i class="bi bi-question-circle me-1"></i>Optional demo</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-boxes text-info me-2"></i>AKS Backup</h5>
+                <p>Protect Kubernetes cluster state and persistent volumes where AKS Backup is available and aligned to workload recovery needs.</p>
+                <span class="badge-custom"><i class="bi bi-safe me-1"></i>Backup vault</span>
+                <span class="badge-custom"><i class="bi bi-plus-circle me-1"></i>Extension pattern</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-bucket text-primary me-2"></i>Azure Blob Operational Backup</h5>
+                <p>Demonstrate operational protection for containers with soft delete, versioning, point-in-time restore, and policy governance.</p>
+                <span class="badge-custom"><i class="bi bi-safe me-1"></i>Backup vault</span>
+                <span class="badge-custom"><i class="bi bi-shield me-1"></i>Data protection</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-database text-success me-2"></i>Azure Database for PostgreSQL</h5>
+                <p>Use workload-native backup capability and, where supported, vaulted backup patterns for longer retention and centralized governance.</p>
+                <span class="badge-custom"><i class="bi bi-safe me-1"></i>Backup vault</span>
+                <span class="badge-custom"><i class="bi bi-check-circle me-1"></i>Where supported</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-diagram-3 text-warning me-2"></i>SQL Server in Azure VM</h5>
+                <p>Protect SQL databases inside Azure VMs with workload-aware policies, log backup, and database-level restore workflows.</p>
+                <span class="badge-custom"><i class="bi bi-vault me-1"></i>Recovery Services vault</span>
+                <span class="badge-custom"><i class="bi bi-arrow-up me-1"></i>Production extension</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-database-check text-info me-2"></i>SAP HANA in Azure VM</h5>
+                <p>Enterprise workload protection for SAP HANA databases with validated backup registration, policies, and restore drills.</p>
+                <span class="badge-custom"><i class="bi bi-vault me-1"></i>Recovery Services vault</span>
+                <span class="badge-custom"><i class="bi bi-star me-1"></i>Advanced extension</span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="use-case-card">
+                <h5><i class="bi bi-globe text-success me-2"></i>On-Premises Servers</h5>
+                <p>Use MARS, MABS, or DPM for Windows files, folders, system state, or workloads that must back up to Azure from outside Azure.</p>
+                <span class="badge-custom"><i class="bi bi-vault me-1"></i>Recovery Services vault</span>
+                <span class="badge-custom"><i class="bi bi-arrow-left-right me-1"></i>Hybrid</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Vault Selection -->
+        <section id="vault-selection">
+          <h2><i class="bi bi-vault me-2"></i>Vault Selection</h2>
+          <p class="text-muted">Recovery Services vault vs Backup vault</p>
+
+          <div class="table-responsive mt-4">
+            <table class="table-comparison">
+              <thead>
+                <tr>
+                  <th style="width: 20%;">Decision Area</th>
+                  <th style="width: 40%;">Recovery Services Vault</th>
+                  <th style="width: 40%;">Backup Vault</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Typical Workloads</strong></td>
+                  <td>Azure VM, Azure Files, SQL in Azure VM, SAP HANA in Azure VM, MARS/MABS/DPM scenarios</td>
+                  <td>Azure Disk Backup, AKS Backup, Blob operational backup, newer data sources</td>
+                </tr>
+                <tr>
+                  <td><strong>Demo Priority</strong></td>
+                  <td>Required for core VM and Azure Files demo</td>
+                  <td>Recommended for disk or newer workload demo</td>
+                </tr>
+                <tr>
+                  <td><strong>Security Controls</strong></td>
+                  <td>Soft delete, enhanced security, RBAC, alerts, diagnostic logs, immutability</td>
+                  <td>RBAC, diagnostic logs, datastore settings, immutability features</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost Posture</strong></td>
+                  <td>Protected instances, retained data, redundancy, snapshot retention</td>
+                  <td>Snapshot/vaulted backup retention and datastore choice</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-warning mt-4">
+            <i class="bi bi-exclamation-triangle me-2"></i><strong>Demo Tip:</strong> Start with Recovery Services Vault for VM and Azure Files demo, then explain Backup vault as the newer pattern. Do not lock immutability in disposable demos unless cleanup is tested.
+          </div>
+        </section>
+
+        <!-- Deployment Patterns -->
+        <section id="patterns">
+          <h2><i class="bi bi-diagram-3 me-2"></i>Spec-Driven Deployment Patterns</h2>
+          <p class="text-muted mb-4">Patterns for different Azure Backup use cases</p>
+
+          <div class="pattern-grid">
+            <div class="pattern-item">
+              <h4><i class="bi bi-star-fill text-warning me-2"></i>Pattern A: Core Demo</h4>
+              <p class="small mb-3">Best for sales engineering, customer engineering, and solution architecture demos.</p>
+              <ul class="small mb-3">
+                <li>One Windows or Linux VM with data disk</li>
+                <li>One storage account with Azure file share</li>
+                <li>Recovery Services vault with daily policies</li>
+                <li>Log Analytics workspace & diagnostics</li>
+                <li>Soft delete enabled; immutability explained</li>
               </ul>
+              <p class="small"><strong>Acceptance:</strong> VM and file share protected, recovery point exists, one restore path demonstrated, cleanup tested.</p>
             </div>
-          </section>
 
-          <!-- Use Cases -->
-          <section id="use-cases" class="mb-5">
-            <h3><i class="bi bi-briefcase me-2"></i>Primary Use Cases</h3>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5 class="mb-2"><i class="bi bi-person-badge me-2"></i>Sales Engineering</h5>
-                  <p class="mb-0 small">Demonstrate backup capabilities to prospects without long-term infrastructure costs.</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5 class="mb-2"><i class="bi bi-gear me-2"></i>Customer Engineering</h5>
-                  <p class="mb-0 small">Validate backup strategy and retention policies before production rollout.</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5 class="mb-2"><i class="bi bi-diagram-3 me-2"></i>Solution Architecture</h5>
-                  <p class="mb-0 small">Test backup patterns, restore procedures, and disaster recovery workflows.</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5 class="mb-2"><i class="bi bi-star me-2"></i>Executive Demo</h5>
-                  <p class="mb-0 small">Show tangible business value: data protection, compliance, quick recovery.</p>
-                </div>
-              </div>
+            <div class="pattern-item">
+              <h4><i class="bi bi-shield-check text-danger me-2"></i>Pattern B: Ransomware Resilience</h4>
+              <p class="small mb-3">Best for security and business continuity stakeholders.</p>
+              <ul class="small mb-3">
+                <li>RBAC separation (backup admin, restore operator)</li>
+                <li>Soft delete demonstration for deleted items</li>
+                <li>Immutable vault guidance</li>
+                <li>Azure Monitor alerts for job failure</li>
+                <li>Pre-staged recovery point</li>
+              </ul>
+              <p class="small"><strong>Acceptance:</strong> Presenter explains deletion protection, role separation, restore control, and alert path.</p>
             </div>
-          </section>
 
-          <!-- Resources -->
-          <section id="resources" class="mb-5">
-            <h3><i class="bi bi-boxes me-2"></i>Resource Inventory</h3>
-            <p class="text-muted small mb-3">All resources tagged for cleanup and cost tracking.</p>
-            <div class="table-responsive">
-              <table class="table table-sm table-hover resource-table">
-                <thead class="table-light">
-                  <tr>
-                    <th style="width: 25%;">Scope</th>
-                    <th style="width: 75%;">Name</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table-primary"><td colspan="2"><strong>Resource Groups (3)</strong></td></tr>
-                  <tr>
-                    <td><code>rg-*-core</code></td>
-                    <td><code>rg-backup-demo-core</code> — VMs, storage, networking</td>
-                  </tr>
-                  <tr>
-                    <td><code>rg-*-protection</code></td>
-                    <td><code>rg-backup-demo-protection</code> — Recovery Services vault, policies</td>
-                  </tr>
-                  <tr>
-                    <td><code>rg-*-ops</code></td>
-                    <td><code>rg-backup-demo-ops</code> — Log Analytics, monitoring</td>
-                  </tr>
-                  <tr class="table-info"><td colspan="2"><strong>Compute (1)</strong></td></tr>
-                  <tr>
-                    <td><code>vm-win-*-01</code></td>
-                    <td><code>vm-win-backup-demo-01</code> — Windows Server 2022, 2 vCPU, 8GB RAM, 128GB OS disk</td>
-                  </tr>
-                  <tr class="table-success"><td colspan="2"><strong>Storage (2)</strong></td></tr>
-                  <tr>
-                    <td><code>st*&lt;unique&gt;</code></td>
-                    <td><code>stbackupdemo&lt;unique&gt;</code> — General-purpose v2, LRS, 100GB quota</td>
-                  </tr>
-                  <tr>
-                    <td><code>file-share</code></td>
-                    <td><code>demo-share</code> — Premium file share, 100GB capacity, 5GiB used in demo</td>
-                  </tr>
-                  <tr class="table-warning"><td colspan="2"><strong>Backup & Recovery (1)</strong></td></tr>
-                  <tr>
-                    <td><code>rsv-*</code></td>
-                    <td><code>rsv-backup-demo-cc</code> — Recovery Services vault, soft delete enabled, LRS redundancy</td>
-                  </tr>
-                  <tr class="table-danger"><td colspan="2"><strong>Backup Policies (2)</strong></td></tr>
-                  <tr>
-                    <td><code>pol-vm-*</code></td>
-                    <td><code>pol-vm-daily-demo</code> — Daily snapshot, 7-day retention, instant restore</td>
-                  </tr>
-                  <tr>
-                    <td><code>pol-files-*</code></td>
-                    <td><code>pol-files-daily-demo</code> — Daily backup, 7-day retention, item-level restore</td>
-                  </tr>
-                  <tr class="table-secondary"><td colspan="2"><strong>Monitoring (1)</strong></td></tr>
-                  <tr>
-                    <td><code>law-*</code></td>
-                    <td><code>law-backup-demo-cc</code> — Log Analytics workspace, 30-day retention</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="pattern-item">
+              <h4><i class="bi bi-lightning-charge text-success me-2"></i>Pattern C: Modern Workloads</h4>
+              <p class="small mb-3">Best for platform teams evaluating Backup vault patterns.</p>
+              <ul class="small mb-3">
+                <li>Backup vault deployed with diagnostics</li>
+                <li>Optional managed disk backup policy</li>
+                <li>Optional AKS backup extension</li>
+                <li>Optional Blob operational backup</li>
+                <li>Clear vault distinctions</li>
+              </ul>
+              <p class="small"><strong>Acceptance:</strong> Team understands why Backup vault exists and which workloads use it.</p>
             </div>
-          </section>
 
-          <!-- Tags -->
-          <section id="tags" class="mb-5">
-            <h3><i class="bi bi-tags me-2"></i>Required Resource Tags</h3>
-            <p class="text-muted small mb-3">All resources must include these tags for governance, cost tracking, and automated cleanup.</p>
-            <div class="code-block">
-Environment: Demo
-Workload: AzureBackup
-Owner: &lt;owner-name&gt;
-CostCenter: Demo
-AutoDeleteAfter: &lt;yyyy-mm-dd&gt;  # e.g., 2026-07-22
-SpecDrivenDeployment: AzureBackupDemo
-UseCase: CoreDemo
-DataClassification: Demo
-BusinessCriticality: Low
-CleanupRequired: true
+            <div class="pattern-item">
+              <h4><i class="bi bi-building text-info me-2"></i>Pattern D: Enterprise Landing Zone</h4>
+              <p class="small mb-3">Best for production-readiness conversations.</p>
+              <ul class="small mb-3">
+                <li>Separate resource groups (workload, protection, ops)</li>
+                <li>Policy-driven tags & diagnostic settings</li>
+                <li>Private access with Bastion & private endpoints</li>
+                <li>Cost controls through retention decisions</li>
+                <li>Runbooks for deployment & handoff</li>
+              </ul>
+              <p class="small"><strong>Acceptance:</strong> Backup design mapped to CAF governance, security, operations, and costs.</p>
             </div>
-            <div class="alert alert-info mt-3">
-              <i class="bi bi-info-circle me-2"></i><strong>Automation Tip:</strong> Set <code>AutoDeleteAfter</code> to 30 days from deployment date. Use Azure Policy to auto-delete resources past this date.
-            </div>
-          </section>
+          </div>
+        </section>
 
-          <!-- Pattern Switches -->
-          <section id="switches" class="mb-5">
-            <h3><i class="bi bi-toggles2 me-2"></i>Pattern Switches (Configuration)</h3>
-            <p class="text-muted small mb-3">Toggle deployment options to customize the demo environment.</p>
-            
-            <div class="row g-3 mb-4">
-              <div class="col-md-6">
-                <div class="switch-toggle">
-                  <strong>Compute Resources</strong>
-                  <div class="mt-2">
-                    <div><code>deployWindowsVm: <span style="color: #28a745;">true</span></code></div>
-                    <div><code>deployLinuxVm: <span style="color: #dc3545;">false</span></code></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="switch-toggle">
-                  <strong>Storage & Protection</strong>
-                  <div class="mt-2">
-                    <div><code>deployAzureFiles: <span style="color: #28a745;">true</span></code></div>
-                    <div><code>deployBackupVault: <span style="color: #28a745;">true</span></code></div>
-                    <div><code>deployDiskBackup: <span style="color: #dc3545;">false</span></code></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="switch-toggle">
-                  <strong>Vault Configuration</strong>
-                  <div class="mt-2">
-                    <div><code>enableSoftDelete: <span style="color: #28a745;">true</span></code></div>
-                    <div><code>enableImmutableVault: <span style="color: #dc3545;">false</span></code></div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="switch-toggle">
-                  <strong>Storage & Retention</strong>
-                  <div class="mt-2">
-                    <div><code>retentionDays: <span style="color: #0078d4;">7</span></code></div>
-                    <div><code>storageRedundancy: <span style="color: #0078d4;">LRS</span></code> (locally redundant)</div>
-                  </div>
-                </div>
+        <!-- Spec Template -->
+        <section id="spec-template">
+          <h2><i class="bi bi-file-earmark-text me-2"></i>Reusable Spec Template</h2>
+          <p class="text-muted mb-4">Spec template for each backup workload</p>
+
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead class="table-light">
+                <tr>
+                  <th style="width: 20%;">Spec Field</th>
+                  <th style="width: 40%;">Required Decision</th>
+                  <th style="width: 40%;">Example for Demo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Workload</strong></td>
+                  <td>What is protected and why?</td>
+                  <td>VM application server and Azure file share with sample business files</td>
+                </tr>
+                <tr>
+                  <td><strong>Vault Type</strong></td>
+                  <td>Recovery Services vault, Backup vault, or workload-native backup</td>
+                  <td>Recovery Services vault for VM and Azure Files</td>
+                </tr>
+                <tr>
+                  <td><strong>Policy</strong></td>
+                  <td>Frequency, retention, snapshot retention, timezone, redundancy</td>
+                  <td>Daily backup, 7-day retention, 2-day instant restore snapshots, LRS</td>
+                </tr>
+                <tr>
+                  <td><strong>Restore Workflow</strong></td>
+                  <td>Which recovery path will be demonstrated?</td>
+                  <td>Restore disk, file-level restore, and Azure Files item restore</td>
+                </tr>
+                <tr>
+                  <td><strong>Security Posture</strong></td>
+                  <td>RBAC, soft delete, immutability, network access</td>
+                  <td>Soft delete enabled, Backup Operator for restore, no public VM ingress</td>
+                </tr>
+                <tr>
+                  <td><strong>Monitoring</strong></td>
+                  <td>Jobs, alerts, diagnostics, workbook, operational owner</td>
+                  <td>Diagnostics to Log Analytics, failed job query, action group placeholder</td>
+                </tr>
+                <tr>
+                  <td><strong>Cost Control</strong></td>
+                  <td>SKU, retention, redundancy, cleanup tags, restored resource lifecycle</td>
+                  <td>Standard_B2s, LRS, 7-day retention, AutoDeleteAfter tag</td>
+                </tr>
+                <tr>
+                  <td><strong>Acceptance</strong></td>
+                  <td>What proves the use case works?</td>
+                  <td>Protected item visible, recovery point created, restore validated, cleanup tested</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Runbook -->
+        <section id="runbook">
+          <h2><i class="bi bi-arrow-repeat me-2"></i>Runbook</h2>
+          <p class="text-muted mb-4">Demo flow from deploy to restore</p>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>1. Deploy the Environment</h5>
+                <p>Create workload, protection, and operations resource groups; deploy VM, storage account, vaults, policies, and diagnostics.</p>
               </div>
             </div>
-          </section>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>2. Seed Demo Data</h5>
+                <p>Create sample VM files and Azure file share folders such as finance, operations, and customer documents.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>3. Enable Protection</h5>
+                <p>Assign policies, enable backup for the VM and file share, and optionally configure disk or modern data-source backup.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>4. Trigger or Review Backup</h5>
+                <p>Run initial backup or use a pre-staged recovery point when the live job would take too long.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>5. Demonstrate Restore</h5>
+                <p>Show full VM restore, disk restore, file-level recovery, or Azure Files item restore depending on audience.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>6. Show Security Controls</h5>
+                <p>Review soft delete, immutability guidance, RBAC separation, and no-public-access posture.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>7. Show Monitoring</h5>
+                <p>Open backup jobs, alerts, protected items, recovery points, and Log Analytics queries.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="section-card">
+                <h5>8. Clean Up</h5>
+                <p>Remove restored resources, stop protection where appropriate, validate soft-delete implications, and delete demo resource groups.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          <!-- Deploy -->
-          <section id="deploy" class="mb-5">
-            <h3><i class="bi bi-cloud-arrow-up me-2"></i>Deployment Steps</h3>
-            
-            <h4>1. Prerequisites & Provider Registration</h4>
-            <div class="code-block">
-# Login and set subscription
+        <!-- Monitoring -->
+        <section id="monitoring">
+          <h2><i class="bi bi-graph-up me-2"></i>Monitoring</h2>
+          <p class="text-muted mb-4">Operational monitoring queries</p>
+
+          <h4>Backup Jobs</h4>
+          <div class="code-block">AzureDiagnostics
+| where Category has "AzureBackup"
+| project TimeGenerated, Resource, Category, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc</div>
+
+          <h4>Failed Operations</h4>
+          <div class="code-block">AzureDiagnostics
+| where Category has "AzureBackup"
+| where ResultType !in ("Success", "Succeeded")
+| project TimeGenerated, Resource, OperationName, ResultType, ResultDescription
+| order by TimeGenerated desc</div>
+
+          <h4>Vault Activity</h4>
+          <div class="code-block">AzureActivity
+| where ResourceProviderValue =~ "Microsoft.RecoveryServices"
+| project TimeGenerated, OperationNameValue, ActivityStatusValue, Caller, ResourceGroup, Resource
+| order by TimeGenerated desc</div>
+        </section>
+
+        <!-- Infrastructure as Code -->
+        <section id="iac">
+          <h2><i class="bi bi-code-square me-2"></i>Infrastructure as Code</h2>
+          <p class="text-muted mb-4">Implemented spec-driven deployment package</p>
+
+          <p>A dedicated deployable package is available in the repository at <code>azure-backup-demo-spec/</code>. It contains the Bicep entry point, focused modules, scripts, docs, and KQL queries needed to deploy and demonstrate the Azure Backup environment.</p>
+
+          <div class="code-block">azure-backup-demo-spec/
+  README.md
+  SPEC.md
+  /infra
+    main.bicep
+    main.demo.bicepparam
+    /modules
+      recovery-services-vault.bicep
+      backup-vault.bicep
+      vm.bicep
+      storage.bicep
+      monitoring.bicep
+      rbac.bicep
+  /scripts
+    deploy.ps1
+    seed-demo-data.ps1
+    trigger-backup.ps1
+    validate-backup.ps1
+    cleanup.ps1
+  /docs
+    architecture.md
+    demo-runbook.md
+    presenter-notes.md
+    test-plan.md
+  /queries
+    backup-jobs.kql
+    failed-backups.kql
+    vault-activity.kql</div>
+
+          <h4 class="mt-4">Deploy Command</h4>
+          <div class="code-block">./scripts/deploy.ps1 `
+  -Location canadacentral `
+  -EnvironmentName backup-demo `
+  -Owner krishna `
+  -AdminPassword (Read-Host -AsSecureString "VM admin password")</div>
+
+          <h4 class="mt-4">Required Parameters</h4>
+          <div class="code-block">environmentName: backup-demo
+location: canadacentral
+owner: krishna
+deployWindowsVm: true
+deployLinuxVm: false
+deployAzureFiles: true
+deployDiskBackup: false
+enableSoftDelete: true
+enableImmutableVault: false
+retentionDays: 7
+storageRedundancy: LRS</div>
+
+          <div class="alert alert-warning mt-3">
+            <i class="bi bi-exclamation-triangle me-2"></i><strong>Cleanup Warning:</strong> Do not lock immutable vault settings in a disposable demo unless the teardown process has been tested with that setting enabled.
+          </div>
+        </section>
+
+        <!-- Deploy to Azure -->
+        <section id="deployment">
+          <h2><i class="bi bi-cloud-arrow-up me-2"></i>Deploy to Azure</h2>
+          <p class="text-muted mb-4">How to deploy the spec-driven patterns</p>
+
+          <h4>1. Prepare the Subscription</h4>
+          <ul>
+            <li>Select a subscription where you can create resource groups, managed identities, vaults, virtual machines, storage accounts, and Log Analytics workspaces.</li>
+            <li>Install Azure CLI, PowerShell 7, and Bicep support through Azure CLI.</li>
+            <li>Confirm provider registration for <code>Microsoft.RecoveryServices</code>, <code>Microsoft.DataProtection</code>, <code>Microsoft.Compute</code>, <code>Microsoft.Storage</code>, <code>Microsoft.Network</code>, and <code>Microsoft.OperationalInsights</code>.</li>
+            <li>Use a short-lived demo owner, cost center, and deletion date before deploying.</li>
+          </ul>
+
+          <h4 class="mt-4">2. Choose the Pattern Switch Set</h4>
+          <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>Pattern</th>
+                  <th>Recommended Switches</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>A</strong> Core demo</td>
+                  <td><code>deployWindowsVm=true</code>, <code>deployAzureFiles=true</code>, <code>deployDiskBackup=false</code>, <code>enableImmutableVault=false</code></td>
+                </tr>
+                <tr>
+                  <td><strong>B</strong> Ransomware resilience</td>
+                  <td><code>deployWindowsVm=true</code>, <code>deployAzureFiles=true</code>, <code>enableSoftDelete=true</code>, <code>enableImmutableVault=false</code></td>
+                </tr>
+                <tr>
+                  <td><strong>C</strong> Modern workloads</td>
+                  <td><code>deployBackupVault=true</code>, <code>deployDiskBackup=true</code>, optional AKS or Blob backup extension</td>
+                </tr>
+                <tr>
+                  <td><strong>D</strong> Enterprise landing zone</td>
+                  <td>Same as A, B, or C plus RBAC principal IDs, required tags, diagnostic settings, policy assignments</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4 class="mt-4">3. Run the Deployment</h4>
+          <div class="code-block">cd azure-backup-demo-spec
 az login
 az account set --subscription "&lt;subscription-name-or-id&gt;"
-
-# Register required resource providers
 az provider register --namespace Microsoft.RecoveryServices
 az provider register --namespace Microsoft.DataProtection
-az provider register --namespace Microsoft.Compute
-az provider register --namespace Microsoft.Storage
-az provider register --namespace Microsoft.Network
-az provider register --namespace Microsoft.OperationalInsights
 
-# Verify registration (should show State: Registered)
-az provider show --namespace Microsoft.RecoveryServices --query "registrationState"
-            </div>
-
-            <h4 class="mt-4">2. Deploy Infrastructure with Bicep</h4>
-            <div class="code-block">
-cd azure-backup-demo-spec
-
-# Capture admin password securely
-$adminPassword = Read-Host -AsSecureString "Enter VM admin password (min 12 chars, complex)"
-
-# Deploy all resources
+$env:AZURE_BACKUP_DEMO_ADMIN_PASSWORD = "&lt;strong-password&gt;"
 ./scripts/deploy.ps1 `
   -Location canadacentral `
   -EnvironmentName backup-demo `
-  -Owner "John Smith" `
-  -RegionCode cc `
-  -AutoDeleteAfter "2026-07-22" `
-  -AdminUsername azureadmin `
-  -AdminPassword $adminPassword
+  -Owner &lt;owner-name&gt; `
+  -AdminPassword (ConvertTo-SecureString $env:AZURE_BACKUP_DEMO_ADMIN_PASSWORD -AsPlainText -Force)</div>
 
-# Expected output: 3 resource groups, ~10 resources, ~10 minutes
-            </div>
+          <p class="text-muted small mt-3">For a shared environment, replace the plain environment variable step with your secret store or a secure PowerShell prompt.</p>
 
-            <h4 class="mt-4">3. Verify Deployment</h4>
-            <div class="code-block">
-# List created resource groups
-az group list --query "[?contains(name, 'backup-demo')].{Name:name, Location:location}" -o table
+          <h4 class="mt-4">4. Validate and Operate</h4>
+          <div class="code-block">./scripts/seed-demo-data.ps1 -EnvironmentName backup-demo
+./scripts/trigger-backup.ps1 -EnvironmentName backup-demo
+./scripts/validate-backup.ps1 -EnvironmentName backup-demo</div>
 
-# List resources in core group
-az resource list --resource-group rg-backup-demo-core -o table
+          <ul class="small mt-3">
+            <li>Confirm protected items appear in the Recovery Services vault or Backup vault.</li>
+            <li>Confirm a recovery point exists before the live presentation.</li>
+            <li>Open Log Analytics and run the KQL queries from <code>queries/</code>.</li>
+            <li>Complete cleanup after the demo with <code>./scripts/cleanup.ps1 -EnvironmentName backup-demo</code>.</li>
+          </ul>
 
-# Verify vault creation
-az backup vault list --resource-group rg-backup-demo-protection -o table
-            </div>
-          </section>
+          <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i><strong>Production note:</strong> For Pattern D, do not deploy directly from demo defaults. Convert the selected pattern into a reviewed landing-zone spec with approved naming, tags, policy assignments, RBAC groups, RPO/RTO, retention, private access, monitoring ownership, and cost-management approval.
+          </div>
 
-          <!-- Seed, Protect, Validate -->
-          <section id="seed" class="mb-5">
-            <h3><i class="bi bi-arrow-repeat me-2"></i>Seed Data, Protect, &amp; Validate</h3>
+          <h4 class="mt-4">Definition of Done</h4>
+          <p>The deployment is ready when:</p>
+          <ul>
+            <li>Environment deploys from IaC</li>
+            <li>VM and Azure Files backup are protected</li>
+            <li>Recovery points exist</li>
+            <li>At least one restore is validated</li>
+            <li>Backup jobs and alerts are visible</li>
+            <li>Soft delete behavior is explained</li>
+            <li>Cleanup is tested</li>
+            <li>Presenter can complete the demo in 30 to 45 minutes</li>
+          </ul>
+        </section>
 
-            <h4>Step 1: Create Demo Data</h4>
-            <p class="text-muted small">Populate VM and file share with sample data for backup demonstration.</p>
-            <div class="code-block">
-$CoreResourceGroupName = "rg-backup-demo-core"
-$StorageAccountName = az storage account list `
-  --resource-group $CoreResourceGroupName `
-  --query "[?starts_with(name, 'stbackupdemo')].name | [0]" -o tsv
-$FileShareName = "demo-share"
+        <!-- Footer -->
+        <section class="mt-5 pt-5 border-top">
+          <p class="text-muted text-center">
+            <small>Azure AI Deployment Patterns © 2026 • 
+            <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" target="_blank" class="text-decoration-none">
+              <i class="bi bi-github me-1"></i>GitHub Repository
+            </a></small>
+          </p>
+        </section>
 
-./scripts/seed-demo-data.ps1 `
-  -ResourceGroupName $CoreResourceGroupName `
-  -StorageAccountName $StorageAccountName `
-  -FileShareName $FileShareName
-
-# Creates:
-# - VM: C:\DemoData\*.txt (sample files)
-# - File Share: demo-share/reports/* (sample PDFs, CSVs)
-            </div>
-
-            <h4 class="mt-4">Step 2: Trigger Initial Backups</h4>
-            <p class="text-muted small">Execute backup jobs for both VM and file share.</p>
-            <div class="code-block">
-$CoreResourceGroupName = "rg-backup-demo-core"
-$ProtectionResourceGroupName = "rg-backup-demo-protection"
-$VaultName = "rsv-backup-demo-cc"
-$VmName = "vm-win-backup-demo-01"
-$FileShareName = "demo-share"
-$StorageAccountName = az storage account list `
-  --resource-group $CoreResourceGroupName `
-  --query "[?starts_with(name, 'stbackupdemo')].name | [0]" -o tsv
-
-./scripts/trigger-backup.ps1 `
-  -CoreResourceGroupName $CoreResourceGroupName `
-  -ProtectionResourceGroupName $ProtectionResourceGroupName `
-  -VaultName $VaultName `
-  -VmName $VmName `
-  -StorageAccountName $StorageAccountName `
-  -FileShareName $FileShareName `
-  -RetainUntil (Get-Date).AddDays(7)
-
-# Expected: Backup jobs queued, processing ~3-5 minutes for first backup
-            </div>
-
-            <h4 class="mt-4">Step 3: Validate Backup Completion</h4>
-            <p class="text-muted small">Confirm recovery points exist and backup job metrics are visible.</p>
-            <div class="code-block">
-./scripts/validate-backup.ps1 `
-  -ProtectionResourceGroupName rg-backup-demo-protection `
-  -VaultName rsv-backup-demo-cc
-
-# Checks:
-# ✓ VM has backup items
-# ✓ File share has backup items
-# ✓ Recovery points exist (last 7 days)
-# ✓ Backup jobs completed successfully
-# ✓ Log Analytics shows backup metrics
-            </div>
-          </section>
-
-          <!-- Restore Demo -->
-          <section id="restore" class="mb-5">
-            <h3><i class="bi bi-arrow-counterclockwise me-2"></i>Restore Demo</h3>
-            <p>Demonstrate one primary restore path to show backup value. Choose one scenario:</p>
-
-            <h4>Option A: VM File Recovery (Easiest)</h4>
-            <div class="step-card">
-              <p><strong>Scenario:</strong> User accidentally deleted a file from VM. Recover specific file from recovery point.</p>
-              <div class="code-block">
-./scripts/restore-vm-files.ps1 `
-  -ProtectionResourceGroupName rg-backup-demo-protection `
-  -VaultName rsv-backup-demo-cc `
-  -VmName vm-win-backup-demo-01 `
-  -RecoveryPointDate (Get-Date).AddDays(-1)
-
-# Opens file picker to select files from recovery point
-# Downloads .iso with recoverable files for mounting
-              </div>
-            </div>
-
-            <h4>Option B: Restore Disks (Medium Complexity)</h4>
-            <div class="step-card">
-              <p><strong>Scenario:</strong> VM corruption detected. Restore OS disk to new VM.</p>
-              <div class="code-block">
-./scripts/restore-vm-disks.ps1 `
-  -ProtectionResourceGroupName rg-backup-demo-protection `
-  -VaultName rsv-backup-demo-cc `
-  -VmName vm-win-backup-demo-01 `
-  -RestoreResourceGroupName rg-restore-temp
-
-# Creates managed disks in rg-restore-temp
-# User can attach to new VM for verification
-              </div>
-            </div>
-
-            <h4>Option C: Azure Files Item Restore (Recommended)</h4>
-            <div class="step-card">
-              <p><strong>Scenario:</strong> Business-critical report file was deleted. Restore from file share backup.</p>
-              <div class="code-block">
-./scripts/restore-file-share-items.ps1 `
-  -ProtectionResourceGroupName rg-backup-demo-protection `
-  -VaultName rsv-backup-demo-cc `
-  -FileShareName demo-share `
-  -RecoveryPointDate (Get-Date).AddDays(-2) `
-  -FilePath "reports/Q2-Summary.pdf"
-
-# Restores file to original or alternate location
-# Item-level granularity shows powerful retention capability
-              </div>
-            </div>
-          </section>
-
-          <!-- Acceptance Criteria -->
-          <section id="acceptance" class="mb-5">
-            <h3><i class="bi bi-check-circle me-2"></i>Acceptance Criteria</h3>
-            <p class="text-muted small mb-3">Verify successful deployment before showcasing to stakeholders.</p>
-            
-            <ul class="acceptance-check">
-              <li>All 3 resource groups created with correct naming</li>
-              <li>VM deployed, provisioned, and accessible via Bastion/RDP</li>
-              <li>Azure file share created and mounted on VM</li>
-              <li>Recovery Services vault deployed with soft delete enabled</li>
-              <li>Backup policies (VM + Files) assigned and active</li>
-              <li>Demo data seeded on VM and file share (≥100MB total)</li>
-              <li>Initial backup job completed successfully</li>
-              <li>Recovery points visible in vault (≥1 per data source)</li>
-              <li>Backup metrics showing in Log Analytics</li>
-              <li>One restore path executed successfully</li>
-              <li>All resources tagged with required tags + AutoDeleteAfter date</li>
-              <li>Cost tracking shows monthly estimate (&lt;$50/month)</li>
-              <li>Cleanup script tested and resources can be deleted in &lt;5 minutes</li>
-            </ul>
-          </section>
-
-          <!-- Cleanup -->
-          <section id="cleanup" class="mb-5">
-            <h3><i class="bi bi-trash me-2"></i>Cleanup & Deprovisioning</h3>
-            <p class="text-muted small mb-3">Demo resources are temporary. Clean up after demo/evaluation period.</p>
-
-            <h4>Manual Cleanup</h4>
-            <div class="code-block">
-# Option 1: Delete entire environment
-az group delete --name rg-backup-demo-core --yes --no-wait
-az group delete --name rg-backup-demo-protection --yes --no-wait
-az group delete --name rg-backup-demo-ops --yes --no-wait
-
-# Option 2: Guided cleanup script
-./scripts/cleanup-demo.ps1 -Force
-
-# Expected: All resources deleted within 5 minutes
-            </div>
-
-            <h4 class="mt-4">Automated Cleanup (Recommended)</h4>
-            <div class="alert alert-success">
-              <i class="bi bi-lightning-charge-fill me-2"></i><strong>Best Practice:</strong> Use <code>AutoDeleteAfter</code> tag with Azure Policy lifecycle management to automatically delete resources on specified date. No manual intervention required.
-            </div>
-
-            <div class="code-block">
-# Azure Policy automatically evaluates AutoDeleteAfter tag
-# If today >= AutoDeleteAfter date, resource is marked for deletion
-# Optional 7-day grace period before permanent deletion
-
-# View policy-tagged deletions
-az resource list --tags AutoDeleteAfter=2026-07-22 -o table
-            </div>
-          </section>
-
-          <!-- Key Learnings -->
-          <section id="learnings" class="mb-5">
-            <h3><i class="bi bi-lightbulb me-2"></i>Key Learnings & Best Practices</h3>
-            
-            <div class="row g-3">
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5><i class="bi bi-shield-check me-2"></i>Soft Delete Protection</h5>
-                  <p class="small mb-0">Enables recovery of deleted backup items for 14 days, critical for accidental deletions.</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5><i class="bi bi-clock me-2"></i>Retention Strategy</h5>
-                  <p class="small mb-0">Demo uses 7-day retention. Production typically uses 30/60/365-day policies.</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5><i class="bi bi-graph-up me-2"></i>Backup Frequency</h5>
-                  <p class="small mb-0">Daily backups recommended for VMs/files. Hourly granularity available for premium workloads.</p>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="step-card">
-                  <h5><i class="bi bi-rulers me-2"></i>Restore Testing</h5>
-                  <p class="small mb-0">Test at least one restore path monthly. Backups are only valid if verified restorable.</p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Related Resources -->
-          <section id="resources-section" class="mb-5">
-            <h3><i class="bi bi-book me-2"></i>Related Resources</h3>
-            <div class="list-group">
-              <a href="modules.html" class="list-group-item list-group-item-action">
-                <i class="bi bi-puzzle me-2 text-primary"></i><strong>Core Azure Modules</strong>
-                <br><small class="text-muted">Azure Backup, Recovery Services, Storage documentation</small>
-              </a>
-              <a href="module-spec-guide.html" class="list-group-item list-group-item-action">
-                <i class="bi bi-file-earmark-text me-2" style="color: #007acc;"></i><strong>Spec Writing Guide</strong>
-                <br><small class="text-muted">Templates for documenting backup patterns and policies</small>
-              </a>
-              <a href="https://learn.microsoft.com/en-us/azure/backup/" class="list-group-item list-group-item-action" target="_blank">
-                <i class="bi bi-cloud-fill me-2"></i><strong>Azure Backup Documentation</strong>
-                <br><small class="text-muted">Official Microsoft docs for backup services →</small>
-              </a>
-              <a href="https://github.com/KrishnaDistributedcomputing/AzureAIDeployments" class="list-group-item list-group-item-action" target="_blank">
-                <i class="bi bi-github me-2"></i><strong>GitHub Repository</strong>
-                <br><small class="text-muted">Bicep templates, scripts, and deployment code →</small>
-              </a>
-            </div>
-          </section>
-        </div>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-body-tertiary py-5 mt-5 border-top">
+  <footer class="bg-body-tertiary py-4 border-top mt-5">
     <div class="container text-center text-muted small">
-      <p>&copy; 2026 Azure Backup Spec-Driven Deployment Patterns. All rights reserved.</p>
-      <p><strong>Spec ID:</strong> AZB-SDD-PATTERN-A-CORE-DEMO | <strong>Version:</strong> 1.0 | <strong>Last Updated:</strong> June 22, 2026</p>
-      <p><a href="index.html" class="text-decoration-none">Home</a> | 
-         <a href="modules.html" class="text-decoration-none">Modules</a> | 
-         <a href="module-spec-guide.html" class="text-decoration-none">Spec Guide</a></p>
+      <p>&copy; 2026 Azure AI Deployment Patterns. All rights reserved.</p>
     </div>
   </footer>
 
@@ -590,11 +683,9 @@ az resource list --tags AutoDeleteAfter=2026-07-22 -o table
       localStorage.setItem('theme', theme === 'dark' ? 'light' : 'dark');
     }
 
-    // Load theme preference
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-bs-theme', savedTheme);
 
-    // Smooth scroll for TOC links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
