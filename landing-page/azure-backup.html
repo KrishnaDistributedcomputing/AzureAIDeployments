@@ -9,31 +9,42 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <style>
-    :root { --primary: #0078d4; --primary-dark: #005a9e; --ink: #172033; --muted: #5f6b7a; --line: #d9e6f5; --panel: #ffffff; --wash: #f4f8fd; --accent: #50e6ff; }
-    [data-bs-theme="dark"] { --ink: #f4f8ff; --muted: #b8c5d6; --line: #2d4764; --panel: #101826; --wash: #09111f; }
-    body { background: var(--wash); color: var(--ink); font-size: 0.95rem; }
-    .navbar { border-bottom: 1px solid var(--line); }
-    .hero { background: radial-gradient(circle at 18% 20%, rgba(80, 230, 255, 0.25), transparent 32%), linear-gradient(135deg, #003f7f 0%, #0078d4 52%, #005a9e 100%); color: #fff; padding: 3rem 0 2.5rem; }
+    :root { --primary: #0078d4; --primary-dark: #005a9e; --ink: #172033; --muted: #5f6b7a; --line: #d9e6f5; --panel: #ffffff; --wash: #f4f8fd; --accent: #50e6ff; --success: #107c10; --warning: #ffb900; --danger: #d83b01; --shadow: 0 16px 38px rgba(0, 50, 100, 0.11); }
+    [data-bs-theme="dark"] { --ink: #f4f8ff; --muted: #b8c5d6; --line: #2d4764; --panel: #101826; --wash: #09111f; --shadow: 0 16px 38px rgba(0, 0, 0, 0.3); }
+    body { background: linear-gradient(180deg, var(--wash) 0%, #ffffff 48%, var(--wash) 100%); color: var(--ink); font-size: 0.95rem; }
+    [data-bs-theme="dark"] body { background: linear-gradient(180deg, #09111f 0%, #0e1828 48%, #09111f 100%); }
+    .navbar { border-bottom: 1px solid var(--line); backdrop-filter: blur(16px); }
+    .hero { background: radial-gradient(circle at 14% 18%, rgba(80, 230, 255, 0.28), transparent 28%), radial-gradient(circle at 88% 22%, rgba(16, 124, 16, 0.24), transparent 24%), linear-gradient(135deg, #003f7f 0%, #0078d4 52%, #005a9e 100%); color: #fff; padding: 3.4rem 0 2.8rem; position: relative; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: rgba(255, 255, 255, 0.28); }
     .hero h1 { max-width: 920px; letter-spacing: 0; }
     .hero .lead { max-width: 860px; color: rgba(255, 255, 255, 0.86); }
-    .metric-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.5rem; }
-    .metric-tile { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 8px; padding: 0.9rem; min-height: 82px; }
+    .metric-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-top: 0; }
+    .metric-tile { background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 8px; padding: 1rem; min-height: 96px; box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12); }
     .metric-tile strong { display: block; font-size: 1.35rem; line-height: 1.1; }
     .metric-tile span { color: rgba(255, 255, 255, 0.76); font-size: 0.86rem; }
-    .hub-card, .pattern-card, .reference-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 30px rgba(0, 50, 100, 0.08); }
-    .hub-card { padding: 1.1rem; }
-    .section-title { color: var(--primary-dark); font-weight: 800; margin: 0 0 1rem; }
+    .hub-card, .pattern-card, .reference-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+    .hub-card { padding: 1.25rem; }
+    .section-title { color: var(--primary-dark); font-weight: 800; margin: 0 0 1rem; display: flex; align-items: center; gap: 0.45rem; }
     [data-bs-theme="dark"] .section-title { color: var(--accent); }
     .quick-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
-    .pattern-card { padding: 1rem; display: flex; flex-direction: column; min-height: 100%; }
+    .pattern-card { padding: 1rem; display: flex; flex-direction: column; min-height: 100%; position: relative; overflow: hidden; }
+    .pattern-card::before { content: ''; position: absolute; inset: 0 0 auto; height: 4px; background: var(--primary); }
+    .pattern-a::before { background: var(--warning); }
+    .pattern-b::before { background: var(--danger); }
+    .pattern-c::before { background: var(--success); }
+    .pattern-d::before { background: var(--primary); }
     .pattern-card h3 { font-size: 1.05rem; margin-bottom: 0.35rem; }
     .pattern-card p, .hub-card p { color: var(--muted); }
-    .pill { display: inline-flex; align-items: center; gap: 0.35rem; border-radius: 999px; border: 1px solid var(--line); background: rgba(0, 120, 212, 0.08); color: var(--primary-dark); font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.55rem; margin: 0.15rem 0.15rem 0.15rem 0; }
+    .pill { display: inline-flex; align-items: center; gap: 0.35rem; border-radius: 999px; border: 1px solid var(--line); background: rgba(0, 120, 212, 0.08); color: var(--primary-dark); font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.55rem; margin: 0.15rem 0.15rem 0.15rem 0; white-space: nowrap; }
     [data-bs-theme="dark"] .pill { color: var(--accent); }
-    .btn-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: auto; padding-top: 0.7rem; }
+    .btn-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: auto; padding-top: 0.85rem; }
+    .btn-row .btn { min-width: 92px; }
     .decision-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; }
     .decision-list .hub-card { min-height: 100%; }
     .artifact-table th, .artifact-table td { vertical-align: middle; font-size: 0.9rem; }
+    .artifact-table thead th { background: rgba(0, 120, 212, 0.08); color: var(--primary-dark); border-bottom: 1px solid var(--line); }
+    [data-bs-theme="dark"] .artifact-table thead th { color: var(--accent); }
+    .artifact-table tbody tr:hover { background: rgba(0, 120, 212, 0.04); }
     .reference-panel { overflow: hidden; }
     .reference-panel summary { cursor: pointer; padding: 1rem 1.1rem; font-weight: 800; color: var(--primary-dark); }
     [data-bs-theme="dark"] .reference-panel summary { color: var(--accent); }
@@ -41,8 +52,13 @@
     .code-block { background: #07111f; color: #b9ffdc; border-radius: 8px; padding: 1rem; font-family: Consolas, "Courier New", monospace; font-size: 0.85rem; white-space: pre-wrap; overflow-x: auto; }
     .compact-nav { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.25rem 0 0; }
     .compact-nav a { color: #fff; text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 999px; padding: 0.35rem 0.7rem; background: rgba(255, 255, 255, 0.1); font-size: 0.9rem; }
-    @media (max-width: 992px) { .metric-strip, .quick-grid, .decision-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 640px) { .hero { padding: 2.3rem 0 2rem; } .metric-strip, .quick-grid, .decision-list { grid-template-columns: 1fr; } }
+    .visual-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.75rem; }
+    .flow-step { border: 1px solid var(--line); border-radius: 8px; padding: 0.9rem; background: linear-gradient(180deg, rgba(0, 120, 212, 0.06), transparent); min-height: 118px; }
+    .flow-step i { color: var(--primary); font-size: 1.35rem; }
+    .flow-step h3 { font-size: 0.95rem; margin: 0.55rem 0 0.25rem; }
+    .flow-step p { color: var(--muted); font-size: 0.85rem; margin: 0; }
+    @media (max-width: 992px) { .metric-strip, .quick-grid, .decision-list, .visual-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 640px) { .hero { padding: 2.3rem 0 2rem; } .metric-strip, .quick-grid, .decision-list, .visual-flow { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -108,28 +124,39 @@
       </div>
     </section>
 
+    <section class="mb-4" aria-label="Azure Backup visual flow">
+      <div class="hub-card">
+        <div class="visual-flow">
+          <div class="flow-step"><i class="bi bi-search"></i><h3>Pick the workload</h3><p>Start with the app, file, or data set the business needs back first.</p></div>
+          <div class="flow-step"><i class="bi bi-shield-check"></i><h3>Set the promise</h3><p>Choose vault, retention, owner, and recovery expectation.</p></div>
+          <div class="flow-step"><i class="bi bi-play-circle"></i><h3>Run the proof</h3><p>Open the matching business demo and validate the recovery path.</p></div>
+          <div class="flow-step"><i class="bi bi-clipboard2-check"></i><h3>Keep evidence</h3><p>Use guide, spec, KQL, and source links for production readiness.</p></div>
+        </div>
+      </div>
+    </section>
+
     <section class="mb-4" id="patterns">
       <h2 class="section-title h4"><i class="bi bi-diagram-3 me-2"></i>Choose a Pattern</h2>
       <div class="quick-grid">
-        <article class="pattern-card">
+        <article class="pattern-card pattern-a">
           <h3><i class="bi bi-lightning-charge text-warning me-1"></i>Pattern A: Core Demo</h3>
           <p class="small">Proves basic recovery confidence for a VM, file share, restore point, and simple business-file recovery.</p>
           <div><span class="pill">10 min story</span><span class="pill">Sales demo</span><span class="pill">Low cost</span></div>
           <div class="btn-row"><a class="btn btn-sm btn-primary" href="/backup-pattern-a-demo">Business demo</a><a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-a/DEPLOYMENT_GUIDE.md" target="_blank">Guide</a><a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-a/SPEC.md" target="_blank">Spec</a></div>
         </article>
-        <article class="pattern-card">
+        <article class="pattern-card pattern-b">
           <h3><i class="bi bi-shield-lock text-danger me-1"></i>Pattern B: Ransomware</h3>
           <p class="small">Shows whether the business can preserve clean recovery options during a ransomware or privileged-access incident.</p>
           <div><span class="pill">CISO</span><span class="pill">RBAC</span><span class="pill">Soft delete</span></div>
           <div class="btn-row"><a class="btn btn-sm btn-primary" href="/backup-pattern-b-demo">Business demo</a><a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-b/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">Guide</a><a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-b/SPEC.md" target="_blank">Spec</a></div>
         </article>
-        <article class="pattern-card">
+        <article class="pattern-card pattern-c">
           <h3><i class="bi bi-cloud-upload text-success me-1"></i>Pattern C: Modern Apps</h3>
           <p class="small">Turns vault selection into a portfolio decision by matching recovery depth, speed, risk, and cost to workload value.</p>
           <div><span class="pill">Portfolio</span><span class="pill">Backup vault</span><span class="pill">Cost fit</span></div>
           <div class="btn-row"><a class="btn btn-sm btn-primary" href="/backup-pattern-c-demo">Business demo</a><a class="btn btn-sm btn-outline-primary" href="/downloads/azure-backup/pattern-c/INFRASTRUCTURE_DEPLOYMENT_GUIDE.md" target="_blank">Guide</a><a class="btn btn-sm btn-outline-secondary" href="/downloads/azure-backup/pattern-c/SPEC.md" target="_blank">Spec</a></div>
         </article>
-        <article class="pattern-card">
+        <article class="pattern-card pattern-d">
           <h3><i class="bi bi-building text-info me-1"></i>Pattern D: Enterprise</h3>
           <p class="small">Makes backup readiness governable with ownership, risk guardrails, spend visibility, restore evidence, and audit proof.</p>
           <div><span class="pill">CIO</span><span class="pill">Audit</span><span class="pill">FinOps</span></div>
