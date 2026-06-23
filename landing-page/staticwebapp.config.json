@@ -29,7 +29,7 @@
   ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/img/*", "*.css", "*.js", "*.svg", "*.png", "*.jpg", "*.ico"]
+    "exclude": ["/img/*", "*.css", "*.js", "*.svg", "*.png", "*.jpg", "*.ico", "*.md", "*.kql"]
   },
   "globalHeaders": {
     "X-Content-Type-Options": "nosniff",
