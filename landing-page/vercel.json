@@ -15,6 +15,7 @@
       { "source": "/azure-backup/live", "destination": "/azure-backup-demo-live.html" },
       { "source": "/backup-pattern-a-demo", "destination": "/pattern-a-demo.html" },
       { "source": "/backup-pattern-b-demo", "destination": "/pattern-b-demo.html" },
+      { "source": "/backup-pattern-b-architecture", "destination": "/pattern-b-architecture.html" },
       { "source": "/backup-pattern-c-demo", "destination": "/pattern-c-demo.html" },
       { "source": "/backup-pattern-d-demo", "destination": "/pattern-d-demo.html" },
     { "source": "/sdd", "destination": "/sdd.html" },

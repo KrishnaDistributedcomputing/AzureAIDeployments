@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ransomware-Resilient Azure Backup Architecture</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8deea;
+      --surface: #ffffff;
+      --canvas: #f4f7fb;
+      --azure: #1570ef;
+      --azure-2: #0b5fd7;
+      --cyan: #06aed4;
+      --purple: #7f56d9;
+      --green: #039855;
+      --amber: #dc6803;
+      --red: #d92d20;
+      --shadow: 0 18px 45px rgba(16, 24, 40, 0.10);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(21, 112, 239, .10), transparent 28%),
+        radial-gradient(circle at 100% 24%, rgba(127, 86, 217, .10), transparent 28%),
+        var(--canvas);
+    }
+
+    button { font: inherit; }
+    .app { max-width: 1500px; margin: 0 auto; padding: 26px; }
+
+    .topbar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+    .brand-row { display: flex; gap: 14px; align-items: center; }
+    .brand-mark {
+      width: 50px; height: 50px; border-radius: 15px;
+      display: grid; place-items: center;
+      color: white;
+      background: linear-gradient(145deg, #2899f5, #1067d8);
+      box-shadow: 0 12px 28px rgba(21, 112, 239, .25);
+      flex: 0 0 auto;
+    }
+    .brand-mark svg { width: 30px; height: 30px; }
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--azure-2);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 36px); letter-spacing: -.035em; line-height: 1.08; }
+    .subtitle { margin: 8px 0 0 64px; color: var(--muted); max-width: 920px; line-height: 1.55; font-size: 15px; }
+
+    .security-pill {
+      display: inline-flex; align-items: center; gap: 9px;
+      border: 1px solid #abefc6;
+      background: #ecfdf3;
+      color: #027a48;
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: 13px; font-weight: 750;
+      white-space: nowrap;
+      box-shadow: 0 8px 22px rgba(3, 152, 85, .08);
+    }
+    .security-dot { width: 8px; height: 8px; border-radius: 50%; background: #12b76a; box-shadow: 0 0 0 4px rgba(18,183,106,.15); }
+
+    .topbar-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      text-decoration: none;
+      color: var(--azure-2);
+      font-size: 13px; font-weight: 700;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 999px;
+      padding: 8px 14px;
+      white-space: nowrap;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .back-link:hover { background: #eef4ff; border-color: #bcd4ff; }
+
+    .chapter-nav {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 10px;
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(216,222,234,.95);
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(16,24,40,.05);
+      margin-bottom: 16px;
+    }
+    .chapter-btn {
+      appearance: none; border: 0; background: transparent;
+      border-radius: 13px; padding: 11px 13px;
+      text-align: left; cursor: pointer; color: #475467;
+      transition: .22s ease;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .chapter-btn:hover { background: #f2f6fc; transform: translateY(-1px); }
+    .chapter-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, #1677ee, #0b5fd7);
+      box-shadow: 0 8px 18px rgba(21,112,239,.22);
+    }
+    .chapter-num {
+      width: 27px; height: 27px; border-radius: 9px;
+      display: grid; place-items: center;
+      background: #edf2f7; color: #344054; font-weight: 800; font-size: 12px;
+      flex: 0 0 auto;
+    }
+    .chapter-btn.active .chapter-num { background: rgba(255,255,255,.2); color: white; }
+    .chapter-copy strong { display: block; font-size: 13px; }
+    .chapter-copy span { display: block; font-size: 11px; margin-top: 2px; opacity: .78; }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .diagram-card,
+    .inspector {
+      border: 1px solid rgba(216,222,234,.95);
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .diagram-card { overflow: hidden; min-width: 0; }
+    .diagram-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 17px 19px;
+      border-bottom: 1px solid #eaecf0;
+    }
+    .diagram-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .step-icon {
+      width: 34px; height: 34px; border-radius: 11px;
+      display: grid; place-items: center; color: white;
+      background: linear-gradient(135deg, var(--azure), var(--purple));
+      font-weight: 850;
+      flex: 0 0 auto;
+    }
+    .diagram-head h2 { margin: 0; font-size: 16px; letter-spacing: -.01em; }
+    .diagram-head p { margin: 3px 0 0; color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .head-actions { display: flex; gap: 8px; }
+    .ghost-btn {
+      border: 1px solid #d0d5dd; background: white; color: #344054;
+      padding: 8px 11px; border-radius: 10px; cursor: pointer;
+      font-size: 12px; font-weight: 700; transition: .2s ease;
+    }
+    .ghost-btn:hover { border-color: #98a2b3; background: #f9fafb; }
+
+    .svg-wrap {
+      padding: 14px;
+      background:
+        linear-gradient(rgba(21,112,239,.027) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(21,112,239,.027) 1px, transparent 1px),
+        #fbfcfe;
+      background-size: 28px 28px;
+      min-height: 620px;
+    }
+    svg { display: block; width: 100%; height: auto; min-height: 590px; }
+
+    .boundary { fill: rgba(255,255,255,.52); stroke-width: 2; stroke-dasharray: 9 8; }
+    .boundary.network { stroke: #98a2b3; }
+    .boundary.workload { fill: rgba(21,112,239,.025); stroke: #84adff; }
+    .boundary.protection { fill: rgba(127,86,217,.025); stroke: #bdb4fe; }
+    .boundary-label { font-size: 15px; font-weight: 800; fill: #344054; }
+    .boundary-sub { font-size: 11px; fill: #667085; }
+
+    .node { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: opacity .25s ease, filter .25s ease, transform .25s ease; }
+    .node:hover { transform: translateY(-3px); filter: drop-shadow(0 11px 13px rgba(16,24,40,.12)); }
+    .node .node-bg { fill: #fff; stroke: #d0d5dd; stroke-width: 1.5; }
+    .node .node-accent { fill: #1570ef; }
+    .node.protection .node-accent { fill: #7f56d9; }
+    .node.monitor .node-accent { fill: #06aed4; }
+    .node .node-title { font-size: 13px; fill: #1d2939; font-weight: 800; }
+    .node .node-sub { font-size: 10.5px; fill: #667085; }
+    .node .node-icon { fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .node .icon-fill { fill: #fff; stroke: none; }
+    .node .status-ring { fill: #ecfdf3; stroke: #abefc6; }
+    .node .status-check { fill: none; stroke: #039855; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .node.selected .node-bg { stroke: #1570ef; stroke-width: 3; }
+
+    .vault-panel { fill: #f9f5ff; stroke: #d9d6fe; stroke-width: 1; }
+    .pill-bg { fill: #ecfdf3; stroke: #abefc6; }
+    .pill-text { font-size: 10px; font-weight: 800; fill: #027a48; }
+
+    .agent { cursor: pointer; transition: .25s ease; }
+    .agent:hover { filter: drop-shadow(0 8px 12px rgba(16,24,40,.13)); }
+    .agent rect { fill: #eff8ff; stroke: #84caff; stroke-width: 1.5; }
+    .agent circle { fill: #1570ef; }
+    .agent text { font-size: 11px; font-weight: 800; fill: #175cd3; }
+    .agent .agent-icon { fill: none; stroke: white; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .agent.selected rect { stroke: #1570ef; stroke-width: 3; }
+
+    .flow { fill: none; stroke: #98a2b3; stroke-width: 2.4; marker-end: url(#arrowGray); opacity: .55; transition: opacity .25s ease, stroke .25s ease, stroke-width .25s ease; }
+    .flow.backup { stroke: #1570ef; marker-end: url(#arrowBlue); }
+    .flow.logs { stroke: #06aed4; marker-end: url(#arrowCyan); }
+    .flow.trigger { stroke: #7f56d9; marker-end: url(#arrowPurple); }
+    .flow.restore { stroke: #039855; marker-end: url(#arrowGreen); stroke-dasharray: 9 7; opacity: 0; }
+    .flow.attack { stroke: #d92d20; marker-end: url(#arrowRed); stroke-dasharray: 7 7; opacity: 0; }
+    .flow.active { opacity: 1; stroke-width: 3.2; stroke-dasharray: 10 8; animation: dash 1.1s linear infinite; }
+    .flow.dim { opacity: .09; }
+    @keyframes dash { to { stroke-dashoffset: -36; } }
+
+    .flow-label rect { fill: white; stroke: #eaecf0; }
+    .flow-label text { fill: #475467; font-size: 10px; font-weight: 800; }
+    .flow-label { opacity: .8; transition: opacity .2s ease; }
+    .flow-label.dim { opacity: .12; }
+
+    .shield-badge { opacity: 0; transform-box: fill-box; transform-origin: center; transition: .3s ease; }
+    .shield-badge.visible { opacity: 1; animation: shieldPop .45s cubic-bezier(.2,.8,.2,1); }
+    @keyframes shieldPop { from { transform: scale(.55); } to { transform: scale(1); } }
+    .shield-badge circle { fill: #ecfdf3; stroke: #6ce9a6; stroke-width: 2; }
+    .shield-badge path { fill: #039855; }
+    .blocked-text { fill: #b42318; font-size: 11px; font-weight: 900; opacity: 0; }
+    .blocked-text.visible { opacity: 1; }
+
+    .compromised .node-bg, .compromised rect.node-bg { fill: #fff3f2; stroke: #f97066; }
+    .compromised .node-accent { fill: #d92d20; }
+    .compromised.agent rect { fill: #fff3f2; stroke: #f97066; }
+    .compromised.agent circle { fill: #d92d20; }
+    .compromised.agent text { fill: #b42318; }
+    .x-badge { opacity: 0; transition: .2s ease; }
+    .compromised .x-badge { opacity: 1; }
+    .x-badge circle { fill: #d92d20; stroke: white; stroke-width: 2; }
+    .x-badge path { stroke: white; stroke-width: 2.4; stroke-linecap: round; }
+
+    .dimmed { opacity: .24; filter: grayscale(.15); }
+    .pulse .node-bg, .pulse rect { animation: pulse 1.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { filter: drop-shadow(0 0 0 rgba(21,112,239,0)); } 50% { filter: drop-shadow(0 0 8px rgba(21,112,239,.38)); } }
+
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 14px;
+      padding: 13px 18px 16px;
+      border-top: 1px solid #eaecf0;
+      background: #fff;
+      color: #667085;
+      font-size: 11px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-line { width: 24px; height: 3px; border-radius: 999px; background: #1570ef; }
+    .legend-line.cyan { background: #06aed4; }
+    .legend-line.purple { background: #7f56d9; }
+    .legend-line.green { background: #039855; border-top: 1px dashed #fff; }
+
+    .inspector { padding: 18px; display: flex; flex-direction: column; min-height: 100%; }
+    .inspector-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .inspector-kicker { color: var(--azure-2); font-size: 11px; font-weight: 850; text-transform: uppercase; letter-spacing: .1em; }
+    .live-badge {
+      font-size: 10px; font-weight: 850; color: #027a48; background: #ecfdf3;
+      border: 1px solid #abefc6; border-radius: 999px; padding: 4px 7px;
+    }
+    .inspector h3 { margin: 12px 0 7px; font-size: 22px; line-height: 1.14; letter-spacing: -.03em; }
+    .inspector-desc { margin: 0; color: #667085; font-size: 13px; line-height: 1.55; }
+    .fact-list { display: grid; gap: 9px; margin: 18px 0; }
+    .fact {
+      display: grid; grid-template-columns: 24px 1fr; gap: 9px;
+      align-items: start; padding: 10px; border-radius: 12px; background: #f8fafc;
+      color: #475467; font-size: 12px; line-height: 1.45;
+    }
+    .fact-icon {
+      width: 24px; height: 24px; border-radius: 8px; display: grid; place-items: center;
+      color: #175cd3; background: #eff8ff; font-size: 12px; font-weight: 900;
+    }
+    .callout {
+      margin-top: auto; border: 1px solid #d9d6fe; background: #f9f5ff;
+      border-radius: 14px; padding: 12px;
+    }
+    .callout strong { display: block; color: #5925dc; font-size: 12px; margin-bottom: 4px; }
+    .callout p { margin: 0; color: #6941c6; font-size: 11px; line-height: 1.5; }
+
+    .progress-row {
+      display: grid; grid-template-columns: 90px 1fr 90px; gap: 10px;
+      align-items: center; margin-top: 16px;
+    }
+    .nav-btn {
+      border: 1px solid #d0d5dd; background: white; color: #344054;
+      height: 42px; border-radius: 12px; font-weight: 800; cursor: pointer;
+      transition: .2s ease;
+    }
+    .nav-btn:hover:not(:disabled) { border-color: #84adff; background: #eff8ff; color: #175cd3; transform: translateY(-1px); }
+    .nav-btn:disabled { opacity: .42; cursor: not-allowed; }
+    .nav-btn.primary { color: white; border-color: #1570ef; background: #1570ef; }
+    .nav-btn.primary:hover:not(:disabled) { background: #0b5fd7; color: white; }
+    .progress-track { height: 8px; border-radius: 999px; background: #e4e7ec; overflow: hidden; }
+    .progress-fill { height: 100%; width: 20%; border-radius: 999px; background: linear-gradient(90deg, #1570ef, #7f56d9); transition: width .35s ease; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 18px);
+      background: #101828; color: white; border-radius: 12px;
+      padding: 11px 15px; font-size: 12px; font-weight: 750;
+      opacity: 0; pointer-events: none; transition: .25s ease; z-index: 20;
+      box-shadow: 0 14px 35px rgba(16,24,40,.25);
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @media (max-width: 1080px) {
+      .workspace { grid-template-columns: 1fr; }
+      .inspector { min-height: 320px; }
+      .callout { margin-top: 12px; }
+      .chapter-copy span { display: none; }
+    }
+    @media (max-width: 760px) {
+      .app { padding: 14px; }
+      .topbar { flex-direction: column; }
+      .subtitle { margin-left: 0; }
+      .chapter-nav { grid-template-columns: 1fr; }
+      .chapter-btn { padding: 9px 11px; }
+      .chapter-copy span { display: block; }
+      .diagram-head { align-items: flex-start; }
+      .diagram-head p { white-space: normal; }
+      .head-actions { flex-direction: column; }
+      .svg-wrap { overflow-x: auto; }
+      svg { min-width: 980px; }
+      .progress-row { grid-template-columns: 80px 1fr 80px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="brand-row">
+          <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path fill="currentColor" d="M18.4 3.5 8.6 12.1 3.2 22.2h9.1l6.1-18.7Zm1.3 4.2-4 11.6 7.6 9.2h5.5L19.7 7.7Zm-5.2 14.8-1.7 5h10.8l-4.2-5h-4.9Z"/></svg>
+          </div>
+          <div>
+            <p class="eyebrow">Interactive architecture demo</p>
+            <h1>Ransomware-Resilient Azure Backup</h1>
+          </div>
+        </div>
+        <p class="subtitle">Backup infrastructure—vaults and monitoring—lives in a separate protection resource group. This isolation prevents compromised workloads from disabling backups.</p>
+      </div>
+      <div class="topbar-actions">
+        <div class="security-pill"><span class="security-dot"></span> Protection plane isolated</div>
+        <a class="back-link" href="/backup-pattern-b-demo">&larr; Back to Pattern B demo</a>
+      </div>
+    </header>
+
+    <nav class="chapter-nav" aria-label="Architecture walkthrough">
+      <button class="chapter-btn active" data-step="0"><span class="chapter-num">1</span><span class="chapter-copy"><strong>Architecture</strong><span>Separate control planes</span></span></button>
+      <button class="chapter-btn" data-step="1"><span class="chapter-num">2</span><span class="chapter-copy"><strong>Backup</strong><span>Protected data flow</span></span></button>
+      <button class="chapter-btn" data-step="2"><span class="chapter-num">3</span><span class="chapter-copy"><strong>Monitor</strong><span>Logs and alert triggers</span></span></button>
+      <button class="chapter-btn" data-step="3"><span class="chapter-num">4</span><span class="chapter-copy"><strong>Contain</strong><span>Ransomware blocked</span></span></button>
+      <button class="chapter-btn" data-step="4"><span class="chapter-num">5</span><span class="chapter-copy"><strong>Recover</strong><span>Restore trusted data</span></span></button>
+    </nav>
+
+    <section class="workspace">
+      <section class="diagram-card" aria-label="Interactive Azure backup architecture diagram">
+        <div class="diagram-head">
+          <div class="diagram-title">
+            <div class="step-icon" id="stepIcon">1</div>
+            <div>
+              <h2 id="stepTitle">Separate the workload and protection planes</h2>
+              <p id="stepSubtitle">Click any component to inspect its role, or use Next to follow the data path.</p>
+            </div>
+          </div>
+          <div class="head-actions">
+            <button class="ghost-btn" id="simulateBtn">Simulate attack</button>
+            <button class="ghost-btn" id="resetBtn">Reset</button>
+          </div>
+        </div>
+
+        <div class="svg-wrap">
+          <svg id="architecture" viewBox="0 0 1200 650" role="img" aria-labelledby="svgTitle svgDesc">
+            <title id="svgTitle">Azure ransomware-resilient backup architecture</title>
+            <desc id="svgDesc">Workloads and backup agents in one resource group send backups to an isolated Recovery Services vault, with monitoring in a separate protection resource group.</desc>
+            <defs>
+              <marker id="arrowGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#98a2b3"/></marker>
+              <marker id="arrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1570ef"/></marker>
+              <marker id="arrowCyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#06aed4"/></marker>
+              <marker id="arrowPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7f56d9"/></marker>
+              <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#039855"/></marker>
+              <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d92d20"/></marker>
+              <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#101828" flood-opacity=".09"/></filter>
+            </defs>
+
+            <rect class="boundary network" x="22" y="40" width="1156" height="590" rx="22"/>
+            <text class="boundary-label" x="45" y="72">Network</text>
+            <text class="boundary-sub" x="1128" y="72" text-anchor="end">Private connectivity + controlled identity boundaries</text>
+
+            <g id="workloadBoundary">
+              <rect class="boundary workload" x="50" y="95" width="505" height="505" rx="20"/>
+              <circle cx="76" cy="124" r="10" fill="#1570ef"/>
+              <path d="M72 124h8M76 120v8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+              <text class="boundary-label" x="94" y="129">Workload Resource Group</text>
+              <text class="boundary-sub" x="94" y="147">Application owners manage compute and storage</text>
+            </g>
+
+            <g id="protectionBoundary">
+              <rect class="boundary protection" x="620" y="95" width="530" height="505" rx="20"/>
+              <circle cx="646" cy="124" r="10" fill="#7f56d9"/>
+              <path d="M646 117.5 652 120v4.5c0 3.8-2.5 6.4-6 7.8-3.5-1.4-6-4-6-7.8V120l6-2.5Z" fill="none" stroke="white" stroke-width="1.5"/>
+              <text class="boundary-label" x="664" y="129">Protection Resource Group</text>
+              <text class="boundary-sub" x="664" y="147">Restricted administrators, policy locks, monitored changes</text>
+            </g>
+
+            <!-- Core backup paths -->
+            <path id="flowVmAgent" class="flow backup" d="M280 235 C315 235, 318 235, 352 235"/>
+            <path id="flowStorageAgent" class="flow backup" d="M280 390 C315 390, 318 390, 352 390"/>
+            <path id="flowDiskAgent" class="flow backup" d="M280 525 C315 525, 318 525, 352 525"/>
+            <path id="flowAgentVault1" class="flow backup" d="M510 235 C575 235, 602 240, 685 245"/>
+            <path id="flowAgentVault2" class="flow backup" d="M510 390 C580 390, 605 330, 685 300"/>
+            <path id="flowAgentVault3" class="flow backup" d="M510 525 C590 525, 600 390, 685 350"/>
+
+            <!-- Monitoring paths -->
+            <path id="flowVaultLogs" class="flow logs" d="M875 385 C875 410, 825 418, 790 445"/>
+            <path id="flowAgentLogs" class="flow logs" d="M510 430 C575 455, 602 480, 675 495"/>
+            <path id="flowTrigger" class="flow trigger" d="M865 495 C900 495, 910 495, 940 495"/>
+
+            <!-- Attack and recovery overlays -->
+            <path id="flowAttack" class="flow attack" d="M500 180 C590 150, 630 150, 695 190"/>
+            <path id="flowRestore" class="flow restore" d="M695 335 C595 350, 500 330, 290 255"/>
+
+            <!-- Flow labels -->
+            <g id="labelProtected" class="flow-label"><rect x="292" y="208" width="68" height="23" rx="8"/><text x="326" y="223" text-anchor="middle">Protected</text></g>
+            <g id="labelBackup" class="flow-label"><rect x="559" y="232" width="58" height="23" rx="8"/><text x="588" y="247" text-anchor="middle">Backup</text></g>
+            <g id="labelLogs" class="flow-label"><rect x="813" y="408" width="44" height="23" rx="8"/><text x="835" y="423" text-anchor="middle">Logs</text></g>
+            <g id="labelTriggers" class="flow-label"><rect x="873" y="467" width="57" height="23" rx="8"/><text x="901" y="482" text-anchor="middle">Triggers</text></g>
+            <g id="labelRestore" class="flow-label" style="opacity:0"><rect x="477" y="313" width="58" height="23" rx="8"/><text x="506" y="328" text-anchor="middle" fill="#027a48">Restore</text></g>
+
+            <!-- Windows VM -->
+            <g class="node workload-node" id="nodeVm" data-node="vm" tabindex="0" role="button" aria-label="Windows VM, encrypted">
+              <rect class="node-bg" x="83" y="180" width="197" height="110" rx="16" filter="url(#softShadow)"/>
+              <rect class="node-accent" x="83" y="180" width="49" height="110" rx="16"/>
+              <rect x="119" y="180" width="13" height="110" fill="#1570ef"/>
+              <rect x="95" y="207" width="25" height="21" rx="2" class="node-icon"/>
+              <path d="M99 233h17M107.5 228v5" class="node-icon"/>
+              <text class="node-title" x="147" y="216">Windows VM</text>
+              <text class="node-sub" x="147" y="237">Encrypted</text>
+              <g transform="translate(147 251)"><rect class="status-ring" width="96" height="23" rx="8"/><path class="status-check" d="M10 12.2l3.3 3.2 5.3-6.2"/><text x="25" y="15.5" class="pill-text">Agent healthy</text></g>
+              <g class="x-badge"><circle cx="265" cy="195" r="12"/><path d="M260 190l10 10M270 190l-10 10"/></g>
+            </g>
+
+            <!-- Azure Storage -->
+            <g class="node workload-node" id="nodeStorage" data-node="storage" tabindex="0" role="button" aria-label="Azure Storage file share">
+              <rect class="node-bg" x="83" y="335" width="197" height="110" rx="16" filter="url(#softShadow)"/>
+              <rect class="node-accent" x="83" y="335" width="49" height="110" rx="16"/>
+              <rect x="119" y="335" width="13" height="110" fill="#1570ef"/>
+              <path d="M95 365h26v21H95zM95 371h26M102 365v21M114 365v21" class="node-icon"/>
+              <text class="node-title" x="147" y="371">Azure Storage</text>
+              <text class="node-sub" x="147" y="392">File Share</text>
+              <g transform="translate(147 406)"><rect class="status-ring" width="103" height="23" rx="8"/><path class="status-check" d="M10 12.2l3.3 3.2 5.3-6.2"/><text x="25" y="15.5" class="pill-text">Policy applied</text></g>
+              <g class="x-badge"><circle cx="265" cy="350" r="12"/><path d="M260 345l10 10M270 345l-10 10"/></g>
+            </g>
+
+            <!-- Data Disk -->
+            <g class="node workload-node" id="nodeDisk" data-node="disk" tabindex="0" role="button" aria-label="Data disk D drive">
+              <rect class="node-bg" x="83" y="480" width="197" height="90" rx="16" filter="url(#softShadow)"/>
+              <rect class="node-accent" x="83" y="480" width="49" height="90" rx="16"/>
+              <rect x="119" y="480" width="13" height="90" fill="#1570ef"/>
+              <ellipse cx="107" cy="511" rx="13" ry="6" class="node-icon"/>
+              <path d="M94 511v20c0 3.3 5.8 6 13 6s13-2.7 13-6v-20M94 521c0 3.3 5.8 6 13 6s13-2.7 13-6" class="node-icon"/>
+              <text class="node-title" x="147" y="514">Data Disk</text>
+              <text class="node-sub" x="147" y="535">D: Drive</text>
+              <g class="x-badge"><circle cx="265" cy="495" r="12"/><path d="M260 490l10 10M270 490l-10 10"/></g>
+            </g>
+
+            <!-- Agents -->
+            <g class="agent workload-node" id="agentVm" data-node="agent" tabindex="0" role="button" aria-label="Backup agent for Windows VM">
+              <rect x="352" y="205" width="158" height="61" rx="14"/>
+              <circle cx="381" cy="235" r="16"/>
+              <path d="M376 237h10M381 232v10M374 229h14v12h-14z" class="agent-icon"/>
+              <text x="405" y="231">Backup Agent</text><text x="405" y="247" font-size="9.5" font-weight="600" fill="#667085">VM extension</text>
+              <g class="x-badge"><circle cx="497" cy="215" r="11"/><path d="M493 211l8 8M501 211l-8 8"/></g>
+            </g>
+            <g class="agent workload-node" id="agentStorage" data-node="agent" tabindex="0" role="button" aria-label="Backup agent for Azure Storage">
+              <rect x="352" y="360" width="158" height="61" rx="14"/>
+              <circle cx="381" cy="390" r="16"/>
+              <path d="M376 392h10M381 387v10M374 384h14v12h-14z" class="agent-icon"/>
+              <text x="405" y="386">Backup Agent</text><text x="405" y="402" font-size="9.5" font-weight="600" fill="#667085">Share protection</text>
+              <g class="x-badge"><circle cx="497" cy="370" r="11"/><path d="M493 366l8 8M501 366l-8 8"/></g>
+            </g>
+            <g class="agent workload-node" id="agentDisk" data-node="agent" tabindex="0" role="button" aria-label="Backup agent for data disk">
+              <rect x="352" y="495" width="158" height="61" rx="14"/>
+              <circle cx="381" cy="525" r="16"/>
+              <path d="M376 527h10M381 522v10M374 519h14v12h-14z" class="agent-icon"/>
+              <text x="405" y="521">Backup Agent</text><text x="405" y="537" font-size="9.5" font-weight="600" fill="#667085">Disk snapshot</text>
+              <g class="x-badge"><circle cx="497" cy="505" r="11"/><path d="M493 501l8 8M501 501l-8 8"/></g>
+            </g>
+
+            <!-- Recovery Services Vault -->
+            <g class="node protection protection-node" id="nodeVault" data-node="vault" tabindex="0" role="button" aria-label="Recovery Services Vault with soft delete and immutable lock">
+              <rect class="node-bg" x="685" y="175" width="380" height="210" rx="18" filter="url(#softShadow)"/>
+              <rect class="node-accent" x="685" y="175" width="56" height="210" rx="18"/>
+              <rect x="726" y="175" width="15" height="210" fill="#7f56d9"/>
+              <path d="M713 207c-10 0-18 5-18 11v22c0 6 8 11 18 11s18-5 18-11v-22c0-6-8-11-18-11Zm-18 11c0 6 8 11 18 11s18-5 18-11M695 230c0 6 8 11 18 11s18-5 18-11" class="node-icon"/>
+              <text class="node-title" x="765" y="216" style="font-size:17px">Recovery Services Vault</text>
+              <text class="node-sub" x="765" y="239">Isolated backup control plane and recovery points</text>
+              <rect class="vault-panel" x="765" y="258" width="268" height="95" rx="13"/>
+              <g transform="translate(784 274)"><circle class="status-ring" cx="10" cy="10" r="10"/><path class="status-check" d="M5 10.2 8.5 13.5 15 6.5"/><text x="28" y="14" class="node-title" style="font-size:12px">Soft Delete — 14 days</text></g>
+              <text class="node-sub" x="812" y="309">Deleted backup items remain recoverable.</text>
+              <g transform="translate(784 322)"><circle class="status-ring" cx="10" cy="10" r="10"/><path class="status-check" d="M5 10.2 8.5 13.5 15 6.5"/><text x="28" y="14" class="node-title" style="font-size:12px">Immutable Lock</text></g>
+              <text class="node-sub" x="812" y="357">Retention settings resist malicious change.</text>
+            </g>
+
+            <!-- Log Analytics -->
+            <g class="node protection-node monitor" id="nodeLogs" data-node="logs" tabindex="0" role="button" aria-label="Log Analytics Workspace">
+              <rect class="node-bg" x="675" y="445" width="190" height="100" rx="16" filter="url(#softShadow)"/>
+              <rect class="node-accent" x="675" y="445" width="44" height="100" rx="16"/>
+              <rect x="707" y="445" width="12" height="100" fill="#06aed4"/>
+              <path d="M688 514V486M699 514v-18M710 514v-30" class="node-icon"/>
+              <text class="node-title" x="737" y="483">Log Analytics</text>
+              <text class="node-title" x="737" y="500">Workspace</text>
+              <text class="node-sub" x="737" y="521">Central audit telemetry</text>
+            </g>
+
+            <!-- Azure Monitor -->
+            <g class="node protection-node monitor protection" id="nodeMonitor" data-node="monitor" tabindex="0" role="button" aria-label="Azure Monitor Alerts">
+              <rect class="node-bg" x="940" y="445" width="175" height="100" rx="16" filter="url(#softShadow)"/>
+              <rect class="node-accent" x="940" y="445" width="44" height="100" rx="16"/>
+              <rect x="972" y="445" width="12" height="100" fill="#7f56d9"/>
+              <path d="M953 507c0-10 5-13 5-20 0-7 4-11 9-11s9 4 9 11c0 7 5 10 5 20h-28Zm9 7h10" class="node-icon"/>
+              <text class="node-title" x="1000" y="482">Azure Monitor</text>
+              <text class="node-title" x="1000" y="499">Alerts</text>
+              <text class="node-sub" x="1000" y="521">Actionable detection</text>
+            </g>
+
+            <!-- Attack block indicator -->
+            <g id="shieldBadge" class="shield-badge">
+              <circle cx="640" cy="172" r="31"/>
+              <path d="M640 150.5 658 157v13.5c0 11.3-7.6 19.3-18 23.5-10.4-4.2-18-12.2-18-23.5V157l18-6.5Zm-8.8 20 6 6 11.5-13-4.3-3.7-7.5 8.6-2.1-2.2-3.6 4.3Z"/>
+            </g>
+            <text id="blockedText" class="blocked-text" x="640" y="215" text-anchor="middle">CHANGE BLOCKED</text>
+          </svg>
+        </div>
+
+        <div class="legend" aria-label="Flow legend">
+          <span class="legend-item"><span class="legend-line"></span> Backup / protected data</span>
+          <span class="legend-item"><span class="legend-line cyan"></span> Logs</span>
+          <span class="legend-item"><span class="legend-line purple"></span> Alert trigger</span>
+          <span class="legend-item"><span class="legend-line green"></span> Recovery path</span>
+          <span class="legend-item">Tip: click a component for details</span>
+        </div>
+      </section>
+
+      <aside class="inspector" aria-live="polite">
+        <div class="inspector-top">
+          <span class="inspector-kicker" id="inspectorKicker">Design principle</span>
+          <span class="live-badge" id="inspectorStatus">Protected</span>
+        </div>
+        <h3 id="inspectorTitle">Isolation is the control</h3>
+        <p class="inspector-desc" id="inspectorDesc">Workloads may be compromised, but backup infrastructure is governed in a separate resource group with restricted access and independent monitoring.</p>
+        <div class="fact-list" id="factList"></div>
+        <div class="callout">
+          <strong id="calloutTitle">Why it matters</strong>
+          <p id="calloutText">Ransomware cannot erase or weaken the same recovery points it is trying to make necessary.</p>
+        </div>
+      </aside>
+    </section>
+
+    <div class="progress-row" aria-label="Walkthrough controls">
+      <button class="nav-btn" id="prevBtn" disabled>Back</button>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <button class="nav-btn primary" id="nextBtn">Next</button>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const steps = [
+      {
+        title: "Separate the workload and protection planes",
+        subtitle: "Click any component to inspect its role, or use Next to follow the data path.",
+        kicker: "Design principle",
+        status: "Protected",
+        inspectorTitle: "Isolation is the control",
+        desc: "Workloads may be compromised, but backup infrastructure is governed in a separate resource group with restricted access and independent monitoring.",
+        facts: [
+          ["01", "Application resources remain in the Workload Resource Group."],
+          ["02", "Vaults, logs, and alerts live in the Protection Resource Group."],
+          ["03", "Separate permissions reduce the blast radius of compromised identities."]
+        ],
+        calloutTitle: "Why it matters",
+        callout: "Ransomware cannot erase or weaken the same recovery points it is trying to make necessary.",
+        focus: ["workload", "protection"], flows: []
+      },
+      {
+        title: "Agents protect compute, file shares, and data disks",
+        subtitle: "Backup agents send protected data to the isolated Recovery Services vault.",
+        kicker: "Backup flow",
+        status: "Transferring",
+        inspectorTitle: "Protected data leaves the workload plane",
+        desc: "Each protected source is associated with a backup agent or native integration. Recovery points are stored in the vault, outside the workload administrators’ control boundary.",
+        facts: [
+          ["VM", "The encrypted Windows VM is protected through its backup extension."],
+          ["FS", "Azure file-share protection preserves point-in-time recoverability."],
+          ["D:", "The data disk is captured according to the configured backup policy."]
+        ],
+        calloutTitle: "Data path",
+        callout: "Backup traffic crosses the resource-group boundary, but backup administration remains isolated.",
+        focus: ["workload", "agents", "vault"], flows: ["backup"]
+      },
+      {
+        title: "Central telemetry turns events into alerts",
+        subtitle: "Backup and vault logs feed Log Analytics; detection rules trigger Azure Monitor alerts.",
+        kicker: "Monitoring flow",
+        status: "Observing",
+        inspectorTitle: "Backup changes are visible",
+        desc: "Operational logs and security-relevant events are centralized. Alert rules surface deletion attempts, policy changes, failed jobs, and other suspicious conditions.",
+        facts: [
+          ["LOG", "Log Analytics receives backup, vault, and agent telemetry."],
+          ["!", "Azure Monitor evaluates rules and triggers alerts."],
+          ["AUD", "A separate workspace preserves evidence during a workload incident."]
+        ],
+        calloutTitle: "Detection objective",
+        callout: "Make destructive backup activity noisy, attributable, and actionable before recovery options are lost.",
+        focus: ["agents", "vault", "logs", "monitor"], flows: ["logs", "trigger"]
+      },
+      {
+        title: "A workload compromise cannot disable the protection plane",
+        subtitle: "The attack reaches workload resources, but destructive vault changes are blocked.",
+        kicker: "Containment simulation",
+        status: "Attack contained",
+        inspectorTitle: "The blast radius stops at the boundary",
+        desc: "In this simulation, ransomware compromises workload resources and local backup agents. The isolated vault remains available because access, deletion safeguards, and monitoring are controlled separately.",
+        facts: [
+          ["X", "Workload resources and local agents are assumed compromised."],
+          ["14", "Soft delete retains deleted backup items for 14 days."],
+          ["LOCK", "Immutable settings resist malicious retention changes."]
+        ],
+        calloutTitle: "Containment outcome",
+        callout: "Production may be unavailable, but trusted recovery points survive the incident.",
+        focus: ["workload", "agents", "vault"], flows: ["attack"], attack: true
+      },
+      {
+        title: "Recover from a trusted point in the isolated vault",
+        subtitle: "Validated recovery points restore the workload after containment and credential reset.",
+        kicker: "Recovery flow",
+        status: "Recovery ready",
+        inspectorTitle: "Restore, validate, then return to service",
+        desc: "After the threat is contained, operators select a known-good recovery point, restore into a controlled environment, validate integrity, and then reconnect the workload.",
+        facts: [
+          ["1", "Contain the incident and rotate compromised credentials."],
+          ["2", "Choose a recovery point that predates malicious activity."],
+          ["3", "Restore, scan, validate, and resume service in stages."]
+        ],
+        calloutTitle: "Recovery objective",
+        callout: "Isolation preserves the option to rebuild from clean data instead of negotiating with an attacker.",
+        focus: ["vault", "workload"], flows: ["restore"], recovery: true
+      }
+    ];
+
+    const nodeDetails = {
+      vm: {
+        kicker: "Workload resource", status: "Encrypted", title: "Windows VM",
+        desc: "A production Windows virtual machine protected by encryption and a backup agent. It remains inside the workload administrative boundary.",
+        facts: [["OS", "Runs the application workload."], ["ENC", "Encryption protects data at rest."], ["BKP", "The backup extension coordinates recovery-point creation."]],
+        calloutTitle: "Threat assumption", callout: "Treat the VM and its credentials as untrusted after a ransomware event."
+      },
+      storage: {
+        kicker: "Workload resource", status: "Policy applied", title: "Azure Storage File Share",
+        desc: "A shared data source protected on a recurring schedule so files can be recovered to a known point in time.",
+        facts: [["FS", "Stores collaborative or application file data."], ["PIT", "Point-in-time copies support granular recovery."], ["RG", "The storage account remains in the workload resource group."]],
+        calloutTitle: "Protection goal", callout: "Preserve file versions beyond the reach of compromised workload identities."
+      },
+      disk: {
+        kicker: "Workload resource", status: "Protected", title: "Data Disk — D: Drive",
+        desc: "The application data disk is backed up independently from the operating system volume, supporting targeted recovery.",
+        facts: [["D:", "Contains application or user data."], ["SNAP", "Snapshots feed the backup workflow."], ["RPO", "Policy frequency determines the recovery-point objective."]],
+        calloutTitle: "Recovery option", callout: "A clean disk can be restored and attached without rebuilding every other component."
+      },
+      agent: {
+        kicker: "Workload integration", status: "Healthy", title: "Backup Agent",
+        desc: "The agent or native backup integration coordinates protection from the workload side, but it does not own the vault’s recovery points or retention controls.",
+        facts: [["JOB", "Starts and reports backup jobs."], ["AUTH", "Uses scoped identity and permissions."], ["SEP", "Cannot independently remove isolated vault safeguards."]],
+        calloutTitle: "Key distinction", callout: "Compromising an agent should not grant authority to destroy the backup control plane."
+      },
+      vault: {
+        kicker: "Protection resource", status: "Hardened", title: "Recovery Services Vault",
+        desc: "The vault stores recovery points and enforces backup policy. It is located in the isolated protection resource group.",
+        facts: [["14d", "Soft delete retains deleted backup items for 14 days."], ["LOCK", "Immutable lock protects retention settings from change."], ["IAM", "Restricted roles separate backup administration from workload administration."]],
+        calloutTitle: "Primary safeguard", callout: "The vault must remain outside the attacker’s effective administrative reach."
+      },
+      logs: {
+        kicker: "Monitoring resource", status: "Collecting", title: "Log Analytics Workspace",
+        desc: "A central workspace receives diagnostic and audit telemetry from backup agents and the vault.",
+        facts: [["LOG", "Collects job, policy, and administrative events."], ["KQL", "Queries support investigation and detection."], ["RET", "Independent retention preserves incident evidence."]],
+        calloutTitle: "Visibility", callout: "Central logs make silent backup tampering materially harder."
+      },
+      monitor: {
+        kicker: "Monitoring resource", status: "Alerting", title: "Azure Monitor Alerts",
+        desc: "Alert rules evaluate telemetry and notify responders when backup operations deviate from policy or indicate destructive behavior.",
+        facts: [["RULE", "Detects failures, deletions, and configuration changes."], ["ACT", "Triggers notifications or response workflows."], ["SLA", "Supports measurable response and escalation targets."]],
+        calloutTitle: "Response signal", callout: "An alert is useful only when ownership, severity, and the next action are predefined."
+      }
+    };
+
+    let currentStep = 0;
+    let selectedEl = null;
+    const $ = (id) => document.getElementById(id);
+    const allFocusEls = {
+      workload: [$("workloadBoundary"), $("nodeVm"), $("nodeStorage"), $("nodeDisk")],
+      agents: [$("agentVm"), $("agentStorage"), $("agentDisk")],
+      protection: [$("protectionBoundary"), $("nodeVault"), $("nodeLogs"), $("nodeMonitor")],
+      vault: [$("nodeVault")], logs: [$("nodeLogs")], monitor: [$("nodeMonitor")]
+    };
+    const backupFlows = [$("flowVmAgent"), $("flowStorageAgent"), $("flowDiskAgent"), $("flowAgentVault1"), $("flowAgentVault2"), $("flowAgentVault3")];
+    const logFlows = [$("flowVaultLogs"), $("flowAgentLogs")];
+    const triggerFlows = [$("flowTrigger")];
+    const allStandardFlows = [...backupFlows, ...logFlows, ...triggerFlows];
+    const labels = [$("labelProtected"), $("labelBackup"), $("labelLogs"), $("labelTriggers")];
+
+    function buildFacts(items) {
+      $("factList").innerHTML = items.map(([icon, text]) => `<div class="fact"><span class="fact-icon">${icon}</span><span>${text}</span></div>`).join("");
+    }
+
+    function setInspector(data) {
+      $("inspectorKicker").textContent = data.kicker;
+      $("inspectorStatus").textContent = data.status;
+      $("inspectorTitle").textContent = data.inspectorTitle || data.title;
+      $("inspectorDesc").textContent = data.desc;
+      buildFacts(data.facts);
+      $("calloutTitle").textContent = data.calloutTitle;
+      $("calloutText").textContent = data.callout;
+    }
+
+    function clearVisualState() {
+      document.querySelectorAll(".node, .agent").forEach(el => el.classList.remove("dimmed", "pulse", "compromised"));
+      allStandardFlows.forEach(el => el.classList.remove("active", "dim"));
+      labels.forEach(el => el.classList.remove("dim"));
+      $("flowAttack").classList.remove("active");
+      $("flowRestore").classList.remove("active");
+      $("flowAttack").style.opacity = "0";
+      $("flowRestore").style.opacity = "0";
+      $("labelRestore").style.opacity = "0";
+      $("shieldBadge").classList.remove("visible");
+      $("blockedText").classList.remove("visible");
+    }
+
+    function focusGroups(focus) {
+      const focusSet = new Set();
+      focus.forEach(group => (allFocusEls[group] || []).forEach(el => focusSet.add(el)));
+      const interactive = [...document.querySelectorAll(".node, .agent")];
+      if (focus.length && currentStep !== 0) {
+        interactive.forEach(el => { if (!focusSet.has(el)) el.classList.add("dimmed"); });
+      }
+      focusSet.forEach(el => { if (el && el.classList && (el.classList.contains("node") || el.classList.contains("agent"))) el.classList.add("pulse"); });
+    }
+
+    function applyFlows(flowTypes) {
+      const active = new Set();
+      if (flowTypes.includes("backup")) backupFlows.forEach(f => active.add(f));
+      if (flowTypes.includes("logs")) logFlows.forEach(f => active.add(f));
+      if (flowTypes.includes("trigger")) triggerFlows.forEach(f => active.add(f));
+      allStandardFlows.forEach(f => {
+        if (active.has(f)) f.classList.add("active");
+        else if (flowTypes.length) f.classList.add("dim");
+      });
+      if (flowTypes.length) {
+        labels.forEach(label => label.classList.add("dim"));
+        if (flowTypes.includes("backup")) { $("labelProtected").classList.remove("dim"); $("labelBackup").classList.remove("dim"); }
+        if (flowTypes.includes("logs")) $("labelLogs").classList.remove("dim");
+        if (flowTypes.includes("trigger")) $("labelTriggers").classList.remove("dim");
+      }
+      if (flowTypes.includes("attack")) {
+        $("flowAttack").style.opacity = "1";
+        $("flowAttack").classList.add("active");
+      }
+      if (flowTypes.includes("restore")) {
+        $("flowRestore").style.opacity = "1";
+        $("flowRestore").classList.add("active");
+        $("labelRestore").style.opacity = ".92";
+      }
+    }
+
+    function renderStep(index, announce = false) {
+      currentStep = Math.max(0, Math.min(index, steps.length - 1));
+      const step = steps[currentStep];
+      clearSelection();
+      clearVisualState();
+
+      $("stepIcon").textContent = currentStep + 1;
+      $("stepTitle").textContent = step.title;
+      $("stepSubtitle").textContent = step.subtitle;
+      setInspector(step);
+      focusGroups(step.focus);
+      applyFlows(step.flows);
+
+      if (step.attack) {
+        document.querySelectorAll(".workload-node").forEach(el => el.classList.add("compromised"));
+        $("shieldBadge").classList.add("visible");
+        $("blockedText").classList.add("visible");
+      }
+      if (step.recovery) {
+        $("nodeVault").classList.add("pulse");
+        $("nodeVm").classList.add("pulse");
+      }
+
+      document.querySelectorAll(".chapter-btn").forEach((btn, i) => btn.classList.toggle("active", i === currentStep));
+      $("prevBtn").disabled = currentStep === 0;
+      $("nextBtn").disabled = currentStep === steps.length - 1;
+      $("nextBtn").textContent = currentStep === steps.length - 1 ? "Done" : "Next";
+      $("progressFill").style.width = `${((currentStep + 1) / steps.length) * 100}%`;
+      $("simulateBtn").textContent = step.attack ? "Attack contained" : "Simulate attack";
+      if (announce) toast(`Step ${currentStep + 1}: ${step.title}`);
+    }
+
+    function clearSelection() {
+      if (selectedEl) selectedEl.classList.remove("selected");
+      selectedEl = null;
+    }
+
+    function selectNode(el) {
+      clearSelection();
+      selectedEl = el;
+      el.classList.add("selected");
+      const details = nodeDetails[el.dataset.node];
+      if (details) setInspector(details);
+      toast(`${details.title} selected`);
+    }
+
+    function toast(message) {
+      const t = $("toast");
+      t.textContent = message;
+      t.classList.add("show");
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+    }
+
+    document.querySelectorAll(".chapter-btn").forEach(btn => btn.addEventListener("click", () => renderStep(Number(btn.dataset.step), true)));
+    $("prevBtn").addEventListener("click", () => renderStep(currentStep - 1, true));
+    $("nextBtn").addEventListener("click", () => renderStep(currentStep + 1, true));
+    $("simulateBtn").addEventListener("click", () => renderStep(3, true));
+    $("resetBtn").addEventListener("click", () => { renderStep(0); toast("Demo reset"); });
+
+    document.querySelectorAll("[data-node]").forEach(el => {
+      el.addEventListener("click", (event) => { event.stopPropagation(); selectNode(el); });
+      el.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectNode(el); }
+      });
+    });
+
+    $("architecture").addEventListener("click", () => { clearSelection(); setInspector(steps[currentStep]); });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight" && currentStep < steps.length - 1) renderStep(currentStep + 1, true);
+      if (event.key === "ArrowLeft" && currentStep > 0) renderStep(currentStep - 1, true);
+      if (event.key.toLowerCase() === "r") { renderStep(0); toast("Demo reset"); }
+    });
+
+    renderStep(0);
+  </script>
+</body>
+</html>
