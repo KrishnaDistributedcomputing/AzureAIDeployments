@@ -768,21 +768,21 @@
             </div>
         </div>
 
-        <!-- Click-through Demo Lab -->
+        <!-- Business Click-through Demo -->
         <div id="click-demo" class="section">
             <div class="section-title">
-                <i class="bi bi-play-circle"></i> Click-through Demo Lab
+                <i class="bi bi-play-circle"></i> Business Value Click-through
             </div>
             <p style="font-size: 1.05em; color: #b0b0b0; margin-bottom: 20px;">
-                Walk through the customer conversation like a live portal demo. Click each step to animate the protected workload, vault, restore flow, and operator guidance.
+                Walk a business sponsor through a board-friendly recovery story: what is protected, what failure would cost, how fast the team can recover, and what decision comes next.
             </p>
 
             <div class="click-demo-shell">
                 <div class="demo-stage">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <div>
-                            <span class="status-badge active"><i class="bi bi-broadcast"></i> Live guided mode</span>
-                            <span class="status-badge protected"><i class="bi bi-clock-history"></i> 15 minute talk track</span>
+                            <span class="status-badge active"><i class="bi bi-broadcast"></i> Executive guided mode</span>
+                            <span class="status-badge protected"><i class="bi bi-clock-history"></i> 10 minute decision story</span>
                         </div>
                         <button class="btn-custom" type="button" id="patternAResetDemo"><i class="bi bi-arrow-clockwise"></i> Restart</button>
                     </div>
@@ -793,50 +793,50 @@
                     <div class="demo-topology" aria-label="Pattern A live topology">
                         <div class="demo-node active" data-node="workload">
                             <i class="bi bi-pc-display-horizontal"></i>
-                            <h5>Windows VM</h5>
-                            <p>demo-vm-prod with OS disk, data disk, and customer-facing sample files.</p>
+                            <h5>Critical Team App</h5>
+                            <p>A business file, report, or team application that leaders need back quickly.</p>
                         </div>
                         <div class="demo-node" data-node="vault">
                             <i class="bi bi-shield-check"></i>
-                            <h5>Recovery Services Vault</h5>
-                            <p>Daily policy, on-demand backup, 7-day retention, and 14-day soft delete.</p>
+                            <h5>Recovery Promise</h5>
+                            <p>The visible commitment for retention, recovery points, and restore ownership.</p>
                         </div>
                         <div class="demo-node" data-node="restore">
                             <i class="bi bi-folder-symlink"></i>
-                            <h5>Restore Workspace</h5>
-                            <p>Browse recovery points, mount restore script, recover files, validate data.</p>
+                            <h5>Business Recovery</h5>
+                            <p>Recover the missing item, validate it, and give the business a clear status.</p>
                         </div>
                     </div>
 
                     <div class="demo-step-buttons" role="tablist" aria-label="Pattern A demo steps">
-                        <button class="demo-step-button active" type="button" data-demo-step="0">1. Brief</button>
-                        <button class="demo-step-button" type="button" data-demo-step="1">2. Protect</button>
-                        <button class="demo-step-button" type="button" data-demo-step="2">3. Monitor</button>
-                        <button class="demo-step-button" type="button" data-demo-step="3">4. Restore</button>
-                        <button class="demo-step-button" type="button" data-demo-step="4">5. Close</button>
+                        <button class="demo-step-button active" type="button" data-demo-step="0">1. Risk</button>
+                        <button class="demo-step-button" type="button" data-demo-step="1">2. Promise</button>
+                        <button class="demo-step-button" type="button" data-demo-step="2">3. Confidence</button>
+                        <button class="demo-step-button" type="button" data-demo-step="3">4. Recovery</button>
+                        <button class="demo-step-button" type="button" data-demo-step="4">5. Decision</button>
                     </div>
 
                     <div class="demo-live-card">
-                        <h3 id="patternATitle">Customer brief: rapid Azure Backup proof</h3>
-                        <p id="patternANarrative">Position the demo as a low-risk way to see VM backup, file-share backup, recovery points, and restore validation in one short session.</p>
+                        <h3 id="patternATitle">Business question: can we recover before the next meeting?</h3>
+                        <p id="patternANarrative">Start with a simple business event: a finance file or team document is missing and the owner needs a confident recovery answer today.</p>
                         <div class="demo-metrics-grid">
-                            <div class="demo-live-metric"><strong id="patternAMetricOne">60 min</strong><span id="patternAMetricOneLabel">Demo-ready deployment</span></div>
-                            <div class="demo-live-metric"><strong id="patternAMetricTwo">7 days</strong><span id="patternAMetricTwoLabel">Retention policy</span></div>
-                            <div class="demo-live-metric"><strong id="patternAMetricThree">$47</strong><span id="patternAMetricThreeLabel">Estimated one-day cost</span></div>
+                            <div class="demo-live-metric"><strong id="patternAMetricOne">15 min</strong><span id="patternAMetricOneLabel">Business walkthrough</span></div>
+                            <div class="demo-live-metric"><strong id="patternAMetricTwo">Same day</strong><span id="patternAMetricTwoLabel">Recovery confidence</span></div>
+                            <div class="demo-live-metric"><strong id="patternAMetricThree">Low</strong><span id="patternAMetricThreeLabel">Proof cost</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="demo-sidecar">
                     <div class="demo-help-panel">
-                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
-                        <div id="patternAHelp">Open with the customer question: "Can I recover a deleted business file quickly without rebuilding the VM?" Then show the resource group and vault.</div>
+                        <h5><i class="bi bi-question-circle"></i> Business guide</h5>
+                        <div id="patternAHelp">Ask: "If payroll, finance, or a customer report disappeared this morning, who can prove we can get it back?"</div>
                     </div>
-                    <div class="demo-command-panel" id="patternAConsole"><span class="prompt">PS&gt;</span> ./deploy.ps1 -Pattern CoreDemo
+                    <div class="demo-command-panel" id="patternAConsole"><span class="prompt">Decision board&gt;</span> Recovery proof session
 
-Deploying Recovery Services vault...
-Applying daily policy...
-Demo environment ready.</div>
+What it means: backup is useful only when a real business item can be restored.
+Why it matters: leaders need a clear recovery answer before downtime becomes customer impact.
+Key takeaway: Pattern A proves the basic recovery promise quickly.</div>
                 </div>
             </div>
         </div>
@@ -1444,54 +1444,54 @@ Demo environment ready.</div>
 
             const patternASteps = [
                 {
-                    title: 'Customer brief: rapid Azure Backup proof',
-                    narrative: 'Position the demo as a low-risk way to see VM backup, file-share backup, recovery points, and restore validation in one short session.',
+                    title: 'Business question: can we recover before the next meeting?',
+                    narrative: 'Start with a simple business event: a finance file or team document is missing and the owner needs a confident recovery answer today.',
                     node: 'workload',
                     progress: '20%',
-                    metrics: ['60 min', '7 days', '$47'],
-                    labels: ['Demo-ready deployment', 'Retention policy', 'Estimated one-day cost'],
-                    help: 'Open with the customer question: "Can I recover a deleted business file quickly without rebuilding the VM?" Then show the resource group and vault.',
-                    console: '<span class="prompt">PS&gt;</span> ./deploy.ps1 -Pattern CoreDemo\n\nDeploying Recovery Services vault...\nApplying daily policy...\nDemo environment ready.'
+                    metrics: ['15 min', 'Same day', 'Low'],
+                    labels: ['Business walkthrough', 'Recovery confidence', 'Proof cost'],
+                    help: 'Ask: "If payroll, finance, or a customer report disappeared this morning, who can prove we can get it back?"',
+                    console: '<span class="prompt">Decision board&gt;</span> Recovery proof session\n\nWhat it means: backup is useful only when a real business item can be restored.\nWhy it matters: leaders need a clear recovery answer before downtime becomes customer impact.\nKey takeaway: Pattern A proves the basic recovery promise quickly.'
                 },
                 {
-                    title: 'Protect the VM and file share',
-                    narrative: 'Show how the VM, data disk, and Azure Files share are associated to the vault and policy without hand-building a complex runbook.',
+                    title: 'Define the recovery promise',
+                    narrative: 'Translate backup settings into business language: which app or file is covered, how far back the business can go, and who owns recovery.',
                     node: 'vault',
                     progress: '40%',
-                    metrics: ['2 items', '11 PM', '14 days'],
-                    labels: ['Protected sources', 'Daily schedule', 'Soft-delete safety net'],
-                    help: 'Point out the simple operating model: one policy, visible protected items, and a predictable retention window for demo conversations.',
-                    console: '<span class="prompt">az&gt;</span> backup protection enable-for-vm --vault-name demo-vault-prod --vm demo-vm-prod\n\nProtection state: Protected\nPolicy: Daily-7Day-Retention\nNext scheduled backup: 23:00 UTC'
+                    metrics: ['2 assets', 'Daily', '14 days'],
+                    labels: ['Protected priorities', 'Recovery rhythm', 'Safety window'],
+                    help: 'Use the phrase "recovery promise" instead of policy. It makes the conversation about service continuity, not configuration.',
+                    console: '<span class="prompt">What it means&gt;</span> The business can see which priority assets are protected.\n\nWhy it matters: no one has to guess whether the missing item is covered.\nHow it works: a simple recovery promise links assets, owners, and restore expectations.'
                 },
                 {
-                    title: 'Monitor backup health live',
-                    narrative: 'Switch to job status and Log Analytics. The demo story is confidence: operators can see backup progress, failures, and restore readiness.',
+                    title: 'Show recovery confidence, not tool noise',
+                    narrative: 'Turn health status into an executive signal: latest protection succeeded, no open failures, and the team has a recovery point available.',
                     node: 'vault',
                     progress: '60%',
-                    metrics: ['100%', '3 jobs', '0 failed'],
-                    labels: ['Latest job status', 'Jobs in walkthrough', 'Failure count'],
-                    help: 'Use this step to answer: "How do I know backups are actually happening?" Show job history, alerts, and the KQL query links.',
-                    console: '<span class="prompt">KQL&gt;</span> AzureDiagnostics\n| where Category == "AzureBackupReport"\n| summarize Jobs=count(), Failed=countif(JobStatus_s != "Completed")\n\nJobs: 3\nFailed: 0\nLatest: Completed'
+                    metrics: ['Green', '0 open', 'Visible'],
+                    labels: ['Readiness status', 'Business blockers', 'Owner evidence'],
+                    help: 'Answer the sponsor question: "How do we know this will work when we need it?" Focus on readiness, owner, and evidence.',
+                    console: '<span class="prompt">Signals to track&gt;</span> Recovery readiness\n\nLatest protection: healthy\nOpen blockers: none\nOwner view: available\nKey takeaway: backup health must be readable by business and operations leaders.'
                 },
                 {
-                    title: 'Restore a deleted business file',
-                    narrative: 'Demonstrate the fastest win: pick a recovery point, mount the restore script, browse files, and recover the missing document.',
+                    title: 'Recover the missing business item',
+                    narrative: 'Demonstrate the moment the sponsor cares about: the missing file comes back, the owner confirms it opens, and the business can continue.',
                     node: 'restore',
                     progress: '82%',
-                    metrics: ['4 min', '1 file', 'Verified'],
-                    labels: ['File restore time', 'Recovered item', 'Checksum status'],
-                    help: 'Narrate this as a business event: Finance deleted budget.xlsx, the operator restores it without restoring the whole VM.',
-                    console: '<span class="prompt">PS&gt;</span> ./demo-restore-scenarios.ps1 -Scenario FileRestore\n\nRecovery point selected: Latest completed\nMounted restore volume: Z:\\\nRestored: Finance\\budget.xlsx\nValidation: checksum matched'
+                    metrics: ['4 min', '1 item', 'Confirmed'],
+                    labels: ['Recovery moment', 'Business impact', 'Owner validation'],
+                    help: 'Keep the story human: Finance gets the budget workbook back without waiting for a full server rebuild.',
+                    console: '<span class="prompt">Simple example&gt;</span> Finance budget workbook deleted\n\nAction: recover the latest good version.\nValidation: owner opens the workbook and confirms it is usable.\nBusiness result: meeting continues without recreating the work.'
                 },
                 {
-                    title: 'Close with cost and next pattern',
-                    narrative: 'Finish by showing the cleanup path, one-day cost, and when to move the customer to Pattern B for ransomware resilience.',
+                    title: 'Make the next business decision',
+                    narrative: 'Close with a decision: Pattern A proves basic recovery confidence; the next investment is stronger ransomware resilience or enterprise governance.',
                     node: 'restore',
                     progress: '100%',
-                    metrics: ['$47', '5 min', 'Pattern B'],
-                    labels: ['One-day demo cost', 'Cleanup time', 'Recommended next step'],
-                    help: 'Close with a clear decision: Pattern A proves restore basics; Pattern B adds RBAC separation, immutable vault posture, and attack recovery.',
-                    console: '<span class="prompt">PS&gt;</span> ./cleanup-demo.ps1 -Confirm\n\nStopping VM...\nRemoving demo resource group...\nBilling stopped.\nNext: open Pattern B ransomware resilience demo.'
+                    metrics: ['Low', 'Clear', 'Pattern B'],
+                    labels: ['Proof investment', 'Sponsor decision', 'Next maturity step'],
+                    help: 'Give leaders a clean fork: accept the basic recovery model, or move to Pattern B when ransomware and privileged access are the bigger risk.',
+                    console: '<span class="prompt">Key takeaway&gt;</span> Pattern A answers the first executive question.\n\nCan we recover a critical item quickly? Yes.\nDo we have visible proof? Yes.\nNext decision: expand to ransomware resilience with Pattern B.'
                 }
             ];
 

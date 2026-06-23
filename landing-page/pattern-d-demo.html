@@ -484,55 +484,55 @@
             </div>
         </section>
 
-        <!-- Click-through Demo Lab -->
+        <!-- Business Click-through Demo -->
         <section class="mb-5" id="click-demo">
-            <h2 class="section-title"><i class="bi bi-play-circle"></i> Click-through Demo: Enterprise Control Room</h2>
-            <p class="lead">Use this guided control-room flow to show executives and platform teams how governance, security, cost, and audit evidence connect.</p>
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Executive Click-through: Backup Governance Control Room</h2>
+            <p class="lead">Use this board-ready flow to show how leaders prove backup readiness, assign ownership, control spend, and produce audit evidence without chasing screenshots.</p>
 
             <div class="click-demo-shell">
                 <div class="click-demo-stage">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <span class="badge-enterprise"><i class="bi bi-broadcast"></i> Live governance simulation</span>
+                        <span class="badge-enterprise"><i class="bi bi-broadcast"></i> Executive governance room</span>
                         <button class="btn btn-outline-primary btn-sm" type="button" id="patternDReset">Restart demo</button>
                     </div>
                     <div class="click-progress-track"><div class="click-progress-bar" id="patternDProgress"></div></div>
 
                     <div class="governance-map">
-                        <div class="governance-node active" data-d-node="caf"><i class="bi bi-diagram-3"></i><h5>CAF Scope</h5><p>Management group policy, subscription guardrails, and tagged resource groups.</p></div>
-                        <div class="governance-node" data-d-node="zero"><i class="bi bi-shield-lock"></i><h5>Zero Trust</h5><p>Private endpoints, Bastion access, NSGs, and separated operator duties.</p></div>
-                        <div class="governance-node" data-d-node="finops"><i class="bi bi-cash-coin"></i><h5>FinOps</h5><p>Cost center tags, budgets, alerts, and backup storage optimization.</p></div>
-                        <div class="governance-node" data-d-node="audit"><i class="bi bi-clipboard2-check"></i><h5>Audit Evidence</h5><p>Policy compliance, restore SLA evidence, and immutable audit records.</p></div>
+                        <div class="governance-node active" data-d-node="caf"><i class="bi bi-diagram-3"></i><h5>Ownership Model</h5><p>Leaders see who owns protection, recovery testing, exceptions, and funding.</p></div>
+                        <div class="governance-node" data-d-node="zero"><i class="bi bi-shield-lock"></i><h5>Risk Guardrails</h5><p>Recovery controls stay enforced even when teams change or incidents escalate.</p></div>
+                        <div class="governance-node" data-d-node="finops"><i class="bi bi-cash-coin"></i><h5>Spend Visibility</h5><p>Cost centers, budgets, and growth signals are visible before spend surprises leaders.</p></div>
+                        <div class="governance-node" data-d-node="audit"><i class="bi bi-clipboard2-check"></i><h5>Board Evidence</h5><p>Readiness, restore tests, exceptions, and audit trail become an exportable pack.</p></div>
                     </div>
 
                     <div class="click-step-buttons">
-                        <button class="click-step-button active" type="button" data-d-step="0">1. Govern</button>
-                        <button class="click-step-button" type="button" data-d-step="1">2. Secure</button>
-                        <button class="click-step-button" type="button" data-d-step="2">3. Operate</button>
-                        <button class="click-step-button" type="button" data-d-step="3">4. Optimize</button>
-                        <button class="click-step-button" type="button" data-d-step="4">5. Audit</button>
+                        <button class="click-step-button active" type="button" data-d-step="0">1. Ownership</button>
+                        <button class="click-step-button" type="button" data-d-step="1">2. Risk</button>
+                        <button class="click-step-button" type="button" data-d-step="2">3. Readiness</button>
+                        <button class="click-step-button" type="button" data-d-step="3">4. Spend</button>
+                        <button class="click-step-button" type="button" data-d-step="4">5. Proof</button>
                     </div>
 
                     <div class="click-live-card">
-                        <h3 id="patternDTitle">Govern: prove the enterprise landing zone shape</h3>
-                        <p id="patternDText">Start at the management group and show how policy requires tags, soft delete, private access, and vault diagnostics before workloads onboard.</p>
+                        <h3 id="patternDTitle">Executive question: who owns recoverability across the enterprise?</h3>
+                        <p id="patternDText">Start with accountability. Leaders need one view of protected services, owners, risk exceptions, recovery testing, and funding alignment.</p>
                         <div class="click-metrics">
-                            <div class="click-metric"><strong id="patternDMetricOne">3 RGs</strong><span id="patternDMetricOneLabel">Separated ownership</span></div>
-                            <div class="click-metric"><strong id="patternDMetricTwo">5 roles</strong><span id="patternDMetricTwoLabel">RBAC model</span></div>
-                            <div class="click-metric"><strong id="patternDMetricThree">4 KQL</strong><span id="patternDMetricThreeLabel">Evidence queries</span></div>
+                            <div class="click-metric"><strong id="patternDMetricOne">3 owners</strong><span id="patternDMetricOneLabel">Business accountability</span></div>
+                            <div class="click-metric"><strong id="patternDMetricTwo">5 roles</strong><span id="patternDMetricTwoLabel">Operating model</span></div>
+                            <div class="click-metric"><strong id="patternDMetricThree">1 pack</strong><span id="patternDMetricThreeLabel">Board evidence</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="click-demo-guide">
                     <div class="help-card">
-                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
-                        <div id="patternDHelp">Open with a CIO question: "Can backup be governed as a platform control, not a per-app afterthought?" Then show the three-resource-group operating model.</div>
+                        <h5><i class="bi bi-question-circle"></i> Business guide</h5>
+                        <div id="patternDHelp">Ask: "Could we prove backup readiness to the board or auditor this week without manual collection?"</div>
                     </div>
-                    <div class="live-console" id="patternDConsole"><span class="prompt">Policy&gt;</span> Evaluate backup landing zone controls
+                    <div class="live-console" id="patternDConsole"><span class="prompt">Governance room&gt;</span> Enterprise recovery accountability
 
-Tag enforcement: compliant
-Soft delete policy: compliant
-Private access policy: compliant</div>
+What it means: backup is managed as a business control, not a per-team afterthought.
+Why it matters: executives need ownership, spend, readiness, and evidence in one story.
+Key takeaway: Pattern D makes recoverability governable and auditable.</div>
                 </div>
             </div>
         </section>
@@ -1063,11 +1063,11 @@ az backup vault backup-properties show \
         });
 
         const patternDSteps = [
-            ['Govern: prove the enterprise landing zone shape', 'Start at the management group and show how policy requires tags, soft delete, private access, and vault diagnostics before workloads onboard.', 'caf', '20%', ['3 RGs', '5 roles', '4 KQL'], ['Separated ownership', 'RBAC model', 'Evidence queries'], 'Open with a CIO question: "Can backup be governed as a platform control, not a per-app afterthought?" Then show the three-resource-group operating model.', '<span class="prompt">Policy&gt;</span> Evaluate backup landing zone controls\n\nTag enforcement: compliant\nSoft delete policy: compliant\nPrivate access policy: compliant'],
-            ['Secure: enforce zero-trust recovery paths', 'Move to the protection layer and show private endpoints, Bastion-based access, NSGs, immutable posture, and restricted restore operators.', 'zero', '40%', ['Private', 'Locked', 'No public'], ['Vault access', 'Immutability', 'Network exposure'], 'Point out that recovery is still possible while public vault access and broad admin paths are removed.', '<span class="prompt">az&gt;</span> network private-endpoint list -g protection-rg\n\nVault endpoint: approved\nStorage endpoint: approved\nPublic network access: disabled'],
-            ['Operate: run the backup command center', 'Show daily operational health, failed backup triage, restore SLA status, and the incident runbook handoff across SOC and backup teams.', 'audit', '60%', ['99.5%', 'P95 ok', '1 alert'], ['Backup success', 'Restore SLA', 'Active signals'], 'Make this feel like the weekly operations review: signals, owner, decision, evidence.', '<span class="prompt">KQL&gt;</span> RestoreSlaCompliance\n| summarize P95RestoreMinutes=percentile(Duration, 95), Failures=countif(Status != "Success")\n\nP95RestoreMinutes: 48\nFailures: 1'],
-            ['Optimize: connect FinOps to resilience', 'Switch to cost center views, budget alerts, redundancy choices, retention tiers, and storage growth so finance can tune without weakening recovery.', 'finops', '80%', ['$72/day', '8%', '3 tags'], ['Infra estimate', 'Budget drift', 'Required tags'], 'Tell the finance story carefully: cost optimization is allowed, but policy prevents changes that break recovery requirements.', '<span class="prompt">KQL&gt;</span> CostByCostCenter\n| summarize MonthlyCost=sum(Cost) by CostCenter, VaultType\n\nFinance: $412\nClaims: $365\nBudget drift: 8%'],
-            ['Audit: export board-ready proof', 'Close by exporting compliance evidence: policies applied, restore tests completed, budget alerts active, and audit trail preserved.', 'audit', '100%', ['100%', '12 tests', 'Exported'], ['Policy compliance', 'Quarterly restores', 'Evidence pack'], 'End with the executive artifact: the environment is governable, recoverable, cost-visible, and auditable.', '<span class="prompt">Report&gt;</span> Export enterprise backup evidence pack\n\nPolicy compliance: 100%\nRestore test records: 12\nAudit trail: immutable\nOutput: backup-governance-board-pack.zip']
+            ['Executive question: who owns recoverability across the enterprise?', 'Start with accountability. Leaders need one view of protected services, owners, risk exceptions, recovery testing, and funding alignment.', 'caf', '20%', ['3 owners', '5 roles', '1 pack'], ['Business accountability', 'Operating model', 'Board evidence'], 'Ask: "Could we prove backup readiness to the board or auditor this week without manual collection?"', '<span class="prompt">Governance room&gt;</span> Enterprise recovery accountability\n\nWhat it means: backup is managed as a business control, not a per-team afterthought.\nWhy it matters: executives need ownership, spend, readiness, and evidence in one story.\nKey takeaway: Pattern D makes recoverability governable and auditable.'],
+            ['Risk guardrails stay enforced', 'Move to the risk view and show that recovery controls are required by standard, not by memory: exceptions are visible and destructive paths are constrained.', 'zero', '40%', ['Enforced', 'Visible', 'Approved'], ['Control posture', 'Risk exceptions', 'Access path'], 'Translate security controls into executive value: fewer hidden recovery gaps, fewer privileged shortcuts, and cleaner incident escalation.', '<span class="prompt">Why it matters&gt;</span> Recovery controls survive organizational change\n\nRisk signal: exceptions are visible.\nAccess signal: destructive control is restricted.\nDecision: approve guardrails as enterprise policy.'],
+            ['Readiness is reviewed before crisis', 'Show the weekly operating view: backup health, restore-test status, open blockers, service owners, and escalation path.', 'audit', '60%', ['99.5%', 'P95 ok', '1 blocker'], ['Readiness signal', 'Recovery target', 'Executive attention'], 'Make this feel like an operating review. A leader should see owner, signal, decision, and evidence without reading runbooks.', '<span class="prompt">Signals to track&gt;</span> Enterprise recovery readiness\n\nBackup success: 99.5%\nRestore target: within threshold\nOpen blocker: one service needs owner action\nDecision: escalate before risk becomes outage.'],
+            ['Spend is connected to resilience value', 'Switch to finance view: cost centers, growth, retention choices, and budget drift so finance can optimize without weakening required recovery.', 'finops', '80%', ['$72/day', '8%', '3 tags'], ['Run cost', 'Budget drift', 'Owner labels'], 'Tell finance that optimization is encouraged, but decisions must preserve the recovery promise for critical services.', '<span class="prompt">Simple example&gt;</span> Backup spend review\n\nFinding: one cost center is trending above budget.\nAllowed action: tune retention for lower-risk workloads.\nGuardrail: critical-app recovery promises cannot be weakened silently.'],
+            ['Export proof for board, audit, and regulators', 'Close by exporting one evidence pack: ownership, control posture, restore tests, cost signals, exceptions, and audit trail.', 'audit', '100%', ['100%', '12 tests', 'Exported'], ['Control coverage', 'Restore evidence', 'Board pack'], 'End with the executive artifact: recoverability is owned, tested, cost-visible, and ready for audit.', '<span class="prompt">Key takeaway&gt;</span> Pattern D creates board-ready backup governance\n\nEvidence: owners, controls, restore tests, spend, exceptions.\nBusiness result: leaders can prove readiness without assembling screenshots.\nNext decision: operationalize the review cadence.']
         ];
 
         function renderPatternDStep(index) {

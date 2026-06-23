@@ -506,54 +506,55 @@
             </div>
         </section>
 
-        <!-- Click-through Demo Lab -->
+        <!-- Business Click-through Demo -->
         <section class="mb-5" id="click-demo">
-            <h2 class="section-title"><i class="bi bi-play-circle"></i> Click-through Demo: Workload Placement</h2>
-            <p class="lead">Guide a platform team through the live decision flow: classify the workload, choose the vault, run the right restore, and compare cost.</p>
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Business Click-through: Application Recovery Choices</h2>
+            <p class="lead">Guide business and platform leaders through the decision: which applications matter most, how fast each must return, and which protection model fits the business value.</p>
 
             <div class="click-demo-shell">
                 <div class="click-demo-stage">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <span class="badge-cloud"><i class="bi bi-broadcast"></i> Live architecture selector</span>
+                        <span class="badge-cloud"><i class="bi bi-broadcast"></i> Portfolio decision mode</span>
                         <button class="btn btn-outline-success btn-sm" type="button" id="patternCReset">Restart demo</button>
                     </div>
                     <div class="click-progress-track"><div class="click-progress-bar" id="patternCProgress"></div></div>
 
                     <div class="placement-map">
-                        <div class="placement-node active" data-c-node="classify"><i class="bi bi-ui-checks-grid"></i><h5>Classify</h5><p>Map VM, files, disk, blob, and AKS to the correct protection model.</p></div>
-                        <div class="placement-node" data-c-node="rsv"><i class="bi bi-archive"></i><h5>RSV Lane</h5><p>Traditional IaaS backup for VMs, Azure Files, SQL in VM, and SAP.</p></div>
-                        <div class="placement-node" data-c-node="vault"><i class="bi bi-cloud-upload"></i><h5>Backup Vault Lane</h5><p>Cloud-native operational backup for disks, blobs, and AKS.</p></div>
-                        <div class="placement-node" data-c-node="optimize"><i class="bi bi-speedometer2"></i><h5>Optimize</h5><p>Compare restore speed, redundancy, retention, and monthly cost.</p></div>
+                        <div class="placement-node active" data-c-node="classify"><i class="bi bi-ui-checks-grid"></i><h5>App Priority</h5><p>Rank each workload by revenue, customer impact, compliance, and tolerance for downtime.</p></div>
+                        <div class="placement-node" data-c-node="rsv"><i class="bi bi-archive"></i><h5>Recovery Depth</h5><p>Use longer retention and full recovery paths where business risk is higher.</p></div>
+                        <div class="placement-node" data-c-node="vault"><i class="bi bi-cloud-upload"></i><h5>Fast Operations</h5><p>Use lighter operational recovery where speed and cloud-native fit matter most.</p></div>
+                        <div class="placement-node" data-c-node="optimize"><i class="bi bi-speedometer2"></i><h5>Value Balance</h5><p>Compare cost, recovery speed, and business criticality before standardizing.</p></div>
                     </div>
 
                     <div class="click-step-buttons">
-                        <button class="click-step-button active" type="button" data-c-step="0">1. Intake</button>
-                        <button class="click-step-button" type="button" data-c-step="1">2. RSV</button>
-                        <button class="click-step-button" type="button" data-c-step="2">3. Snapshot</button>
-                        <button class="click-step-button" type="button" data-c-step="3">4. Blob PITR</button>
-                        <button class="click-step-button" type="button" data-c-step="4">5. Compare</button>
+                        <button class="click-step-button active" type="button" data-c-step="0">1. Priority</button>
+                        <button class="click-step-button" type="button" data-c-step="1">2. Depth</button>
+                        <button class="click-step-button" type="button" data-c-step="2">3. Speed</button>
+                        <button class="click-step-button" type="button" data-c-step="3">4. Data Risk</button>
+                        <button class="click-step-button" type="button" data-c-step="4">5. Standard</button>
                     </div>
 
                     <div class="click-live-card">
-                        <h3 id="patternCTitle">Intake: classify every workload first</h3>
-                        <p id="patternCText">Start by sorting workloads by restore behavior. VMs and file shares go to RSV; disks, blobs, and AKS go to Backup Vault.</p>
+                        <h3 id="patternCTitle">Portfolio question: which apps deserve the strongest recovery promise?</h3>
+                        <p id="patternCText">Start by ranking workloads by business impact. A payroll system, customer portal, and analytics feed should not all receive the same recovery treatment.</p>
                         <div class="click-metrics">
-                            <div class="click-metric"><strong id="patternCMetricOne">11</strong><span id="patternCMetricOneLabel">Protected resources</span></div>
-                            <div class="click-metric"><strong id="patternCMetricTwo">2</strong><span id="patternCMetricTwoLabel">Vault types</span></div>
-                            <div class="click-metric"><strong id="patternCMetricThree">30%</strong><span id="patternCMetricThreeLabel">Potential savings</span></div>
+                            <div class="click-metric"><strong id="patternCMetricOne">11</strong><span id="patternCMetricOneLabel">Business services</span></div>
+                            <div class="click-metric"><strong id="patternCMetricTwo">3 tiers</strong><span id="patternCMetricTwoLabel">Recovery priority</span></div>
+                            <div class="click-metric"><strong id="patternCMetricThree">30%</strong><span id="patternCMetricThreeLabel">Optimization room</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="click-demo-guide">
                     <div class="help-card">
-                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
-                        <div id="patternCHelp">Lead with a platform team question: "Which vault should we standardize on?" The answer is workload-driven, not one-size-fits-all.</div>
+                        <h5><i class="bi bi-question-circle"></i> Business guide</h5>
+                        <div id="patternCHelp">Ask: "Which applications create the most customer, revenue, or compliance impact if recovery is slow?"</div>
                     </div>
-                    <div class="live-console" id="patternCConsole"><span class="prompt">Matrix&gt;</span> VM, Azure Files -> Recovery Services Vault
-Managed disk, Blob, AKS -> Backup Vault
+                    <div class="live-console" id="patternCConsole"><span class="prompt">Portfolio board&gt;</span> Application recovery choices
 
-Placement model ready.</div>
+What it means: protection follows business priority, not technology habit.
+Why it matters: critical services get stronger recovery while lower-risk workloads stay cost efficient.
+Key takeaway: Pattern C turns backup placement into an application portfolio decision.</div>
                 </div>
             </div>
         </section>
@@ -1068,11 +1069,11 @@ az storage blob list -c backup-demo --account-name storage
         });
 
         const patternCSteps = [
-            ['Intake: classify every workload first', 'Start by sorting workloads by restore behavior. VMs and file shares go to RSV; disks, blobs, and AKS go to Backup Vault.', 'classify', '20%', ['11', '2', '30%'], ['Protected resources', 'Vault types', 'Potential savings'], 'Lead with a platform team question: "Which vault should we standardize on?" The answer is workload-driven, not one-size-fits-all.', '<span class="prompt">Matrix&gt;</span> VM, Azure Files -> Recovery Services Vault\nManaged disk, Blob, AKS -> Backup Vault\n\nPlacement model ready.'],
-            ['RSV lane: traditional restore choices', 'Show VM and file share protection in Recovery Services Vault, then walk through file restore, disk restore, and full VM recovery options.', 'rsv', '40%', ['3-5 min', '9999d', 'GRS'], ['File restore', 'Max retention', 'Redundancy option'], 'Explain that RSV is the mature lane for IaaS operations and long-retention recovery requirements.', '<span class="prompt">az&gt;</span> backup item list --vault-name rsv-modern-demo\n\nVM: protected\nAzure Files: protected\nRestore modes: File, Disk, Full VM'],
-            ['Backup Vault lane: disk snapshot restore', 'Trigger an ad hoc backup for a managed disk and restore from snapshot. The visual point is fast, cloud-native recovery.', 'vault', '60%', ['<1 min', '5 disks', 'LRS'], ['Snapshot restore', 'Disk workload count', 'Storage redundancy'], 'Use this step to show why not every cloud-native workload needs long RSV-style retention.', '<span class="prompt">az&gt;</span> dataprotection backup-instance adhoc-backup --backup-instance-name disk-backup\n\nSnapshot created\nRestore disk available\nElapsed: 42 seconds'],
-            ['Blob operational backup and PITR', 'Delete a test blob, then restore the storage account to a point before deletion. This feels live because the file list visibly returns.', 'vault', '82%', ['7 days', '<1 min', 'PITR'], ['Restore window', 'Restore action', 'Recovery mode'], 'Tell the data lake story: operational backup is continuous and made for accidental deletion or pipeline mistakes.', '<span class="prompt">az&gt;</span> storage blob delete -n customer-feed.csv\n<span class="prompt">az&gt;</span> dataprotection restore trigger --restore-to-timestamp 2026-06-23T14:30:00Z\n\ncustomer-feed.csv restored'],
-            ['Compare cost, SLA, and standards', 'Close with the placement matrix, monthly cost estimate, restore SLA, and the standard: use the vault that matches the workload.', 'optimize', '100%', ['$73', 'P95 ok', '30-50%'], ['Monthly estimate', 'Restore SLA status', 'Savings range'], 'Finish with a simple governance decision the customer can adopt: classify, place, monitor, optimize.', '<span class="prompt">KQL&gt;</span> BackupCoverageByVault\n| summarize Protected=count(), MonthlyCost=sum(Cost) by VaultType\n\nRSV: $50\nBackup Vault: $18\nStorage: $5']
+            ['Portfolio question: which apps deserve the strongest recovery promise?', 'Start by ranking workloads by business impact. A payroll system, customer portal, and analytics feed should not all receive the same recovery treatment.', 'classify', '20%', ['11', '3 tiers', '30%'], ['Business services', 'Recovery priority', 'Optimization room'], 'Ask: "Which applications create the most customer, revenue, or compliance impact if recovery is slow?"', '<span class="prompt">Portfolio board&gt;</span> Application recovery choices\n\nWhat it means: protection follows business priority, not technology habit.\nWhy it matters: critical services get stronger recovery while lower-risk workloads stay cost efficient.\nKey takeaway: Pattern C turns backup placement into an application portfolio decision.'],
+            ['Give critical apps deeper recovery coverage', 'Show the business reason for stronger coverage: some systems need longer recovery history, more restore options, and clearer owner accountability.', 'rsv', '40%', ['P1', 'Longer', 'Owned'], ['Criticality tier', 'Recovery history', 'Business owner'], 'Use business language: the strongest protection belongs where downtime, audit exposure, or customer impact is highest.', '<span class="prompt">What it means&gt;</span> High-impact services receive deeper recovery coverage\n\nWhy it matters: critical applications need more than a fast snapshot; they need recoverability leaders can defend.\nDecision: assign recovery depth by business tier.'],
+            ['Use faster recovery where speed matters most', 'For cloud-native or lower-risk operational workloads, emphasize fast return and lower overhead instead of maximum retention everywhere.', 'vault', '60%', ['Fast', 'Fit', 'Lean'], ['Restore motion', 'Workload match', 'Cost posture'], 'This step prevents over-engineering. The point is not one vault for everything; it is the right recovery promise for each service.', '<span class="prompt">Simple example&gt;</span> Product image service\n\nBusiness need: quick rollback after accidental deletion.\nProtection choice: operational recovery with fast restore.\nResult: service recovers without paying for unnecessary depth.'],
+            ['Protect data pipelines from business disruption', 'Tell the data story: an analytics feed, customer export, or reporting file can be recovered to a known good point before downstream teams are blocked.', 'vault', '82%', ['7 days', 'Fast', 'Visible'], ['Recovery window', 'Data return', 'Owner signal'], 'Keep it business-facing: data recovery is about reporting, decisions, and customer commitments, not only storage objects.', '<span class="prompt">Why it matters&gt;</span> Data mistakes can stop business decisions\n\nScenario: customer-feed.csv is deleted before a reporting run.\nAction: return the data to a known good point.\nOutcome: downstream reporting continues.'],
+            ['Set a standard finance and operations can support', 'Close with a portfolio standard: align business criticality, recovery speed, retention, compliance, and cost so the model can scale.', 'optimize', '100%', ['$73', 'P95 ok', '30-50%'], ['Monthly view', 'Recovery target', 'Savings range'], 'Finish with a repeatable decision model: classify, choose the recovery promise, validate, and optimize.', '<span class="prompt">Key takeaway&gt;</span> Pattern C balances resilience and cost\n\nCritical apps: deeper recovery.\nOperational apps: faster, leaner recovery.\nExecutive decision: approve a portfolio standard for app recovery tiers.']
         ];
 
         function renderPatternCStep(index) {

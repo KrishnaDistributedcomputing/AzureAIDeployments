@@ -471,55 +471,55 @@
             </div>
         </section>
 
-        <!-- Click-through Demo Lab -->
+        <!-- Business Click-through Demo -->
         <section class="mb-5" id="click-demo">
-            <h2 class="section-title"><i class="bi bi-play-circle"></i> Click-through Demo: Ransomware Response</h2>
-            <p class="lead">Run the incident story as a guided portal walkthrough: attack signal, blocked privilege path, soft-delete recovery, and executive closeout.</p>
+            <h2 class="section-title"><i class="bi bi-play-circle"></i> Business Click-through: Ransomware Readiness</h2>
+            <p class="lead">Run the boardroom version of the incident: what is at risk, which controls hold, how the business recovers, and what evidence leaders receive.</p>
 
             <div class="click-demo-shell">
                 <div class="click-demo-stage">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <span class="badge-security"><i class="bi bi-broadcast"></i> Live incident simulation</span>
+                        <span class="badge-security"><i class="bi bi-broadcast"></i> Executive incident room</span>
                         <button class="btn btn-outline-danger btn-sm" type="button" id="patternBReset">Restart demo</button>
                     </div>
                     <div class="click-progress-track"><div class="click-progress-bar" id="patternBProgress"></div></div>
 
                     <div class="attack-map">
-                        <div class="attack-node active" data-b-node="signal"><i class="bi bi-virus"></i><h5>Attack Signal</h5><p>Backup delete events and unusual RBAC requests appear in audit logs.</p></div>
-                        <div class="attack-node" data-b-node="rbac"><i class="bi bi-person-lock"></i><h5>RBAC Gate</h5><p>Operator role cannot weaken policy, delete vault, or change immutability.</p></div>
-                        <div class="attack-node" data-b-node="vault"><i class="bi bi-safe2"></i><h5>Vault Guard</h5><p>Soft delete and immutable posture preserve recovery points.</p></div>
-                        <div class="attack-node" data-b-node="recover"><i class="bi bi-arrow-counterclockwise"></i><h5>Recovery</h5><p>Undelete, restore, validate, and export incident evidence.</p></div>
+                        <div class="attack-node active" data-b-node="signal"><i class="bi bi-virus"></i><h5>Business Alarm</h5><p>Leaders see the impact: destructive attempts are detected before recovery is lost.</p></div>
+                        <div class="attack-node" data-b-node="rbac"><i class="bi bi-person-lock"></i><h5>Access Boundaries</h5><p>Compromised access cannot erase the recovery promise or weaken controls.</p></div>
+                        <div class="attack-node" data-b-node="vault"><i class="bi bi-safe2"></i><h5>Recovery Reserve</h5><p>Protected recovery points remain available when the business needs a clean copy.</p></div>
+                        <div class="attack-node" data-b-node="recover"><i class="bi bi-arrow-counterclockwise"></i><h5>Return to Service</h5><p>The team restores, validates, and briefs executives with evidence.</p></div>
                     </div>
 
                     <div class="click-step-buttons">
-                        <button class="click-step-button active" type="button" data-b-step="0">1. Detect</button>
-                        <button class="click-step-button" type="button" data-b-step="1">2. Contain</button>
-                        <button class="click-step-button" type="button" data-b-step="2">3. Preserve</button>
-                        <button class="click-step-button" type="button" data-b-step="3">4. Recover</button>
-                        <button class="click-step-button" type="button" data-b-step="4">5. Report</button>
+                        <button class="click-step-button active" type="button" data-b-step="0">1. Impact</button>
+                        <button class="click-step-button" type="button" data-b-step="1">2. Boundaries</button>
+                        <button class="click-step-button" type="button" data-b-step="2">3. Resilience</button>
+                        <button class="click-step-button" type="button" data-b-step="3">4. Service</button>
+                        <button class="click-step-button" type="button" data-b-step="4">5. Evidence</button>
                     </div>
 
                     <div class="click-live-card">
-                        <h3 id="patternBTitle">Detect suspicious backup activity</h3>
-                        <p id="patternBText">Start with the security dashboard: backup deletion attempts, access changes, and failed vault operations show the incident story immediately.</p>
+                        <h3 id="patternBTitle">Business impact: ransomware tries to remove recovery options</h3>
+                        <p id="patternBText">Start with the executive concern: the attack is serious, but the organization can still see what happened and preserve clean recovery choices.</p>
                         <div class="click-metrics">
-                            <div class="click-metric"><strong id="patternBMetricOne">7</strong><span id="patternBMetricOneLabel">Delete attempts</span></div>
-                            <div class="click-metric"><strong id="patternBMetricTwo">0</strong><span id="patternBMetricTwoLabel">Vault changes allowed</span></div>
-                            <div class="click-metric"><strong id="patternBMetricThree">14d</strong><span id="patternBMetricThreeLabel">Soft-delete window</span></div>
+                            <div class="click-metric"><strong id="patternBMetricOne">High</strong><span id="patternBMetricOneLabel">Incident severity</span></div>
+                            <div class="click-metric"><strong id="patternBMetricTwo">0</strong><span id="patternBMetricTwoLabel">Recovery points lost</span></div>
+                            <div class="click-metric"><strong id="patternBMetricThree">14d</strong><span id="patternBMetricThreeLabel">Recovery reserve</span></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="click-demo-guide">
                     <div class="help-card">
-                        <h5><i class="bi bi-question-circle"></i> Presenter help</h5>
-                        <div id="patternBHelp">Ask the customer who can delete backups today. Then show how this pattern makes the attack noisy and recoverable.</div>
+                        <h5><i class="bi bi-question-circle"></i> Business guide</h5>
+                        <div id="patternBHelp">Ask: "If ransomware reaches an admin account, can it also erase our ability to recover?" Then show the answer in business terms.</div>
                     </div>
-                    <div class="live-console" id="patternBConsole"><span class="prompt">KQL&gt;</span> AzureActivity
-| where OperationNameValue has "backup" or OperationNameValue has "vault"
-| summarize Attempts=count() by Caller, ActivityStatusValue
+                    <div class="live-console" id="patternBConsole"><span class="prompt">Incident room&gt;</span> Ransomware readiness
 
-Blocked destructive operations found.</div>
+What it means: attackers tried to reduce recovery options.
+Why it matters: the business can still recover because clean points remain protected.
+Key takeaway: Pattern B makes backup destruction noisy, blocked, and recoverable.</div>
                 </div>
             </div>
         </section>
@@ -1044,11 +1044,11 @@ az monitor alert list --query "[?contains(name, 'backup')]"
         });
 
         const patternBSteps = [
-            ['Detect suspicious backup activity', 'Start with the security dashboard: backup deletion attempts, access changes, and failed vault operations show the incident story immediately.', 'signal', '20%', ['7', '0', '14d'], ['Delete attempts', 'Vault changes allowed', 'Soft-delete window'], 'Ask the customer who can delete backups today. Then show how this pattern makes the attack noisy and recoverable.', '<span class="prompt">KQL&gt;</span> AzureActivity\n| where OperationNameValue has "backup" or OperationNameValue has "vault"\n| summarize Attempts=count() by Caller, ActivityStatusValue\n\nBlocked destructive operations found.'],
-            ['Contain with separated roles', 'Show that the compromised operator can trigger jobs and restores but cannot change vault lock, delete backup items, or reduce retention.', 'rbac', '40%', ['4 roles', 'Least privilege', '0 policy edits'], ['Separated duties', 'Access model', 'Blocked changes'], 'Name the human story: backup operators can help recovery without having keys to destroy protection.', '<span class="prompt">az&gt;</span> role assignment list --scope protection-rg\n\nBackup Operator: no delete permissions\nRestore Operator: restore only\nSecurity Admin: vault lock owner'],
-            ['Preserve recovery points', 'Open the vault posture: soft delete, immutable lock, and audit diagnostics keep recovery points available after a destructive attempt.', 'vault', '62%', ['Enabled', 'Locked', 'Logged'], ['Soft delete', 'Immutability', 'Diagnostics'], 'This is the "we can still recover" moment. Highlight that deleted backup items remain visible to authorized responders.', '<span class="prompt">az&gt;</span> backup item list --backup-management-type AzureIaasVM\n\nState: SoftDeleted\nRecoveryPointsAvailable: true\nUndeleteAction: available'],
-            ['Recover the protected workload', 'Run the response path: undelete backup item, choose clean recovery point, restore disk or files, and validate workload startup.', 'recover', '84%', ['8 min', 'Clean point', 'Validated'], ['Restore elapsed', 'Recovery point', 'App check'], 'Tie this step to RTO: the demo proves the team can move from attack detection to verified recovery.', '<span class="prompt">PS&gt;</span> ./restore-after-ransomware.ps1 -RecoveryPoint Clean\n\nUndelete completed\nDisk restored\nValidation checks passed'],
-            ['Report control effectiveness', 'Close with evidence: audit KQL, incident timeline, blocked actions, restored assets, and recommended escalation to Pattern D for governance scale.', 'recover', '100%', ['3 KQL', '1 report', 'Pattern D'], ['Evidence queries', 'Executive artifact', 'Next step'], 'End with an executive answer: the control did not prevent the attack attempt, but it preserved recoverability and evidence.', '<span class="prompt">KQL&gt;</span> union AzureActivity, AzureDiagnostics\n| summarize Events=count() by bin(TimeGenerated, 1h), Category\n\nIncident pack exported: ransomware-response-summary.csv']
+            ['Business impact: ransomware tries to remove recovery options', 'Start with the executive concern: the attack is serious, but the organization can still see what happened and preserve clean recovery choices.', 'signal', '20%', ['High', '0', '14d'], ['Incident severity', 'Recovery points lost', 'Recovery reserve'], 'Ask: "If ransomware reaches an admin account, can it also erase our ability to recover?" Then show the answer in business terms.', '<span class="prompt">Incident room&gt;</span> Ransomware readiness\n\nWhat it means: attackers tried to reduce recovery options.\nWhy it matters: the business can still recover because clean points remain protected.\nKey takeaway: Pattern B makes backup destruction noisy, blocked, and recoverable.'],
+            ['Access boundaries protect the recovery promise', 'Show leaders that day-to-day operators can help restore service, but cannot remove the protections the business depends on during an incident.', 'rbac', '40%', ['Clear', 'Limited', '0'], ['Duty separation', 'Operator authority', 'Control changes'], 'Frame this as a people and process control: no single compromised role should be able to both operate and destroy recovery.', '<span class="prompt">What it means&gt;</span> Recovery duties are separated\n\nWhy it matters: an attacker with one account cannot silently remove the safety net.\nDecision: keep restore authority useful, but keep destructive control restricted.'],
+            ['Recovery reserve remains available', 'Move from fear to assurance: the protected clean copies stay available long enough for responders to choose a safe recovery point.', 'vault', '62%', ['On', 'Locked', 'Tracked'], ['Safety reserve', 'Change control', 'Audit trail'], 'This is the "we can still recover" moment. Use plain language: the attack did not erase the last good copy.', '<span class="prompt">Why it matters&gt;</span> Clean recovery points survive the incident\n\nBusiness result: responders have time to investigate and restore without negotiating against the clock.\nSignal: protected copies remain visible to authorized recovery owners.'],
+            ['Return priority service first', 'Guide the incident team through the business decision: recover the most critical workload first, validate it, then expand recovery in order of impact.', 'recover', '84%', ['P1 first', 'Clean', 'Validated'], ['Service priority', 'Recovery point', 'Business check'], 'Tie this step to RTO and customer impact. The goal is not technical completion; it is a verified service return.', '<span class="prompt">Simple example&gt;</span> Claims portal impacted\n\nDecision: restore the customer-facing service first.\nValidation: service owner confirms login and transaction flow.\nOutcome: customer impact window is reduced.'],
+            ['Give executives evidence, not anecdotes', 'Close with the incident pack: timeline, blocked actions, available recovery points, restored service, and the next governance step.', 'recover', '100%', ['1 pack', 'Ready', 'Pattern D'], ['Board evidence', 'Recovery status', 'Next maturity step'], 'End with a precise executive answer: the controls did not stop every attack attempt, but they preserved recovery and produced evidence.', '<span class="prompt">Key takeaway&gt;</span> Pattern B turns ransomware recovery into a managed business response\n\nEvidence: attempted destruction blocked or retained.\nService: priority workload restored and validated.\nNext decision: scale governance and reporting with Pattern D.']
         ];
 
         function renderPatternBStep(index) {
